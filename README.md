@@ -38,11 +38,51 @@ Useful options:
 - `-DBUILD_TESTING=OFF` skips the tests
 - `-DBMS_WARNINGS_AS_ERRORS=ON` fails the build on any compiler warning
 
+## Running
+
+```sh
+./build/bin/bms_server                 # http://127.0.0.1:8080
+./build/bin/bms_server --port 9000 --db data/bms.db
+curl http://127.0.0.1:8080/health      # {"status":"ok","version":"0.1.0"}
+```
+
+| Option | Environment variable | Default |
+|---|---|---|
+| `--host <address>` | `BMS_HOST` | `127.0.0.1` (this machine only) |
+| `--port <number>` | `BMS_PORT` | `8080` |
+| `--db <path>` | `BMS_DB_PATH` | `bms.db` |
+| `--frontend <dir>` | `BMS_FRONTEND_DIR` | the repository's `frontend/` folder |
+
+Command-line options override environment variables. The server serves the front end at `/` and the API endpoints from SADS 3.2 beside it. Stop it with Ctrl+C.
+
+### API conventions
+
+- Requests and responses are JSON.
+- Errors always look like this, with the matching HTTP status:
+
+  ```json
+  { "code": "VALIDATION_ERROR", "message": "Amount must be positive.", "field": "amount" }
+  ```
+
+  `field` appears only when one input field caused the error. Statuses: 400 for invalid input, 401 when not logged in, 403 when the role is not allowed, 404 when something is not found, 409 for a conflict, 422 for a broken business rule (for example `INSUFFICIENT_BALANCE`), and 500 for unexpected errors, which never include internal details.
+- Core code throws `bms::Error` (`src/common/error.hpp`). The API layer turns it into the response above.
+- Each module registers its endpoints in `src/<module>/routes.cpp`:
+
+  ```cpp
+  void register_routes(api::Router& router) {
+      router.get("/accounts/:acc/balance", [](const api::Request& req) {
+          return api::Response::ok({{"account", req.param("acc")}, {"balance", "0.00"}});
+      });
+  }
+  ```
+- The access log records the method, path and status only. Request bodies, query strings and headers are never logged.
+
 ## Project structure
 
 ```
 src/
-  common/        shared code: config, version, errors, database helpers
+  common/        shared code: config, logging, errors, database helpers
+  api/           HTTP server, router, JSON error format, access log
   auth/          login, sessions, lockout, role-based access control
   customer/      customer records
   account/       accounts and account types
