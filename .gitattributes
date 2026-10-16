@@ -1,0 +1,11 @@
+# Normalise line endings so Windows and Linux checkouts produce identical diffs.
+* text=auto eol=lf
+
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+*.pdf  binary
+*.docx binary
+*.png  binary
+*.jpg  binary
+*.mp4  binary

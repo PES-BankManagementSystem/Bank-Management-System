@@ -1,0 +1,32 @@
+# Build output
+/build*/
+/out/
+/cmake-build-*/
+CMakeUserPresets.json
+compile_commands.json
+Testing/
+
+# Local databases (the schema and seed scripts in db/ are tracked)
+*.db
+*.db-journal
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+
+# Secrets and local configuration: never commit these
+.env
+.env.*
+*.pem
+*.key
+*.crt
+config.local.*
+
+# Editors and OS files
+.vs/
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+Thumbs.db
