@@ -27,6 +27,16 @@ target_link_libraries(db_test PRIVATE bms::common bms_options)
 target_compile_definitions(db_test PRIVATE DB_PATH="${PROJECT_SOURCE_DIR}/db" BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
 add_test(NAME db_test COMMAND db_test)
 
+add_executable(transaction_test transaction_test.cpp)
+target_link_libraries(transaction_test PRIVATE bms::transaction bms_options)
+target_compile_definitions(transaction_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
+add_test(NAME transaction_test COMMAND transaction_test)
+
+add_executable(withdraw_test withdraw_test.cpp)
+target_link_libraries(withdraw_test PRIVATE bms::transaction bms_options)
+target_compile_definitions(withdraw_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
+add_test(NAME withdraw_test COMMAND withdraw_test)
+
 add_executable(module_tests module_tests.cpp support/seeded_database.hpp)
 target_link_libraries(module_tests PRIVATE
     bms::account bms::api bms::audit bms::auth bms::common bms::customer

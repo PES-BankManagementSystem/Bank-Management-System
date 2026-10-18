@@ -72,7 +72,7 @@ TEST_F(ModuleTest, StaffRouteRegistrationIsCallable) {
 TEST_F(ModuleTest, TransactionRouteRegistrationIsCallable) {
     httplib::Server server;
     bms::api::Router router(server);
-    EXPECT_NO_THROW(bms::transaction::register_routes(router));
+    EXPECT_NO_THROW(bms::transaction::register_routes(router, db(), 2));
 }
 
 }  // namespace
