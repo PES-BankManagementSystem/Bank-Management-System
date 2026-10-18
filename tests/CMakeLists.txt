@@ -54,3 +54,8 @@ add_executable(transfer_test transfer_test.cpp)
 target_link_libraries(transfer_test PRIVATE bms::transaction bms_options)
 target_compile_definitions(transfer_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
 add_test(NAME transfer_test COMMAND transfer_test)
+
+add_executable(interest_test interest_test.cpp)
+target_link_libraries(interest_test PRIVATE bms::reporting bms_options)
+target_compile_definitions(interest_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
+add_test(NAME interest_test COMMAND interest_test)
