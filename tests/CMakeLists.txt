@@ -29,3 +29,8 @@ add_executable(withdraw_test withdraw_test.cpp)
 target_link_libraries(withdraw_test PRIVATE bms::transaction bms_options)
 target_compile_definitions(withdraw_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
 add_test(NAME withdraw_test COMMAND withdraw_test)
+
+add_executable(interest_test interest_test.cpp)
+target_link_libraries(interest_test PRIVATE bms::reporting bms_options)
+target_compile_definitions(interest_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
+add_test(NAME interest_test COMMAND interest_test)
