@@ -1,5 +1,12 @@
-# Unit tests, run with ctest. S-06 adds the test framework and a sample test
-# per module; the tests below use the minimal support/check.hpp until then.
+# Unit tests, run with ctest.
+
+include(FetchContent)
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_Declare(googletest
+    GIT_REPOSITORY https://github.com/google/googletest.git
+    GIT_TAG v1.15.2
+    GIT_SHALLOW TRUE)
+FetchContent_MakeAvailable(googletest)
 
 # Smoke test: the server binary runs and reports the project version.
 add_test(NAME server_reports_version COMMAND bms_server --version)
@@ -29,3 +36,10 @@ add_executable(withdraw_test withdraw_test.cpp)
 target_link_libraries(withdraw_test PRIVATE bms::transaction bms_options)
 target_compile_definitions(withdraw_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
 add_test(NAME withdraw_test COMMAND withdraw_test)
+
+add_executable(module_tests module_tests.cpp support/seeded_database.hpp)
+target_link_libraries(module_tests PRIVATE
+    bms::account bms::api bms::audit bms::auth bms::common bms::customer
+    bms::reporting bms::staff bms::transaction GTest::gtest_main bms_options)
+target_compile_definitions(module_tests PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
+add_test(NAME module_tests COMMAND module_tests)
