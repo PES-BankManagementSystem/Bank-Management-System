@@ -7,9 +7,8 @@
 #include "common/error.hpp"
 
 namespace bms::transaction {
-namespace {
 
-std::int64_t parse_amount(const std::string& amount) {
+std::int64_t parse_amount_paise(const std::string& amount) {
     if (amount.empty()) {
         throw validation_error("amount", "Amount is required.");
     }
@@ -62,11 +61,9 @@ std::int64_t parse_amount(const std::string& amount) {
     return amount_paise;
 }
 
-}  // namespace
-
 DepositResult deposit(Database& database, const std::string& account_number,
                       const std::string& amount, std::int64_t operator_id) {
-    const std::int64_t amount_paise = parse_amount(amount);
+    const std::int64_t amount_paise = parse_amount_paise(amount);
     if (account_number.empty()) {
         throw validation_error("account_number", "Account number is required.");
     }
