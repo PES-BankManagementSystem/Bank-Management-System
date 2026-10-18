@@ -10,6 +10,7 @@
 #include "audit/routes.hpp"
 #include "auth/routes.hpp"
 #include "common/config.hpp"
+#include "common/database.hpp"
 #include "common/log.hpp"
 #include "common/version.hpp"
 #include "customer/routes.hpp"
@@ -61,6 +62,7 @@ int main(int argc, char* argv[]) {
     }
 
     try {
+        bms::Database::init(config.db_path);
         bms::api::Server server(config);
         register_all_routes(server.router());
         const int port = server.bind();
