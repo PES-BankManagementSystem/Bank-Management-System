@@ -14,3 +14,8 @@ add_executable(api_server_test api_server_test.cpp)
 target_link_libraries(api_server_test PRIVATE bms::api bms_options)
 add_test(NAME api_server_test COMMAND api_server_test)
 set_tests_properties(api_server_test PROPERTIES TIMEOUT 60)
+
+add_executable(auth_test auth_test.cpp)
+target_link_libraries(auth_test PRIVATE bms::auth bms::common bms_options)
+add_test(NAME auth_test COMMAND auth_test)
+
