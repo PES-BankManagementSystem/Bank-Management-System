@@ -5,6 +5,7 @@
 #include "common/error.hpp"
 #include "transaction/deposit.hpp"
 #include "transaction/withdraw.hpp"
+#include "transaction/transfer.hpp"
 
 namespace bms::transaction {
 
@@ -40,6 +41,50 @@ void register_routes(api::Router& router, Database& database, std::int64_t opera
                              {"resulting_balance", format_money(result.resulting_balance_paise)},
                              {"operator_id", result.operator_id},
                              {"created_at", result.created_at}}},
+        });
+    });
+
+    router.post("/transfers", [&database, operator_id](const api::Request& request) {
+        const auto& body = request.json();
+        if (!body.contains("from_account_number") || !body["from_account_number"].is_string()) {
+            throw validation_error("from_account_number", "Source account number is required.");
+        }
+        if (!body.contains("to_account_number") || !body["to_account_number"].is_string()) {
+            throw validation_error("to_account_number", "Destination account number is required.");
+        }
+        if (!body.contains("amount") || !body["amount"].is_string()) {
+            throw validation_error("amount", "Amount must be a decimal string.");
+        }
+
+        const std::string from_account_number = body["from_account_number"].get<std::string>();
+        const std::string to_account_number = body["to_account_number"].get<std::string>();
+        const TransferResult result = transfer(database, from_account_number, to_account_number,
+                                               body["amount"].get<std::string>(), operator_id);
+        const std::string formatted_amount = format_money(result.amount_paise);
+        return api::Response::created({
+            {"transfer_reference", result.transfer_reference},
+            {"from_balance", format_money(result.source_balance_paise)},
+            {"to_balance", format_money(result.destination_balance_paise)},
+            {"transactions", {
+                {"debit", {{"transaction_id", result.source_transaction_id},
+                            {"account_id", result.source_account_id},
+                            {"account_number", from_account_number},
+                            {"type", "transfer_debit"},
+                            {"amount", formatted_amount},
+                            {"resulting_balance", format_money(result.source_balance_paise)},
+                            {"operator_id", result.operator_id},
+                            {"transfer_ref", result.transfer_reference},
+                            {"created_at", result.created_at}}},
+                {"credit", {{"transaction_id", result.destination_transaction_id},
+                             {"account_id", result.destination_account_id},
+                             {"account_number", to_account_number},
+                             {"type", "transfer_credit"},
+                             {"amount", formatted_amount},
+                             {"resulting_balance", format_money(result.destination_balance_paise)},
+                             {"operator_id", result.operator_id},
+                             {"transfer_ref", result.transfer_reference},
+                             {"created_at", result.created_at}}},
+            }},
         });
     });
 }

@@ -49,7 +49,32 @@
     </form>
     <p id="withdraw-result" class="result" role="status" aria-live="polite"></p>
   </section>
+  <section class="card" aria-labelledby="transfer-heading">
+    <p class="eyebrow">Bank Management System</p>
+    <h1 id="transfer-heading">Transfer money</h1>
+    <p class="intro">Move funds between two active accounts in one transaction.</p>
+
+    <form id="transfer-form">
+      <label for="from-account-number">From account</label>
+      <input id="from-account-number" name="from_account_number" type="text" autocomplete="off" required>
+
+      <label for="to-account-number">To account</label>
+      <input id="to-account-number" name="to_account_number" type="text" autocomplete="off" required>
+
+      <label for="transfer-amount">Amount</label>
+      <div class="amount-input">
+        <span aria-hidden="true">₹</span>
+        <input id="transfer-amount" name="amount" type="text" inputmode="decimal"
+               pattern="[0-9]+(\.[0-9]{1,2})?" placeholder="0.00" required>
+      </div>
+      <p class="hint">Use rupees with up to two decimal places.</p>
+
+      <button id="transfer-submit-button" type="submit">Review transfer</button>
+    </form>
+    <p id="transfer-result" class="result" role="status" aria-live="polite"></p>
+  </section>
   <script src="app.js" defer></script>
   <script src="withdraw.js" defer></script>
+  <script src="transfer.js" defer></script>
 </body>
 </html>
