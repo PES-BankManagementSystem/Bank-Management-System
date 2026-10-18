@@ -45,7 +45,15 @@ int main() {
     });
 
     // 3. Session lifecycle
-    bms::test::run("create, validate, and invalidate session", []() {
+    bms::test::run("create, validate, and invalidate session", [&db]() {
+        // Insert admin user to satisfy sessions.user_id foreign key constraint
+        std::string hash = bms::auth::hash_password("AdminPass123");
+        auto ins = db.prepare(
+            "INSERT OR REPLACE INTO users (id, name, role, password_hash, active, locked, failed_attempts) "
+            "VALUES ('admin', 'System Admin', 'administrator', ?1, 1, 0, 0)");
+        ins.bind(1, hash);
+        ins.execute();
+
         std::string token = bms::auth::create_session("admin", "administrator");
         CHECK(!token.empty());
 
