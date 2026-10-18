@@ -43,3 +43,8 @@ target_link_libraries(module_tests PRIVATE
     bms::reporting bms::staff bms::transaction GTest::gtest_main bms_options)
 target_compile_definitions(module_tests PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
 add_test(NAME module_tests COMMAND module_tests)
+
+add_executable(transfer_test transfer_test.cpp)
+target_link_libraries(transfer_test PRIVATE bms::transaction bms_options)
+target_compile_definitions(transfer_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
+add_test(NAME transfer_test COMMAND transfer_test)
