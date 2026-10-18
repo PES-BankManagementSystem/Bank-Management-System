@@ -23,6 +23,7 @@ struct DepositResult {
 DepositResult deposit(Database& database, const std::string& account_number,
                       const std::string& amount, std::int64_t operator_id);
 
+std::int64_t parse_amount_paise(const std::string& amount);
 std::string format_money(std::int64_t amount_paise);
 
 }  // namespace bms::transaction
