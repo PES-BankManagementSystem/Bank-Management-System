@@ -14,3 +14,8 @@ add_executable(api_server_test api_server_test.cpp)
 target_link_libraries(api_server_test PRIVATE bms::api bms_options)
 add_test(NAME api_server_test COMMAND api_server_test)
 set_tests_properties(api_server_test PROPERTIES TIMEOUT 60)
+
+add_executable(db_test db_test.cpp)
+target_link_libraries(db_test PRIVATE bms::common bms_options)
+target_compile_definitions(db_test PRIVATE DB_PATH="${PROJECT_SOURCE_DIR}/db" BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
+add_test(NAME db_test COMMAND db_test)

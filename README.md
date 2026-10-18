@@ -6,6 +6,23 @@ Web-based bank management system for the PES University Software Engineering min
 
 C++17, CMake, cpp-httplib, nlohmann/json, SQLite, libsodium (Argon2id), GoogleTest, and a plain HTML/CSS/JS front end. The choices and reasons are in [ADR 001: Technology stack](docs/decisions/001-tech-stack.md).
 
+## Database
+
+The database schema is defined in `db/schema.sql` and seed data in `db/seed.sql`. To create a local database for development or testing:
+
+```bash
+sqlite3 bms.db < db/schema.sql
+sqlite3 bms.db < db/seed.sql
+```
+
+### Demo Credentials
+All demo users use the password "Password123!" (for testing only):
+- Administrator: username `admin`
+- Bank Officers: username `officer1`, `officer2`
+- Customers: username `customer1`, `customer2`, `customer3`
+
+⚠️ **Warning**: These credentials are for demonstration purposes only. In production, strong unique passwords should be used.
+
 ## Building
 
 ### Prerequisites
