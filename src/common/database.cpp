@@ -138,6 +138,10 @@ Database& Database::instance() {
     return *g_instance;
 }
 
+void Database::shutdown() {
+    g_instance.reset();
+}
+
 void Database::init(const std::string& path) {
     g_instance = std::make_unique<Database>(path);
     log::info("Database opened: " + path);

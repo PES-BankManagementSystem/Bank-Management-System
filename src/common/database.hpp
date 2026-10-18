@@ -71,6 +71,7 @@ public:
     // The single shared connection for the server process.
     static Database& instance();
     static void init(const std::string& path);
+    static void shutdown();
 
 private:
     sqlite3* db_ = nullptr;

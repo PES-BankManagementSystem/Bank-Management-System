@@ -10,14 +10,8 @@
 namespace fs = std::filesystem;
 
 int main() {
-    // Setup temporary database for testing
-    const std::string test_db = "test_auth.db";
-    if (fs::exists(test_db)) {
-        fs::remove(test_db);
-    }
-
     try {
-        bms::Database::init(test_db);
+        bms::Database::init(":memory:");
     } catch (const std::exception& e) {
         std::cerr << "Database::init failed: " << e.what() << "\n";
         return 1;
@@ -138,10 +132,6 @@ int main() {
         CHECK(!sess.has_value());
     });
 
-    // Clean up temporary database
-    if (fs::exists(test_db)) {
-        fs::remove(test_db);
-    }
-
+    bms::Database::shutdown();
     return bms::test::finish();
 }

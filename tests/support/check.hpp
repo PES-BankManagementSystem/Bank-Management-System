@@ -22,7 +22,7 @@ inline void run(const char* name, const std::function<void()>& test) {
         ++failure_count();
         std::cerr << "  unexpected exception: " << e.what() << '\n';
     }
-    std::cout << (failure_count() == before ? "[PASS] " : "[FAIL] ") << name << '\n';
+    std::cout << (failure_count() == before ? "[PASS] " : "[FAIL] ") << name << std::endl;
 }
 
 inline int finish() {
