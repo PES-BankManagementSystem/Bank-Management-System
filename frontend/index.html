@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Bank Management System – Secure web interface for managing bank accounts, transactions, and staff.">
+    <title>Bank Management System</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Toast notification container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Confirmation dialog overlay -->
+    <div id="confirm-dialog-overlay" class="dialog-overlay hidden">
+        <div class="dialog-card" id="confirm-dialog">
+            <h3 id="confirm-dialog-title">Confirm Action</h3>
+            <div id="confirm-dialog-body" class="dialog-body"></div>
+            <div class="dialog-actions">
+                <button class="btn btn-ghost" id="confirm-dialog-cancel">Cancel</button>
+                <button class="btn btn-primary" id="confirm-dialog-ok">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== LOGIN PAGE ==================== -->
+    <div id="page-login" class="page active">
+        <div class="login-wrapper">
+            <div class="login-card">
+                <div class="login-header">
+                    <div class="logo">
+                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                            <rect width="48" height="48" rx="12" fill="url(#logo-gradient)"/>
+                            <path d="M24 10L36 17V19H12V17L24 10Z" fill="white" opacity="0.9"/>
+                            <rect x="14" y="21" width="4" height="12" rx="1" fill="white" opacity="0.8"/>
+                            <rect x="22" y="21" width="4" height="12" rx="1" fill="white" opacity="0.8"/>
+                            <rect x="30" y="21" width="4" height="12" rx="1" fill="white" opacity="0.8"/>
+                            <rect x="12" y="35" width="24" height="3" rx="1" fill="white" opacity="0.9"/>
+                            <defs>
+                                <linearGradient id="logo-gradient" x1="0" y1="0" x2="48" y2="48">
+                                    <stop stop-color="#6366f1"/>
+                                    <stop offset="1" stop-color="#8b5cf6"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <h1>Bank Management System</h1>
+                    <p class="login-subtitle">Sign in to your account</p>
+                </div>
+                <form id="login-form" autocomplete="off">
+                    <div class="form-field" id="field-user-id">
+                        <label for="login-user-id">User ID</label>
+                        <input type="text" id="login-user-id" name="user_id" placeholder="Enter your user ID" required autofocus>
+                        <span class="field-error" id="error-user-id"></span>
+                    </div>
+                    <div class="form-field" id="field-password">
+                        <label for="login-password">Password</label>
+                        <div class="password-wrapper">
+                            <input type="password" id="login-password" name="password" placeholder="Enter your password" required>
+                            <button type="button" class="password-toggle" id="toggle-password" aria-label="Toggle password visibility">
+                                <svg class="eye-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <span class="field-error" id="error-password"></span>
+                    </div>
+                    <div class="form-field">
+                        <span class="field-error" id="error-login-general"></span>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full" id="login-submit">
+                        <span class="btn-text">Sign In</span>
+                        <span class="btn-spinner hidden"></span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MAIN APP SHELL ==================== -->
+    <div id="app-shell" class="app-shell hidden">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-small">
+                    <svg width="32" height="32" viewBox="0 0 48 48" fill="none">
+                        <rect width="48" height="48" rx="12" fill="url(#logo-gradient2)"/>
+                        <path d="M24 10L36 17V19H12V17L24 10Z" fill="white" opacity="0.9"/>
+                        <rect x="14" y="21" width="4" height="12" rx="1" fill="white" opacity="0.7"/>
+                        <rect x="22" y="21" width="4" height="12" rx="1" fill="white" opacity="0.7"/>
+                        <rect x="30" y="21" width="4" height="12" rx="1" fill="white" opacity="0.7"/>
+                        <rect x="12" y="35" width="24" height="3" rx="1" fill="white" opacity="0.9"/>
+                        <defs>
+                            <linearGradient id="logo-gradient2" x1="0" y1="0" x2="48" y2="48">
+                                <stop stop-color="#6366f1"/>
+                                <stop offset="1" stop-color="#8b5cf6"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span class="sidebar-title">BMS</span>
+            </div>
+            <ul class="nav-links" id="nav-links">
+                <!-- Populated by JS based on role -->
+            </ul>
+            <div class="sidebar-footer">
+                <div class="user-info" id="user-info">
+                    <div class="user-avatar" id="user-avatar">A</div>
+                    <div class="user-details">
+                        <span class="user-name" id="user-name">User</span>
+                        <span class="user-role" id="user-role">Role</span>
+                    </div>
+                </div>
+                <button class="btn btn-ghost btn-logout" id="logout-btn" title="Sign out">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+                        <polyline points="16 17 21 12 16 7"/>
+                        <line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="main-content" id="main-content">
+            <!-- Dashboard page -->
+            <section id="page-dashboard" class="content-page">
+                <div class="page-header">
+                    <h2>Dashboard</h2>
+                    <p class="page-desc" id="dashboard-greeting">Welcome back</p>
+                </div>
+                <div id="dashboard-content" class="dashboard-grid">
+                    <!-- Populated by JS based on role -->
+                </div>
+            </section>
+
+            <!-- Staff Management page (Admin only) -->
+            <section id="page-staff" class="content-page hidden">
+                <div class="page-header">
+                    <h2>Staff Management</h2>
+                    <p class="page-desc">Manage Bank Officer accounts</p>
+                    <button class="btn btn-primary" id="btn-add-officer">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        Add Officer
+                    </button>
+                </div>
+                <div class="data-table-wrapper">
+                    <table class="data-table" id="staff-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Status</th>
+                                <th>Locked</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="staff-table-body">
+                        </tbody>
+                    </table>
+                    <div class="table-empty hidden" id="staff-table-empty">No officers found.</div>
+                </div>
+            </section>
+
+            <!-- User Management / Unlock page (Admin only) -->
+            <section id="page-users" class="content-page hidden">
+                <div class="page-header">
+                    <h2>User Accounts</h2>
+                    <p class="page-desc">View and unlock user accounts</p>
+                </div>
+                <div class="data-table-wrapper">
+                    <table class="data-table" id="users-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Role</th>
+                                <th>Active</th>
+                                <th>Locked</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-table-body">
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Transaction History (Customer) -->
+            <section id="page-history" class="content-page hidden">
+                <div class="page-header">
+                    <h2>Transaction History</h2>
+                    <p class="page-desc">View your recent transactions</p>
+                </div>
+                <div class="data-table-wrapper">
+                    <table class="data-table" id="history-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Account</th>
+                                <th>Type</th>
+                                <th>Amount</th>
+                                <th>Balance After</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-table-body">
+                        </tbody>
+                    </table>
+                    <div class="table-empty hidden" id="history-table-empty">No transactions found.</div>
+                </div>
+            </section>
+
+            <!-- Transactions page (Officer) -->
+            <section id="page-transactions" class="content-page hidden">
+                <div class="page-header">
+                    <h2>Transactions</h2>
+                    <p class="page-desc">Process deposits and withdrawals</p>
+                </div>
+                <div id="transactions-content">
+                    <p class="placeholder-text">Transaction processing screens will be available soon.</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Create Officer Modal -->
+    <div id="modal-create-officer" class="dialog-overlay hidden">
+        <div class="dialog-card dialog-wide">
+            <h3>Create Bank Officer</h3>
+            <form id="create-officer-form">
+                <div class="form-field">
+                    <label for="officer-id">Officer ID</label>
+                    <input type="text" id="officer-id" required placeholder="e.g. officer3">
+                    <span class="field-error" id="error-officer-id"></span>
+                </div>
+                <div class="form-field">
+                    <label for="officer-name">Full Name</label>
+                    <input type="text" id="officer-name" required placeholder="e.g. Jane Smith">
+                    <span class="field-error" id="error-officer-name"></span>
+                </div>
+                <div class="form-field">
+                    <label for="officer-password">Initial Password</label>
+                    <input type="password" id="officer-password" required placeholder="Min 6 characters" minlength="6">
+                    <span class="field-error" id="error-officer-password"></span>
+                </div>
+                <div class="dialog-actions">
+                    <button type="button" class="btn btn-ghost" id="cancel-create-officer">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create Officer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="/js/api.js"></script>
+    <script src="/js/components.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>
