@@ -138,6 +138,90 @@ Response handle_update_officer(const Request& req) {
     return Response::ok({{"message", "Officer updated."}, {"id", officer_id}});
 }
 
+// GET /dashboard  (S-25) – returns dashboard data specific to the caller's role.
+Response handle_dashboard(const Request& req) {
+    auth::AuthUser user = auth::require_auth(req);
+    auto& db = Database::instance();
+
+    Json data = {{"role", user.role}, {"user_id", user.id}, {"user_name", user.name}};
+
+    if (user.role == "administrator") {
+        // Admin dashboard: counts of customers, accounts, staff, and today's totals.
+        {
+            auto stmt = db.prepare("SELECT COUNT(*) FROM users WHERE role = 'customer' AND active = 1");
+            stmt.step();
+            data["customer_count"] = stmt.column_int(0);
+        }
+        {
+            auto stmt = db.prepare("SELECT COUNT(*) FROM accounts WHERE active = 1");
+            stmt.step();
+            data["account_count"] = stmt.column_int(0);
+        }
+        {
+            auto stmt = db.prepare("SELECT COUNT(*) FROM users WHERE role = 'bank_officer' AND active = 1");
+            stmt.step();
+            data["staff_count"] = stmt.column_int(0);
+        }
+        {
+            auto stmt = db.prepare(
+                "SELECT COALESCE(SUM(amount), 0), COUNT(*) FROM transactions "
+                "WHERE date(created_at) = date('now')");
+            stmt.step();
+            data["today_transaction_total"] = stmt.column_double(0);
+            data["today_transaction_count"] = stmt.column_int(1);
+        }
+    } else if (user.role == "bank_officer") {
+        // Officer dashboard: transactions they processed today.
+        {
+            auto stmt = db.prepare(
+                "SELECT COUNT(*), COALESCE(SUM(amount), 0) FROM transactions "
+                "WHERE performed_by = ?1 AND date(created_at) = date('now')");
+            stmt.bind(1, user.id);
+            stmt.step();
+            data["today_transaction_count"] = stmt.column_int(0);
+            data["today_transaction_total"] = stmt.column_double(1);
+        }
+        // Recent transactions for quick reference.
+        {
+            auto stmt = db.prepare(
+                "SELECT id, account_id, type, amount, created_at FROM transactions "
+                "WHERE performed_by = ?1 ORDER BY created_at DESC LIMIT 10");
+            stmt.bind(1, user.id);
+            Json txns = Json::array();
+            while (stmt.step()) {
+                txns.push_back({
+                    {"id", stmt.column_int(0)},
+                    {"account_id", stmt.column_text(1)},
+                    {"type", stmt.column_text(2)},
+                    {"amount", stmt.column_double(3)},
+                    {"created_at", stmt.column_text(4)}
+                });
+            }
+            data["recent_transactions"] = txns;
+        }
+    } else if (user.role == "customer") {
+        // Customer dashboard: their accounts and balances.
+        {
+            auto stmt = db.prepare(
+                "SELECT id, account_type, balance, active FROM accounts "
+                "WHERE customer_id = ?1 ORDER BY id");
+            stmt.bind(1, user.id);
+            Json accounts = Json::array();
+            while (stmt.step()) {
+                accounts.push_back({
+                    {"id", stmt.column_text(0)},
+                    {"account_type", stmt.column_text(1)},
+                    {"balance", stmt.column_double(2)},
+                    {"active", stmt.column_int(3) == 1}
+                });
+            }
+            data["accounts"] = accounts;
+        }
+    }
+
+    return Response::ok(data);
+}
+
 // GET /staff/all-users  (Administrator only) – list all users for admin unlock UI.
 Response handle_list_all_users(const Request& req) {
     auth::require_admin(req);
@@ -169,6 +253,9 @@ void register_routes(api::Router& router) {
     router.post("/staff", handle_create_officer);
     router.get("/staff", handle_list_officers);
     router.patch("/staff/:id", handle_update_officer);
+
+    // S-25: Role-specific dashboard.
+    router.get("/dashboard", handle_dashboard);
 
     // Admin utility: list all users for the unlock UI.
     router.get("/staff/all-users", handle_list_all_users);
