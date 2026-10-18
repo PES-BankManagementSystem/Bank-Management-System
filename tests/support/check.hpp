@@ -1,7 +1,6 @@
 #pragma once
 
-// Minimal assertions so tests can run under ctest before the test framework
-// lands (S-06). Port tests that use this header to GoogleTest when it does.
+// Assertions retained by the existing standalone tests. New tests use GoogleTest.
 
 #include <exception>
 #include <functional>
