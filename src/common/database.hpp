@@ -33,6 +33,9 @@ public:
     // Execute without reading rows (INSERT, UPDATE, DELETE).
     void execute();
 
+    // Reset statement for re-execution.
+    void reset();
+
     std::string column_text(int index) const;
     int column_int(int index) const;
     double column_double(int index) const;

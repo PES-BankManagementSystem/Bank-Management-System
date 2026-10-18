@@ -60,6 +60,12 @@ void Statement::execute() {
     }
 }
 
+void Statement::reset() {
+    if (stmt_) {
+        sqlite3_reset(stmt_);
+    }
+}
+
 std::string Statement::column_text(int index) const {
     const unsigned char* text = sqlite3_column_text(stmt_, index);
     return text ? reinterpret_cast<const char*>(text) : "";
