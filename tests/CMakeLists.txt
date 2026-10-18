@@ -19,3 +19,8 @@ add_executable(db_test db_test.cpp)
 target_link_libraries(db_test PRIVATE bms::common bms_options)
 target_compile_definitions(db_test PRIVATE DB_PATH="${PROJECT_SOURCE_DIR}/db" BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
 add_test(NAME db_test COMMAND db_test)
+
+add_executable(transaction_test transaction_test.cpp)
+target_link_libraries(transaction_test PRIVATE bms::transaction bms_options)
+target_compile_definitions(transaction_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
+add_test(NAME transaction_test COMMAND transaction_test)
