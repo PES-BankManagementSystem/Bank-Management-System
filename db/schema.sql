@@ -61,7 +61,10 @@ CREATE TABLE IF NOT EXISTS transactions (
     account_id INTEGER NOT NULL,
     operator_id INTEGER NOT NULL, -- FK to users (administrator who triggered interest runs)
     type TEXT NOT NULL CHECK (type IN ('deposit', 'withdrawal', 'transfer_debit', 'transfer_credit', 'interest')),
-    amount INTEGER NOT NULL CHECK (amount > 0), -- in paise
+    amount INTEGER NOT NULL CHECK (
+        (type = 'interest' AND amount >= 0) OR
+        (type <> 'interest' AND amount > 0)
+    ), -- in paise
     resulting_balance INTEGER NOT NULL CHECK (resulting_balance >= 0), -- in paise
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     transfer_ref TEXT, -- NULL for non-transfer transactions
@@ -69,6 +72,20 @@ CREATE TABLE IF NOT EXISTS transactions (
     FOREIGN KEY (account_id) REFERENCES accounts(account_id) ON DELETE RESTRICT,
     FOREIGN KEY (operator_id) REFERENCES users(user_id) ON DELETE RESTRICT
 ) STRICT;
+
+-- Auth sessions table
+CREATE TABLE IF NOT EXISTS auth_sessions (
+    session_id INTEGER PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    token TEXT NOT NULL UNIQUE,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    expires_at TEXT NOT NULL,
+    revoked_at TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE RESTRICT
+) STRICT;
+
+CREATE INDEX IF NOT EXISTS idx_auth_sessions_user_active
+ON auth_sessions(user_id, expires_at) WHERE revoked_at IS NULL;
 
 -- Unique index for transfer_ref: at most one per type (gives exactly two linked entries: debit/credit)
 CREATE UNIQUE INDEX IF NOT EXISTS idx_transactions_transfer_ref_type ON transactions(transfer_ref, type) WHERE transfer_ref IS NOT NULL;
@@ -147,4 +164,4 @@ BEGIN
 END;
 
 -- Set user_version for migration tracking
-PRAGMA user_version = 1;
+PRAGMA user_version = 2;

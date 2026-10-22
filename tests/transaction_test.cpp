@@ -43,6 +43,17 @@ std::int64_t row_count(bms::Database& database, const std::string& table) {
     return query->column_int(0);
 }
 
+std::string issue_test_session(bms::Database& database, std::int64_t user_id) {
+    const std::string token = "test-token-" + std::to_string(user_id);
+    auto insert = database.prepare(
+        "INSERT INTO auth_sessions (user_id, token, expires_at) "
+        "VALUES (?, ?, datetime('now', '+1 hour'))");
+    insert->bind(1, user_id);
+    insert->bind(2, token);
+    insert->step();
+    return token;
+}
+
 void test_deposit_updates_all_three_records_atomically() {
     bms::test::SeededDatabase fixture;
     auto& database = fixture.database();
@@ -133,13 +144,16 @@ void test_deposit_route_returns_json_success_and_account_errors() {
     config.host = "127.0.0.1";
     config.port = 0;
     bms::api::Server server(config);
-    bms::transaction::register_routes(server.router(), fixture.database(), 2);
+    bms::transaction::register_routes(server.router(), fixture.database());
     const int port = server.bind();
     std::thread server_thread([&server] { server.run(); });
     server.wait_until_ready();
 
     httplib::Client client("127.0.0.1", port);
-    const auto success = client.Post("/transactions",
+    const std::string token = issue_test_session(fixture.database(), 2);
+    const httplib::Headers auth_headers = {{"Authorization", "Bearer " + token}};
+
+    const auto success = client.Post("/transactions", auth_headers,
                                      R"({"type":"deposit","account_number":"ACC001","amount":"125.50"})",
                                      "application/json");
     CHECK(success);
@@ -153,7 +167,39 @@ void test_deposit_route_returns_json_success_and_account_errors() {
         CHECK(body["transaction"]["created_at"].is_string());
     }
 
-    const auto frozen = client.Post("/transactions",
+    void test_deposit_route_requires_authenticated_staff_session() {
+        bms::test::SeededDatabase fixture;
+        bms::Config config;
+        config.host = "127.0.0.1";
+        config.port = 0;
+        bms::api::Server server(config);
+        bms::transaction::register_routes(server.router(), fixture.database());
+        const int port = server.bind();
+        std::thread server_thread([&server] { server.run(); });
+        server.wait_until_ready();
+
+        httplib::Client client("127.0.0.1", port);
+        const auto missing_auth = client.Post(
+            "/transactions",
+            R"({"type":"deposit","account_number":"ACC001","amount":"1.00"})",
+            "application/json");
+        CHECK(missing_auth);
+        if (missing_auth) CHECK_EQ(missing_auth->status, 401);
+
+        const std::string customer_token = issue_test_session(fixture.database(), 4);
+        const httplib::Headers customer_auth = {{"Authorization", "Bearer " + customer_token}};
+        const auto forbidden = client.Post(
+            "/transactions", customer_auth,
+            R"({"type":"deposit","account_number":"ACC001","amount":"1.00"})",
+            "application/json");
+        CHECK(forbidden);
+        if (forbidden) CHECK_EQ(forbidden->status, 403);
+
+        server.stop();
+        server_thread.join();
+    }
+
+    const auto frozen = client.Post("/transactions", auth_headers,
                                     R"({"type":"deposit","account_number":"ACC002","amount":"10.00"})",
                                     "application/json");
     CHECK(frozen);
@@ -164,7 +210,7 @@ void test_deposit_route_returns_json_success_and_account_errors() {
         CHECK(body["message"].get<std::string>().find("frozen") != std::string::npos);
     }
 
-    const auto unknown = client.Post("/transactions",
+    const auto unknown = client.Post("/transactions", auth_headers,
                                      R"({"type":"deposit","account_number":"UNKNOWN","amount":"10.00"})",
                                      "application/json");
     CHECK(unknown);
@@ -204,6 +250,8 @@ int main() {
     bms::test::run("unknown account is not found", test_unknown_account_returns_not_found);
     bms::test::run("deposit route returns JSON success and account errors",
                    test_deposit_route_returns_json_success_and_account_errors);
+    bms::test::run("deposit route requires authenticated staff session",
+                   test_deposit_route_requires_authenticated_staff_session);
     bms::test::run("audit failure rolls back all deposit changes", test_audit_failure_rolls_back_balance_and_transaction_row);
     return bms::test::finish();
 }

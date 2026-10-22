@@ -47,6 +47,17 @@ std::int64_t row_count(bms::Database& database, const std::string& table) {
     return query->column_int(0);
 }
 
+std::string issue_test_session(bms::Database& database, std::int64_t user_id) {
+    const std::string token = "test-token-" + std::to_string(user_id);
+    auto insert = database.prepare(
+        "INSERT INTO auth_sessions (user_id, token, expires_at) "
+        "VALUES (?, ?, datetime('now', '+1 hour'))");
+    insert->bind(1, user_id);
+    insert->bind(2, token);
+    insert->step();
+    return token;
+}
+
 void test_success_updates_both_balances_and_links_records_and_audits() {
     bms::test::SeededDatabase fixture;
     auto& database = fixture.database();
@@ -222,13 +233,15 @@ void test_transfer_api_success_and_expected_errors() {
     config.host = "127.0.0.1";
     config.port = 0;
     bms::api::Server server(config);
-    bms::transaction::register_routes(server.router(), fixture.database(), 2);
+    bms::transaction::register_routes(server.router(), fixture.database());
     const int port = server.bind();
     std::thread server_thread([&server] { server.run(); });
     server.wait_until_ready();
     httplib::Client client("127.0.0.1", port);
+    const std::string token = issue_test_session(fixture.database(), 2);
+    const httplib::Headers auth_headers = {{"Authorization", "Bearer " + token}};
 
-    const auto success = client.Post("/transfers",
+    const auto success = client.Post("/transfers", auth_headers,
         R"({"from_account_number":"ACC001","to_account_number":"ACC004","amount":"10.00"})",
         "application/json");
     CHECK(success);
@@ -243,7 +256,7 @@ void test_transfer_api_success_and_expected_errors() {
         CHECK_EQ(body["transactions"]["debit"]["transfer_ref"], body["transactions"]["credit"]["transfer_ref"]);
     }
 
-    const auto same = client.Post("/transfers",
+    const auto same = client.Post("/transfers", auth_headers,
         R"({"from_account_number":"ACC001","to_account_number":"ACC001","amount":"10.00"})",
         "application/json");
     CHECK(same);
@@ -254,7 +267,7 @@ void test_transfer_api_success_and_expected_errors() {
         CHECK_EQ(body["field"].get<std::string>(), std::string("to_account_number"));
     }
 
-    const auto frozen = client.Post("/transfers",
+    const auto frozen = client.Post("/transfers", auth_headers,
         R"({"from_account_number":"ACC001","to_account_number":"ACC002","amount":"10.00"})",
         "application/json");
     CHECK(frozen);
@@ -265,7 +278,7 @@ void test_transfer_api_success_and_expected_errors() {
         CHECK(body["message"].get<std::string>().find("ACC002 is frozen") != std::string::npos);
     }
 
-    const auto unknown = client.Post("/transfers",
+    const auto unknown = client.Post("/transfers", auth_headers,
         R"({"from_account_number":"ACC001","to_account_number":"UNKNOWN","amount":"10.00"})",
         "application/json");
     CHECK(unknown);

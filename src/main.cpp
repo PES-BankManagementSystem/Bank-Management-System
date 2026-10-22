@@ -1,5 +1,4 @@
 #include <csignal>
-#include <cstdint>
 #include <exception>
 #include <iostream>
 #include <stdexcept>
@@ -23,9 +22,6 @@ namespace {
 
 bms::api::Server* g_server = nullptr;
 
-// S-17 temporary local-demo identity until the authentication/session story is implemented.
-constexpr std::int64_t kLocalDemoOperatorId = 2;
-
 // Ctrl+C / SIGTERM: stop accepting requests and let main() return normally, so
 // open database connections are closed cleanly.
 extern "C" void handle_stop_signal(int) {
@@ -33,10 +29,10 @@ extern "C" void handle_stop_signal(int) {
 }
 
 void register_all_routes(bms::api::Router& router, bms::Database& database) {
-    bms::auth::register_routes(router);
+    bms::auth::register_routes(router, database);
     bms::customer::register_routes(router);
     bms::account::register_routes(router);
-    bms::transaction::register_routes(router, database, kLocalDemoOperatorId);
+    bms::transaction::register_routes(router, database);
     bms::reporting::register_routes(router);
     bms::staff::register_routes(router);
     bms::audit::register_routes(router);
