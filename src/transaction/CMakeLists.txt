@@ -2,4 +2,4 @@
 # work, with minimum-balance and daily-limit rules (FR-6, FR-7, FR-8, NFR-3).
 bms_add_module(transaction
     SOURCES routes.cpp deposit.cpp withdraw.cpp transfer.cpp
-    DEPENDS bms::api bms::common)
+    DEPENDS bms::api bms::auth bms::common)

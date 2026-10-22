@@ -14,6 +14,6 @@ namespace bms::transaction {
 
 // Registers this module's HTTP endpoints:
 // POST /transactions and POST /transfers (S-17, S-18, S-19).
-void register_routes(api::Router& router, Database& database, std::int64_t operator_id);
+void register_routes(api::Router& router, Database& database);
 
 }  // namespace bms::transaction

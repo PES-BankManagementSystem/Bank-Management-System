@@ -2,15 +2,25 @@
 
 #include "common/db.hpp"
 #include "api/router.hpp"
+#include "auth/session.hpp"
 #include "common/error.hpp"
 #include "transaction/deposit.hpp"
 #include "transaction/withdraw.hpp"
 #include "transaction/transfer.hpp"
 
 namespace bms::transaction {
+namespace {
 
-void register_routes(api::Router& router, Database& database, std::int64_t operator_id) {
-    router.post("/transactions", [&database, operator_id](const api::Request& request) {
+std::int64_t resolve_operator_id(Database& database, const api::Request& request) {
+    const auth::AuthenticatedUser user = auth::require_authenticated(database, request);
+    auth::require_role(user, {"administrator", "bank_officer"});
+    return user.user_id;
+}
+
+}  // namespace
+
+void register_routes(api::Router& router, Database& database) {
+    router.post("/transactions", [&database](const api::Request& request) {
         const auto& body = request.json();
         if (!body.contains("type") || !body["type"].is_string()) {
             throw validation_error("type", "Transaction type is required.");
@@ -27,6 +37,7 @@ void register_routes(api::Router& router, Database& database, std::int64_t opera
 
         const std::string account_number = body["account_number"].get<std::string>();
         const std::string amount = body["amount"].get<std::string>();
+        const std::int64_t operator_id = resolve_operator_id(database, request);
         const bool is_withdrawal = body["type"] == "withdraw";
         const DepositResult result = is_withdrawal
             ? withdraw(database, account_number, amount, operator_id)
@@ -44,7 +55,7 @@ void register_routes(api::Router& router, Database& database, std::int64_t opera
         });
     });
 
-    router.post("/transfers", [&database, operator_id](const api::Request& request) {
+    router.post("/transfers", [&database](const api::Request& request) {
         const auto& body = request.json();
         if (!body.contains("from_account_number") || !body["from_account_number"].is_string()) {
             throw validation_error("from_account_number", "Source account number is required.");
@@ -58,6 +69,7 @@ void register_routes(api::Router& router, Database& database, std::int64_t opera
 
         const std::string from_account_number = body["from_account_number"].get<std::string>();
         const std::string to_account_number = body["to_account_number"].get<std::string>();
+        const std::int64_t operator_id = resolve_operator_id(database, request);
         const TransferResult result = transfer(database, from_account_number, to_account_number,
                                                body["amount"].get<std::string>(), operator_id);
         const std::string formatted_amount = format_money(result.amount_paise);

@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <memory>
+#include <mutex>
 #include <sqlite3.h>
 #include <stdexcept>
 #include <string>
@@ -60,7 +61,7 @@ namespace bms
         {
         public:
             explicit Transaction(Database &db, bool immediate = false)
-                : db_(db), done_(false)
+                : db_(db), lock_(db_.mutex_), done_(false)
             {
                 db_.begin(immediate);
             }
@@ -95,10 +96,15 @@ namespace bms
 
         private:
             Database &db_;
+            std::unique_lock<std::recursive_mutex> lock_;
             bool done_;
         };
 
     private:
+        friend class Statement;
+        friend class Transaction;
+
+        std::recursive_mutex mutex_;
         sqlite3 *db_ = nullptr;
     };
 
