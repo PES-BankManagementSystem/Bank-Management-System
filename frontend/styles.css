@@ -50,6 +50,8 @@ input:focus { outline: 3px solid #cce2fa; border-color: #2363a5; }
 .amount-input span { position: absolute; top: 13px; left: 13px; color: #5e6c84; }
 .amount-input input { padding-left: 34px; }
 .hint { margin: 7px 0 0; color: #5e6c84; font-size: 0.85rem; }
+.field-error { min-height: 1.2em; margin: 5px 0 0; color: #b42318; font-size: 0.85rem; }
+input[aria-invalid="true"] { border-color: #b42318; }
 button {
   width: 100%;
   min-height: 48px;
@@ -64,6 +66,7 @@ button {
 }
 button:hover { background: #104b89; }
 button:disabled { opacity: 0.65; cursor: wait; }
+button[hidden], [hidden] { display: none; }
 .result { min-height: 1.5em; margin: 20px 0 0; line-height: 1.5; }
 .result.success { color: #16794b; }
 .result.error { color: #b42318; }

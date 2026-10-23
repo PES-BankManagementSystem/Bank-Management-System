@@ -4,11 +4,13 @@ namespace bms::api {
 class Router;
 }
 
+namespace bms {
+class Database;
+}
+
 namespace bms::customer {
 
-// Registers this module's HTTP endpoints:
-// POST /customers, GET /customers, GET /customers/:id and
-// PUT /customers/:id (S-11, S-12, S-13).
-void register_routes(api::Router& router);
+void register_routes(api::Router& router, Database& database,
+                     bool allow_initial_credential_delivery);
 
 }  // namespace bms::customer

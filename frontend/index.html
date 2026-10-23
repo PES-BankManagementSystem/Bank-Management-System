@@ -3,10 +3,82 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Bank Management System | Transactions</title>
+  <title>Bank Management System | Staff and customer services</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <section class="card" aria-labelledby="login-heading">
+    <p class="eyebrow">Bank Management System</p>
+    <h1 id="login-heading">Staff sign in</h1>
+    <p class="intro">Sign in with an Administrator or Bank Officer account to register a customer.</p>
+    <form id="login-form">
+      <label for="login-username">Username</label>
+      <input id="login-username" name="username" type="text" autocomplete="username" required
+             aria-describedby="login-error">
+      <label for="login-password">Password</label>
+      <input id="login-password" name="password" type="password" autocomplete="current-password"
+             required aria-describedby="login-error">
+      <button id="login-submit" type="submit">Sign in</button>
+    </form>
+    <p id="login-error" class="result error" role="status" aria-live="polite"></p>
+    <p id="session-status" class="result" role="status" aria-live="polite"></p>
+    <button id="logout-button" type="button" hidden>Sign out</button>
+  </section>
+
+  <section id="password-change-card" class="card" aria-labelledby="password-change-heading" hidden>
+    <p class="eyebrow">First sign in</p>
+    <h1 id="password-change-heading">Change your password</h1>
+    <p class="intro">You must choose a new password before continuing.</p>
+    <form id="password-change-form">
+      <label for="new-password">New password</label>
+      <input id="new-password" name="newPassword" type="password" minlength="12"
+             autocomplete="new-password" required aria-describedby="password-change-error">
+      <button type="submit">Change password</button>
+    </form>
+    <p id="password-change-error" class="result error" role="status" aria-live="polite"></p>
+  </section>
+
+  <section id="customer-registration-card" class="card" aria-labelledby="customer-heading" hidden>
+    <p class="eyebrow">Customer records</p>
+    <h1 id="customer-heading">Register a customer</h1>
+    <p class="intro">Create a customer record and a one-time login credential for handoff.</p>
+    <form id="customer-form" novalidate>
+      <label for="customer-name">Full name</label>
+      <input id="customer-name" name="name" type="text" maxlength="100" required
+             aria-describedby="customer-name-error">
+      <p id="customer-name-error" class="field-error"></p>
+
+      <label for="customer-dob">Date of birth</label>
+      <input id="customer-dob" name="dateOfBirth" type="date" required
+             aria-describedby="customer-dob-error">
+      <p id="customer-dob-error" class="field-error"></p>
+
+      <label for="customer-address">Address</label>
+      <input id="customer-address" name="address" type="text" maxlength="255" required
+             aria-describedby="customer-address-error">
+      <p id="customer-address-error" class="field-error"></p>
+
+      <label for="customer-phone">Phone number</label>
+      <input id="customer-phone" name="phone" type="tel" autocomplete="tel" required
+             aria-describedby="customer-phone-error">
+      <p id="customer-phone-error" class="field-error"></p>
+
+      <label for="customer-id-reference">Identification reference</label>
+      <input id="customer-id-reference" name="identificationReference" type="text"
+             maxlength="50" required aria-describedby="customer-id-reference-error">
+      <p id="customer-id-reference-error" class="field-error"></p>
+
+      <label for="customer-email">Email address</label>
+      <input id="customer-email" name="email" type="email" maxlength="254" autocomplete="email"
+             required aria-describedby="customer-email-error">
+      <p id="customer-email-error" class="field-error"></p>
+
+      <button id="customer-submit" type="submit">Register customer</button>
+    </form>
+    <p id="customer-form-error" class="result error" role="status" aria-live="polite"></p>
+    <div id="customer-created" class="result success" role="status" aria-live="polite"></div>
+  </section>
+
   <main class="card">
     <p class="eyebrow">Bank Management System</p>
     <h1>Deposit money</h1>
@@ -76,5 +148,6 @@
   <script src="app.js" defer></script>
   <script src="withdraw.js" defer></script>
   <script src="transfer.js" defer></script>
+  <script src="customer.js" defer></script>
 </body>
 </html>

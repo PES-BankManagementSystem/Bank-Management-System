@@ -23,7 +23,7 @@ namespace {
 
 bms::api::Server* g_server = nullptr;
 
-// S-17 temporary local-demo identity until the authentication/session story is implemented.
+// S-17 still uses a fixed local-demo operator; transaction routes are not session-authenticated.
 constexpr std::int64_t kLocalDemoOperatorId = 2;
 
 // Ctrl+C / SIGTERM: stop accepting requests and let main() return normally, so
@@ -32,9 +32,14 @@ extern "C" void handle_stop_signal(int) {
     if (g_server != nullptr) g_server->stop();
 }
 
-void register_all_routes(bms::api::Router& router, bms::Database& database) {
-    bms::auth::register_routes(router);
-    bms::customer::register_routes(router);
+bool is_loopback_host(const std::string& host) {
+    return host == "localhost" || host == "127.0.0.1" || host == "::1" || host == "[::1]";
+}
+
+void register_all_routes(bms::api::Router& router, bms::Database& database,
+                         bool allow_initial_credential_delivery) {
+    bms::auth::register_routes(router, database, allow_initial_credential_delivery);
+    bms::customer::register_routes(router, database, allow_initial_credential_delivery);
     bms::account::register_routes(router);
     bms::transaction::register_routes(router, database, kLocalDemoOperatorId);
     bms::reporting::register_routes(router);
@@ -68,7 +73,7 @@ int main(int argc, char* argv[]) {
     try {
         bms::Database database(config.db_path);
         bms::api::Server server(config);
-        register_all_routes(server.router(), database);
+        register_all_routes(server.router(), database, is_loopback_host(config.host));
         const int port = server.bind();
 
         g_server = &server;

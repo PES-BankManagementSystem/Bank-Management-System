@@ -589,10 +589,10 @@ void test_actual_schema_file()
     stmt->step();
     CHECK_EQ(stmt->column_int(0), 1); // Should be 1 (ON)
 
-    // Verify user_version is set to 1
+    // Verify user_version is set to the latest schema version.
     stmt = db.prepare("PRAGMA user_version");
     stmt->step();
-    CHECK_EQ(stmt->column_int(0), 1);
+    CHECK_EQ(stmt->column_int(0), 2);
 }
 
 void test_actual_seed_file()

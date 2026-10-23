@@ -25,10 +25,10 @@ INSERT OR IGNORE INTO users (user_id, username, role, status, failed_attempts, p
 (6, 'customer3', 'customer', 'active', 0, '$argon2id$v=19$m=65536,t=2,p=1$d83lIuXVQpU5Of0R478UDQ$2nq3k3SbcvkrhDEq7AEI1lI1Jak5DNLNSiXC6wJkm8Y');
 
 -- Insert customers (linking to users for login capability)
-INSERT OR IGNORE INTO customers (customer_id, user_id, full_name, email, phone, address, date_of_birth) VALUES
-(1, 4, 'John Doe', 'john.doe@example.com', '+1-555-0101', '123 Main St, Cityville, State 12345', '1990-05-15'),
-(2, 5, 'Jane Smith', 'jane.smith@example.com', '+1-555-0102', '456 Oak Ave, Townsville, State 67890', '1985-08-22'),
-(3, 6, 'Bob Johnson', 'bob.johnson@example.com', '+1-555-0103', '789 Pine Rd, Village, State 13579', '1992-12-03');
+INSERT OR IGNORE INTO customers (customer_id, customer_code, user_id, full_name, email, phone, identification_reference, address, date_of_birth) VALUES
+(1, 'CUS-00000001', 4, 'John Doe', 'john.doe@example.com', '+1-555-0101', 'DEMO-ID-0001', '123 Main St, Cityville, State 12345', '1990-05-15'),
+(2, 'CUS-00000002', 5, 'Jane Smith', 'jane.smith@example.com', '+1-555-0102', 'DEMO-ID-0002', '456 Oak Ave, Townsville, State 67890', '1985-08-22'),
+(3, 'CUS-00000003', 6, 'Bob Johnson', 'bob.johnson@example.com', '+1-555-0103', 'DEMO-ID-0003', '789 Pine Rd, Village, State 13579', '1992-12-03');
 
 -- Insert accounts
 -- At least one active, one frozen, and one closed account (closed with zero balance)
