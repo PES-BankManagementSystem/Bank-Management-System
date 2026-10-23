@@ -3,6 +3,8 @@
 #include <optional>
 #include <stdexcept>
 #include <string>
+#include <utility>
+#include <vector>
 
 namespace bms {
 
@@ -23,26 +25,33 @@ enum class ErrorKind {
 // bms::Error is treated as an unexpected internal error.
 class Error : public std::runtime_error {
 public:
+    using FieldErrors = std::vector<std::pair<std::string, std::string>>;
+
     Error(ErrorKind kind, std::string code, std::string message,
-          std::optional<std::string> field = std::nullopt);
+          std::optional<std::string> field = std::nullopt,
+          FieldErrors fields = {});
 
     ErrorKind kind() const noexcept { return kind_; }
     const std::string& code() const noexcept { return code_; }
     const std::optional<std::string>& field() const noexcept { return field_; }
+    const FieldErrors& fields() const noexcept { return fields_; }
 
 private:
     ErrorKind kind_;
     std::string code_;
     std::optional<std::string> field_;
+    FieldErrors fields_;
 };
 
 // Shorthands for the common cases. Business-rule errors take their own code,
 // e.g. business_rule("INSUFFICIENT_BALANCE", "...").
 Error validation_error(std::string field, std::string message);
+Error validation_errors(Error::FieldErrors fields);
 Error unauthenticated(std::string message = "Please log in to continue.");
 Error forbidden(std::string message = "You are not allowed to perform this action.");
 Error not_found(std::string message);
-Error conflict(std::string code, std::string message);
+Error conflict(std::string code, std::string message,
+               std::optional<std::string> field = std::nullopt);
 Error business_rule(std::string code, std::string message);
 
 }  // namespace bms

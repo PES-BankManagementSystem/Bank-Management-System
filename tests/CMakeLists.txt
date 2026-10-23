@@ -44,6 +44,12 @@ target_link_libraries(module_tests PRIVATE
 target_compile_definitions(module_tests PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
 add_test(NAME module_tests COMMAND module_tests)
 
+add_executable(customer_test customer_test.cpp support/seeded_database.hpp)
+target_link_libraries(customer_test PRIVATE
+    bms::api bms::auth bms::common bms::customer GTest::gtest_main bms_options)
+target_compile_definitions(customer_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
+add_test(NAME customer_test COMMAND customer_test)
+
 add_executable(transfer_test transfer_test.cpp)
 target_link_libraries(transfer_test PRIVATE bms::transaction bms_options)
 target_compile_definitions(transfer_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")

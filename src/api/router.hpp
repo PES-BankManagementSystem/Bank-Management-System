@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <map>
 #include <optional>
 #include <string>
 
@@ -48,10 +49,11 @@ private:
 struct Response {
     int status = 200;
     Json body = Json::object();
+    std::map<std::string, std::string> headers;
 
-    static Response ok(Json body) { return {200, std::move(body)}; }
-    static Response created(Json body) { return {201, std::move(body)}; }
-    static Response no_content() { return {204, nullptr}; }
+    static Response ok(Json body) { return {200, std::move(body), {}}; }
+    static Response created(Json body) { return {201, std::move(body), {}}; }
+    static Response no_content() { return {204, nullptr, {}}; }
 };
 
 // A route handler returns a Response, or throws bms::Error for an expected
