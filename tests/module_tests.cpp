@@ -70,7 +70,7 @@ TEST_F(ModuleTest, CustomerRouteRegistrationIsCallable) {
 TEST_F(ModuleTest, ReportingRouteRegistrationIsCallable) {
     httplib::Server server;
     bms::api::Router router(server);
-    EXPECT_NO_THROW(bms::reporting::register_routes(router));
+    EXPECT_NO_THROW(bms::reporting::register_routes(router, db(), 1));
 }
 
 TEST_F(ModuleTest, StaffRouteRegistrationIsCallable) {
