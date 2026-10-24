@@ -15,6 +15,12 @@ sqlite3 bms.db < db/schema.sql
 sqlite3 bms.db < db/seed.sql
 ```
 
+For an existing version 1 database, run the one-time migration before starting the updated server:
+
+```powershell
+sqlite3 bms.db ".read db/migrations/002_customer_credentials.sql"
+```
+
 ### Demo Credentials
 All demo users use the password "Password123!" (for testing only):
 - Administrator: username `admin`
@@ -81,7 +87,7 @@ Command-line options override environment variables. The server serves the front
   { "code": "VALIDATION_ERROR", "message": "Amount must be positive.", "field": "amount" }
   ```
 
-  `field` appears only when one input field caused the error. Statuses: 400 for invalid input, 401 when not logged in, 403 when the role is not allowed, 404 when something is not found, 409 for a conflict, 422 for a broken business rule (for example `INSUFFICIENT_BALANCE`), and 500 for unexpected errors, which never include internal details.
+  `field` appears for a single-field error; multi-field validation responses use a `fields` array of `{ "field", "message" }` entries. Statuses: 400 for invalid input, 401 when not logged in, 403 when the role is not allowed, 404 when something is not found, 409 for a conflict, 422 for a broken business rule (for example `INSUFFICIENT_BALANCE`), and 500 for unexpected errors, which never include internal details.
 - Core code throws `bms::Error` (`src/common/error.hpp`). The API layer turns it into the response above.
 - Each module registers its endpoints in `src/<module>/routes.cpp`:
 
@@ -93,6 +99,12 @@ Command-line options override environment variables. The server serves the front
   }
   ```
 - The access log records the method, path and status only. Request bodies, query strings and headers are never logged.
+
+### Customer registration and sign-in
+
+Administrators and Bank Officers sign in with `POST /auth/login` using `{"username":"…","password":"…"}`. The response contains a short-lived bearer token; send it as `Authorization: Bearer <token>` to `POST /customers`. Customer registration requires `name`, `dateOfBirth`, `address`, `phone`, `identificationReference` and `email`. A successful response returns the new customer ID and one-time temporary password; the customer must change that password after first sign-in using `POST /auth/change-password` with `{"newPassword":"…"}`. `POST /auth/logout` invalidates the bearer token.
+
+The temporary password is shown only in the immediate registration response and success screen. The customer-registration and sign-in endpoints are enabled only when the server binds to a loopback address. This project does not yet support HTTPS; do not expose it to a network or use real customer data until TLS is implemented. The one-time credential response is a documented exception to SADS SEC-2; see [the deviations log](docs/DEVIATIONS.md).
 
 ## Project structure
 

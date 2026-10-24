@@ -6,6 +6,7 @@
 #include "api/errors.hpp"
 #include "api/router.hpp"
 #include "audit/routes.hpp"
+#include "auth/password.hpp"
 #include "auth/routes.hpp"
 #include "common/error.hpp"
 #include "customer/routes.hpp"
@@ -24,6 +25,15 @@ TEST_F(ModuleTest, CommonLoadsSeededAdministrator) {
     ASSERT_TRUE(user->step());
     EXPECT_STREQ(reinterpret_cast<const char*>(user->column_text(0)), "administrator");
     EXPECT_STREQ(reinterpret_cast<const char*>(user->column_text(1)), "active");
+}
+
+TEST_F(ModuleTest, SeededDemoPasswordMatchesItsDocumentedCredential) {
+    auto user = db().prepare("SELECT password_hash FROM users WHERE username = 'admin'");
+    ASSERT_TRUE(user->step());
+    const auto* value = user->column_text(0);
+    ASSERT_NE(value, nullptr);
+    EXPECT_TRUE(bms::auth::verify_password("Password123!",
+                                           reinterpret_cast<const char*>(value)));
 }
 
 TEST_F(ModuleTest, ApiMapsValidationErrorsToBadRequest) {
@@ -48,13 +58,13 @@ TEST_F(ModuleTest, AuditRouteRegistrationIsCallable) {
 TEST_F(ModuleTest, AuthRouteRegistrationIsCallable) {
     httplib::Server server;
     bms::api::Router router(server);
-    EXPECT_NO_THROW(bms::auth::register_routes(router));
+    EXPECT_NO_THROW(bms::auth::register_routes(router, db(), true));
 }
 
 TEST_F(ModuleTest, CustomerRouteRegistrationIsCallable) {
     httplib::Server server;
     bms::api::Router router(server);
-    EXPECT_NO_THROW(bms::customer::register_routes(router));
+    EXPECT_NO_THROW(bms::customer::register_routes(router, db(), true));
 }
 
 TEST_F(ModuleTest, ReportingRouteRegistrationIsCallable) {

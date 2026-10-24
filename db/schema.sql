@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS users (
     status TEXT NOT NULL CHECK (status IN ('active', 'inactive', 'locked')),
     failed_attempts INTEGER NOT NULL CHECK (failed_attempts >= 0),
     password_hash TEXT NOT NULL, -- Argon2id string from libsodium crypto_pwhash_str
+    must_change_password INTEGER NOT NULL DEFAULT 0 CHECK (must_change_password IN (0, 1)),
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) STRICT;
@@ -19,10 +20,12 @@ CREATE TABLE IF NOT EXISTS users (
 -- Customers table (optional link to users for login capability)
 CREATE TABLE IF NOT EXISTS customers (
     customer_id INTEGER PRIMARY KEY,
+    customer_code TEXT NOT NULL UNIQUE,
     user_id INTEGER UNIQUE, -- Optional FK to users so a customer can log in
     full_name TEXT NOT NULL,
     email TEXT NOT NULL UNIQUE,
     phone TEXT NOT NULL UNIQUE,
+    identification_reference TEXT NOT NULL UNIQUE,
     address TEXT NOT NULL,
     date_of_birth TEXT NOT NULL,
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -147,4 +150,4 @@ BEGIN
 END;
 
 -- Set user_version for migration tracking
-PRAGMA user_version = 1;
+PRAGMA user_version = 2;

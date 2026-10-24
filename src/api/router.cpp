@@ -50,6 +50,9 @@ httplib::Server::Handler wrap(Handler handler) {
         try {
             Response response = handler(Request(raw));
             write_json(res, response.status, response.body);
+            for (const auto& header : response.headers) {
+                res.set_header(header.first, header.second);
+            }
         } catch (const Error& e) {
             write_error(res, e);
         } catch (const std::exception& e) {

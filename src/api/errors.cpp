@@ -19,6 +19,12 @@ int http_status(ErrorKind kind) {
 nlohmann::json error_body(const Error& error) {
     nlohmann::json body = {{"code", error.code()}, {"message", error.what()}};
     if (error.field()) body["field"] = *error.field();
+    if (!error.fields().empty()) {
+        body["fields"] = nlohmann::json::array();
+        for (const auto& field : error.fields()) {
+            body["fields"].push_back({{"field", field.first}, {"message", field.second}});
+        }
+    }
     return body;
 }
 
