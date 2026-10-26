@@ -3,6 +3,7 @@
 #include <limits>
 #include <string>
 
+#include "audit/record.hpp"
 #include "common/db.hpp"
 #include "common/error.hpp"
 
@@ -120,16 +121,9 @@ DepositResult deposit(Database& database, const std::string& account_number,
         transaction_id = transaction_id_query->column_int(0);
     }
 
-    {
-        auto insert_audit = database.prepare(
-            "INSERT INTO audit_log (user_id, action, entity, entity_id, details) "
-            "VALUES (?, 'DEPOSIT', 'accounts', ?, ?)");
-        insert_audit->bind(1, operator_id);
-        insert_audit->bind(2, account_id);
-        insert_audit->bind(3, "Deposited " + std::to_string(amount_paise) +
-                                  " paise; resulting balance " + std::to_string(resulting_balance) + " paise.");
-        insert_audit->step();
-    }
+    audit::record(database, operator_id, "DEPOSIT", "accounts", account_id,
+                  "Deposited " + std::to_string(amount_paise) +
+                      " paise; resulting balance " + std::to_string(resulting_balance) + " paise.");
 
     std::string created_at;
     {

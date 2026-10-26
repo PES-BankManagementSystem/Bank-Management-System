@@ -87,3 +87,10 @@ target_link_libraries(staff_test PRIVATE
     bms::api bms::auth bms::common bms::staff GTest::gtest_main bms_options)
 target_compile_definitions(staff_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
 add_test(NAME staff_test COMMAND staff_test)
+
+# S-26: audit trail written inside each balance-changing transaction.
+add_executable(audit_test audit_test.cpp support/seeded_database.hpp)
+target_link_libraries(audit_test PRIVATE
+    bms::audit bms::common bms::transaction GTest::gtest_main bms_options)
+target_compile_definitions(audit_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
+add_test(NAME audit_test COMMAND audit_test)

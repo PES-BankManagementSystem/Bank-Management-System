@@ -2,4 +2,4 @@
 # attempts, and role-based access control (FR-1, FR-2, NFR-4, SEC-1, SEC-2).
 bms_add_module(auth
     SOURCES routes.cpp password.cpp
-    DEPENDS bms::api bms::common sodium)
+    DEPENDS bms::api bms::audit bms::common sodium)

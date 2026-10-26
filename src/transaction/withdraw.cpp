@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include "audit/record.hpp"
 #include "common/db.hpp"
 #include "common/error.hpp"
 
@@ -93,16 +94,9 @@ DepositResult withdraw(Database& database, const std::string& account_number,
         query->step();
         transaction_id = query->column_int(0);
     }
-    {
-        auto insert = database.prepare(
-            "INSERT INTO audit_log (user_id, action, entity, entity_id, details) "
-            "VALUES (?, 'WITHDRAWAL', 'accounts', ?, ?)");
-        insert->bind(1, operator_id);
-        insert->bind(2, account_id);
-        insert->bind(3, "Withdrew " + std::to_string(amount_paise) +
-                           " paise; resulting balance " + std::to_string(resulting_balance) + " paise.");
-        insert->step();
-    }
+    audit::record(database, operator_id, "WITHDRAWAL", "accounts", account_id,
+                  "Withdrew " + std::to_string(amount_paise) +
+                      " paise; resulting balance " + std::to_string(resulting_balance) + " paise.");
 
     std::string created_at;
     {
