@@ -75,7 +75,10 @@ int main(int argc, char* argv[]) {
     try {
         bms::Database database(config.db_path);
         bms::api::Server server(config);
-        register_all_routes(server.router(), database, is_loopback_host(config.host));
+        // One-time credential delivery and sign-in are allowed on loopback (local
+        // development) or when the connection is encrypted.
+        register_all_routes(server.router(), database,
+                            is_loopback_host(config.host) || server.tls_enabled());
         const int port = server.bind();
 
         g_server = &server;
@@ -83,7 +86,13 @@ int main(int argc, char* argv[]) {
         std::signal(SIGTERM, handle_stop_signal);
 
         bms::log::info(std::string(bms::kProjectName) + ' ' + bms::kVersion +
-                       " listening on http://" + config.host + ':' + std::to_string(port));
+                       " listening on " + (server.tls_enabled() ? "https://" : "http://") + config.host +
+                       ':' + std::to_string(port));
+        if (!server.tls_enabled() && !is_loopback_host(config.host)) {
+            bms::log::warning(
+                "Serving plain HTTP on a network address: sign-in and credential routes are "
+                "disabled. Set --tls-cert and --tls-key to enable HTTPS.");
+        }
         server.run();
         g_server = nullptr;
         bms::log::info("Server stopped");

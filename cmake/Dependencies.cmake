@@ -14,9 +14,15 @@ include(FetchContent)
 set(FETCHCONTENT_UPDATES_DISCONNECTED ON CACHE BOOL "" FORCE)
 
 # --- cpp-httplib -------------------------------------------------------------
-# Optional features stay off so the build is identical on every machine; TLS is
-# switched on later for HTTPS (S-28).
-set(HTTPLIB_USE_OPENSSL_IF_AVAILABLE OFF CACHE BOOL "" FORCE)
+# Optional compression features stay off so the build is identical on every
+# machine. HTTPS (S-28) is built in whenever OpenSSL 3 is found; configure with
+# -DBMS_ENABLE_TLS=OFF to leave it out.
+option(BMS_ENABLE_TLS "Build HTTPS support when OpenSSL is available" ON)
+if(BMS_ENABLE_TLS)
+    set(HTTPLIB_USE_OPENSSL_IF_AVAILABLE ON CACHE BOOL "" FORCE)
+else()
+    set(HTTPLIB_USE_OPENSSL_IF_AVAILABLE OFF CACHE BOOL "" FORCE)
+endif()
 set(HTTPLIB_USE_ZLIB_IF_AVAILABLE OFF CACHE BOOL "" FORCE)
 set(HTTPLIB_USE_BROTLI_IF_AVAILABLE OFF CACHE BOOL "" FORCE)
 set(HTTPLIB_USE_ZSTD_IF_AVAILABLE OFF CACHE BOOL "" FORCE)

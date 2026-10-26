@@ -54,6 +54,26 @@ int main() {
         CHECK_EQ(c.frontend_dir, std::string("ui"));
     });
 
+    bms::test::run("TLS certificate and key come from environment or options", [] {
+        bms::Config c = load_config({}, fake_env({}));
+        CHECK(!c.tls_enabled());
+
+        c = load_config({}, fake_env({{"BMS_TLS_CERT", "env.crt"}, {"BMS_TLS_KEY", "env.key"}}));
+        CHECK(c.tls_enabled());
+        CHECK_EQ(c.tls_cert_path, std::string("env.crt"));
+        CHECK_EQ(c.tls_key_path, std::string("env.key"));
+
+        c = load_config({"--tls-cert", "cli.crt", "--tls-key", "cli.key"},
+                        fake_env({{"BMS_TLS_CERT", "env.crt"}, {"BMS_TLS_KEY", "env.key"}}));
+        CHECK_EQ(c.tls_cert_path, std::string("cli.crt"));
+        CHECK_EQ(c.tls_key_path, std::string("cli.key"));
+    });
+
+    bms::test::run("a certificate without a key (or the reverse) is rejected", [] {
+        CHECK_THROWS_AS(load_config({"--tls-cert", "a.crt"}, fake_env({})), std::invalid_argument);
+        CHECK_THROWS_AS(load_config({}, fake_env({{"BMS_TLS_KEY", "a.key"}})), std::invalid_argument);
+    });
+
     bms::test::run("port 0 is accepted (OS picks a free port)", [] {
         CHECK_EQ(load_config({"--port", "0"}, fake_env({})).port, 0);
     });

@@ -42,6 +42,8 @@ Config load_config(const std::vector<std::string>& args, const EnvLookup& env) {
     if (auto v = env("BMS_PORT")) config.port = parse_port(*v, "BMS_PORT");
     if (auto v = env("BMS_DB_PATH")) config.db_path = *v;
     if (auto v = env("BMS_FRONTEND_DIR")) config.frontend_dir = *v;
+    if (auto v = env("BMS_TLS_CERT")) config.tls_cert_path = *v;
+    if (auto v = env("BMS_TLS_KEY")) config.tls_key_path = *v;
 
     for (std::size_t i = 0; i < args.size(); ++i) {
         const std::string& option = args[i];
@@ -58,9 +60,18 @@ Config load_config(const std::vector<std::string>& args, const EnvLookup& env) {
             config.db_path = value();
         } else if (option == "--frontend") {
             config.frontend_dir = value();
+        } else if (option == "--tls-cert") {
+            config.tls_cert_path = value();
+        } else if (option == "--tls-key") {
+            config.tls_key_path = value();
         } else {
             throw std::invalid_argument("Unknown option: " + option);
         }
+    }
+    if (config.tls_cert_path.empty() != config.tls_key_path.empty()) {
+        throw std::invalid_argument(
+            "HTTPS needs both a certificate and a private key: set --tls-cert and --tls-key "
+            "(or BMS_TLS_CERT and BMS_TLS_KEY).");
     }
     return config;
 }
@@ -74,6 +85,10 @@ std::string usage() {
            "  --db <path>        SQLite database file   [BMS_DB_PATH]  default bms.db\n"
            "  --frontend <dir>   folder served at /     [BMS_FRONTEND_DIR]\n"
            "                     default: the frontend/ folder of the repository\n"
+           "  --tls-cert <file>  PEM certificate for HTTPS  [BMS_TLS_CERT]\n"
+           "  --tls-key <file>   PEM private key for HTTPS  [BMS_TLS_KEY]\n"
+           "                     give both to serve HTTPS; without them the server speaks\n"
+           "                     plain HTTP, which is for local development only\n"
            "  --version          print the version and exit\n"
            "  --help             print this help and exit\n";
 }

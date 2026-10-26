@@ -50,8 +50,38 @@ httplib::Server::HandlerResponse fill_empty_error(const httplib::Request&, httpl
 
 }  // namespace
 
+namespace {
+
+std::unique_ptr<httplib::Server> make_http_server(const Config& config) {
+    if (!config.tls_enabled()) return std::make_unique<httplib::Server>();
+#ifdef CPPHTTPLIB_OPENSSL_SUPPORT
+    auto server = std::make_unique<httplib::SSLServer>(config.tls_cert_path.c_str(),
+                                                       config.tls_key_path.c_str());
+    if (!server->is_valid()) {
+        throw std::runtime_error("Could not load the TLS certificate '" + config.tls_cert_path +
+                                 "' and private key '" + config.tls_key_path +
+                                 "'. Check that both are PEM files and match.");
+    }
+    return server;
+#else
+    throw std::runtime_error(
+        "This build has no HTTPS support. Rebuild with OpenSSL available, or remove the "
+        "TLS certificate and key settings to serve plain HTTP for local development.");
+#endif
+}
+
+}  // namespace
+
+bool Server::tls_supported() {
+#ifdef CPPHTTPLIB_OPENSSL_SUPPORT
+    return true;
+#else
+    return false;
+#endif
+}
+
 Server::Server(Config config)
-    : config_(std::move(config)), http_(std::make_unique<httplib::Server>()), router_(*http_) {
+    : config_(std::move(config)), http_(make_http_server(config_)), router_(*http_) {
     // httplib's default sets SO_REUSEPORT on Linux, which lets a second server
     // bind the same port and silently take half the requests. Allow a quick
     // restart (SO_REUSEADDR) but never a shared port.
