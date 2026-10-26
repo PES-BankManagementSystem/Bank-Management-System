@@ -2,8 +2,8 @@
 // paths come from configuration (SRS 3.4, SEC-3, NFR-4).
 
 #include <chrono>
-#include <cstdio>
 #include <filesystem>
+#include <fstream>
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -16,6 +16,7 @@
 #include "common/config.hpp"
 
 #ifdef CPPHTTPLIB_OPENSSL_SUPPORT
+#include <openssl/bio.h>
 #include <openssl/evp.h>
 #include <openssl/pem.h>
 #include <openssl/x509.h>
@@ -51,8 +52,12 @@ public:
         X509_set_issuer_name(x509, name);
         X509_sign(x509, pkey, EVP_sha256());
 
-        write(cert_, [&](FILE* f) { return PEM_write_X509(f, x509); });
-        write(key_, [&](FILE* f) { return PEM_write_PrivateKey(f, pkey, nullptr, nullptr, 0, nullptr, nullptr); });
+        // In-memory BIOs rather than FILE*: on Windows OpenSSL cannot use a FILE*
+        // from the test's C runtime without OPENSSL_Applink.
+        write(cert_, [&](BIO* bio) { return PEM_write_bio_X509(bio, x509); });
+        write(key_, [&](BIO* bio) {
+            return PEM_write_bio_PrivateKey(bio, pkey, nullptr, nullptr, 0, nullptr, nullptr);
+        });
         X509_free(x509);
         EVP_PKEY_free(pkey);
     }
@@ -68,11 +73,18 @@ public:
 private:
     template <typename Writer>
     static void write(const std::string& path, Writer&& writer) {
-        FILE* file = std::fopen(path.c_str(), "wb");
-        if (file == nullptr) throw std::runtime_error("Could not write " + path);
-        const int ok = writer(file);
-        std::fclose(file);
-        if (ok != 1) throw std::runtime_error("Could not write PEM data to " + path);
+        BIO* bio = BIO_new(BIO_s_mem());
+        const int ok = writer(bio);
+        char* data = nullptr;
+        const long size = BIO_get_mem_data(bio, &data);
+        if (ok != 1 || size <= 0) {
+            BIO_free(bio);
+            throw std::runtime_error("Could not produce PEM data for " + path);
+        }
+        std::ofstream file(path, std::ios::binary);
+        file.write(data, size);
+        BIO_free(bio);
+        if (!file) throw std::runtime_error("Could not write " + path);
     }
 
     fs::path dir_;
