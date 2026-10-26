@@ -104,6 +104,11 @@ Principal authenticate(const api::Request& request, Database& database,
     return {session->user_id, role, must_change_password};
 }
 
+void expire_all_sessions_for_testing() {
+    std::lock_guard<std::mutex> lock(sessions_mutex);
+    for (auto& entry : sessions) entry.second.expires_at = Clock::now() - std::chrono::seconds(1);
+}
+
 void register_routes(api::Router& router, Database& database, bool allow_plain_http) {
     router.post("/auth/login", [&database, allow_plain_http](const api::Request& request) {
         if (!allow_plain_http) {
