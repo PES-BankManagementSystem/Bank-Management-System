@@ -101,3 +101,11 @@ target_link_libraries(audit_viewer_test PRIVATE
     bms::api bms::audit bms::auth bms::common bms::transaction GTest::gtest_main bms_options)
 target_compile_definitions(audit_viewer_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
 add_test(NAME audit_viewer_test COMMAND audit_viewer_test)
+
+# S-10: role-based access control in the core, tested through the API without the UI.
+add_executable(rbac_test rbac_test.cpp support/seeded_database.hpp support/login.hpp)
+target_link_libraries(rbac_test PRIVATE
+    bms::api bms::audit bms::auth bms::common bms::customer bms::reporting bms::staff
+    bms::transaction GTest::gtest_main bms_options)
+target_compile_definitions(rbac_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
+add_test(NAME rbac_test COMMAND rbac_test)

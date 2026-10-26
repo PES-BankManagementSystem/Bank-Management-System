@@ -6,10 +6,12 @@
 #include <nlohmann/json.hpp>
 
 #include "api/server.hpp"
+#include "auth/routes.hpp"
 #include "common/db.hpp"
 #include "common/config.hpp"
 #include "common/error.hpp"
 #include "support/check.hpp"
+#include "support/login.hpp"
 #include "support/seeded_db.hpp"
 #include "transaction/deposit.hpp"
 #include "transaction/routes.hpp"
@@ -133,13 +135,15 @@ void test_deposit_route_returns_json_success_and_account_errors() {
     config.host = "127.0.0.1";
     config.port = 0;
     bms::api::Server server(config);
-    bms::transaction::register_routes(server.router(), fixture.database(), 2);
+    bms::auth::register_routes(server.router(), fixture.database(), true);
+    bms::transaction::register_routes(server.router(), fixture.database());
     const int port = server.bind();
     std::thread server_thread([&server] { server.run(); });
     server.wait_until_ready();
 
     httplib::Client client("127.0.0.1", port);
-    const auto success = client.Post("/transactions",
+    const auto officer = bms::test::sign_in(client, "officer1");
+    const auto success = client.Post("/transactions", officer,
                                      R"({"type":"deposit","account_number":"ACC001","amount":"125.50"})",
                                      "application/json");
     CHECK(success);
@@ -153,7 +157,7 @@ void test_deposit_route_returns_json_success_and_account_errors() {
         CHECK(body["transaction"]["created_at"].is_string());
     }
 
-    const auto frozen = client.Post("/transactions",
+    const auto frozen = client.Post("/transactions", officer,
                                     R"({"type":"deposit","account_number":"ACC002","amount":"10.00"})",
                                     "application/json");
     CHECK(frozen);
@@ -164,7 +168,7 @@ void test_deposit_route_returns_json_success_and_account_errors() {
         CHECK(body["message"].get<std::string>().find("frozen") != std::string::npos);
     }
 
-    const auto unknown = client.Post("/transactions",
+    const auto unknown = client.Post("/transactions", officer,
                                      R"({"type":"deposit","account_number":"UNKNOWN","amount":"10.00"})",
                                      "application/json");
     CHECK(unknown);

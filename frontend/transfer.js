@@ -18,17 +18,11 @@ transferForm.addEventListener("submit", async (event) => {
   transferSubmitButton.disabled = true;
   transferSubmitButton.textContent = "Processing…";
   try {
-    const response = await fetch("/transfers", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        from_account_number: fromAccount,
-        to_account_number: toAccount,
-        amount,
-      }),
+    const body = await window.BmsApi.post("/transfers", {
+      from_account_number: fromAccount,
+      to_account_number: toAccount,
+      amount,
     });
-    const body = await response.json();
-    if (!response.ok) throw new Error(body.message || "The transfer could not be completed.");
 
     transferResult.textContent =
       `Transfer succeeded. Reference: ${body.transfer_reference}. ` +

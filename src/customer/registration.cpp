@@ -9,6 +9,7 @@
 
 #include "audit/record.hpp"
 #include "auth/password.hpp"
+#include "auth/rbac.hpp"
 #include "common/db.hpp"
 #include "common/error.hpp"
 
@@ -80,6 +81,7 @@ void reject_duplicate_customer_fields(Database& database, const CustomerInput& i
 
 RegistrationResult register_customer(Database& database, const CustomerInput& raw_input,
                                       std::int64_t operator_user_id) {
+    auth::rbac::require_role(database, operator_user_id, auth::rbac::Operation::RegisterCustomer);
     const CustomerInput input = validate_customer_input(raw_input);
     ensure_sodium();
     reject_duplicate_customer_fields(database, input);

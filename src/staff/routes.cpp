@@ -12,6 +12,7 @@
 #include "api/router.hpp"
 #include "audit/record.hpp"
 #include "auth/password.hpp"
+#include "auth/rbac.hpp"
 #include "auth/routes.hpp"
 #include "common/db.hpp"
 #include "common/error.hpp"
@@ -29,9 +30,7 @@ std::string column_string(const Statement& row, int index) {
 }
 
 auth::Principal require_administrator(const api::Request& request, Database& database) {
-    const auth::Principal principal = auth::authenticate(request, database);
-    if (principal.role != "administrator") throw forbidden();
-    return principal;
+    return auth::rbac::require(request, database, auth::rbac::Operation::ManageStaff);
 }
 
 std::string generate_temporary_password() {

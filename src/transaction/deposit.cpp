@@ -4,6 +4,7 @@
 #include <string>
 
 #include "audit/record.hpp"
+#include "auth/rbac.hpp"
 #include "common/db.hpp"
 #include "common/error.hpp"
 
@@ -64,6 +65,7 @@ std::int64_t parse_amount_paise(const std::string& amount) {
 
 DepositResult deposit(Database& database, const std::string& account_number,
                       const std::string& amount, std::int64_t operator_id) {
+    auth::rbac::require_role(database, operator_id, auth::rbac::Operation::Deposit);
     const std::int64_t amount_paise = parse_amount_paise(amount);
     if (account_number.empty()) {
         throw validation_error("account_number", "Account number is required.");

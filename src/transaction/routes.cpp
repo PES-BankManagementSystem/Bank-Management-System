@@ -1,7 +1,8 @@
 #include "transaction/routes.hpp"
 
-#include "common/db.hpp"
 #include "api/router.hpp"
+#include "auth/rbac.hpp"
+#include "common/db.hpp"
 #include "common/error.hpp"
 #include "transaction/deposit.hpp"
 #include "transaction/withdraw.hpp"
@@ -9,8 +10,15 @@
 
 namespace bms::transaction {
 
-void register_routes(api::Router& router, Database& database, std::int64_t operator_id) {
-    router.post("/transactions", [&database, operator_id](const api::Request& request) {
+void register_routes(api::Router& router, Database& database) {
+    router.post("/transactions", [&database](const api::Request& request) {
+        const auth::Principal principal = auth::authenticate(request, database);
+        // A caller who may do neither is refused before the body is read.
+        if (!auth::rbac::is_allowed(auth::rbac::Operation::Deposit, principal.role) &&
+            !auth::rbac::is_allowed(auth::rbac::Operation::Withdraw, principal.role)) {
+            auth::rbac::require_permission(request, database, principal,
+                                           auth::rbac::Operation::Deposit);
+        }
         const auto& body = request.json();
         if (!body.contains("type") || !body["type"].is_string()) {
             throw validation_error("type", "Transaction type is required.");
@@ -28,6 +36,10 @@ void register_routes(api::Router& router, Database& database, std::int64_t opera
         const std::string account_number = body["account_number"].get<std::string>();
         const std::string amount = body["amount"].get<std::string>();
         const bool is_withdrawal = body["type"] == "withdraw";
+        auth::rbac::require_permission(request, database, principal,
+                                       is_withdrawal ? auth::rbac::Operation::Withdraw
+                                                     : auth::rbac::Operation::Deposit);
+        const std::int64_t operator_id = principal.user_id;
         const DepositResult result = is_withdrawal
             ? withdraw(database, account_number, amount, operator_id)
             : deposit(database, account_number, amount, operator_id);
@@ -44,7 +56,9 @@ void register_routes(api::Router& router, Database& database, std::int64_t opera
         });
     });
 
-    router.post("/transfers", [&database, operator_id](const api::Request& request) {
+    router.post("/transfers", [&database](const api::Request& request) {
+        const std::int64_t operator_id =
+            auth::rbac::require(request, database, auth::rbac::Operation::Transfer).user_id;
         const auto& body = request.json();
         if (!body.contains("from_account_number") || !body["from_account_number"].is_string()) {
             throw validation_error("from_account_number", "Source account number is required.");

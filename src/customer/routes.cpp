@@ -5,6 +5,7 @@
 #include <utility>
 
 #include "api/router.hpp"
+#include "auth/rbac.hpp"
 #include "auth/routes.hpp"
 #include "common/db.hpp"
 #include "common/error.hpp"
@@ -33,10 +34,8 @@ void register_routes(api::Router& router, Database& database,
                      bool allow_initial_credential_delivery) {
     router.post("/customers", [&database, allow_initial_credential_delivery](
                                   const api::Request& request) {
-        const auth::Principal principal = auth::authenticate(request, database);
-        if (principal.role != "administrator" && principal.role != "bank_officer") {
-            throw forbidden();
-        }
+        const auth::Principal principal =
+            auth::rbac::require(request, database, auth::rbac::Operation::RegisterCustomer);
         if (!allow_initial_credential_delivery) {
             throw forbidden(
                 "Customer registration with one-time credential delivery is disabled on "

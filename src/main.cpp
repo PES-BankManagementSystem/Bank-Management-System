@@ -10,6 +10,7 @@
 #include "api/router.hpp"
 #include "api/server.hpp"
 #include "audit/routes.hpp"
+#include "auth/rbac.hpp"
 #include "auth/routes.hpp"
 #include "common/config.hpp"
 #include "common/db.hpp"
@@ -24,10 +25,6 @@
 namespace {
 
 bms::api::Server* g_server = nullptr;
-
-// S-17 still uses a fixed local-demo operator; transaction routes are not session-authenticated.
-constexpr std::int64_t kLocalDemoOperatorId = 2;
-constexpr std::int64_t kLocalDemoAdministratorId = 1;
 
 // Ctrl+C / SIGTERM: stop accepting requests and let main() return normally, so
 // open database connections are closed cleanly.
@@ -44,13 +41,11 @@ void register_all_routes(bms::api::Router& router, bms::Database& database,
     bms::auth::register_routes(router, database, allow_initial_credential_delivery);
     bms::customer::register_routes(router, database, allow_initial_credential_delivery);
     bms::account::register_routes(router);
-    bms::transaction::register_routes(router, database, kLocalDemoOperatorId);
-    bms::reporting::register_routes(router, database, kLocalDemoAdministratorId);
+    bms::transaction::register_routes(router, database);
+    bms::reporting::register_routes(router, database);
     bms::staff::register_routes(router, database, allow_initial_credential_delivery);
     bms::audit::register_routes(router, database, [&database](const bms::api::Request& request) {
-        if (bms::auth::authenticate(request, database).role != "administrator") {
-            throw bms::forbidden();
-        }
+        bms::auth::rbac::require(request, database, bms::auth::rbac::Operation::ViewAudit);
     });
 }
 

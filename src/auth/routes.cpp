@@ -15,6 +15,7 @@
 #include "api/router.hpp"
 #include "audit/record.hpp"
 #include "auth/password.hpp"
+#include "auth/rbac.hpp"
 #include "common/db.hpp"
 #include "common/error.hpp"
 
@@ -85,9 +86,7 @@ void locked_login() {
 }
 
 Principal require_administrator(const api::Request& request, Database& database) {
-    const Principal principal = authenticate(request, database);
-    if (principal.role != "administrator") throw forbidden();
-    return principal;
+    return rbac::require(request, database, rbac::Operation::UnlockUser);
 }
 
 std::int64_t parse_user_id(const std::string& value) {
