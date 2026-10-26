@@ -5,8 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Bank Management System | Staff and customer services</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="shell.css">
 </head>
 <body>
+  <header class="app-header">
+    <a class="app-brand" href="#">Bank Management System</a>
+    <nav id="app-nav" class="app-nav" aria-label="Main" hidden></nav>
+    <p id="app-user" class="app-user" hidden>
+      <span id="app-user-label"></span>
+      <button id="app-sign-out" type="button" class="secondary">Sign out</button>
+    </p>
+  </header>
+
   <section class="card" aria-labelledby="login-heading">
     <p class="eyebrow">Bank Management System</p>
     <h1 id="login-heading">Staff sign in</h1>
@@ -157,6 +167,9 @@
     </form>
     <p id="interest-result" class="result" role="status" aria-live="polite"></p>
   </section>
+  <script src="api.js" defer></script>
+  <script src="components.js" defer></script>
+  <script src="shell.js" defer></script>
   <script src="app.js" defer></script>
   <script src="withdraw.js" defer></script>
   <script src="transfer.js" defer></script>
