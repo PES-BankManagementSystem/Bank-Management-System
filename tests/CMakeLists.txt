@@ -32,6 +32,13 @@ target_link_libraries(transaction_test PRIVATE bms::transaction bms_options)
 target_compile_definitions(transaction_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
 add_test(NAME transaction_test COMMAND transaction_test)
 
+# S-08: session tokens, expiry and logout.
+add_executable(auth_session_test auth_session_test.cpp support/seeded_database.hpp)
+target_link_libraries(auth_session_test PRIVATE
+    bms::api bms::auth bms::common GTest::gtest_main bms_options)
+target_compile_definitions(auth_session_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
+add_test(NAME auth_session_test COMMAND auth_session_test)
+
 add_executable(withdraw_test withdraw_test.cpp)
 target_link_libraries(withdraw_test PRIVATE bms::transaction bms_options)
 target_compile_definitions(withdraw_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")

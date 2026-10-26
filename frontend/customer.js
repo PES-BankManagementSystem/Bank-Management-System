@@ -106,6 +106,9 @@ function updateSessionView() {
   sessionStatus.textContent = accessToken
     ? `Signed in as ${currentRole.replaceAll("_", " ")}.`
     : "You are signed out.";
+  document.dispatchEvent(new CustomEvent("bms:session", {
+    detail: { accessToken, role: currentRole, mustChangePassword },
+  }));
 }
 
 loginForm.addEventListener("submit", async (event) => {
@@ -174,6 +177,10 @@ passwordChangeForm.addEventListener("submit", async (event) => {
       },
       body: JSON.stringify({ newPassword: password }),
     });
+    if (response.status === 401) {
+      document.dispatchEvent(new CustomEvent("bms:session-expired"));
+      return;
+    }
     const body = await response.json();
     if (!response.ok) throw new Error(body.message || "Password change failed.");
     mustChangePassword = false;
@@ -207,6 +214,10 @@ customerForm.addEventListener("submit", async (event) => {
       },
       body: JSON.stringify(values),
     });
+    if (response.status === 401) {
+      document.dispatchEvent(new CustomEvent("bms:session-expired"));
+      return;
+    }
     const body = await response.json();
     if (!response.ok) {
       if (!displayApiFieldErrors(body)) throw new Error(body.message || "Registration failed.");
@@ -227,6 +238,17 @@ customerForm.addEventListener("submit", async (event) => {
   } finally {
     customerSubmit.disabled = false;
   }
+});
+
+// Shared session hook for the other front-end modules: they listen for
+// "bms:session" and raise "bms:session-expired" when the server answers 401,
+// which returns the page to the sign-in form.
+document.addEventListener("bms:session-expired", () => {
+  accessToken = "";
+  currentRole = "";
+  mustChangePassword = false;
+  updateSessionView();
+  loginError.textContent = "Your session has ended. Please sign in again.";
 });
 
 updateSessionView();
