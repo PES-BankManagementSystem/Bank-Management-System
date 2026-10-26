@@ -19,8 +19,8 @@
 
   <section class="card" aria-labelledby="login-heading">
     <p class="eyebrow">Bank Management System</p>
-    <h1 id="login-heading">Staff sign in</h1>
-    <p class="intro">Sign in with an Administrator or Bank Officer account to register a customer.</p>
+    <h1 id="login-heading">Sign in</h1>
+    <p class="intro">Administrators, Bank Officers and Customers sign in with their user ID and password.</p>
     <form id="login-form">
       <label for="login-username">Username</label>
       <input id="login-username" name="username" type="text" autocomplete="username" required
@@ -33,6 +33,14 @@
     <p id="login-error" class="result error" role="status" aria-live="polite"></p>
     <p id="session-status" class="result" role="status" aria-live="polite"></p>
     <button id="logout-button" type="button" hidden>Sign out</button>
+  </section>
+
+  <section id="role-home" class="card" aria-labelledby="role-home-heading" hidden>
+    <p class="eyebrow" id="role-home-eyebrow">Home</p>
+    <h1 id="role-home-heading" tabindex="-1">Welcome</h1>
+    <p id="role-home-intro" class="intro"></p>
+    <ul id="role-home-links" class="role-home-links"></ul>
+    <p class="hint">This is a placeholder home page. The full dashboard for your role arrives with S-25.</p>
   </section>
 
   <section id="password-change-card" class="card" aria-labelledby="password-change-heading" hidden>
@@ -171,6 +179,7 @@
   <script src="components.js" defer></script>
   <script src="shell.js" defer></script>
   <script src="app.js" defer></script>
+  <script src="landing.js" defer></script>
   <script src="withdraw.js" defer></script>
   <script src="transfer.js" defer></script>
   <script src="customer.js" defer></script>

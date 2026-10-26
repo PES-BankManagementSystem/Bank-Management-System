@@ -27,6 +27,13 @@ target_link_libraries(db_test PRIVATE bms::common bms_options)
 target_compile_definitions(db_test PRIVATE DB_PATH="${PROJECT_SOURCE_DIR}/db" BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
 add_test(NAME db_test COMMAND db_test)
 
+# S-07: login with user ID and password for every role.
+add_executable(auth_login_test auth_login_test.cpp support/seeded_database.hpp)
+target_link_libraries(auth_login_test PRIVATE
+    bms::api bms::auth bms::common GTest::gtest_main bms_options)
+target_compile_definitions(auth_login_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
+add_test(NAME auth_login_test COMMAND auth_login_test)
+
 add_executable(transaction_test transaction_test.cpp)
 target_link_libraries(transaction_test PRIVATE bms::transaction bms_options)
 target_compile_definitions(transaction_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
