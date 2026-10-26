@@ -106,6 +106,9 @@ function updateSessionView() {
   sessionStatus.textContent = accessToken
     ? `Signed in as ${currentRole.replaceAll("_", " ")}.`
     : "You are signed out.";
+  document.dispatchEvent(new CustomEvent("bms:session", {
+    detail: { accessToken, role: currentRole, mustChangePassword },
+  }));
 }
 
 loginForm.addEventListener("submit", async (event) => {
@@ -227,6 +230,17 @@ customerForm.addEventListener("submit", async (event) => {
   } finally {
     customerSubmit.disabled = false;
   }
+});
+
+// Shared session hook for the other front-end modules: they listen for
+// "bms:session" and raise "bms:session-expired" when the server answers 401,
+// which returns the page to the sign-in form.
+document.addEventListener("bms:session-expired", () => {
+  accessToken = "";
+  currentRole = "";
+  mustChangePassword = false;
+  updateSessionView();
+  loginError.textContent = "Your session has ended. Please sign in again.";
 });
 
 updateSessionView();

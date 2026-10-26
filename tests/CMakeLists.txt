@@ -37,6 +37,13 @@ target_link_libraries(withdraw_test PRIVATE bms::transaction bms_options)
 target_compile_definitions(withdraw_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
 add_test(NAME withdraw_test COMMAND withdraw_test)
 
+# S-09: lockout after three failed logins and Administrator unlock.
+add_executable(auth_lockout_test auth_lockout_test.cpp support/seeded_database.hpp)
+target_link_libraries(auth_lockout_test PRIVATE
+    bms::api bms::auth bms::common GTest::gtest_main bms_options)
+target_compile_definitions(auth_lockout_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
+add_test(NAME auth_lockout_test COMMAND auth_lockout_test)
+
 add_executable(module_tests module_tests.cpp support/seeded_database.hpp)
 target_link_libraries(module_tests PRIVATE
     bms::account bms::api bms::audit bms::auth bms::common bms::customer
