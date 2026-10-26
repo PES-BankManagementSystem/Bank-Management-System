@@ -192,6 +192,25 @@
     <div id="staff-list"></div>
     <p id="staff-result" class="result" role="status" aria-live="polite"></p>
   </section>
+  <section id="audit-card" class="card" aria-labelledby="audit-heading"
+           data-nav-label="Audit trail" data-roles="administrator" hidden>
+    <p class="eyebrow">Administrator</p>
+    <h1 id="audit-heading">Audit trail</h1>
+    <p class="intro">Every balance change and account-security event, newest first. The trail is read-only: entries cannot be edited or deleted.</p>
+
+    <form id="audit-form" novalidate>
+      <label for="audit-from">From date</label>
+      <input id="audit-from" name="from" type="date">
+      <label for="audit-to">To date</label>
+      <input id="audit-to" name="to" type="date">
+      <label for="audit-account">Account number</label>
+      <input id="audit-account" name="account" type="text" autocomplete="off" placeholder="All accounts">
+      <button id="audit-submit" type="submit">Show entries</button>
+    </form>
+    <p id="audit-result" class="result" role="status" aria-live="polite"></p>
+    <div id="audit-list"></div>
+    <button id="audit-more" type="button" hidden>Load more</button>
+  </section>
   <section class="card" aria-labelledby="interest-heading">
     <p class="eyebrow">Administrator</p>
     <h1 id="interest-heading">Run interest</h1>
@@ -215,5 +234,6 @@
   <script src="customer.js" defer></script>
   <script src="staff.js" defer></script>
   <script src="interest.js" defer></script>
+  <script src="audit.js" defer></script>
 </body>
 </html>

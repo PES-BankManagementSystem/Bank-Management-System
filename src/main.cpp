@@ -7,11 +7,13 @@
 #include <vector>
 
 #include "account/routes.hpp"
+#include "api/router.hpp"
 #include "api/server.hpp"
 #include "audit/routes.hpp"
 #include "auth/routes.hpp"
 #include "common/config.hpp"
 #include "common/db.hpp"
+#include "common/error.hpp"
 #include "common/log.hpp"
 #include "common/version.hpp"
 #include "customer/routes.hpp"
@@ -45,7 +47,11 @@ void register_all_routes(bms::api::Router& router, bms::Database& database,
     bms::transaction::register_routes(router, database, kLocalDemoOperatorId);
     bms::reporting::register_routes(router, database, kLocalDemoAdministratorId);
     bms::staff::register_routes(router, database, allow_initial_credential_delivery);
-    bms::audit::register_routes(router);
+    bms::audit::register_routes(router, database, [&database](const bms::api::Request& request) {
+        if (bms::auth::authenticate(request, database).role != "administrator") {
+            throw bms::forbidden();
+        }
+    });
 }
 
 }  // namespace

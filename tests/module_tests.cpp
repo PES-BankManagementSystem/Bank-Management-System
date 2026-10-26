@@ -52,7 +52,7 @@ TEST_F(ModuleTest, AccountRouteRegistrationIsCallable) {
 TEST_F(ModuleTest, AuditRouteRegistrationIsCallable) {
     httplib::Server server;
     bms::api::Router router(server);
-    EXPECT_NO_THROW(bms::audit::register_routes(router));
+    EXPECT_NO_THROW(bms::audit::register_routes(router, db(), [](const bms::api::Request&) {}));
 }
 
 TEST_F(ModuleTest, AuthRouteRegistrationIsCallable) {
