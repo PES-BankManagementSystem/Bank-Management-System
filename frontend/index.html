@@ -145,6 +145,25 @@
     </form>
     <p id="transfer-result" class="result" role="status" aria-live="polite"></p>
   </section>
+  <section id="staff-card" class="card" aria-labelledby="staff-heading"
+           data-nav-label="Staff" data-roles="administrator" hidden>
+    <p class="eyebrow">Administrator</p>
+    <h1 id="staff-heading">Manage Bank Officers</h1>
+    <p class="intro">Create officer accounts, rename them, and deactivate officers who no longer work at the bank. Deactivated officers cannot sign in; their past transactions keep their ID.</p>
+
+    <form id="staff-form" novalidate>
+      <label for="staff-username">New officer username</label>
+      <input id="staff-username" name="username" type="text" autocomplete="off"
+             maxlength="32" required aria-describedby="staff-username-error staff-username-hint">
+      <p id="staff-username-hint" class="hint">3-32 lower-case letters, digits, ".", "_" or "-", starting with a letter.</p>
+      <p id="staff-username-error" class="field-error"></p>
+      <button id="staff-submit" type="submit">Create officer</button>
+    </form>
+    <div id="staff-created" class="result success" role="status" aria-live="polite"></div>
+
+    <div id="staff-list"></div>
+    <p id="staff-result" class="result" role="status" aria-live="polite"></p>
+  </section>
   <section class="card" aria-labelledby="interest-heading">
     <p class="eyebrow">Administrator</p>
     <h1 id="interest-heading">Run interest</h1>
@@ -161,6 +180,7 @@
   <script src="withdraw.js" defer></script>
   <script src="transfer.js" defer></script>
   <script src="customer.js" defer></script>
+  <script src="staff.js" defer></script>
   <script src="interest.js" defer></script>
 </body>
 </html>
