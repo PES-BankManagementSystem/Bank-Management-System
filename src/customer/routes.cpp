@@ -1,5 +1,8 @@
 #include "customer/routes.hpp"
 
+#include <charconv>
+#include <cstdint>
+#include <limits>
 #include <set>
 #include <string>
 #include <utility>
@@ -9,10 +12,14 @@
 #include "common/db.hpp"
 #include "common/error.hpp"
 #include "customer/registration.hpp"
+#include "customer/records.hpp"
 #include "customer/validation.hpp"
 
 namespace bms::customer {
 namespace {
+
+constexpr char kCustomerDataHttpMessage[] =
+    "Customer data services are disabled on network-accessible HTTP listeners. Enable HTTPS.";
 
 std::string json_string(const api::Json& body, const char* key,
                         Error::FieldErrors& errors) {
@@ -27,10 +34,170 @@ std::string json_string(const api::Json& body, const char* key,
     return body[key].get<std::string>();
 }
 
+CustomerInput read_customer_input(const api::Json& body) {
+    const std::set<std::string> editable_fields = {
+        "name", "dateOfBirth", "address", "phone", "identificationReference", "email"};
+    const std::set<std::string> immutable_fields = {
+        "customerId", "customer_code", "user_id", "createdAt"};
+    Error::FieldErrors errors;
+    for (auto it = body.begin(); it != body.end(); ++it) {
+        if (immutable_fields.find(it.key()) != immutable_fields.end()) {
+            errors.emplace_back(it.key(), "This field cannot be changed.");
+        } else if (editable_fields.find(it.key()) == editable_fields.end()) {
+            errors.emplace_back(it.key(), "Unknown field.");
+        }
+    }
+
+    CustomerInput input{
+        json_string(body, "name", errors),
+        json_string(body, "dateOfBirth", errors),
+        json_string(body, "address", errors),
+        json_string(body, "phone", errors),
+        json_string(body, "identificationReference", errors),
+        json_string(body, "email", errors),
+    };
+    return validate_customer_input(std::move(input), std::move(errors));
+}
+
+std::int64_t pagination_value(const api::Request& request, const char* name,
+                              std::int64_t default_value, std::int64_t maximum) {
+    const auto value = request.query(name);
+    if (!value) return default_value;
+    std::int64_t parsed = 0;
+    const char* first = value->data();
+    const char* last = first + value->size();
+    const auto result = std::from_chars(first, last, parsed);
+    if (value->empty() || result.ec != std::errc{} || result.ptr != last ||
+        parsed < 0 || parsed > maximum || (std::string(name) == "limit" && parsed == 0)) {
+        const std::string expectation = std::string(name) == "limit"
+            ? "Limit must be an integer from 1 to 100."
+            : "Offset must be a non-negative integer.";
+        throw validation_error(name, expectation);
+    }
+    return parsed;
+}
+
+std::string money_string(std::int64_t paise) {
+    const std::int64_t rupees = paise / 100;
+    const std::int64_t remainder = paise % 100;
+    return std::to_string(rupees) + "." +
+           (remainder < 10 ? "0" : "") + std::to_string(remainder);
+}
+
+api::Json customer_details_json(const CustomerDetails& customer) {
+    api::Json accounts = api::Json::array();
+    for (const CustomerAccount& account : customer.accounts) {
+        accounts.push_back({
+            {"accountNumber", account.account_number},
+            {"type", account.type},
+            {"status", account.status},
+            {"balance", money_string(account.balance_paise)},
+        });
+    }
+    return {
+        {"customerId", customer.customer_id},
+        {"name", customer.name},
+        {"dateOfBirth", customer.date_of_birth},
+        {"address", customer.address},
+        {"phone", customer.phone},
+        {"email", customer.email},
+        {"identificationReference", customer.identification_reference},
+        {"status", customer.status},
+        {"createdAt", customer.created_at},
+        {"updatedAt", customer.updated_at},
+        {"accounts", std::move(accounts)},
+    };
+}
+
+std::string lowercase(std::string value) {
+    for (char& character : value) {
+        if (character >= 'A' && character <= 'Z') {
+            character = static_cast<char>(character - 'A' + 'a');
+        }
+    }
+    return value;
+}
+
+void require_loopback_data_access(bool allow_initial_credential_delivery) {
+    if (!allow_initial_credential_delivery) throw forbidden(kCustomerDataHttpMessage);
+}
+
+void require_staff_role(const auth::Principal& principal) {
+    if (principal.role != "administrator" && principal.role != "bank_officer") {
+        throw forbidden();
+    }
+}
+
 }  // namespace
 
 void register_routes(api::Router& router, Database& database,
                      bool allow_initial_credential_delivery) {
+    router.get("/customers", [&database, allow_initial_credential_delivery](
+                                 const api::Request& request) {
+        require_loopback_data_access(allow_initial_credential_delivery);
+        const auth::Principal principal = auth::authenticate(request, database);
+        require_staff_role(principal);
+
+        const std::string query = request.query("query").value_or("");
+        const std::int64_t limit = pagination_value(request, "limit", 20, 100);
+        const std::int64_t offset =
+            pagination_value(request, "offset", 0, std::numeric_limits<std::int64_t>::max());
+        const CustomerPage page = search_customers(database, query, limit, offset);
+        api::Json items = api::Json::array();
+        for (const CustomerSummary& customer : page.items) {
+            items.push_back({
+                {"customerId", customer.customer_id},
+                {"name", customer.name},
+                {"phone", customer.phone},
+                {"email", customer.email},
+                {"status", customer.status},
+            });
+        }
+        return api::Response::ok({
+            {"items", std::move(items)},
+            {"total", page.total},
+            {"limit", limit},
+            {"offset", offset},
+        });
+    });
+
+    router.get("/customers/me", [&database, allow_initial_credential_delivery](
+                                   const api::Request& request) {
+        require_loopback_data_access(allow_initial_credential_delivery);
+        const auth::Principal principal = auth::authenticate(request, database);
+        if (principal.role != "customer") throw forbidden();
+        return api::Response::ok(customer_details_json(
+            get_customer_for_user(database, principal.user_id)));
+    });
+
+    router.get("/customers/:id", [&database, allow_initial_credential_delivery](
+                                     const api::Request& request) {
+        require_loopback_data_access(allow_initial_credential_delivery);
+        const auth::Principal principal = auth::authenticate(request, database);
+        const std::string customer_id = request.param("id");
+        if (principal.role == "customer") {
+            const CustomerDetails own =
+                get_customer_for_user(database, principal.user_id);
+            if (lowercase(own.customer_id) != lowercase(customer_id)) {
+                throw not_found("Customer " + customer_id + " was not found.");
+            }
+            return api::Response::ok(customer_details_json(own));
+        }
+        require_staff_role(principal);
+        return api::Response::ok(customer_details_json(
+            get_customer(database, customer_id)));
+    });
+
+    router.put("/customers/:id", [&database, allow_initial_credential_delivery](
+                                     const api::Request& request) {
+        require_loopback_data_access(allow_initial_credential_delivery);
+        const auth::Principal principal = auth::authenticate(request, database);
+        require_staff_role(principal);
+        const CustomerInput input = read_customer_input(request.json());
+        return api::Response::ok(customer_details_json(
+            update_customer(database, request.param("id"), input, principal.user_id)));
+    });
+
     router.post("/customers", [&database, allow_initial_credential_delivery](
                                   const api::Request& request) {
         const auth::Principal principal = auth::authenticate(request, database);
@@ -43,25 +210,7 @@ void register_routes(api::Router& router, Database& database,
                 "network-accessible HTTP listeners. Enable HTTPS before using this route.");
         }
 
-        const auto& body = request.json();
-        const std::set<std::string> allowed_fields = {
-            "name", "dateOfBirth", "address", "phone", "identificationReference", "email"};
-        Error::FieldErrors errors;
-        for (auto it = body.begin(); it != body.end(); ++it) {
-            if (allowed_fields.find(it.key()) == allowed_fields.end()) {
-                errors.emplace_back(it.key(), "Unknown field.");
-            }
-        }
-
-        CustomerInput input{
-            json_string(body, "name", errors),
-            json_string(body, "dateOfBirth", errors),
-            json_string(body, "address", errors),
-            json_string(body, "phone", errors),
-            json_string(body, "identificationReference", errors),
-            json_string(body, "email", errors),
-        };
-        const CustomerInput normalized = validate_customer_input(std::move(input), std::move(errors));
+        const CustomerInput normalized = read_customer_input(request.json());
         const RegistrationResult result =
             register_customer(database, normalized, principal.user_id);
 
