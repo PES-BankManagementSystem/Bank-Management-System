@@ -44,7 +44,7 @@ void register_all_routes(bms::api::Router& router, bms::Database& database,
     bms::account::register_routes(router);
     bms::transaction::register_routes(router, database, kLocalDemoOperatorId);
     bms::reporting::register_routes(router, database, kLocalDemoAdministratorId);
-    bms::staff::register_routes(router);
+    bms::staff::register_routes(router, database, allow_initial_credential_delivery);
     bms::audit::register_routes(router);
 }
 

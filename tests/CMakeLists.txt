@@ -80,3 +80,10 @@ add_executable(interest_test interest_test.cpp)
 target_link_libraries(interest_test PRIVATE bms::reporting bms_options)
 target_compile_definitions(interest_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
 add_test(NAME interest_test COMMAND interest_test)
+
+# S-24: Bank Officer management (create, list, update, deactivate).
+add_executable(staff_test staff_test.cpp support/seeded_database.hpp)
+target_link_libraries(staff_test PRIVATE
+    bms::api bms::auth bms::common bms::staff GTest::gtest_main bms_options)
+target_compile_definitions(staff_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
+add_test(NAME staff_test COMMAND staff_test)
