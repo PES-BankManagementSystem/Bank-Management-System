@@ -10,6 +10,7 @@
 #include <sodium.h>
 
 #include "api/router.hpp"
+#include "audit/record.hpp"
 #include "auth/password.hpp"
 #include "auth/routes.hpp"
 #include "common/db.hpp"
@@ -87,18 +88,6 @@ std::int64_t parse_id(const std::string& value) {
     return std::stoll(value);
 }
 
-void write_audit(Database& database, std::int64_t admin_id, const char* action,
-                 std::int64_t officer_id, const std::string& details) {
-    auto audit = database.prepare(
-        "INSERT INTO audit_log (user_id, action, entity, entity_id, details) "
-        "VALUES (?, ?, 'users', ?, ?)");
-    audit->bind(1, admin_id);
-    audit->bind(2, std::string(action));
-    audit->bind(3, officer_id);
-    audit->bind(4, details);
-    audit->step();
-}
-
 std::optional<api::Json> find_officer(Database& database, std::int64_t user_id) {
     auto query = database.prepare(
         "SELECT user_id, username, status, created_at, updated_at FROM users "
@@ -149,8 +138,8 @@ void register_routes(api::Router& router, Database& database,
         auto last_id = database.prepare("SELECT last_insert_rowid()");
         last_id->step();
         const std::int64_t officer_id = last_id->column_int(0);
-        write_audit(database, admin.user_id, "STAFF_CREATED", officer_id,
-                    "Created Bank Officer " + username);
+        audit::record(database, admin.user_id, "STAFF_CREATED", "users", officer_id,
+                      "Created Bank Officer " + username);
         api::Json officer = *find_officer(database, officer_id);
         transaction.commit();
 
@@ -207,7 +196,7 @@ void register_routes(api::Router& router, Database& database,
         if (!current) throw not_found("Bank Officer not found.");
 
         std::string details;
-        if (username && *username != (*current)["username"]) {
+        if (username && *username != (*current)["username"].get<std::string>()) {
             reject_duplicate_username(database, *username, officer_id);
             auto rename = database.prepare(
                 "UPDATE users SET username = ?, updated_at = CURRENT_TIMESTAMP "
@@ -218,7 +207,7 @@ void register_routes(api::Router& router, Database& database,
             details += "username " + (*current)["username"].get<std::string>() + " -> " +
                        *username + "; ";
         }
-        if (status && *status != (*current)["status"]) {
+        if (status && *status != (*current)["status"].get<std::string>()) {
             // Reactivating also clears any failed-attempt count.
             auto change = database.prepare(
                 "UPDATE users SET status = ?, failed_attempts = CASE WHEN ? = 'active' "
@@ -231,9 +220,9 @@ void register_routes(api::Router& router, Database& database,
             details += "status " + (*current)["status"].get<std::string>() + " -> " + *status;
         }
         if (!details.empty()) {
-            write_audit(database, admin.user_id,
-                        status && *status == "inactive" ? "STAFF_DEACTIVATED" : "STAFF_UPDATED",
-                        officer_id, details);
+            audit::record(database, admin.user_id,
+                          status && *status == "inactive" ? "STAFF_DEACTIVATED" : "STAFF_UPDATED",
+                          "users", officer_id, details);
         }
         api::Json officer = *find_officer(database, officer_id);
         transaction.commit();

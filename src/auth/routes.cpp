@@ -13,6 +13,7 @@
 #include <sodium.h>
 
 #include "api/router.hpp"
+#include "audit/record.hpp"
 #include "auth/password.hpp"
 #include "common/db.hpp"
 #include "common/error.hpp"
@@ -81,18 +82,6 @@ void locked_login() {
     throw Error(ErrorKind::Unauthenticated, "ACCOUNT_LOCKED",
                 "This account is locked after three failed sign-in attempts. "
                 "Contact an Administrator to unlock it.");
-}
-
-void write_audit(Database& database, std::int64_t actor_id, const std::string& action,
-                 std::int64_t user_id, const std::string& details) {
-    auto audit = database.prepare(
-        "INSERT INTO audit_log (user_id, action, entity, entity_id, details) "
-        "VALUES (?, ?, 'users', ?, ?)");
-    audit->bind(1, actor_id);
-    audit->bind(2, action);
-    audit->bind(3, user_id);
-    audit->bind(4, details);
-    audit->step();
 }
 
 Principal require_administrator(const api::Request& request, Database& database) {
@@ -194,8 +183,8 @@ void register_routes(api::Router& router, Database& database, bool allow_plain_h
             const bool now_locked =
                 status == "active" && failed_attempts + 1 >= kMaxFailedAttempts;
             if (now_locked) {
-                write_audit(database, user_id, "ACCOUNT_LOCKED", user_id,
-                            "Locked after three consecutive failed sign-in attempts");
+                audit::record(database, user_id, "ACCOUNT_LOCKED", "users", user_id,
+                              "Locked after three consecutive failed sign-in attempts");
             }
             transaction.commit();
             if (now_locked) locked_login();
@@ -303,8 +292,8 @@ void register_routes(api::Router& router, Database& database, bool allow_plain_h
             "updated_at = CURRENT_TIMESTAMP WHERE user_id = ?");
         unlock->bind(1, user_id);
         unlock->step();
-        write_audit(database, admin.user_id, "USER_UNLOCKED", user_id,
-                    "Unlocked by Administrator");
+        audit::record(database, admin.user_id, "USER_UNLOCKED", "users", user_id,
+                      "Unlocked by Administrator");
         transaction.commit();
 
         return api::Response::ok({

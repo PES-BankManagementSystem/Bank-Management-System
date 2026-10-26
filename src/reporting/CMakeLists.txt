@@ -2,4 +2,4 @@
 # (FR-9 to FR-12).
 bms_add_module(reporting
     SOURCES routes.cpp interest.cpp
-    DEPENDS bms::api bms::common bms::transaction)
+    DEPENDS bms::api bms::audit bms::common bms::transaction)

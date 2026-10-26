@@ -46,6 +46,9 @@ namespace bms
 
         bool is_open() const noexcept { return db_ != nullptr; }
 
+        // True between begin() and commit()/rollback().
+        bool in_transaction() const noexcept { return db_ != nullptr && sqlite3_get_autocommit(db_) == 0; }
+
         void exec(const std::string &sql);
         void exec_script(const std::string &sql);
 
