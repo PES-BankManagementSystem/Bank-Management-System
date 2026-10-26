@@ -109,3 +109,16 @@ target_link_libraries(rbac_test PRIVATE
     bms::transaction GTest::gtest_main bms_options)
 target_compile_definitions(rbac_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
 add_test(NAME rbac_test COMMAND rbac_test)
+
+# S-28: HTTPS with a certificate and key from configuration.
+add_executable(tls_test tls_test.cpp)
+target_link_libraries(tls_test PRIVATE bms::api bms::common GTest::gtest_main bms_options)
+add_test(NAME tls_test COMMAND tls_test)
+set_tests_properties(tls_test PROPERTIES TIMEOUT 60)
+
+# S-28: passwords, one-time credentials and tokens never appear in the log.
+add_executable(log_secrets_test log_secrets_test.cpp support/seeded_database.hpp)
+target_link_libraries(log_secrets_test PRIVATE
+    bms::api bms::auth bms::common bms::customer bms::staff GTest::gtest_main bms_options)
+target_compile_definitions(log_secrets_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
+add_test(NAME log_secrets_test COMMAND log_secrets_test)

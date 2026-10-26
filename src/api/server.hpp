@@ -28,6 +28,14 @@ public:
 
     Router& router() { return router_; }
 
+    // True when the server was configured with a certificate and key and
+    // serves HTTPS.
+    bool tls_enabled() const { return config_.tls_enabled(); }
+
+    // False when this build was made without OpenSSL; asking for TLS then
+    // fails in the constructor.
+    static bool tls_supported();
+
     // Binds to config.host:config.port and returns the port actually used
     // (useful with port 0). Throws std::runtime_error if the port is taken.
     int bind();
