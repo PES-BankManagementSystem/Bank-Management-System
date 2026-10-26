@@ -56,6 +56,16 @@
     <p id="password-change-error" class="result error" role="status" aria-live="polite"></p>
   </section>
 
+  <section id="locked-users-card" class="card" aria-labelledby="locked-users-heading"
+           data-nav-label="Locked users" data-roles="administrator" hidden>
+    <p class="eyebrow">Administrator</p>
+    <h1 id="locked-users-heading">Locked users</h1>
+    <p class="intro">Accounts are locked after three failed sign-in attempts. Unlock a user once you have confirmed who they are.</p>
+    <div id="locked-users-list"></div>
+    <button id="locked-users-refresh" type="button">Refresh list</button>
+    <p id="locked-users-result" class="result" role="status" aria-live="polite"></p>
+  </section>
+
   <section id="customer-registration-card" class="card" aria-labelledby="customer-heading" hidden>
     <p class="eyebrow">Customer records</p>
     <h1 id="customer-heading">Register a customer</h1>
@@ -182,6 +192,7 @@
   <script src="landing.js" defer></script>
   <script src="withdraw.js" defer></script>
   <script src="transfer.js" defer></script>
+  <script src="unlock.js" defer></script>
   <script src="customer.js" defer></script>
   <script src="interest.js" defer></script>
 </body>

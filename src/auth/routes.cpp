@@ -8,6 +8,7 @@
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
+#include <utility>
 
 #include <sodium.h>
 
@@ -21,6 +22,7 @@ namespace {
 
 using Clock = std::chrono::steady_clock;
 constexpr auto kSessionLifetime = std::chrono::minutes(30);
+constexpr std::int64_t kMaxFailedAttempts = 3;  // S-09, TC-02
 
 struct Session {
     std::int64_t user_id;
@@ -71,6 +73,40 @@ void remove_session(const std::string& token) {
 
 void invalid_login() {
     throw unauthenticated("Invalid username or password.");
+}
+
+// S-09: a locked account is told to contact an Administrator, even when the
+// correct password is supplied.
+void locked_login() {
+    throw Error(ErrorKind::Unauthenticated, "ACCOUNT_LOCKED",
+                "This account is locked after three failed sign-in attempts. "
+                "Contact an Administrator to unlock it.");
+}
+
+void write_audit(Database& database, std::int64_t actor_id, const std::string& action,
+                 std::int64_t user_id, const std::string& details) {
+    auto audit = database.prepare(
+        "INSERT INTO audit_log (user_id, action, entity, entity_id, details) "
+        "VALUES (?, ?, 'users', ?, ?)");
+    audit->bind(1, actor_id);
+    audit->bind(2, action);
+    audit->bind(3, user_id);
+    audit->bind(4, details);
+    audit->step();
+}
+
+Principal require_administrator(const api::Request& request, Database& database) {
+    const Principal principal = authenticate(request, database);
+    if (principal.role != "administrator") throw forbidden();
+    return principal;
+}
+
+std::int64_t parse_user_id(const std::string& value) {
+    if (value.empty() || value.size() > 18 ||
+        value.find_first_not_of("0123456789") != std::string::npos) {
+        throw not_found("User not found.");
+    }
+    return std::stoll(value);
 }
 
 }  // namespace
@@ -140,16 +176,29 @@ void register_routes(api::Router& router, Database& database, bool allow_plain_h
         const std::int64_t user_id = query->column_int(0);
         const std::string role = column_string(*query, 1);
         const std::string status = column_string(*query, 2);
+        const std::int64_t failed_attempts = query->column_int(3);
         const std::string hash = column_string(*query, 4);
         const bool must_change_password = query->column_int(5) != 0;
+        if (status == "locked") {
+            transaction.rollback();
+            locked_login();
+        }
         if (status != "active" || !verify_password(password, hash)) {
             auto failed = database.prepare(
                 "UPDATE users SET failed_attempts = failed_attempts + 1, "
-                "status = CASE WHEN failed_attempts + 1 >= 3 THEN 'locked' ELSE status END, "
+                "status = CASE WHEN failed_attempts + 1 >= ? THEN 'locked' ELSE status END, "
                 "updated_at = CURRENT_TIMESTAMP WHERE user_id = ? AND status = 'active'");
-            failed->bind(1, user_id);
+            failed->bind(1, kMaxFailedAttempts);
+            failed->bind(2, user_id);
             failed->step();
+            const bool now_locked =
+                status == "active" && failed_attempts + 1 >= kMaxFailedAttempts;
+            if (now_locked) {
+                write_audit(database, user_id, "ACCOUNT_LOCKED", user_id,
+                            "Locked after three consecutive failed sign-in attempts");
+            }
             transaction.commit();
+            if (now_locked) locked_login();
             invalid_login();
         }
 
@@ -212,6 +261,58 @@ void register_routes(api::Router& router, Database& database, bool allow_plain_h
         update->bind(2, principal.user_id);
         update->step();
         return api::Response::ok({{"message", "Password changed."}});
+    });
+
+    // S-09: Administrators see every locked user (customer or staff)...
+    router.get("/users/locked", [&database](const api::Request& request) {
+        require_administrator(request, database);
+        auto query = database.prepare(
+            "SELECT user_id, username, role, failed_attempts, updated_at FROM users "
+            "WHERE status = 'locked' ORDER BY updated_at DESC, user_id");
+        api::Json users = api::Json::array();
+        while (query->step()) {
+            users.push_back({
+                {"userId", query->column_int(0)},
+                {"username", column_string(*query, 1)},
+                {"role", column_string(*query, 2)},
+                {"failedAttempts", query->column_int(3)},
+                {"lockedAt", column_string(*query, 4)},
+            });
+        }
+        return api::Response::ok({{"users", std::move(users)}});
+    });
+
+    // ...and can unlock any of them, which also resets the failure counter.
+    router.patch("/users/:id/unlock", [&database](const api::Request& request) {
+        const Principal admin = require_administrator(request, database);
+        const std::int64_t user_id = parse_user_id(request.param("id"));
+
+        Database::Transaction transaction(database, true);
+        auto query = database.prepare(
+            "SELECT username, role, status FROM users WHERE user_id = ?");
+        query->bind(1, user_id);
+        if (!query->step()) throw not_found("User not found.");
+        const std::string username = column_string(*query, 0);
+        const std::string role = column_string(*query, 1);
+        if (column_string(*query, 2) != "locked") {
+            throw conflict("USER_NOT_LOCKED", "This user is not locked.");
+        }
+
+        auto unlock = database.prepare(
+            "UPDATE users SET status = 'active', failed_attempts = 0, "
+            "updated_at = CURRENT_TIMESTAMP WHERE user_id = ?");
+        unlock->bind(1, user_id);
+        unlock->step();
+        write_audit(database, admin.user_id, "USER_UNLOCKED", user_id,
+                    "Unlocked by Administrator");
+        transaction.commit();
+
+        return api::Response::ok({
+            {"userId", user_id},
+            {"username", username},
+            {"role", role},
+            {"status", "active"},
+        });
     });
 }
 
