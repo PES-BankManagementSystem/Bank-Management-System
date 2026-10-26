@@ -94,3 +94,10 @@ target_link_libraries(audit_test PRIVATE
     bms::audit bms::common bms::transaction GTest::gtest_main bms_options)
 target_compile_definitions(audit_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
 add_test(NAME audit_test COMMAND audit_test)
+
+# S-27: Administrator audit trail viewer.
+add_executable(audit_viewer_test audit_viewer_test.cpp support/seeded_database.hpp)
+target_link_libraries(audit_viewer_test PRIVATE
+    bms::api bms::audit bms::auth bms::common bms::transaction GTest::gtest_main bms_options)
+target_compile_definitions(audit_viewer_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
+add_test(NAME audit_viewer_test COMMAND audit_viewer_test)
