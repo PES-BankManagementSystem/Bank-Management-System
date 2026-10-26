@@ -10,10 +10,39 @@ const customerForm = document.querySelector("#customer-form");
 const customerSubmit = document.querySelector("#customer-submit");
 const customerFormError = document.querySelector("#customer-form-error");
 const customerCreated = document.querySelector("#customer-created");
+const customerManagementCard = document.querySelector("#customer-management-card");
+const customerSearchForm = document.querySelector("#customer-search-form");
+const customerSearchQuery = document.querySelector("#customer-search-query");
+const customerListStatus = document.querySelector("#customer-list-status");
+const customerResults = document.querySelector("#customer-results");
+const customerPreviousPage = document.querySelector("#customer-previous-page");
+const customerNextPage = document.querySelector("#customer-next-page");
+const customerPageStatus = document.querySelector("#customer-page-status");
+const customerDetailCard = document.querySelector("#customer-detail-card");
+const customerDetailFields = document.querySelector("#customer-detail-fields");
+const customerDetailAccounts = document.querySelector("#customer-detail-accounts");
+const customerDetailStatus = document.querySelector("#customer-detail-status");
+const customerEditButton = document.querySelector("#customer-edit-button");
+const customerEditForm = document.querySelector("#customer-edit-form");
+const customerEditSubmit = document.querySelector("#customer-edit-submit");
+const customerProfileCard = document.querySelector("#customer-profile-card");
+const customerProfileFields = document.querySelector("#customer-profile-fields");
+const customerProfileAccounts = document.querySelector("#customer-profile-accounts");
+const customerProfileStatus = document.querySelector("#customer-profile-status");
+const staffTransactionCards = [
+  document.querySelector("#deposit-card"),
+  document.querySelector("#withdraw-card"),
+  document.querySelector("#transfer-card"),
+  document.querySelector("#interest-card"),
+];
 
 let accessToken = "";
 let currentRole = "";
 let mustChangePassword = false;
+let customerOffset = 0;
+let customerTotal = 0;
+const customerPageSize = 20;
+let selectedCustomerId = "";
 
 const fieldMap = {
   name: "customer-name",
@@ -22,6 +51,15 @@ const fieldMap = {
   phone: "customer-phone",
   identificationReference: "customer-id-reference",
   email: "customer-email",
+};
+
+const editFieldMap = {
+  name: "customer-edit-name",
+  dateOfBirth: "customer-edit-dob",
+  address: "customer-edit-address",
+  phone: "customer-edit-phone",
+  identificationReference: "customer-edit-id-reference",
+  email: "customer-edit-email",
 };
 
 const today = new Date();
@@ -41,6 +79,174 @@ function clearFieldErrors() {
   for (const inputId of Object.values(fieldMap)) {
     document.getElementById(inputId).removeAttribute("aria-invalid");
     document.getElementById(`${inputId}-error`).textContent = "";
+  }
+}
+
+function clearEditFieldErrors() {
+  for (const inputId of Object.values(editFieldMap)) {
+    document.getElementById(inputId).removeAttribute("aria-invalid");
+    document.getElementById(`${inputId}-error`).textContent = "";
+  }
+}
+
+function displayEditFieldErrors(body) {
+  const errors = Array.isArray(body.fields)
+    ? body.fields
+    : body.field ? [{ field: body.field, message: body.message }] : [];
+  for (const error of errors) {
+    const inputId = editFieldMap[error.field];
+    if (!inputId) continue;
+    const input = document.getElementById(inputId);
+    input.setAttribute("aria-invalid", "true");
+    document.getElementById(`${inputId}-error`).textContent = error.message;
+  }
+  const first = errors.find((error) => editFieldMap[error.field]);
+  if (first) document.getElementById(editFieldMap[first.field]).focus();
+  return errors.length > 0;
+}
+
+function appendDetail(details, label, value) {
+  const term = document.createElement("dt");
+  term.textContent = label;
+  const description = document.createElement("dd");
+  description.textContent = value == null ? "" : String(value);
+  details.append(term, description);
+}
+
+function renderCustomerDetails(detailsElement, accountsElement, customer) {
+  detailsElement.replaceChildren();
+  for (const [label, value] of [
+    ["Customer ID", customer.customerId],
+    ["Name", customer.name],
+    ["Date of birth", customer.dateOfBirth],
+    ["Address", customer.address],
+    ["Phone", customer.phone],
+    ["Email", customer.email],
+    ["Identification reference", customer.identificationReference],
+    ["Status", customer.status],
+    ["Created", customer.createdAt],
+    ["Updated", customer.updatedAt],
+  ]) {
+    appendDetail(detailsElement, label, value);
+  }
+
+  accountsElement.replaceChildren();
+  for (const account of customer.accounts || []) {
+    const row = document.createElement("tr");
+    for (const value of [
+      account.accountNumber, account.type, account.status, account.balance,
+    ]) {
+      const cell = document.createElement("td");
+      cell.textContent = value == null ? "" : String(value);
+      row.append(cell);
+    }
+    accountsElement.append(row);
+  }
+  if (!accountsElement.childElementCount) {
+    const row = document.createElement("tr");
+    const cell = document.createElement("td");
+    cell.colSpan = 4;
+    cell.textContent = "No accounts are linked to this customer.";
+    row.append(cell);
+    accountsElement.append(row);
+  }
+}
+
+async function loadCustomerPage() {
+  customerListStatus.textContent = "Loading customers...";
+  customerResults.replaceChildren();
+  customerPreviousPage.disabled = true;
+  customerNextPage.disabled = true;
+  document.querySelector("#customer-search-submit").disabled = true;
+  try {
+    const params = new URLSearchParams({
+      query: customerSearchQuery.value,
+      limit: String(customerPageSize),
+      offset: String(customerOffset),
+    });
+    const response = await fetch(`/customers?${params}`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    const body = await response.json();
+    if (!response.ok) throw new Error(body.message || "Unable to load customers.");
+
+    customerTotal = body.total;
+    for (const customer of body.items) {
+      const row = document.createElement("tr");
+      for (const value of [
+        customer.customerId, customer.name, customer.phone, customer.email,
+      ]) {
+        const cell = document.createElement("td");
+        cell.textContent = value;
+        row.append(cell);
+      }
+      const actionCell = document.createElement("td");
+      const openButton = document.createElement("button");
+      openButton.type = "button";
+      openButton.textContent = "View";
+      openButton.dataset.customerId = customer.customerId;
+      openButton.addEventListener("click", () => openCustomer(openButton.dataset.customerId));
+      actionCell.append(openButton);
+      row.append(actionCell);
+      customerResults.append(row);
+    }
+    customerListStatus.textContent = customerTotal === 0 ? "No customers found." : "";
+    const firstResult = customerTotal === 0 ? 0 : customerOffset + 1;
+    const lastResult = Math.min(customerOffset + customerPageSize, customerTotal);
+    customerPageStatus.textContent =
+      `${firstResult}-${lastResult} of ${customerTotal}`;
+    customerPreviousPage.disabled = customerOffset === 0;
+    customerNextPage.disabled = customerOffset + customerPageSize >= customerTotal;
+  } catch (error) {
+    customerListStatus.textContent = error.message || "Unable to load customers.";
+  } finally {
+    document.querySelector("#customer-search-submit").disabled = false;
+  }
+}
+
+async function openCustomer(customerId) {
+  customerDetailCard.hidden = false;
+  customerDetailStatus.textContent = "Loading customer details…";
+  customerEditForm.hidden = true;
+  customerEditButton.hidden = true;
+  selectedCustomerId = customerId;
+  try {
+    const response = await fetch(`/customers/${encodeURIComponent(customerId)}`, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    const body = await response.json();
+    if (!response.ok) throw new Error(body.message || "Unable to load customer details.");
+    renderCustomerDetails(customerDetailFields, customerDetailAccounts, body);
+    for (const [field, value] of [
+      ["name", body.name],
+      ["dateOfBirth", body.dateOfBirth],
+      ["address", body.address],
+      ["phone", body.phone],
+      ["identificationReference", body.identificationReference],
+      ["email", body.email],
+    ]) {
+      customerEditForm.elements[field].value = value;
+    }
+    customerDetailStatus.textContent = "";
+    customerEditButton.hidden = false;
+    customerDetailCard.scrollIntoView({ behavior: "smooth", block: "start" });
+  } catch (error) {
+    customerDetailStatus.textContent = error.message || "Unable to load customer details.";
+  }
+}
+
+async function loadMyProfile() {
+  customerProfileStatus.textContent = "Loading your profile...";
+  try {
+    const response = await fetch("/customers/me", {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+    const body = await response.json();
+    if (!response.ok) throw new Error(body.message || "Unable to load your profile.");
+    renderCustomerDetails(customerProfileFields, customerProfileAccounts, body);
+    customerProfileStatus.textContent = "";
+  } catch (error) {
+    customerProfileStatus.textContent = error.message || "Unable to load your profile.";
   }
 }
 
@@ -102,10 +308,20 @@ function updateSessionView() {
   loginForm.hidden = Boolean(accessToken);
   logoutButton.hidden = !accessToken;
   registrationCard.hidden = !accessToken || mustChangePassword || !authorizedRole;
+  customerManagementCard.hidden = !accessToken || mustChangePassword || !authorizedRole;
+  customerProfileCard.hidden = !accessToken || mustChangePassword || currentRole !== "customer";
+  for (const card of staffTransactionCards) {
+    card.hidden = Boolean(accessToken) && currentRole === "customer";
+  }
   passwordChangeCard.hidden = !accessToken || !mustChangePassword;
   sessionStatus.textContent = accessToken
     ? `Signed in as ${currentRole.replaceAll("_", " ")}.`
     : "You are signed out.";
+  customerDetailCard.hidden = true;
+  if (accessToken && !mustChangePassword) {
+    if (authorizedRole) void loadCustomerPage();
+    if (currentRole === "customer") void loadMyProfile();
+  }
 }
 
 loginForm.addEventListener("submit", async (event) => {
@@ -226,6 +442,96 @@ customerForm.addEventListener("submit", async (event) => {
     customerFormError.textContent = error.message || "Registration failed. Please try again.";
   } finally {
     customerSubmit.disabled = false;
+  }
+});
+
+customerSearchForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  customerOffset = 0;
+  void loadCustomerPage();
+});
+
+customerPreviousPage.addEventListener("click", () => {
+  customerOffset = Math.max(0, customerOffset - customerPageSize);
+  void loadCustomerPage();
+});
+
+customerNextPage.addEventListener("click", () => {
+  if (customerOffset + customerPageSize < customerTotal) {
+    customerOffset += customerPageSize;
+    void loadCustomerPage();
+  }
+});
+
+customerEditButton.addEventListener("click", () => {
+  clearEditFieldErrors();
+  customerDetailStatus.textContent = "";
+  customerEditForm.hidden = false;
+  customerEditButton.hidden = true;
+  document.querySelector("#customer-edit-name").focus();
+});
+
+document.querySelector("#customer-edit-cancel").addEventListener("click", () => {
+  clearEditFieldErrors();
+  customerEditForm.hidden = true;
+  customerEditButton.hidden = false;
+  customerDetailStatus.textContent = "";
+});
+
+customerEditForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  clearEditFieldErrors();
+  customerDetailStatus.textContent = "";
+  const values = Object.fromEntries(new FormData(customerEditForm).entries());
+  values.name = values.name.trim();
+  values.dateOfBirth = values.dateOfBirth.trim();
+  values.address = values.address.trim();
+  values.phone = values.phone.replace(/[\s-]/g, "");
+  values.identificationReference = values.identificationReference.trim();
+  values.email = values.email.trim();
+
+  customerEditSubmit.disabled = true;
+  try {
+    const response = await fetch(`/customers/${encodeURIComponent(selectedCustomerId)}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(values),
+    });
+    const body = await response.json();
+    if (!response.ok) {
+      const message = body.message || "Unable to update customer.";
+      if (response.status === 404 || response.status === 409) {
+        customerDetailStatus.textContent = message;
+      } else if (displayEditFieldErrors(body)) {
+        customerDetailStatus.textContent = message;
+      } else {
+        throw new Error(message);
+      }
+      return;
+    }
+
+    renderCustomerDetails(customerDetailFields, customerDetailAccounts, body);
+    for (const [field, value] of [
+      ["name", body.name],
+      ["dateOfBirth", body.dateOfBirth],
+      ["address", body.address],
+      ["phone", body.phone],
+      ["identificationReference", body.identificationReference],
+      ["email", body.email],
+    ]) {
+      customerEditForm.elements[field].value = value;
+    }
+    customerEditForm.hidden = true;
+    customerEditButton.hidden = false;
+    customerDetailStatus.textContent = "Customer details updated successfully.";
+    void loadCustomerPage();
+  } catch (error) {
+    customerDetailStatus.textContent = error.message || "Unable to update customer.";
+  } finally {
+    customerEditSubmit.disabled = false;
   }
 });
 

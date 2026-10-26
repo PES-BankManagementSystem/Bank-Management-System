@@ -24,6 +24,20 @@ body {
   box-shadow: 0 12px 36px #172b4d12;
 }
 
+.customer-wide-card { width: min(100%, 900px); }
+.customer-wide-card h2 { margin: 26px 0 12px; font-size: 1.2rem; }
+.table-scroll { width: 100%; overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; text-align: left; }
+caption { padding: 10px 0; color: #5e6c84; text-align: left; }
+th, td { padding: 10px 12px; border-bottom: 1px solid #e1e7ef; }
+th { color: #344563; }
+td button { min-width: 90px; width: auto; min-height: 38px; margin: 0; padding: 6px 12px; }
+.pagination { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.pagination button { width: auto; min-width: 110px; margin-top: 16px; }
+.customer-fields { display: grid; grid-template-columns: minmax(140px, 1fr) 2fr; gap: 8px 16px; }
+.customer-fields dt { font-weight: 700; }
+.customer-fields dd { margin: 0; overflow-wrap: anywhere; }
+
 .eyebrow {
   margin: 0 0 8px;
   color: #2363a5;
