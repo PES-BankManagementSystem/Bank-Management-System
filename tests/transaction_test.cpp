@@ -1,3 +1,4 @@
+#include <cstdint>
 #include <functional>
 #include <string>
 #include <thread>
@@ -138,6 +139,38 @@ void test_unknown_account_returns_not_found() {
     CHECK(error.message.find("UNKNOWN") != std::string::npos);
 }
 
+void test_deposit_route_requires_authenticated_staff_session() {
+    bms::test::SeededDatabase fixture;
+    bms::Config config;
+    config.host = "127.0.0.1";
+    config.port = 0;
+    bms::api::Server server(config);
+    bms::transaction::register_routes(server.router(), fixture.database());
+    const int port = server.bind();
+    std::thread server_thread([&server] { server.run(); });
+    server.wait_until_ready();
+
+    httplib::Client client("127.0.0.1", port);
+    const auto missing_auth = client.Post(
+        "/transactions",
+        R"({"type":"deposit","account_number":"ACC001","amount":"1.00"})",
+        "application/json");
+    CHECK(missing_auth);
+    if (missing_auth) CHECK_EQ(missing_auth->status, 401);
+
+    const std::string customer_token = issue_test_session(fixture.database(), 4);
+    const httplib::Headers customer_auth = {{"Authorization", "Bearer " + customer_token}};
+    const auto forbidden = client.Post(
+        "/transactions", customer_auth,
+        R"({"type":"deposit","account_number":"ACC001","amount":"1.00"})",
+        "application/json");
+    CHECK(forbidden);
+    if (forbidden) CHECK_EQ(forbidden->status, 403);
+
+    server.stop();
+    server_thread.join();
+}
+
 void test_deposit_route_returns_json_success_and_account_errors() {
     bms::test::SeededDatabase fixture;
     bms::Config config;
@@ -165,38 +198,6 @@ void test_deposit_route_returns_json_success_and_account_errors() {
         CHECK_EQ(body["transaction"]["amount"].get<std::string>(), std::string("125.50"));
         CHECK_EQ(body["transaction"]["operator_id"].get<int>(), 2);
         CHECK(body["transaction"]["created_at"].is_string());
-    }
-
-    void test_deposit_route_requires_authenticated_staff_session() {
-        bms::test::SeededDatabase fixture;
-        bms::Config config;
-        config.host = "127.0.0.1";
-        config.port = 0;
-        bms::api::Server server(config);
-        bms::transaction::register_routes(server.router(), fixture.database());
-        const int port = server.bind();
-        std::thread server_thread([&server] { server.run(); });
-        server.wait_until_ready();
-
-        httplib::Client client("127.0.0.1", port);
-        const auto missing_auth = client.Post(
-            "/transactions",
-            R"({"type":"deposit","account_number":"ACC001","amount":"1.00"})",
-            "application/json");
-        CHECK(missing_auth);
-        if (missing_auth) CHECK_EQ(missing_auth->status, 401);
-
-        const std::string customer_token = issue_test_session(fixture.database(), 4);
-        const httplib::Headers customer_auth = {{"Authorization", "Bearer " + customer_token}};
-        const auto forbidden = client.Post(
-            "/transactions", customer_auth,
-            R"({"type":"deposit","account_number":"ACC001","amount":"1.00"})",
-            "application/json");
-        CHECK(forbidden);
-        if (forbidden) CHECK_EQ(forbidden->status, 403);
-
-        server.stop();
-        server_thread.join();
     }
 
     const auto frozen = client.Post("/transactions", auth_headers,
