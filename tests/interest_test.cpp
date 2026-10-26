@@ -8,12 +8,14 @@
 #include <nlohmann/json.hpp>
 
 #include "api/server.hpp"
+#include "auth/routes.hpp"
 #include "common/config.hpp"
 #include "common/db.hpp"
 #include "common/error.hpp"
 #include "reporting/interest.hpp"
 #include "reporting/routes.hpp"
 #include "support/check.hpp"
+#include "support/login.hpp"
 #include "support/seeded_db.hpp"
 #include "transaction/deposit.hpp"
 
@@ -239,13 +241,15 @@ void test_api_success_duplicate_and_malformed_period() {
     config.host = "127.0.0.1";
     config.port = 0;
     bms::api::Server server(config);
-    bms::reporting::register_routes(server.router(), fixture.database(), 1);
+    bms::auth::register_routes(server.router(), fixture.database(), true);
+    bms::reporting::register_routes(server.router(), fixture.database());
     const int port = server.bind();
     std::thread server_thread([&server] { server.run(); });
     server.wait_until_ready();
     httplib::Client client("127.0.0.1", port);
+    const auto admin = bms::test::sign_in(client, "admin");
 
-    const auto success = client.Post("/interest/run", R"({"period":"2026-04"})", "application/json");
+    const auto success = client.Post("/interest/run", admin, R"({"period":"2026-04"})", "application/json");
     CHECK(success);
     if (success) {
         const auto body = nlohmann::json::parse(success->body);
@@ -256,7 +260,7 @@ void test_api_success_duplicate_and_malformed_period() {
         CHECK_EQ(body["accounts"].size(), 2U);
     }
 
-    const auto duplicate = client.Post("/interest/run", R"({"period":"2026-04"})", "application/json");
+    const auto duplicate = client.Post("/interest/run", admin, R"({"period":"2026-04"})", "application/json");
     CHECK(duplicate);
     if (duplicate) {
         const auto body = nlohmann::json::parse(duplicate->body);
@@ -265,7 +269,7 @@ void test_api_success_duplicate_and_malformed_period() {
         CHECK(body["message"].get<std::string>().find("2026-04") != std::string::npos);
     }
 
-    const auto malformed = client.Post("/interest/run", R"({"period":"2026-13"})", "application/json");
+    const auto malformed = client.Post("/interest/run", admin, R"({"period":"2026-13"})", "application/json");
     CHECK(malformed);
     if (malformed) {
         const auto body = nlohmann::json::parse(malformed->body);

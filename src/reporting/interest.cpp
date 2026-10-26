@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "audit/record.hpp"
+#include "auth/rbac.hpp"
 #include "common/db.hpp"
 #include "common/error.hpp"
 #include "transaction/deposit.hpp"
@@ -171,6 +172,7 @@ std::int64_t calculate_interest_paise(std::int64_t balance_paise,
 
 InterestRunResult run_interest(Database& database, const std::string& period_label,
                                 std::int64_t administrator_id) {
+    auth::rbac::require_role(database, administrator_id, auth::rbac::Operation::RunInterest);
     const InterestPeriod period = parse_interest_period(period_label);
     Database::Transaction transaction(database, true);
 

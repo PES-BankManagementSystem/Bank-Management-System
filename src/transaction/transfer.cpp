@@ -6,6 +6,7 @@
 #include <string>
 
 #include "audit/record.hpp"
+#include "auth/rbac.hpp"
 #include "common/db.hpp"
 #include "common/error.hpp"
 #include "transaction/deposit.hpp"
@@ -92,6 +93,7 @@ std::string make_transfer_reference(const std::string& created_at,
 TransferResult transfer(Database& database, const std::string& from_account_number,
                         const std::string& to_account_number, const std::string& amount,
                         std::int64_t operator_id) {
+    auth::rbac::require_role(database, operator_id, auth::rbac::Operation::Transfer);
     const std::int64_t amount_paise = parse_amount_paise(amount);
     if (from_account_number.empty()) {
         throw validation_error("from_account_number", "Source account number is required.");

@@ -17,13 +17,11 @@ form.addEventListener("submit", async (event) => {
   submitButton.disabled = true;
   submitButton.textContent = "Processing…";
   try {
-    const response = await fetch("/transactions", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ type: "deposit", account_number: accountNumber, amount }),
+    const body = await window.BmsApi.post("/transactions", {
+      type: "deposit",
+      account_number: accountNumber,
+      amount,
     });
-    const body = await response.json();
-    if (!response.ok) throw new Error(body.message || "The deposit could not be completed.");
 
     result.textContent =
       `Deposit of ₹${body.transaction.amount} into ${body.transaction.account_number} succeeded. ` +

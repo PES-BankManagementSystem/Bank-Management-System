@@ -16,13 +16,7 @@ interestForm.addEventListener("submit", async (event) => {
   interestSubmitButton.disabled = true;
   interestSubmitButton.textContent = "Processing…";
   try {
-    const response = await fetch("/interest/run", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ period }),
-    });
-    const body = await response.json();
-    if (!response.ok) throw new Error(body.message || "Interest could not be run.");
+    const body = await window.BmsApi.post("/interest/run", { period });
 
     interestResult.textContent =
       `Interest for ${body.period} was credited to ${body.accounts_credited} account(s). ` +

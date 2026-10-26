@@ -17,13 +17,11 @@ withdrawForm.addEventListener("submit", async (event) => {
   withdrawSubmitButton.disabled = true;
   withdrawSubmitButton.textContent = "Processing…";
   try {
-    const response = await fetch("/transactions", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ type: "withdraw", account_number: accountNumber, amount }),
+    const body = await window.BmsApi.post("/transactions", {
+      type: "withdraw",
+      account_number: accountNumber,
+      amount,
     });
-    const body = await response.json();
-    if (!response.ok) throw new Error(body.message || "The withdrawal could not be completed.");
 
     withdrawResult.textContent =
       `Withdrawal of ₹${body.transaction.amount} from ${body.transaction.account_number} succeeded. ` +
