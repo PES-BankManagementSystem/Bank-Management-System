@@ -23,6 +23,7 @@ const customerDetailFields = document.querySelector("#customer-detail-fields");
 const customerDetailAccounts = document.querySelector("#customer-detail-accounts");
 const customerDetailStatus = document.querySelector("#customer-detail-status");
 const customerEditButton = document.querySelector("#customer-edit-button");
+const customerDeactivateButton = document.querySelector("#customer-deactivate-button");
 const customerEditForm = document.querySelector("#customer-edit-form");
 const customerEditSubmit = document.querySelector("#customer-edit-submit");
 const customerProfileCard = document.querySelector("#customer-profile-card");
@@ -113,6 +114,18 @@ function appendDetail(details, label, value) {
   details.append(term, description);
 }
 
+function appendStatus(details, status) {
+  const term = document.createElement("dt");
+  term.textContent = "Status";
+  const description = document.createElement("dd");
+  const badge = document.createElement("span");
+  const inactive = status === "inactive";
+  badge.className = `customer-status-badge ${inactive ? "inactive" : "active"}`;
+  badge.textContent = inactive ? "Inactive" : "Active";
+  description.append(badge);
+  details.append(term, description);
+}
+
 function renderCustomerDetails(detailsElement, accountsElement, customer) {
   detailsElement.replaceChildren();
   for (const [label, value] of [
@@ -123,12 +136,12 @@ function renderCustomerDetails(detailsElement, accountsElement, customer) {
     ["Phone", customer.phone],
     ["Email", customer.email],
     ["Identification reference", customer.identificationReference],
-    ["Status", customer.status],
     ["Created", customer.createdAt],
     ["Updated", customer.updatedAt],
   ]) {
     appendDetail(detailsElement, label, value);
   }
+  appendStatus(detailsElement, customer.status);
 
   accountsElement.replaceChildren();
   for (const account of customer.accounts || []) {
@@ -184,6 +197,13 @@ async function loadCustomerPage() {
         cell.textContent = value;
         row.append(cell);
       }
+      const statusCell = document.createElement("td");
+      const statusBadge = document.createElement("span");
+      const inactive = customer.status === "inactive";
+      statusBadge.className = `customer-status-badge ${inactive ? "inactive" : "active"}`;
+      statusBadge.textContent = inactive ? "Inactive" : "Active";
+      statusCell.append(statusBadge);
+      row.append(statusCell);
       const actionCell = document.createElement("td");
       const openButton = document.createElement("button");
       openButton.type = "button";
@@ -213,6 +233,7 @@ async function openCustomer(customerId) {
   customerDetailStatus.textContent = "Loading customer details…";
   customerEditForm.hidden = true;
   customerEditButton.hidden = true;
+  customerDeactivateButton.hidden = true;
   selectedCustomerId = customerId;
   try {
     const response = await fetch(`/customers/${encodeURIComponent(customerId)}`, {
@@ -237,6 +258,8 @@ async function openCustomer(customerId) {
     }
     customerDetailStatus.textContent = "";
     customerEditButton.hidden = false;
+    customerDeactivateButton.hidden =
+      currentRole !== "administrator" || body.status === "inactive";
     customerDetailCard.scrollIntoView({ behavior: "smooth", block: "start" });
   } catch (error) {
     customerDetailStatus.textContent = error.message || "Unable to load customer details.";
@@ -330,6 +353,8 @@ function updateSessionView() {
     ? `Signed in as ${currentRole.replaceAll("_", " ")}.`
     : "You are signed out.";
   customerDetailCard.hidden = true;
+  customerDeactivateButton.hidden = true;
+  customerDeactivateButton.disabled = false;
   document.dispatchEvent(new CustomEvent("bms:session", {
     detail: { accessToken, role: currentRole, mustChangePassword },
   }));
@@ -492,6 +517,43 @@ customerEditButton.addEventListener("click", () => {
   customerEditForm.hidden = false;
   customerEditButton.hidden = true;
   document.querySelector("#customer-edit-name").focus();
+});
+
+customerDeactivateButton.addEventListener("click", async () => {
+  if (currentRole !== "administrator" ||
+      !window.confirm(`Deactivate customer ${selectedCustomerId}? Their records and history will be kept.`)) {
+    return;
+  }
+  customerDeactivateButton.disabled = true;
+  customerDetailStatus.classList.remove("error", "success");
+  customerDetailStatus.textContent = "Deactivating customer...";
+  try {
+    const response = await fetch(`/customers/${encodeURIComponent(selectedCustomerId)}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({ status: "inactive" }),
+    });
+    if (response.status === 401) {
+      document.dispatchEvent(new CustomEvent("bms:session-expired"));
+      return;
+    }
+    const body = await response.json();
+    if (!response.ok) throw new Error(body.message || "Unable to deactivate customer.");
+    renderCustomerDetails(customerDetailFields, customerDetailAccounts, body);
+    customerEditButton.hidden = false;
+    customerDeactivateButton.hidden = true;
+    customerDetailStatus.classList.add("success");
+    customerDetailStatus.textContent = "Customer deactivated successfully.";
+    void loadCustomerPage();
+  } catch (error) {
+    customerDetailStatus.classList.add("error");
+    customerDetailStatus.textContent = error.message || "Unable to deactivate customer.";
+  } finally {
+    customerDeactivateButton.disabled = false;
+  }
 });
 
 document.querySelector("#customer-edit-cancel").addEventListener("click", () => {
