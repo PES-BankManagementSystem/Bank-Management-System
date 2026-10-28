@@ -21,6 +21,7 @@
 #include "common/db.hpp"
 #include "common/error.hpp"
 #include "customer/registration.hpp"
+#include "customer/records.hpp"
 #include "customer/routes.hpp"
 #include "customer/validation.hpp"
 #include "support/seeded_database.hpp"
@@ -353,6 +354,336 @@ TEST_F(CustomerTest, CredentialDeliveryRouteIsDisabledForNetworkListeners) {
         "application/json");
     ASSERT_TRUE(no_session);
     EXPECT_EQ(no_session->status, 401);
+}
+
+TEST_F(CustomerTest, FR3_SearchMatchesCustomerIdNamePhoneAndLiteralWildcards) {
+    const auto exact = bms::customer::search_customers(db(), "cus-00000001", 20, 0);
+    ASSERT_EQ(exact.total, 1);
+    EXPECT_EQ(exact.items[0].customer_id, "CUS-00000001");
+
+    const auto prefix = bms::customer::search_customers(db(), "CUS-0000000", 20, 0);
+    EXPECT_EQ(prefix.total, 3);
+
+    const auto name = bms::customer::search_customers(db(), "dOe", 20, 0);
+    ASSERT_EQ(name.total, 1);
+    EXPECT_EQ(name.items[0].name, "John Doe");
+
+    const auto phone = bms::customer::search_customers(db(), "555-0101", 20, 0);
+    ASSERT_EQ(phone.total, 1);
+    EXPECT_EQ(phone.items[0].customer_id, "CUS-00000001");
+    const auto phone_with_spaces =
+        bms::customer::search_customers(db(), "555 0101", 20, 0);
+    ASSERT_EQ(phone_with_spaces.total, 1);
+    EXPECT_EQ(phone_with_spaces.items[0].customer_id, "CUS-00000001");
+
+    const auto wildcard = bms::customer::search_customers(db(), "%_", 20, 0);
+    EXPECT_EQ(wildcard.total, 0);
+    EXPECT_TRUE(wildcard.items.empty());
+
+    const auto empty = bms::customer::search_customers(db(), "", 20, 0);
+    ASSERT_EQ(empty.total, 3);
+    const auto first_page = bms::customer::search_customers(db(), "", 1, 1);
+    ASSERT_EQ(first_page.total, 3);
+    ASSERT_EQ(first_page.items.size(), 1U);
+    EXPECT_EQ(first_page.items[0].customer_id, "CUS-00000002");
+}
+
+TEST_F(CustomerTest, FR3_DetailsReturnAccountsAndUnknownCustomerIsNotFound) {
+    const auto customer = bms::customer::get_customer(db(), "CUS-00000001");
+    EXPECT_EQ(customer.customer_id, "CUS-00000001");
+    ASSERT_EQ(customer.accounts.size(), 2U);
+    EXPECT_EQ(customer.accounts[0].account_number, "ACC001");
+    EXPECT_EQ(customer.accounts[0].type, "Savings");
+    EXPECT_EQ(customer.accounts[0].balance_paise, 5000000);
+
+    try {
+        (void)bms::customer::get_customer(db(), "not-a-customer-id");
+        FAIL() << "Expected an unknown customer to return not found";
+    } catch (const bms::Error& error) {
+        EXPECT_EQ(error.kind(), bms::ErrorKind::NotFound);
+        EXPECT_NE(std::string(error.what()).find("not-a-customer-id"), std::string::npos);
+    }
+
+    auto created_input = valid_input();
+    created_input.phone = "+14155552679";
+    created_input.email = "no.accounts@example.com";
+    created_input.identification_reference = "ID-NO-ACCOUNTS";
+    const auto created = bms::customer::register_customer(db(), created_input, 2);
+    const auto no_accounts = bms::customer::get_customer(db(), created.customer_code);
+    EXPECT_TRUE(no_accounts.accounts.empty());
+}
+
+TEST_F(CustomerTest, FR3_UpdateAllowsOwnUniqueValuesAndAuditsFieldNamesOnly) {
+    const auto registered = bms::customer::register_customer(db(), valid_input(), 2);
+    const auto unchanged =
+        bms::customer::update_customer(db(), registered.customer_code, valid_input(), 2);
+    EXPECT_EQ(unchanged.name, valid_input().name);
+    EXPECT_EQ(unchanged.phone, "+919876543210");
+
+    auto revised = valid_input();
+    revised.name = "Rahul Sharma Updated";
+    revised.phone = "+14155552672";
+    revised.email = "updated.rahul@example.com";
+    revised.identification_reference = "ID-RAHUL-002";
+    const auto updated = bms::customer::update_customer(
+        db(), registered.customer_code, revised, 2);
+    EXPECT_EQ(updated.name, revised.name);
+    EXPECT_EQ(updated.phone, revised.phone);
+    EXPECT_EQ(updated.email, revised.email);
+    EXPECT_EQ(updated.identification_reference, revised.identification_reference);
+
+    auto audit = db().prepare(
+        "SELECT details FROM audit_log WHERE action = 'CUSTOMER_UPDATED' "
+        "AND entity_id = ? ORDER BY log_id DESC LIMIT 1");
+    audit->bind(1, registered.customer_id);
+    ASSERT_TRUE(audit->step());
+    const auto* details = audit->column_text(0);
+    ASSERT_NE(details, nullptr);
+    const std::string audit_details = reinterpret_cast<const char*>(details);
+    EXPECT_NE(audit_details.find("fields=name,phone,email,identificationReference"),
+              std::string::npos);
+    EXPECT_EQ(audit_details.find(revised.name), std::string::npos);
+    EXPECT_EQ(audit_details.find(revised.phone), std::string::npos);
+    EXPECT_EQ(audit_details.find(revised.email), std::string::npos);
+    EXPECT_EQ(audit_details.find(revised.identification_reference), std::string::npos);
+}
+
+TEST_F(CustomerTest, FR3_UpdateRejectsDuplicateFieldsAndRollsBackWhenAuditFails) {
+    const auto first = bms::customer::register_customer(db(), valid_input(), 2);
+    auto second_input = valid_input();
+    second_input.name = "Another Customer";
+    second_input.phone = "+14155552672";
+    second_input.email = "another@example.com";
+    second_input.identification_reference = "ID-ANOTHER-001";
+    const auto second = bms::customer::register_customer(db(), second_input, 2);
+
+    auto duplicate = second_input;
+    duplicate.phone = first.phone;
+    const std::vector<std::pair<std::string, std::string>> duplicate_values = {
+        {"phone", first.phone},
+        {"email", first.email},
+        {"identificationReference", "ID-RAHUL-001"},
+    };
+    for (const auto& duplicate_value : duplicate_values) {
+        duplicate = second_input;
+        if (duplicate_value.first == "phone") duplicate.phone = duplicate_value.second;
+        else if (duplicate_value.first == "email") duplicate.email = duplicate_value.second;
+        else duplicate.identification_reference = duplicate_value.second;
+        try {
+            (void)bms::customer::update_customer(db(), second.customer_code, duplicate, 2);
+            FAIL() << "Expected duplicate " << duplicate_value.first << " conflict";
+        } catch (const bms::Error& error) {
+            EXPECT_EQ(error.kind(), bms::ErrorKind::Conflict);
+            EXPECT_EQ(error.field(),
+                      std::optional<std::string>(duplicate_value.first));
+        }
+    }
+
+    db().exec(
+        "CREATE TRIGGER fail_customer_update_audit BEFORE INSERT ON audit_log "
+        "WHEN NEW.action = 'CUSTOMER_UPDATED' BEGIN "
+        "SELECT RAISE(ABORT, 'forced audit failure'); END");
+    const std::int64_t audit_count =
+        scalar_int(db(), "SELECT COUNT(*) FROM audit_log WHERE action = 'CUSTOMER_UPDATED'");
+    auto revised = second_input;
+    revised.name = "Must Roll Back";
+    EXPECT_THROW(
+        (void)bms::customer::update_customer(db(), second.customer_code, revised, 2),
+        bms::DbError);
+    EXPECT_EQ(bms::customer::get_customer(db(), second.customer_code).name,
+              second_input.name);
+    EXPECT_EQ(scalar_int(db(), "SELECT COUNT(*) FROM audit_log WHERE action = 'CUSTOMER_UPDATED'"),
+              audit_count);
+}
+
+TEST_F(CustomerTest, FR3_SearchAndDetailsRoutesEnforceRolesAndOwnership) {
+    TestServer server(db(), true);
+    auto unauthenticated = server.client().Get("/customers");
+    ASSERT_TRUE(unauthenticated);
+    EXPECT_EQ(unauthenticated->status, 401);
+
+    auto customer_login = server.client().Post(
+        "/auth/login", R"({"username":"customer1","password":"OfficerPassword123!"})",
+        "application/json");
+    ASSERT_TRUE(customer_login);
+    ASSERT_EQ(customer_login->status, 200);
+    const std::string customer_token = json::parse(customer_login->body)["accessToken"];
+    httplib::Headers customer_headers{{"Authorization", "Bearer " + customer_token}};
+    auto customer_search = server.client().Get("/customers", customer_headers);
+    ASSERT_TRUE(customer_search);
+    EXPECT_EQ(customer_search->status, 403);
+
+    auto own = server.client().Get("/customers/me", customer_headers);
+    ASSERT_TRUE(own);
+    ASSERT_EQ(own->status, 200) << own->body;
+    EXPECT_EQ(json::parse(own->body)["customerId"], "CUS-00000001");
+    EXPECT_EQ(json::parse(own->body)["accounts"].size(), 2U);
+
+    auto own_by_id = server.client().Get("/customers/CUS-00000001", customer_headers);
+    ASSERT_TRUE(own_by_id);
+    EXPECT_EQ(own_by_id->status, 200);
+    auto other_by_id = server.client().Get("/customers/CUS-00000002", customer_headers);
+    ASSERT_TRUE(other_by_id);
+    EXPECT_EQ(other_by_id->status, 404);
+    EXPECT_NE(json::parse(other_by_id->body)["message"].get<std::string>().find(
+                  "CUS-00000002"), std::string::npos);
+
+    auto officer_login = server.client().Post(
+        "/auth/login", R"({"username":"officer1","password":"OfficerPassword123!"})",
+        "application/json");
+    ASSERT_TRUE(officer_login);
+    ASSERT_EQ(officer_login->status, 200);
+    const std::string officer_token = json::parse(officer_login->body)["accessToken"];
+    httplib::Headers officer_headers{{"Authorization", "Bearer " + officer_token}};
+    auto list = server.client().Get("/customers?query=DOE&limit=1&offset=0", officer_headers);
+    ASSERT_TRUE(list);
+    ASSERT_EQ(list->status, 200) << list->body;
+    const json list_body = json::parse(list->body);
+    EXPECT_EQ(list_body["total"], 1);
+    EXPECT_EQ(list_body["items"][0]["name"], "John Doe");
+    EXPECT_FALSE(list_body["items"][0].contains("identificationReference"));
+
+    auto invalid_limit = server.client().Get("/customers?limit=0", officer_headers);
+    ASSERT_TRUE(invalid_limit);
+    EXPECT_EQ(invalid_limit->status, 400);
+    EXPECT_EQ(json::parse(invalid_limit->body)["field"], "limit");
+    auto invalid_offset = server.client().Get("/customers?offset=-1", officer_headers);
+    ASSERT_TRUE(invalid_offset);
+    EXPECT_EQ(invalid_offset->status, 400);
+    EXPECT_EQ(json::parse(invalid_offset->body)["field"], "offset");
+
+    auto missing = server.client().Get("/customers/CUS-00000099", officer_headers);
+    ASSERT_TRUE(missing);
+    EXPECT_EQ(missing->status, 404);
+    EXPECT_NE(json::parse(missing->body)["message"].get<std::string>().find(
+                  "CUS-00000099"), std::string::npos);
+
+    auto admin_login = server.client().Post(
+        "/auth/login", R"({"username":"admin","password":"OfficerPassword123!"})",
+        "application/json");
+    ASSERT_TRUE(admin_login);
+    ASSERT_EQ(admin_login->status, 200);
+    const std::string admin_token = json::parse(admin_login->body)["accessToken"];
+    httplib::Headers admin_headers{{"Authorization", "Bearer " + admin_token}};
+    auto admin_details = server.client().Get("/customers/CUS-00000002", admin_headers);
+    ASSERT_TRUE(admin_details);
+    EXPECT_EQ(admin_details->status, 200);
+}
+
+TEST_F(CustomerTest, FR3_UpdateRouteValidatesAndRestrictsCustomerRole) {
+    TestServer server(db(), true);
+    const std::string valid_payload =
+        R"({"name":"Updated John","dateOfBirth":"1990-05-15","address":"Updated address","phone":"9876543210","identificationReference":"ID-JOHN-UPDATED","email":"updated.john@example.com"})";
+    auto unauthenticated = server.client().Put(
+        "/customers/CUS-00000001", valid_payload, "application/json");
+    ASSERT_TRUE(unauthenticated);
+    EXPECT_EQ(unauthenticated->status, 401);
+
+    auto customer_login = server.client().Post(
+        "/auth/login", R"({"username":"customer1","password":"OfficerPassword123!"})",
+        "application/json");
+    ASSERT_TRUE(customer_login);
+    const std::string customer_token = json::parse(customer_login->body)["accessToken"];
+    httplib::Headers customer_headers{{"Authorization", "Bearer " + customer_token}};
+    auto forbidden_update = server.client().Put(
+        "/customers/CUS-00000001", customer_headers, valid_payload, "application/json");
+    ASSERT_TRUE(forbidden_update);
+    EXPECT_EQ(forbidden_update->status, 403);
+
+    auto officer_login = server.client().Post(
+        "/auth/login", R"({"username":"officer1","password":"OfficerPassword123!"})",
+        "application/json");
+    ASSERT_TRUE(officer_login);
+    const std::string officer_token = json::parse(officer_login->body)["accessToken"];
+    httplib::Headers officer_headers{{"Authorization", "Bearer " + officer_token}};
+    auto login_before = db().prepare(
+        "SELECT username, role, status, password_hash, must_change_password "
+        "FROM users WHERE user_id = 4");
+    ASSERT_TRUE(login_before->step());
+    const std::vector<std::string> login_values_before = {
+        reinterpret_cast<const char*>(login_before->column_text(0)),
+        reinterpret_cast<const char*>(login_before->column_text(1)),
+        reinterpret_cast<const char*>(login_before->column_text(2)),
+        reinterpret_cast<const char*>(login_before->column_text(3)),
+        std::to_string(login_before->column_int(4)),
+    };
+    auto invalid = server.client().Put(
+        "/customers/CUS-00000001", officer_headers, "{}", "application/json");
+    ASSERT_TRUE(invalid);
+    ASSERT_EQ(invalid->status, 400);
+    EXPECT_GE(json::parse(invalid->body)["fields"].size(), 6U);
+    const std::string several_invalid_fields =
+        R"({"name":7,"dateOfBirth":"2026-02-30","address":" ","phone":"12x","identificationReference":"bad id","email":"invalid"})";
+    auto several_invalid = server.client().Put(
+        "/customers/CUS-00000001", officer_headers, several_invalid_fields,
+        "application/json");
+    ASSERT_TRUE(several_invalid);
+    ASSERT_EQ(several_invalid->status, 400);
+    EXPECT_GE(json::parse(several_invalid->body)["fields"].size(), 6U);
+
+    const std::string immutable_payload =
+        R"({"customerId":"CUS-00000002","name":"Updated John","dateOfBirth":"1990-05-15","address":"Updated address","phone":"9876543210","identificationReference":"ID-JOHN-UPDATED","email":"updated.john@example.com"})";
+    auto immutable = server.client().Put(
+        "/customers/CUS-00000001", officer_headers, immutable_payload,
+        "application/json");
+    ASSERT_TRUE(immutable);
+    EXPECT_EQ(immutable->status, 400);
+    EXPECT_EQ(json::parse(immutable->body)["fields"][0]["field"], "customerId");
+
+    auto updated = server.client().Put(
+        "/customers/CUS-00000001", officer_headers, valid_payload, "application/json");
+    ASSERT_TRUE(updated);
+    ASSERT_EQ(updated->status, 200) << updated->body;
+    EXPECT_EQ(json::parse(updated->body)["name"], "Updated John");
+    EXPECT_EQ(json::parse(updated->body)["accounts"].size(), 2U);
+    EXPECT_FALSE(json::parse(updated->body)["updatedAt"].get<std::string>().empty());
+    auto login_after = db().prepare(
+        "SELECT username, role, status, password_hash, must_change_password "
+        "FROM users WHERE user_id = 4");
+    ASSERT_TRUE(login_after->step());
+    const std::vector<std::string> login_values_after = {
+        reinterpret_cast<const char*>(login_after->column_text(0)),
+        reinterpret_cast<const char*>(login_after->column_text(1)),
+        reinterpret_cast<const char*>(login_after->column_text(2)),
+        reinterpret_cast<const char*>(login_after->column_text(3)),
+        std::to_string(login_after->column_int(4)),
+    };
+    EXPECT_EQ(login_values_after, login_values_before);
+
+    const std::string duplicate_phone =
+        R"({"name":"Jane Smith Updated","dateOfBirth":"1985-08-22","address":"Updated address","phone":"9876543210","identificationReference":"ID-JANE-UPDATED","email":"jane.updated@example.com"})";
+    auto duplicate = server.client().Put(
+        "/customers/CUS-00000002", officer_headers, duplicate_phone, "application/json");
+    ASSERT_TRUE(duplicate);
+    ASSERT_EQ(duplicate->status, 409);
+    EXPECT_EQ(json::parse(duplicate->body)["field"], "phone");
+
+    auto missing = server.client().Put(
+        "/customers/CUS-00000099", officer_headers, valid_payload, "application/json");
+    ASSERT_TRUE(missing);
+    EXPECT_EQ(missing->status, 404);
+
+    auto admin_login = server.client().Post(
+        "/auth/login", R"({"username":"admin","password":"OfficerPassword123!"})",
+        "application/json");
+    ASSERT_TRUE(admin_login);
+    ASSERT_EQ(admin_login->status, 200);
+    const std::string admin_token = json::parse(admin_login->body)["accessToken"];
+    httplib::Headers admin_headers{{"Authorization", "Bearer " + admin_token}};
+    auto admin_update = server.client().Put(
+        "/customers/CUS-00000001", admin_headers, valid_payload, "application/json");
+    ASSERT_TRUE(admin_update);
+    EXPECT_EQ(admin_update->status, 200) << admin_update->body;
+}
+
+TEST_F(CustomerTest, FR3_CustomerDataRoutesAreDisabledOnNetworkHttpListeners) {
+    TestServer server(db(), false);
+    auto list = server.client().Get("/customers");
+    ASSERT_TRUE(list);
+    EXPECT_EQ(list->status, 403);
+    auto details = server.client().Get("/customers/CUS-00000001");
+    ASSERT_TRUE(details);
+    EXPECT_EQ(details->status, 403);
 }
 
 TEST_F(CustomerTest, TemporaryPasswordForcesPasswordChangeAtLogin) {

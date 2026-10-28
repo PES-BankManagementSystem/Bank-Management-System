@@ -107,7 +107,102 @@
     <div id="customer-created" class="result success" role="status" aria-live="polite"></div>
   </section>
 
-  <main class="card">
+  <section id="customer-management-card" class="card customer-wide-card" aria-labelledby="customers-heading"
+           data-nav-label="Customers" data-roles="administrator bank_officer" hidden>
+    <p class="eyebrow">Customer records</p>
+    <h1 id="customers-heading">Customers</h1>
+    <p class="intro">Search customer records by customer ID, name or phone number.</p>
+    <form id="customer-search-form">
+      <label for="customer-search-query">Search customers</label>
+      <input id="customer-search-query" name="query" type="search" autocomplete="off">
+      <button id="customer-search-submit" type="submit">Search</button>
+    </form>
+    <p id="customer-list-status" class="result" role="status" aria-live="polite"></p>
+    <div class="table-scroll">
+      <table>
+        <caption>Customer search results</caption>
+        <thead>
+          <tr><th scope="col">Customer ID</th><th scope="col">Name</th>
+            <th scope="col">Phone</th><th scope="col">Email</th><th scope="col">Details</th></tr>
+        </thead>
+        <tbody id="customer-results"></tbody>
+      </table>
+    </div>
+    <nav class="pagination" aria-label="Customer results pages">
+      <button id="customer-previous-page" type="button" disabled>Previous</button>
+      <span id="customer-page-status" aria-live="polite"></span>
+      <button id="customer-next-page" type="button" disabled>Next</button>
+    </nav>
+  </section>
+
+  <section id="customer-detail-card" class="card customer-wide-card" aria-labelledby="customer-detail-heading" hidden>
+    <p class="eyebrow">Customer record</p>
+    <h1 id="customer-detail-heading">Customer details</h1>
+    <dl id="customer-detail-fields" class="customer-fields"></dl>
+    <h2>Accounts</h2>
+    <div class="table-scroll">
+      <table>
+        <caption>Accounts linked to this customer</caption>
+        <thead>
+          <tr><th scope="col">Account number</th><th scope="col">Type</th>
+            <th scope="col">Status</th><th scope="col">Balance (INR)</th></tr>
+        </thead>
+        <tbody id="customer-detail-accounts"></tbody>
+      </table>
+    </div>
+    <p id="customer-detail-status" class="result" role="status" aria-live="polite"></p>
+    <button id="customer-edit-button" type="button">Edit customer</button>
+    <form id="customer-edit-form" novalidate hidden>
+      <h2>Edit customer details</h2>
+      <label for="customer-edit-name">Full name</label>
+      <input id="customer-edit-name" name="name" type="text" maxlength="100" required
+             aria-describedby="customer-edit-name-error">
+      <p id="customer-edit-name-error" class="field-error"></p>
+      <label for="customer-edit-dob">Date of birth</label>
+      <input id="customer-edit-dob" name="dateOfBirth" type="date" required
+             aria-describedby="customer-edit-dob-error">
+      <p id="customer-edit-dob-error" class="field-error"></p>
+      <label for="customer-edit-address">Address</label>
+      <input id="customer-edit-address" name="address" type="text" maxlength="255" required
+             aria-describedby="customer-edit-address-error">
+      <p id="customer-edit-address-error" class="field-error"></p>
+      <label for="customer-edit-phone">Phone number</label>
+      <input id="customer-edit-phone" name="phone" type="tel" required
+             aria-describedby="customer-edit-phone-error">
+      <p id="customer-edit-phone-error" class="field-error"></p>
+      <label for="customer-edit-id-reference">Identification reference</label>
+      <input id="customer-edit-id-reference" name="identificationReference" type="text"
+             maxlength="50" required aria-describedby="customer-edit-id-reference-error">
+      <p id="customer-edit-id-reference-error" class="field-error"></p>
+      <label for="customer-edit-email">Email address</label>
+      <input id="customer-edit-email" name="email" type="email" maxlength="254" required
+             aria-describedby="customer-edit-email-error">
+      <p id="customer-edit-email-error" class="field-error"></p>
+      <button id="customer-edit-submit" type="submit">Save changes</button>
+      <button id="customer-edit-cancel" type="button">Cancel</button>
+    </form>
+  </section>
+
+  <section id="customer-profile-card" class="card customer-wide-card" aria-labelledby="customer-profile-heading"
+           data-nav-label="My profile" data-roles="customer" hidden>
+    <p class="eyebrow">Customer account</p>
+    <h1 id="customer-profile-heading">My profile</h1>
+    <dl id="customer-profile-fields" class="customer-fields"></dl>
+    <h2>My accounts</h2>
+    <div class="table-scroll">
+      <table>
+        <caption>Accounts linked to your profile</caption>
+        <thead>
+          <tr><th scope="col">Account number</th><th scope="col">Type</th>
+            <th scope="col">Status</th><th scope="col">Balance (INR)</th></tr>
+        </thead>
+        <tbody id="customer-profile-accounts"></tbody>
+      </table>
+    </div>
+    <p id="customer-profile-status" class="result" role="status" aria-live="polite"></p>
+  </section>
+
+  <main id="deposit-card" class="card">
     <p class="eyebrow">Bank Management System</p>
     <h1>Deposit money</h1>
     <p class="intro">Record a cash deposit to an active customer account.</p>
@@ -128,7 +223,7 @@
     </form>
     <p id="result" class="result" role="status" aria-live="polite"></p>
   </main>
-  <section class="card" aria-labelledby="withdraw-heading">
+  <section id="withdraw-card" class="card" aria-labelledby="withdraw-heading">
     <p class="eyebrow">Bank Management System</p>
     <h1 id="withdraw-heading">Withdraw money</h1>
     <p class="intro">Withdraw funds from an active account within its balance and daily limits.</p>
@@ -149,7 +244,7 @@
     </form>
     <p id="withdraw-result" class="result" role="status" aria-live="polite"></p>
   </section>
-  <section class="card" aria-labelledby="transfer-heading">
+  <section id="transfer-card" class="card" aria-labelledby="transfer-heading">
     <p class="eyebrow">Bank Management System</p>
     <h1 id="transfer-heading">Transfer money</h1>
     <p class="intro">Move funds between two active accounts in one transaction.</p>
@@ -211,7 +306,7 @@
     <div id="audit-list"></div>
     <button id="audit-more" type="button" hidden>Load more</button>
   </section>
-  <section class="card" aria-labelledby="interest-heading">
+  <section id="interest-card" class="card" aria-labelledby="interest-heading">
     <p class="eyebrow">Administrator</p>
     <h1 id="interest-heading">Run interest</h1>
     <p class="intro">Credit interest for a completed calendar month. Each period can be run once.</p>
