@@ -75,8 +75,25 @@ curl http://127.0.0.1:8080/health      # {"status":"ok","version":"0.1.0"}
 | `--port <number>` | `BMS_PORT` | `8080` |
 | `--db <path>` | `BMS_DB_PATH` | `bms.db` |
 | `--frontend <dir>` | `BMS_FRONTEND_DIR` | the repository's `frontend/` folder |
+| `--tls-cert <file>` | `BMS_TLS_CERT` | none (plain HTTP) |
+| `--tls-key <file>` | `BMS_TLS_KEY` | none (plain HTTP) |
 
 Command-line options override environment variables. The server serves the front end at `/` and the API endpoints from SADS 3.2 beside it. Stop it with Ctrl+C.
+
+### HTTPS and secrets
+
+Plain HTTP is for local development only. To serve HTTPS, give the server a PEM certificate and private key (the build includes TLS when OpenSSL 3 is found; configure with `-DBMS_ENABLE_TLS=OFF` to leave it out). For a local test certificate:
+
+```sh
+openssl req -x509 -newkey rsa:2048 -nodes -days 30 -subj "/CN=localhost" \
+    -keyout dev.key -out dev.crt
+BMS_TLS_CERT=dev.crt BMS_TLS_KEY=dev.key ./build/bin/bms_server    # https://127.0.0.1:8080
+```
+
+Sign-in, password change and one-time credential delivery are allowed on a loopback address or over HTTPS, and refused on a network address served over plain HTTP.
+
+- Certificates, keys, `.env` files and local databases are listed in `.gitignore`, and CI runs `scripts/check-secrets.sh` to fail the build if any is committed. Configuration comes from the environment or command-line options only; nothing secret lives in the repository. The demo password above is for the seeded demo users.
+- Passwords, one-time initial passwords and bearer tokens are never logged; `tests/log_secrets_test.cpp` drives sign-in, registration, staff creation and password change and checks the log.
 
 ### API conventions
 
@@ -104,7 +121,7 @@ Command-line options override environment variables. The server serves the front
 
 Administrators and Bank Officers sign in with `POST /auth/login` using `{"username":"…","password":"…"}`. The response contains a short-lived bearer token; send it as `Authorization: Bearer <token>` to `POST /customers`. Customer registration requires `name`, `dateOfBirth`, `address`, `phone`, `identificationReference` and `email`. A successful response returns the new customer ID and one-time temporary password; the customer must change that password after first sign-in using `POST /auth/change-password` with `{"newPassword":"…"}`. `POST /auth/logout` invalidates the bearer token.
 
-The temporary password is shown only in the immediate registration response and success screen. The customer-registration and sign-in endpoints are enabled only when the server binds to a loopback address. This project does not yet support HTTPS; do not expose it to a network or use real customer data until TLS is implemented. The one-time credential response is a documented exception to SADS SEC-2; see [the deviations log](docs/DEVIATIONS.md).
+The temporary password is shown only in the immediate registration response and success screen. The customer-registration and sign-in endpoints are enabled only when the server binds to a loopback address or serves HTTPS (see above); do not expose plain HTTP to a network. The one-time credential response is a documented exception to SADS SEC-2; see [the deviations log](docs/DEVIATIONS.md).
 
 ## Project structure
 

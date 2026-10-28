@@ -5,12 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Bank Management System | Staff and customer services</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="shell.css">
 </head>
 <body>
+  <header class="app-header">
+    <a class="app-brand" href="#">Bank Management System</a>
+    <nav id="app-nav" class="app-nav" aria-label="Main" hidden></nav>
+    <p id="app-user" class="app-user" hidden>
+      <span id="app-user-label"></span>
+      <button id="app-sign-out" type="button" class="secondary">Sign out</button>
+    </p>
+  </header>
+
   <section class="card" aria-labelledby="login-heading">
     <p class="eyebrow">Bank Management System</p>
-    <h1 id="login-heading">Staff sign in</h1>
-    <p class="intro">Sign in with an Administrator or Bank Officer account to register a customer.</p>
+    <h1 id="login-heading">Sign in</h1>
+    <p class="intro">Administrators, Bank Officers and Customers sign in with their user ID and password.</p>
     <form id="login-form">
       <label for="login-username">Username</label>
       <input id="login-username" name="username" type="text" autocomplete="username" required
@@ -25,6 +35,14 @@
     <button id="logout-button" type="button" hidden>Sign out</button>
   </section>
 
+  <section id="role-home" class="card" aria-labelledby="role-home-heading" hidden>
+    <p class="eyebrow" id="role-home-eyebrow">Home</p>
+    <h1 id="role-home-heading" tabindex="-1">Welcome</h1>
+    <p id="role-home-intro" class="intro"></p>
+    <ul id="role-home-links" class="role-home-links"></ul>
+    <p class="hint">This is a placeholder home page. The full dashboard for your role arrives with S-25.</p>
+  </section>
+
   <section id="password-change-card" class="card" aria-labelledby="password-change-heading" hidden>
     <p class="eyebrow">First sign in</p>
     <h1 id="password-change-heading">Change your password</h1>
@@ -36,6 +54,16 @@
       <button type="submit">Change password</button>
     </form>
     <p id="password-change-error" class="result error" role="status" aria-live="polite"></p>
+  </section>
+
+  <section id="locked-users-card" class="card" aria-labelledby="locked-users-heading"
+           data-nav-label="Locked users" data-roles="administrator" hidden>
+    <p class="eyebrow">Administrator</p>
+    <h1 id="locked-users-heading">Locked users</h1>
+    <p class="intro">Accounts are locked after three failed sign-in attempts. Unlock a user once you have confirmed who they are.</p>
+    <div id="locked-users-list"></div>
+    <button id="locked-users-refresh" type="button">Refresh list</button>
+    <p id="locked-users-result" class="result" role="status" aria-live="polite"></p>
   </section>
 
   <section id="customer-registration-card" class="card" aria-labelledby="customer-heading" hidden>
@@ -79,7 +107,8 @@
     <div id="customer-created" class="result success" role="status" aria-live="polite"></div>
   </section>
 
-  <section id="customer-management-card" class="card customer-wide-card" aria-labelledby="customers-heading" hidden>
+  <section id="customer-management-card" class="card customer-wide-card" aria-labelledby="customers-heading"
+           data-nav-label="Customers" data-roles="administrator bank_officer" hidden>
     <p class="eyebrow">Customer records</p>
     <h1 id="customers-heading">Customers</h1>
     <p class="intro">Search customer records by customer ID, name or phone number.</p>
@@ -154,7 +183,8 @@
     </form>
   </section>
 
-  <section id="customer-profile-card" class="card customer-wide-card" aria-labelledby="customer-profile-heading" hidden>
+  <section id="customer-profile-card" class="card customer-wide-card" aria-labelledby="customer-profile-heading"
+           data-nav-label="My profile" data-roles="customer" hidden>
     <p class="eyebrow">Customer account</p>
     <h1 id="customer-profile-heading">My profile</h1>
     <dl id="customer-profile-fields" class="customer-fields"></dl>
@@ -238,6 +268,44 @@
     </form>
     <p id="transfer-result" class="result" role="status" aria-live="polite"></p>
   </section>
+  <section id="staff-card" class="card" aria-labelledby="staff-heading"
+           data-nav-label="Staff" data-roles="administrator" hidden>
+    <p class="eyebrow">Administrator</p>
+    <h1 id="staff-heading">Manage Bank Officers</h1>
+    <p class="intro">Create officer accounts, rename them, and deactivate officers who no longer work at the bank. Deactivated officers cannot sign in; their past transactions keep their ID.</p>
+
+    <form id="staff-form" novalidate>
+      <label for="staff-username">New officer username</label>
+      <input id="staff-username" name="username" type="text" autocomplete="off"
+             maxlength="32" required aria-describedby="staff-username-error staff-username-hint">
+      <p id="staff-username-hint" class="hint">3-32 lower-case letters, digits, ".", "_" or "-", starting with a letter.</p>
+      <p id="staff-username-error" class="field-error"></p>
+      <button id="staff-submit" type="submit">Create officer</button>
+    </form>
+    <div id="staff-created" class="result success" role="status" aria-live="polite"></div>
+
+    <div id="staff-list"></div>
+    <p id="staff-result" class="result" role="status" aria-live="polite"></p>
+  </section>
+  <section id="audit-card" class="card" aria-labelledby="audit-heading"
+           data-nav-label="Audit trail" data-roles="administrator" hidden>
+    <p class="eyebrow">Administrator</p>
+    <h1 id="audit-heading">Audit trail</h1>
+    <p class="intro">Every balance change and account-security event, newest first. The trail is read-only: entries cannot be edited or deleted.</p>
+
+    <form id="audit-form" novalidate>
+      <label for="audit-from">From date</label>
+      <input id="audit-from" name="from" type="date">
+      <label for="audit-to">To date</label>
+      <input id="audit-to" name="to" type="date">
+      <label for="audit-account">Account number</label>
+      <input id="audit-account" name="account" type="text" autocomplete="off" placeholder="All accounts">
+      <button id="audit-submit" type="submit">Show entries</button>
+    </form>
+    <p id="audit-result" class="result" role="status" aria-live="polite"></p>
+    <div id="audit-list"></div>
+    <button id="audit-more" type="button" hidden>Load more</button>
+  </section>
   <section id="interest-card" class="card" aria-labelledby="interest-heading">
     <p class="eyebrow">Administrator</p>
     <h1 id="interest-heading">Run interest</h1>
@@ -250,10 +318,17 @@
     </form>
     <p id="interest-result" class="result" role="status" aria-live="polite"></p>
   </section>
+  <script src="api.js" defer></script>
+  <script src="components.js" defer></script>
+  <script src="shell.js" defer></script>
   <script src="app.js" defer></script>
+  <script src="landing.js" defer></script>
   <script src="withdraw.js" defer></script>
   <script src="transfer.js" defer></script>
+  <script src="unlock.js" defer></script>
   <script src="customer.js" defer></script>
+  <script src="staff.js" defer></script>
   <script src="interest.js" defer></script>
+  <script src="audit.js" defer></script>
 </body>
 </html>

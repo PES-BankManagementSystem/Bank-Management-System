@@ -52,7 +52,7 @@ TEST_F(ModuleTest, AccountRouteRegistrationIsCallable) {
 TEST_F(ModuleTest, AuditRouteRegistrationIsCallable) {
     httplib::Server server;
     bms::api::Router router(server);
-    EXPECT_NO_THROW(bms::audit::register_routes(router));
+    EXPECT_NO_THROW(bms::audit::register_routes(router, db(), [](const bms::api::Request&) {}));
 }
 
 TEST_F(ModuleTest, AuthRouteRegistrationIsCallable) {
@@ -70,19 +70,19 @@ TEST_F(ModuleTest, CustomerRouteRegistrationIsCallable) {
 TEST_F(ModuleTest, ReportingRouteRegistrationIsCallable) {
     httplib::Server server;
     bms::api::Router router(server);
-    EXPECT_NO_THROW(bms::reporting::register_routes(router, db(), 1));
+    EXPECT_NO_THROW(bms::reporting::register_routes(router, db()));
 }
 
 TEST_F(ModuleTest, StaffRouteRegistrationIsCallable) {
     httplib::Server server;
     bms::api::Router router(server);
-    EXPECT_NO_THROW(bms::staff::register_routes(router));
+    EXPECT_NO_THROW(bms::staff::register_routes(router, db(), true));
 }
 
 TEST_F(ModuleTest, TransactionRouteRegistrationIsCallable) {
     httplib::Server server;
     bms::api::Router router(server);
-    EXPECT_NO_THROW(bms::transaction::register_routes(router, db(), 2));
+    EXPECT_NO_THROW(bms::transaction::register_routes(router, db()));
 }
 
 }  // namespace

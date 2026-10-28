@@ -2,6 +2,8 @@
 
 #include <string>
 
+#include "audit/record.hpp"
+#include "auth/rbac.hpp"
 #include "common/db.hpp"
 #include "common/error.hpp"
 
@@ -9,6 +11,7 @@ namespace bms::transaction {
 
 DepositResult withdraw(Database& database, const std::string& account_number,
                        const std::string& amount, std::int64_t operator_id) {
+    auth::rbac::require_role(database, operator_id, auth::rbac::Operation::Withdraw);
     const std::int64_t amount_paise = parse_amount_paise(amount);
     if (account_number.empty()) {
         throw validation_error("account_number", "Account number is required.");
@@ -93,16 +96,9 @@ DepositResult withdraw(Database& database, const std::string& account_number,
         query->step();
         transaction_id = query->column_int(0);
     }
-    {
-        auto insert = database.prepare(
-            "INSERT INTO audit_log (user_id, action, entity, entity_id, details) "
-            "VALUES (?, 'WITHDRAWAL', 'accounts', ?, ?)");
-        insert->bind(1, operator_id);
-        insert->bind(2, account_id);
-        insert->bind(3, "Withdrew " + std::to_string(amount_paise) +
-                           " paise; resulting balance " + std::to_string(resulting_balance) + " paise.");
-        insert->step();
-    }
+    audit::record(database, operator_id, "WITHDRAWAL", "accounts", account_id,
+                  "Withdrew " + std::to_string(amount_paise) +
+                      " paise; resulting balance " + std::to_string(resulting_balance) + " paise.");
 
     std::string created_at;
     {

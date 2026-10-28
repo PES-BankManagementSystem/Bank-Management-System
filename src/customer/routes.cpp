@@ -8,6 +8,7 @@
 #include <utility>
 
 #include "api/router.hpp"
+#include "auth/rbac.hpp"
 #include "auth/routes.hpp"
 #include "common/db.hpp"
 #include "common/error.hpp"
@@ -135,7 +136,8 @@ void register_routes(api::Router& router, Database& database,
     router.get("/customers", [&database, allow_initial_credential_delivery](
                                  const api::Request& request) {
         require_loopback_data_access(allow_initial_credential_delivery);
-        const auth::Principal principal = auth::authenticate(request, database);
+        const auth::Principal principal = auth::rbac::require(
+            request, database, auth::rbac::Operation::ViewCustomer);
         require_staff_role(principal);
 
         const std::string query = request.query("query").value_or("");
@@ -164,7 +166,8 @@ void register_routes(api::Router& router, Database& database,
     router.get("/customers/me", [&database, allow_initial_credential_delivery](
                                    const api::Request& request) {
         require_loopback_data_access(allow_initial_credential_delivery);
-        const auth::Principal principal = auth::authenticate(request, database);
+        const auth::Principal principal = auth::rbac::require(
+            request, database, auth::rbac::Operation::ViewCustomer);
         if (principal.role != "customer") throw forbidden();
         return api::Response::ok(customer_details_json(
             get_customer_for_user(database, principal.user_id)));
@@ -173,7 +176,8 @@ void register_routes(api::Router& router, Database& database,
     router.get("/customers/:id", [&database, allow_initial_credential_delivery](
                                      const api::Request& request) {
         require_loopback_data_access(allow_initial_credential_delivery);
-        const auth::Principal principal = auth::authenticate(request, database);
+        const auth::Principal principal = auth::rbac::require(
+            request, database, auth::rbac::Operation::ViewCustomer);
         const std::string customer_id = request.param("id");
         if (principal.role == "customer") {
             const CustomerDetails own =
@@ -191,7 +195,8 @@ void register_routes(api::Router& router, Database& database,
     router.put("/customers/:id", [&database, allow_initial_credential_delivery](
                                      const api::Request& request) {
         require_loopback_data_access(allow_initial_credential_delivery);
-        const auth::Principal principal = auth::authenticate(request, database);
+        const auth::Principal principal = auth::rbac::require(
+            request, database, auth::rbac::Operation::UpdateCustomer);
         require_staff_role(principal);
         const CustomerInput input = read_customer_input(request.json());
         return api::Response::ok(customer_details_json(
@@ -200,10 +205,8 @@ void register_routes(api::Router& router, Database& database,
 
     router.post("/customers", [&database, allow_initial_credential_delivery](
                                   const api::Request& request) {
-        const auth::Principal principal = auth::authenticate(request, database);
-        if (principal.role != "administrator" && principal.role != "bank_officer") {
-            throw forbidden();
-        }
+        const auth::Principal principal =
+            auth::rbac::require(request, database, auth::rbac::Operation::RegisterCustomer);
         if (!allow_initial_credential_delivery) {
             throw forbidden(
                 "Customer registration with one-time credential delivery is disabled on "

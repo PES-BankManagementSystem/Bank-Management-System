@@ -9,10 +9,12 @@
 #include <nlohmann/json.hpp>
 
 #include "api/server.hpp"
+#include "auth/routes.hpp"
 #include "common/config.hpp"
 #include "common/db.hpp"
 #include "common/error.hpp"
 #include "support/check.hpp"
+#include "support/login.hpp"
 #include "support/seeded_db.hpp"
 #include "transaction/routes.hpp"
 #include "transaction/transfer.hpp"
@@ -222,13 +224,15 @@ void test_transfer_api_success_and_expected_errors() {
     config.host = "127.0.0.1";
     config.port = 0;
     bms::api::Server server(config);
-    bms::transaction::register_routes(server.router(), fixture.database(), 2);
+    bms::auth::register_routes(server.router(), fixture.database(), true);
+    bms::transaction::register_routes(server.router(), fixture.database());
     const int port = server.bind();
     std::thread server_thread([&server] { server.run(); });
     server.wait_until_ready();
     httplib::Client client("127.0.0.1", port);
+    const auto officer = bms::test::sign_in(client, "officer1");
 
-    const auto success = client.Post("/transfers",
+    const auto success = client.Post("/transfers", officer,
         R"({"from_account_number":"ACC001","to_account_number":"ACC004","amount":"10.00"})",
         "application/json");
     CHECK(success);
@@ -243,7 +247,7 @@ void test_transfer_api_success_and_expected_errors() {
         CHECK_EQ(body["transactions"]["debit"]["transfer_ref"], body["transactions"]["credit"]["transfer_ref"]);
     }
 
-    const auto same = client.Post("/transfers",
+    const auto same = client.Post("/transfers", officer,
         R"({"from_account_number":"ACC001","to_account_number":"ACC001","amount":"10.00"})",
         "application/json");
     CHECK(same);
@@ -254,7 +258,7 @@ void test_transfer_api_success_and_expected_errors() {
         CHECK_EQ(body["field"].get<std::string>(), std::string("to_account_number"));
     }
 
-    const auto frozen = client.Post("/transfers",
+    const auto frozen = client.Post("/transfers", officer,
         R"({"from_account_number":"ACC001","to_account_number":"ACC002","amount":"10.00"})",
         "application/json");
     CHECK(frozen);
@@ -265,7 +269,7 @@ void test_transfer_api_success_and_expected_errors() {
         CHECK(body["message"].get<std::string>().find("ACC002 is frozen") != std::string::npos);
     }
 
-    const auto unknown = client.Post("/transfers",
+    const auto unknown = client.Post("/transfers", officer,
         R"({"from_account_number":"ACC001","to_account_number":"UNKNOWN","amount":"10.00"})",
         "application/json");
     CHECK(unknown);

@@ -7,6 +7,8 @@
 #include <string>
 #include <vector>
 
+#include "audit/record.hpp"
+#include "auth/rbac.hpp"
 #include "common/db.hpp"
 #include "common/error.hpp"
 #include "transaction/deposit.hpp"
@@ -170,6 +172,7 @@ std::int64_t calculate_interest_paise(std::int64_t balance_paise,
 
 InterestRunResult run_interest(Database& database, const std::string& period_label,
                                 std::int64_t administrator_id) {
+    auth::rbac::require_role(database, administrator_id, auth::rbac::Operation::RunInterest);
     const InterestPeriod period = parse_interest_period(period_label);
     Database::Transaction transaction(database, true);
 
@@ -250,16 +253,9 @@ InterestRunResult run_interest(Database& database, const std::string& period_lab
             insert_transaction->bind(5, run_id);
             insert_transaction->step();
         }
-        {
-            auto audit = database.prepare(
-                "INSERT INTO audit_log (user_id, action, entity, entity_id, details) "
-                "VALUES (?, 'INTEREST_CREDIT', 'accounts', ?, ?)");
-            audit->bind(1, administrator_id);
-            audit->bind(2, account.id);
-            audit->bind(3, "Credited " + transaction::format_money(interest) +
-                           " interest for period " + period.label + ".");
-            audit->step();
-        }
+        audit::record(database, administrator_id, "INTEREST_CREDIT", "accounts", account.id,
+                      "Credited " + transaction::format_money(interest) +
+                          " interest for period " + period.label + ".");
 
         result.accounts.push_back({account.id, account.number, basis_balance, interest, resulting_balance});
         result.accounts_credited = checked_add(result.accounts_credited, 1);

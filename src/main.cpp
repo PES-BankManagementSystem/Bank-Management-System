@@ -7,11 +7,14 @@
 #include <vector>
 
 #include "account/routes.hpp"
+#include "api/router.hpp"
 #include "api/server.hpp"
 #include "audit/routes.hpp"
+#include "auth/rbac.hpp"
 #include "auth/routes.hpp"
 #include "common/config.hpp"
 #include "common/db.hpp"
+#include "common/error.hpp"
 #include "common/log.hpp"
 #include "common/version.hpp"
 #include "customer/routes.hpp"
@@ -22,10 +25,6 @@
 namespace {
 
 bms::api::Server* g_server = nullptr;
-
-// S-17 still uses a fixed local-demo operator; transaction routes are not session-authenticated.
-constexpr std::int64_t kLocalDemoOperatorId = 2;
-constexpr std::int64_t kLocalDemoAdministratorId = 1;
 
 // Ctrl+C / SIGTERM: stop accepting requests and let main() return normally, so
 // open database connections are closed cleanly.
@@ -42,10 +41,12 @@ void register_all_routes(bms::api::Router& router, bms::Database& database,
     bms::auth::register_routes(router, database, allow_initial_credential_delivery);
     bms::customer::register_routes(router, database, allow_initial_credential_delivery);
     bms::account::register_routes(router);
-    bms::transaction::register_routes(router, database, kLocalDemoOperatorId);
-    bms::reporting::register_routes(router, database, kLocalDemoAdministratorId);
-    bms::staff::register_routes(router);
-    bms::audit::register_routes(router);
+    bms::transaction::register_routes(router, database);
+    bms::reporting::register_routes(router, database);
+    bms::staff::register_routes(router, database, allow_initial_credential_delivery);
+    bms::audit::register_routes(router, database, [&database](const bms::api::Request& request) {
+        bms::auth::rbac::require(request, database, bms::auth::rbac::Operation::ViewAudit);
+    });
 }
 
 }  // namespace
@@ -74,7 +75,10 @@ int main(int argc, char* argv[]) {
     try {
         bms::Database database(config.db_path);
         bms::api::Server server(config);
-        register_all_routes(server.router(), database, is_loopback_host(config.host));
+        // One-time credential delivery and sign-in are allowed on loopback (local
+        // development) or when the connection is encrypted.
+        register_all_routes(server.router(), database,
+                            is_loopback_host(config.host) || server.tls_enabled());
         const int port = server.bind();
 
         g_server = &server;
@@ -82,7 +86,13 @@ int main(int argc, char* argv[]) {
         std::signal(SIGTERM, handle_stop_signal);
 
         bms::log::info(std::string(bms::kProjectName) + ' ' + bms::kVersion +
-                       " listening on http://" + config.host + ':' + std::to_string(port));
+                       " listening on " + (server.tls_enabled() ? "https://" : "http://") + config.host +
+                       ':' + std::to_string(port));
+        if (!server.tls_enabled() && !is_loopback_host(config.host)) {
+            bms::log::warning(
+                "Serving plain HTTP on a network address: sign-in and credential routes are "
+                "disabled. Set --tls-cert and --tls-key to enable HTTPS.");
+        }
         server.run();
         g_server = nullptr;
         bms::log::info("Server stopped");

@@ -6,6 +6,8 @@
 #include <string>
 #include <vector>
 
+#include "audit/record.hpp"
+#include "auth/rbac.hpp"
 #include "common/db.hpp"
 #include "common/error.hpp"
 
@@ -208,6 +210,8 @@ CustomerDetails get_customer_for_user(Database& database, std::int64_t user_id) 
 CustomerDetails update_customer(Database& database, const std::string& customer_id,
                                 const CustomerInput& raw_input,
                                 std::int64_t operator_user_id) {
+    auth::rbac::require_role(database, operator_user_id,
+                             auth::rbac::Operation::UpdateCustomer);
     const CustomerInput input = validate_customer_input(raw_input);
     Database::Transaction transaction(database, true);
     const std::int64_t customer_key = find_customer_key(database, customer_id);
@@ -228,13 +232,8 @@ CustomerDetails update_customer(Database& database, const std::string& customer_
     update->bind(7, customer_key);
     update->step();
 
-    auto audit = database.prepare(
-        "INSERT INTO audit_log (user_id, action, entity, entity_id, details) "
-        "VALUES (?, 'CUSTOMER_UPDATED', 'customers', ?, ?)");
-    audit->bind(1, operator_user_id);
-    audit->bind(2, customer_key);
-    audit->bind(3, audit_details(before.customer_id, changed));
-    audit->step();
+    audit::record(database, operator_user_id, "CUSTOMER_UPDATED", "customers",
+                  customer_key, audit_details(before.customer_id, changed));
 
     CustomerDetails updated = read_customer(database, customer_id);
     transaction.commit();

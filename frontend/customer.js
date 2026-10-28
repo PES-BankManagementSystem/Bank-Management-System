@@ -167,6 +167,10 @@ async function loadCustomerPage() {
     const response = await fetch(`/customers?${params}`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
+    if (response.status === 401) {
+      document.dispatchEvent(new CustomEvent("bms:session-expired"));
+      return;
+    }
     const body = await response.json();
     if (!response.ok) throw new Error(body.message || "Unable to load customers.");
 
@@ -214,6 +218,10 @@ async function openCustomer(customerId) {
     const response = await fetch(`/customers/${encodeURIComponent(customerId)}`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
+    if (response.status === 401) {
+      document.dispatchEvent(new CustomEvent("bms:session-expired"));
+      return;
+    }
     const body = await response.json();
     if (!response.ok) throw new Error(body.message || "Unable to load customer details.");
     renderCustomerDetails(customerDetailFields, customerDetailAccounts, body);
@@ -241,6 +249,10 @@ async function loadMyProfile() {
     const response = await fetch("/customers/me", {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
+    if (response.status === 401) {
+      document.dispatchEvent(new CustomEvent("bms:session-expired"));
+      return;
+    }
     const body = await response.json();
     if (!response.ok) throw new Error(body.message || "Unable to load your profile.");
     renderCustomerDetails(customerProfileFields, customerProfileAccounts, body);
@@ -318,6 +330,9 @@ function updateSessionView() {
     ? `Signed in as ${currentRole.replaceAll("_", " ")}.`
     : "You are signed out.";
   customerDetailCard.hidden = true;
+  document.dispatchEvent(new CustomEvent("bms:session", {
+    detail: { accessToken, role: currentRole, mustChangePassword },
+  }));
   if (accessToken && !mustChangePassword) {
     if (authorizedRole) void loadCustomerPage();
     if (currentRole === "customer") void loadMyProfile();
@@ -390,6 +405,10 @@ passwordChangeForm.addEventListener("submit", async (event) => {
       },
       body: JSON.stringify({ newPassword: password }),
     });
+    if (response.status === 401) {
+      document.dispatchEvent(new CustomEvent("bms:session-expired"));
+      return;
+    }
     const body = await response.json();
     if (!response.ok) throw new Error(body.message || "Password change failed.");
     mustChangePassword = false;
@@ -423,6 +442,10 @@ customerForm.addEventListener("submit", async (event) => {
       },
       body: JSON.stringify(values),
     });
+    if (response.status === 401) {
+      document.dispatchEvent(new CustomEvent("bms:session-expired"));
+      return;
+    }
     const body = await response.json();
     if (!response.ok) {
       if (!displayApiFieldErrors(body)) throw new Error(body.message || "Registration failed.");
@@ -500,6 +523,10 @@ customerEditForm.addEventListener("submit", async (event) => {
       },
       body: JSON.stringify(values),
     });
+    if (response.status === 401) {
+      document.dispatchEvent(new CustomEvent("bms:session-expired"));
+      return;
+    }
     const body = await response.json();
     if (!response.ok) {
       const message = body.message || "Unable to update customer.";
@@ -533,6 +560,17 @@ customerEditForm.addEventListener("submit", async (event) => {
   } finally {
     customerEditSubmit.disabled = false;
   }
+});
+
+// Shared session hook for the other front-end modules: they listen for
+// "bms:session" and raise "bms:session-expired" when the server answers 401,
+// which returns the page to the sign-in form.
+document.addEventListener("bms:session-expired", () => {
+  accessToken = "";
+  currentRole = "";
+  mustChangePassword = false;
+  updateSessionView();
+  loginError.textContent = "Your session has ended. Please sign in again.";
 });
 
 updateSessionView();

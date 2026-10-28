@@ -3,6 +3,8 @@
 #include <limits>
 #include <string>
 
+#include "audit/record.hpp"
+#include "auth/rbac.hpp"
 #include "common/db.hpp"
 #include "common/error.hpp"
 
@@ -63,6 +65,7 @@ std::int64_t parse_amount_paise(const std::string& amount) {
 
 DepositResult deposit(Database& database, const std::string& account_number,
                       const std::string& amount, std::int64_t operator_id) {
+    auth::rbac::require_role(database, operator_id, auth::rbac::Operation::Deposit);
     const std::int64_t amount_paise = parse_amount_paise(amount);
     if (account_number.empty()) {
         throw validation_error("account_number", "Account number is required.");
@@ -120,16 +123,9 @@ DepositResult deposit(Database& database, const std::string& account_number,
         transaction_id = transaction_id_query->column_int(0);
     }
 
-    {
-        auto insert_audit = database.prepare(
-            "INSERT INTO audit_log (user_id, action, entity, entity_id, details) "
-            "VALUES (?, 'DEPOSIT', 'accounts', ?, ?)");
-        insert_audit->bind(1, operator_id);
-        insert_audit->bind(2, account_id);
-        insert_audit->bind(3, "Deposited " + std::to_string(amount_paise) +
-                                  " paise; resulting balance " + std::to_string(resulting_balance) + " paise.");
-        insert_audit->step();
-    }
+    audit::record(database, operator_id, "DEPOSIT", "accounts", account_id,
+                  "Deposited " + std::to_string(amount_paise) +
+                      " paise; resulting balance " + std::to_string(resulting_balance) + " paise.");
 
     std::string created_at;
     {

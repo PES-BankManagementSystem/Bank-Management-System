@@ -7,7 +7,9 @@
 
 #include <sodium.h>
 
+#include "audit/record.hpp"
 #include "auth/password.hpp"
+#include "auth/rbac.hpp"
 #include "common/db.hpp"
 #include "common/error.hpp"
 
@@ -79,6 +81,7 @@ void reject_duplicate_customer_fields(Database& database, const CustomerInput& i
 
 RegistrationResult register_customer(Database& database, const CustomerInput& raw_input,
                                       std::int64_t operator_user_id) {
+    auth::rbac::require_role(database, operator_user_id, auth::rbac::Operation::RegisterCustomer);
     const CustomerInput input = validate_customer_input(raw_input);
     ensure_sodium();
     reject_duplicate_customer_fields(database, input);
@@ -133,13 +136,8 @@ RegistrationResult register_customer(Database& database, const CustomerInput& ra
     last_customer->step();
     const std::int64_t customer_id = last_customer->column_int(0);
 
-    auto audit = database.prepare(
-        "INSERT INTO audit_log (user_id, action, entity, entity_id, details) "
-        "VALUES (?, 'CUSTOMER_REGISTERED', 'customers', ?, ?)");
-    audit->bind(1, operator_user_id);
-    audit->bind(2, customer_id);
-    audit->bind(3, "customerId=" + customer_code);
-    audit->step();
+    audit::record(database, operator_user_id, "CUSTOMER_REGISTERED", "customers", customer_id,
+                  "customerId=" + customer_code);
 
     auto created_at_query =
         database.prepare("SELECT created_at FROM customers WHERE customer_id = ?");

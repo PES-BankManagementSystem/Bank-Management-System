@@ -6,10 +6,12 @@
 #include <nlohmann/json.hpp>
 
 #include "api/server.hpp"
+#include "auth/routes.hpp"
 #include "common/config.hpp"
 #include "common/db.hpp"
 #include "common/error.hpp"
 #include "support/check.hpp"
+#include "support/login.hpp"
 #include "support/seeded_db.hpp"
 #include "transaction/withdraw.hpp"
 #include "transaction/routes.hpp"
@@ -157,12 +159,14 @@ void test_api_success_and_business_rule_responses() {
     config.host = "127.0.0.1";
     config.port = 0;
     bms::api::Server server(config);
-    bms::transaction::register_routes(server.router(), fixture.database(), 2);
+    bms::auth::register_routes(server.router(), fixture.database(), true);
+    bms::transaction::register_routes(server.router(), fixture.database());
     const int port = server.bind();
     std::thread server_thread([&server] { server.run(); });
     server.wait_until_ready();
     httplib::Client client("127.0.0.1", port);
-    const auto success = client.Post("/transactions",
+    const auto officer = bms::test::sign_in(client, "officer1");
+    const auto success = client.Post("/transactions", officer,
         R"({"type":"withdraw","account_number":"ACC001","amount":"10.00"})", "application/json");
     CHECK(success);
     if (success) {
@@ -171,7 +175,7 @@ void test_api_success_and_business_rule_responses() {
         CHECK_EQ(body["transaction"]["type"].get<std::string>(), std::string("withdrawal"));
         CHECK_EQ(body["balance"].get<std::string>(), std::string("49990.00"));
     }
-    const auto below_minimum = client.Post("/transactions",
+    const auto below_minimum = client.Post("/transactions", officer,
         R"({"type":"withdraw","account_number":"ACC005","amount":"7000.01"})", "application/json");
     CHECK(below_minimum);
     if (below_minimum) {
@@ -181,7 +185,7 @@ void test_api_success_and_business_rule_responses() {
         CHECK(body["message"].get<std::string>().find("1000.00") != std::string::npos);
     }
     set_balance(fixture.database(), "ACC004", 30000000);
-    const auto daily_limit = client.Post("/transactions",
+    const auto daily_limit = client.Post("/transactions", officer,
         R"({"type":"withdraw","account_number":"ACC004","amount":"200000.01"})", "application/json");
     CHECK(daily_limit);
     if (daily_limit) {

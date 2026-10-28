@@ -1,0 +1,66 @@
+/* S-05: base layout shared by every screen. */
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 0 16px 48px;
+}
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  width: calc(100% + 32px);
+  margin: 0 -16px;
+  padding: 12px 24px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 24px;
+  background: #fff;
+  border-bottom: 1px solid #e1e7ef;
+  box-shadow: 0 2px 10px #172b4d0d;
+}
+.app-brand { color: #172b4d; font-weight: 700; text-decoration: none; }
+.app-nav { display: flex; flex-wrap: wrap; gap: 4px 16px; }
+.app-nav a { color: #185ea8; font-weight: 600; text-decoration: none; }
+.app-nav a:hover, .app-nav a:focus-visible { text-decoration: underline; }
+.app-user { display: flex; align-items: center; gap: 12px; margin: 0 0 0 auto; color: #5e6c84; }
+.app-user[hidden] { display: none; }
+.app-user button { width: auto; min-height: 36px; margin: 0; padding: 0 14px; }
+
+.card { scroll-margin-top: 80px; }
+.role-hidden { display: none !important; }
+
+button.secondary { background: #e9eef5; color: #172b4d; }
+button.secondary:hover { background: #d8e1ec; }
+
+.form-field { margin: 0; }
+
+.data-table { width: 100%; margin-top: 18px; border-collapse: collapse; font-size: 0.92rem; }
+.data-table caption { margin-bottom: 8px; text-align: left; font-weight: 600; }
+.data-table th, .data-table td { padding: 9px 6px; border-bottom: 1px solid #e1e7ef; text-align: left; }
+.data-table th { color: #5e6c84; font-weight: 600; }
+.empty-state { margin: 18px 0 0; color: #5e6c84; }
+
+.confirm-dialog {
+  width: min(92vw, 400px);
+  padding: 28px;
+  border: 1px solid #e1e7ef;
+  border-radius: 14px;
+  color: #172b4d;
+  box-shadow: 0 18px 48px #172b4d30;
+}
+.confirm-dialog::backdrop { background: #172b4d66; }
+.confirm-dialog h2 { margin: 0 0 16px; font-size: 1.3rem; }
+.confirm-dialog dl { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; margin: 0; }
+.confirm-dialog dt { color: #5e6c84; }
+.confirm-dialog dd { margin: 0; font-weight: 600; text-align: right; }
+.dialog-actions { display: flex; gap: 12px; margin-top: 8px; }
+.dialog-actions button { flex: 1; }
+
+.toast-region { position: fixed; right: 16px; bottom: 16px; display: grid; gap: 8px; z-index: 20; }
+.toast { margin: 0; padding: 12px 16px; border-radius: 8px; background: #172b4d; color: #fff; }
+.toast.success { background: #16794b; }
+.toast.error { background: #b42318; }

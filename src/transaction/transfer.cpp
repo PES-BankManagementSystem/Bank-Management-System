@@ -5,6 +5,8 @@
 #include <stdexcept>
 #include <string>
 
+#include "audit/record.hpp"
+#include "auth/rbac.hpp"
 #include "common/db.hpp"
 #include "common/error.hpp"
 #include "transaction/deposit.hpp"
@@ -76,17 +78,6 @@ std::string current_utc_timestamp(Database& database) {
     return timestamp ? reinterpret_cast<const char*>(timestamp) : "";
 }
 
-void insert_audit(Database& database, std::int64_t operator_id, std::int64_t account_id,
-                  const std::string& action, const std::string& details) {
-    auto insert = database.prepare(
-        "INSERT INTO audit_log (user_id, action, entity, entity_id, details) VALUES (?, ?, 'accounts', ?, ?)");
-    insert->bind(1, operator_id);
-    insert->bind(2, action);
-    insert->bind(3, account_id);
-    insert->bind(4, details);
-    insert->step();
-}
-
 }  // namespace
 
 std::string make_transfer_reference(const std::string& created_at,
@@ -102,6 +93,7 @@ std::string make_transfer_reference(const std::string& created_at,
 TransferResult transfer(Database& database, const std::string& from_account_number,
                         const std::string& to_account_number, const std::string& amount,
                         std::int64_t operator_id) {
+    auth::rbac::require_role(database, operator_id, auth::rbac::Operation::Transfer);
     const std::int64_t amount_paise = parse_amount_paise(amount);
     if (from_account_number.empty()) {
         throw validation_error("from_account_number", "Source account number is required.");
@@ -165,9 +157,8 @@ TransferResult transfer(Database& database, const std::string& from_account_numb
 
     const std::string details = "Transfer " + reference + " of " + format_money(amount_paise) +
         "; resulting balance " + format_money(source_balance) + ".";
-    insert_audit(database, operator_id, source.id, "TRANSFER_OUT", details);
-    insert_audit(database, operator_id, destination.id,
-                 "TRANSFER_IN", "Transfer " + reference + " of " + format_money(amount_paise) +
+    audit::record(database, operator_id, "TRANSFER_OUT", "accounts", source.id, details);
+    audit::record(database, operator_id, "TRANSFER_IN", "accounts", destination.id, "Transfer " + reference + " of " + format_money(amount_paise) +
                     "; resulting balance " + format_money(destination_balance) + ".");
 
     transaction.commit();

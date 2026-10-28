@@ -5,6 +5,7 @@
 #include <nlohmann/json.hpp>
 
 #include "api/router.hpp"
+#include "auth/rbac.hpp"
 #include "common/db.hpp"
 #include "common/error.hpp"
 #include "reporting/interest.hpp"
@@ -12,8 +13,10 @@
 
 namespace bms::reporting {
 
-void register_routes(api::Router& router, Database& database, std::int64_t administrator_id) {
-    router.post("/interest/run", [&database, administrator_id](const api::Request& request) {
+void register_routes(api::Router& router, Database& database) {
+    router.post("/interest/run", [&database](const api::Request& request) {
+        const std::int64_t administrator_id =
+            auth::rbac::require(request, database, auth::rbac::Operation::RunInterest).user_id;
         const auto& body = request.json();
         if (!body.contains("period") || !body["period"].is_string()) {
             throw validation_error("period", "Period must use YYYY-MM format.");
