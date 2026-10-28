@@ -49,9 +49,8 @@ std::string like_pattern(const std::string& value, bool leading_wildcard,
 CustomerDetails read_customer(Database& database, const std::string& customer_id) {
     auto customer = database.prepare(
         "SELECT c.customer_code, c.full_name, c.date_of_birth, c.address, c.phone, "
-        "c.email, c.identification_reference, COALESCE(u.status, 'active'), "
-        "c.created_at, c.updated_at "
-        "FROM customers c LEFT JOIN users u ON u.user_id = c.user_id "
+        "c.email, c.identification_reference, c.status, "
+        "c.created_at, c.updated_at FROM customers c "
         "WHERE c.customer_code = ? COLLATE NOCASE");
     customer->bind(1, customer_id);
     if (!customer->step()) {
@@ -175,8 +174,7 @@ CustomerPage search_customers(Database& database, const std::string& query,
 
     auto results = database.prepare(
         "SELECT c.customer_code, c.full_name, c.phone, c.email, "
-        "COALESCE(u.status, 'active') "
-        "FROM customers c LEFT JOIN users u ON u.user_id = c.user_id" + where +
+        "c.status FROM customers c" + where +
         " ORDER BY c.full_name COLLATE NOCASE, c.customer_code COLLATE NOCASE "
         "LIMIT ? OFFSET ?");
     results->bind(1, trimmed);
@@ -238,6 +236,66 @@ CustomerDetails update_customer(Database& database, const std::string& customer_
     CustomerDetails updated = read_customer(database, customer_id);
     transaction.commit();
     return updated;
+}
+
+CustomerDetails deactivate_customer(Database& database, const std::string& customer_id,
+                                    std::int64_t operator_user_id) {
+    auth::rbac::require_role(database, operator_user_id,
+                             auth::rbac::Operation::DeactivateCustomer);
+    Database::Transaction transaction(database, true);
+    const std::int64_t customer_key = find_customer_key(database, customer_id);
+
+    auto current = database.prepare(
+        "SELECT c.customer_code, c.status, c.user_id, u.status FROM customers c "
+        "LEFT JOIN users u ON u.user_id = c.user_id WHERE c.customer_id = ?");
+    current->bind(1, customer_key);
+    if (!current->step()) {
+        throw not_found("Customer " + customer_id + " was not found.");
+    }
+    const std::string canonical_customer_id = column_string(*current, 0);
+    const std::string old_status = column_string(*current, 1);
+    const bool has_user = !current->column_null(2);
+    const std::int64_t user_id = has_user ? current->column_int(2) : 0;
+    const std::string user_status = column_string(*current, 3);
+    const bool changed = old_status != "inactive" ||
+                         (has_user && user_status != "inactive");
+    if (!changed) {
+        transaction.commit();
+        return read_customer(database, customer_id);
+    }
+
+    auto deactivate_record = database.prepare(
+        "UPDATE customers SET status = 'inactive', updated_at = CURRENT_TIMESTAMP "
+        "WHERE customer_id = ?");
+    deactivate_record->bind(1, customer_key);
+    deactivate_record->step();
+    if (has_user && user_status != "inactive") {
+        auto deactivate_login = database.prepare(
+            "UPDATE users SET status = 'inactive', updated_at = CURRENT_TIMESTAMP "
+            "WHERE user_id = ?");
+        deactivate_login->bind(1, user_id);
+        deactivate_login->step();
+    }
+    audit::record(database, operator_user_id, "CUSTOMER_DEACTIVATED", "customers",
+                  customer_key, "customerId=" + canonical_customer_id +
+                                    ";oldStatus=" + old_status + ";newStatus=inactive");
+
+    CustomerDetails updated = read_customer(database, customer_id);
+    transaction.commit();
+    return updated;
+}
+
+void require_active_customer(Database& database, const std::string& customer_id) {
+    auto query = database.prepare(
+        "SELECT status FROM customers WHERE customer_code = ? COLLATE NOCASE");
+    query->bind(1, customer_id);
+    if (!query->step()) {
+        throw not_found("Customer " + customer_id + " was not found.");
+    }
+    if (column_string(*query, 0) != "active") {
+        throw conflict("CUSTOMER_INACTIVE",
+                       "This customer is inactive and cannot open a new account.");
+    }
 }
 
 }  // namespace bms::customer

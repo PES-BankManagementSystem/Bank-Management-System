@@ -106,13 +106,16 @@ TEST(PermissionTable, MatchesTheBusinessRules) {
     const std::string admin = "administrator", officer = "bank_officer", customer = "customer";
 
     for (const Operation op : {Operation::RegisterCustomer, Operation::UpdateCustomer,
-                               Operation::DeactivateCustomer, Operation::OpenAccount,
-                               Operation::CloseAccount, Operation::FreezeAccount,
-                               Operation::Deposit, Operation::Withdraw, Operation::Transfer}) {
+                               Operation::OpenAccount, Operation::CloseAccount,
+                               Operation::FreezeAccount, Operation::Deposit,
+                               Operation::Withdraw, Operation::Transfer}) {
         EXPECT_TRUE(bms::auth::rbac::is_allowed(op, admin)) << bms::auth::rbac::name(op);
         EXPECT_TRUE(bms::auth::rbac::is_allowed(op, officer)) << bms::auth::rbac::name(op);
         EXPECT_FALSE(bms::auth::rbac::is_allowed(op, customer)) << bms::auth::rbac::name(op);
     }
+    EXPECT_TRUE(bms::auth::rbac::is_allowed(Operation::DeactivateCustomer, admin));
+    EXPECT_FALSE(bms::auth::rbac::is_allowed(Operation::DeactivateCustomer, officer));
+    EXPECT_FALSE(bms::auth::rbac::is_allowed(Operation::DeactivateCustomer, customer));
     for (const Operation op : {Operation::ViewCustomer, Operation::ViewAccount}) {
         EXPECT_TRUE(bms::auth::rbac::is_allowed(op, admin));
         EXPECT_TRUE(bms::auth::rbac::is_allowed(op, officer));

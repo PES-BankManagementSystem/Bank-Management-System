@@ -52,5 +52,8 @@ CustomerDetails get_customer(Database& database, const std::string& customer_id)
 CustomerDetails get_customer_for_user(Database& database, std::int64_t user_id);
 CustomerDetails update_customer(Database& database, const std::string& customer_id,
                                 const CustomerInput& input, std::int64_t operator_user_id);
+CustomerDetails deactivate_customer(Database& database, const std::string& customer_id,
+                                    std::int64_t operator_user_id);
+void require_active_customer(Database& database, const std::string& customer_id);
 
 }  // namespace bms::customer
