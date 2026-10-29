@@ -40,13 +40,10 @@ TEST_F(ModuleTest, ApiMapsValidationErrorsToBadRequest) {
     EXPECT_EQ(bms::api::http_status(bms::ErrorKind::Validation), 400);
 }
 
-// These modules currently provide route-registration stubs only. This smoke
-// check verifies each module's public registration function is linked and
-// callable; behavioral coverage belongs with the route implementations.
 TEST_F(ModuleTest, AccountRouteRegistrationIsCallable) {
     httplib::Server server;
     bms::api::Router router(server);
-    EXPECT_NO_THROW(bms::account::register_routes(router));
+    EXPECT_NO_THROW(bms::account::register_routes(router, db()));
 }
 
 TEST_F(ModuleTest, AuditRouteRegistrationIsCallable) {

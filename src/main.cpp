@@ -40,7 +40,7 @@ void register_all_routes(bms::api::Router& router, bms::Database& database,
                          bool allow_initial_credential_delivery) {
     bms::auth::register_routes(router, database, allow_initial_credential_delivery);
     bms::customer::register_routes(router, database, allow_initial_credential_delivery);
-    bms::account::register_routes(router);
+    bms::account::register_routes(router, database);
     bms::transaction::register_routes(router, database);
     bms::reporting::register_routes(router, database);
     bms::staff::register_routes(router, database, allow_initial_credential_delivery);
