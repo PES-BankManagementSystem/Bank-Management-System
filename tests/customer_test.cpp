@@ -96,7 +96,7 @@ protected:
         const std::string hash = bms::auth::hash_password(kPassword);
         auto update = db().prepare(
             "UPDATE users SET password_hash = ?, failed_attempts = 0, status = 'active' "
-            "WHERE username IN ('admin', 'officer1', 'customer1')");
+            "WHERE username IN ('admin', 'officer1', 'customer1', 'customer2')");
         update->bind(1, hash);
         update->step();
     }
@@ -676,6 +676,184 @@ TEST_F(CustomerTest, FR3_UpdateRouteValidatesAndRestrictsCustomerRole) {
     EXPECT_EQ(admin_update->status, 200) << admin_update->body;
 }
 
+TEST_F(CustomerTest, FR3_AdminDeactivationIsAtomicIdempotentAndPreservesHistory) {
+    TestServer server(db(), true);
+    auto unauthenticated = server.client().Put(
+        "/customers/CUS-00000001", R"({"status":"inactive"})", "application/json");
+    ASSERT_TRUE(unauthenticated);
+    EXPECT_EQ(unauthenticated->status, 401);
+
+    auto login = [&server](const char* username) {
+        return server.client().Post(
+            "/auth/login",
+            json({{"username", username}, {"password", kPassword}}).dump(),
+            "application/json");
+    };
+    auto admin_login = login("admin");
+    ASSERT_TRUE(admin_login);
+    ASSERT_EQ(admin_login->status, 200) << admin_login->body;
+    httplib::Headers admin_headers{{
+        "Authorization", "Bearer " + json::parse(admin_login->body)["accessToken"].get<std::string>()}};
+    auto officer_login = login("officer1");
+    ASSERT_TRUE(officer_login);
+    ASSERT_EQ(officer_login->status, 200);
+    httplib::Headers officer_headers{{
+        "Authorization", "Bearer " + json::parse(officer_login->body)["accessToken"].get<std::string>()}};
+    auto customer_login = login("customer1");
+    ASSERT_TRUE(customer_login);
+    ASSERT_EQ(customer_login->status, 200);
+    httplib::Headers customer_headers{{
+        "Authorization", "Bearer " + json::parse(customer_login->body)["accessToken"].get<std::string>()}};
+
+    auto forbidden_officer = server.client().Put(
+        "/customers/CUS-00000001", officer_headers, R"({"status":"inactive"})",
+        "application/json");
+    ASSERT_TRUE(forbidden_officer);
+    EXPECT_EQ(forbidden_officer->status, 403);
+    auto forbidden_customer = server.client().Put(
+        "/customers/CUS-00000001", customer_headers, R"({"status":"inactive"})",
+        "application/json");
+    ASSERT_TRUE(forbidden_customer);
+    EXPECT_EQ(forbidden_customer->status, 403);
+
+    auto invalid_status = server.client().Put(
+        "/customers/CUS-00000001", admin_headers, R"({"status":"active"})",
+        "application/json");
+    ASSERT_TRUE(invalid_status);
+    ASSERT_EQ(invalid_status->status, 400);
+    EXPECT_EQ(json::parse(invalid_status->body)["field"], "status");
+    auto unknown = server.client().Put(
+        "/customers/CUS-00000099", admin_headers, R"({"status":"inactive"})",
+        "application/json");
+    ASSERT_TRUE(unknown);
+    EXPECT_EQ(unknown->status, 404);
+    EXPECT_NE(json::parse(unknown->body)["message"].get<std::string>().find(
+                  "CUS-00000099"), std::string::npos);
+
+    const std::int64_t accounts_before = scalar_int(
+        db(), "SELECT COUNT(*) FROM accounts WHERE customer_id = 1");
+    const std::int64_t transactions_before = scalar_int(
+        db(), "SELECT COUNT(*) FROM transactions "
+              "WHERE account_id IN (SELECT account_id FROM accounts WHERE customer_id = 1)");
+    auto deactivated = server.client().Put(
+        "/customers/CUS-00000001", admin_headers, R"({"status":"inactive"})",
+        "application/json");
+    ASSERT_TRUE(deactivated);
+    ASSERT_EQ(deactivated->status, 200) << deactivated->body;
+    EXPECT_EQ(json::parse(deactivated->body)["status"], "inactive");
+    EXPECT_EQ(scalar_int(db(), "SELECT COUNT(*) FROM customers WHERE customer_id = 1"), 1);
+    EXPECT_EQ(scalar_int(db(), "SELECT COUNT(*) FROM users WHERE user_id = 4"), 1);
+    auto user_status = db().prepare("SELECT status FROM users WHERE user_id = 4");
+    ASSERT_TRUE(user_status->step());
+    EXPECT_STREQ(reinterpret_cast<const char*>(user_status->column_text(0)), "inactive");
+    auto audit = db().prepare(
+        "SELECT user_id, details, timestamp FROM audit_log "
+        "WHERE action = 'CUSTOMER_DEACTIVATED' AND entity_id = 1");
+    ASSERT_TRUE(audit->step());
+    EXPECT_EQ(audit->column_int(0), 1);
+    const std::string audit_details =
+        reinterpret_cast<const char*>(audit->column_text(1));
+    EXPECT_NE(audit_details.find("customerId=CUS-00000001"), std::string::npos);
+    EXPECT_NE(audit_details.find("oldStatus=active;newStatus=inactive"), std::string::npos);
+    EXPECT_FALSE(audit->column_null(2));
+    EXPECT_EQ(audit_details.find("John Doe"), std::string::npos);
+    EXPECT_EQ(audit_details.find("john.doe@example.com"), std::string::npos);
+    EXPECT_EQ(audit_details.find("555-0101"), std::string::npos);
+
+    auto old_token_profile = server.client().Get("/customers/me", customer_headers);
+    ASSERT_TRUE(old_token_profile);
+    EXPECT_EQ(old_token_profile->status, 401);
+    auto old_token_password_change = server.client().Post(
+        "/auth/change-password", customer_headers,
+        R"({"newPassword":"NewCustomerPassword123!"})", "application/json");
+    ASSERT_TRUE(old_token_password_change);
+    EXPECT_EQ(old_token_password_change->status, 401);
+    auto inactive_login = login("customer1");
+    ASSERT_TRUE(inactive_login);
+    EXPECT_EQ(inactive_login->status, 401);
+    EXPECT_EQ(json::parse(inactive_login->body)["message"], "Invalid username or password.");
+    auto active_login = login("customer2");
+    ASSERT_TRUE(active_login);
+    EXPECT_EQ(active_login->status, 200) << active_login->body;
+
+    auto search = server.client().Get("/customers?query=CUS-00000001", admin_headers);
+    ASSERT_TRUE(search);
+    ASSERT_EQ(search->status, 200) << search->body;
+    ASSERT_EQ(json::parse(search->body)["items"].size(), 1U);
+    EXPECT_EQ(json::parse(search->body)["items"][0]["status"], "inactive");
+    auto details = server.client().Get("/customers/CUS-00000001", admin_headers);
+    ASSERT_TRUE(details);
+    ASSERT_EQ(details->status, 200);
+    EXPECT_EQ(json::parse(details->body)["status"], "inactive");
+    EXPECT_EQ(json::parse(details->body)["accounts"].size(), 2U);
+    EXPECT_EQ(scalar_int(
+                  db(), "SELECT COUNT(*) FROM accounts WHERE customer_id = 1"),
+              accounts_before);
+    EXPECT_EQ(scalar_int(
+                  db(), "SELECT COUNT(*) FROM transactions "
+                        "WHERE account_id IN (SELECT account_id FROM accounts WHERE customer_id = 1)"),
+              transactions_before);
+
+    const std::int64_t audit_count =
+        scalar_int(db(), "SELECT COUNT(*) FROM audit_log WHERE action = 'CUSTOMER_DEACTIVATED'");
+    auto repeated = server.client().Put(
+        "/customers/CUS-00000001", admin_headers, R"({"status":"inactive"})",
+        "application/json");
+    ASSERT_TRUE(repeated);
+    EXPECT_EQ(repeated->status, 200);
+    EXPECT_EQ(json::parse(repeated->body)["status"], "inactive");
+    EXPECT_EQ(scalar_int(db(), "SELECT COUNT(*) FROM audit_log WHERE action = 'CUSTOMER_DEACTIVATED'"),
+              audit_count);
+}
+
+TEST_F(CustomerTest, SRS55_DeactivationAuditFailureRollsBackCustomerAndLogin) {
+    db().exec(
+        "CREATE TRIGGER fail_customer_deactivation_audit BEFORE INSERT ON audit_log "
+        "WHEN NEW.action = 'CUSTOMER_DEACTIVATED' BEGIN "
+        "SELECT RAISE(ABORT, 'forced audit failure'); END");
+    TestServer server(db(), true);
+    auto admin_login = server.client().Post(
+        "/auth/login", R"({"username":"admin","password":"OfficerPassword123!"})",
+        "application/json");
+    ASSERT_TRUE(admin_login);
+    ASSERT_EQ(admin_login->status, 200);
+    httplib::Headers admin_headers{{
+        "Authorization", "Bearer " + json::parse(admin_login->body)["accessToken"].get<std::string>()}};
+    auto result = server.client().Put(
+        "/customers/CUS-00000001", admin_headers, R"({"status":"inactive"})",
+        "application/json");
+    ASSERT_TRUE(result);
+    EXPECT_EQ(result->status, 500);
+    EXPECT_EQ(scalar_int(db(), "SELECT COUNT(*) FROM customers "
+                               "WHERE customer_id = 1 AND status = 'active'"),
+              1);
+    EXPECT_EQ(scalar_int(db(), "SELECT COUNT(*) FROM users "
+                               "WHERE user_id = 4 AND status = 'active'"),
+              1);
+    EXPECT_EQ(scalar_int(db(), "SELECT COUNT(*) FROM audit_log "
+                               "WHERE action = 'CUSTOMER_DEACTIVATED'"),
+              0);
+}
+
+TEST_F(CustomerTest, FR3_AccountOpeningGuardAllowsOnlyActiveCustomers) {
+    EXPECT_NO_THROW(bms::customer::require_active_customer(db(), "CUS-00000001"));
+    EXPECT_NO_THROW(bms::customer::require_active_customer(db(), "CUS-00000002"));
+    (void)bms::customer::deactivate_customer(db(), "CUS-00000001", 1);
+    try {
+        bms::customer::require_active_customer(db(), "CUS-00000001");
+        FAIL() << "Expected an inactive customer to be rejected";
+    } catch (const bms::Error& error) {
+        EXPECT_EQ(error.kind(), bms::ErrorKind::Conflict);
+        EXPECT_NE(std::string(error.what()).find("inactive"), std::string::npos);
+    }
+    try {
+        bms::customer::require_active_customer(db(), "CUS-00000099");
+        FAIL() << "Expected an unknown customer to be rejected";
+    } catch (const bms::Error& error) {
+        EXPECT_EQ(error.kind(), bms::ErrorKind::NotFound);
+    }
+}
+
 TEST_F(CustomerTest, FR3_CustomerDataRoutesAreDisabledOnNetworkHttpListeners) {
     TestServer server(db(), false);
     auto list = server.client().Get("/customers");
@@ -684,6 +862,10 @@ TEST_F(CustomerTest, FR3_CustomerDataRoutesAreDisabledOnNetworkHttpListeners) {
     auto details = server.client().Get("/customers/CUS-00000001");
     ASSERT_TRUE(details);
     EXPECT_EQ(details->status, 403);
+    auto status_change = server.client().Put(
+        "/customers/CUS-00000001", R"({"status":"inactive"})", "application/json");
+    ASSERT_TRUE(status_change);
+    EXPECT_EQ(status_change->status, 403);
 }
 
 TEST_F(CustomerTest, TemporaryPasswordForcesPasswordChangeAtLogin) {
@@ -780,6 +962,41 @@ TEST_F(CustomerTest, VersionOneDatabaseMigrationAddsCredentialFields) {
     auto flag = legacy.prepare("SELECT must_change_password FROM users WHERE user_id = 1");
     ASSERT_TRUE(flag->step());
     EXPECT_EQ(flag->column_int(0), 0);
+}
+
+TEST_F(CustomerTest, SRS55_VersionTwoMigrationAddsIndependentCustomerStatus) {
+    bms::Database legacy(":memory:");
+    legacy.exec(
+        "CREATE TABLE users (user_id INTEGER PRIMARY KEY, status TEXT NOT NULL)");
+    legacy.exec(
+        "CREATE TABLE customers (customer_id INTEGER PRIMARY KEY, customer_code TEXT NOT NULL, "
+        "user_id INTEGER, identification_reference TEXT NOT NULL)");
+    legacy.exec("INSERT INTO users VALUES (1, 'active'), (2, 'inactive'), (3, 'locked')");
+    legacy.exec(
+        "INSERT INTO customers VALUES (1, 'CUS-00000001', 1, 'ID-1'), "
+        "(2, 'CUS-00000002', 2, 'ID-2'), (3, 'CUS-00000003', 3, 'ID-3')");
+    legacy.exec("PRAGMA user_version = 2");
+
+    std::ifstream migration(std::filesystem::path(BMS_DB_DIR) / "migrations" /
+                            "003_customer_status.sql");
+    ASSERT_TRUE(migration.good());
+    std::ostringstream script;
+    script << migration.rdbuf();
+    legacy.exec_script(script.str());
+
+    auto rows = legacy.prepare(
+        "SELECT customer_code, status FROM customers ORDER BY customer_id");
+    ASSERT_TRUE(rows->step());
+    EXPECT_STREQ(reinterpret_cast<const char*>(rows->column_text(0)), "CUS-00000001");
+    EXPECT_STREQ(reinterpret_cast<const char*>(rows->column_text(1)), "active");
+    ASSERT_TRUE(rows->step());
+    EXPECT_STREQ(reinterpret_cast<const char*>(rows->column_text(0)), "CUS-00000002");
+    EXPECT_STREQ(reinterpret_cast<const char*>(rows->column_text(1)), "inactive");
+    ASSERT_TRUE(rows->step());
+    EXPECT_STREQ(reinterpret_cast<const char*>(rows->column_text(1)), "active");
+    auto version = legacy.prepare("PRAGMA user_version");
+    ASSERT_TRUE(version->step());
+    EXPECT_EQ(version->column_int(0), 3);
 }
 
 }  // namespace

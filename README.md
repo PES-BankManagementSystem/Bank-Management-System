@@ -15,11 +15,20 @@ sqlite3 bms.db < db/schema.sql
 sqlite3 bms.db < db/seed.sql
 ```
 
-For an existing version 1 database, run the one-time migration before starting the updated server:
+For an existing version 1 database, apply both migrations in order:
 
 ```powershell
 sqlite3 bms.db ".read db/migrations/002_customer_credentials.sql"
+sqlite3 bms.db ".read db/migrations/003_customer_status.sql"
 ```
+
+For a version 2 database, apply only the customer-status migration:
+
+```powershell
+sqlite3 bms.db ".read db/migrations/003_customer_status.sql"
+```
+
+The customer deactivation UI's manual verification steps are in [S-13 manual test](docs/S-13-MANUAL-TEST.md).
 
 ### Demo Credentials
 All demo users use the password "Password123!" (for testing only):

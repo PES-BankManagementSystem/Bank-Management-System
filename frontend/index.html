@@ -123,7 +123,8 @@
         <caption>Customer search results</caption>
         <thead>
           <tr><th scope="col">Customer ID</th><th scope="col">Name</th>
-            <th scope="col">Phone</th><th scope="col">Email</th><th scope="col">Details</th></tr>
+            <th scope="col">Phone</th><th scope="col">Email</th>
+            <th scope="col">Status</th><th scope="col">Details</th></tr>
         </thead>
         <tbody id="customer-results"></tbody>
       </table>
@@ -152,6 +153,7 @@
     </div>
     <p id="customer-detail-status" class="result" role="status" aria-live="polite"></p>
     <button id="customer-edit-button" type="button">Edit customer</button>
+    <button id="customer-deactivate-button" type="button" hidden>Deactivate customer</button>
     <form id="customer-edit-form" novalidate hidden>
       <h2>Edit customer details</h2>
       <label for="customer-edit-name">Full name</label>

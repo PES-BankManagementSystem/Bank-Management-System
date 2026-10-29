@@ -195,8 +195,27 @@ void register_routes(api::Router& router, Database& database,
     router.put("/customers/:id", [&database, allow_initial_credential_delivery](
                                      const api::Request& request) {
         require_loopback_data_access(allow_initial_credential_delivery);
-        const auth::Principal principal = auth::rbac::require(
-            request, database, auth::rbac::Operation::UpdateCustomer);
+        const auth::Principal principal = auth::authenticate(request, database);
+        const api::Json& body = request.json();
+        if (body.is_object() && body.contains("status")) {
+            auth::rbac::require_permission(
+                request, database, principal, auth::rbac::Operation::DeactivateCustomer);
+            if (body.size() != 1) {
+                throw validation_error(
+                    "status", "Submit only the status field to deactivate a customer.");
+            }
+            if (!body["status"].is_string()) {
+                throw validation_error("status", "Status must be a string.");
+            }
+            if (body["status"].get<std::string>() != "inactive") {
+                throw validation_error("status", "Status must be 'inactive'.");
+            }
+            return api::Response::ok(customer_details_json(
+                deactivate_customer(database, request.param("id"), principal.user_id)));
+        }
+
+        auth::rbac::require_permission(
+            request, database, principal, auth::rbac::Operation::UpdateCustomer);
         require_staff_role(principal);
         const CustomerInput input = read_customer_input(request.json());
         return api::Response::ok(customer_details_json(

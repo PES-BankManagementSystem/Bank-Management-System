@@ -62,7 +62,6 @@ bool is_allowed(Operation operation, const std::string& role) {
     switch (operation) {
         case Operation::RegisterCustomer:
         case Operation::UpdateCustomer:
-        case Operation::DeactivateCustomer:
         case Operation::OpenAccount:
         case Operation::CloseAccount:
         case Operation::FreezeAccount:
@@ -70,6 +69,8 @@ bool is_allowed(Operation operation, const std::string& role) {
         case Operation::Withdraw:
         case Operation::Transfer:
             return role == kAdministrator || role == kBankOfficer;
+        case Operation::DeactivateCustomer:
+            return role == kAdministrator;
         case Operation::ViewCustomer:
         case Operation::ViewAccount:
             return role == kAdministrator || role == kBankOfficer || role == kCustomer;

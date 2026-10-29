@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS customers (
     identification_reference TEXT NOT NULL UNIQUE,
     address TEXT NOT NULL,
     date_of_birth TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'inactive')),
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE SET NULL
@@ -150,4 +151,4 @@ BEGIN
 END;
 
 -- Set user_version for migration tracking
-PRAGMA user_version = 2;
+PRAGMA user_version = 3;

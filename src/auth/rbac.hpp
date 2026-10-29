@@ -20,9 +20,9 @@ class Database;
 namespace bms::auth::rbac {
 
 enum class Operation {
-    // Customers and accounts (SRS 5.5): Bank Officer or Administrator.
     RegisterCustomer,
     UpdateCustomer,
+    // Customer deactivation follows the S-13 story's Administrator-only rule.
     DeactivateCustomer,
     OpenAccount,
     CloseAccount,
