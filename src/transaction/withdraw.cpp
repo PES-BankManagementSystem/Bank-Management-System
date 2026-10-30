@@ -6,6 +6,7 @@
 #include "auth/rbac.hpp"
 #include "common/db.hpp"
 #include "common/error.hpp"
+#include "common/input_validation.hpp"
 
 namespace bms::transaction {
 
@@ -13,9 +14,7 @@ DepositResult withdraw(Database& database, const std::string& account_number,
                        const std::string& amount, std::int64_t operator_id) {
     auth::rbac::require_role(database, operator_id, auth::rbac::Operation::Withdraw);
     const std::int64_t amount_paise = parse_amount_paise(amount);
-    if (account_number.empty()) {
-        throw validation_error("account_number", "Account number is required.");
-    }
+    validate_account_number(account_number, "account_number");
 
     // Acquire the write lock before reading the daily total so concurrent
     // withdrawals cannot both pass the same limit check.

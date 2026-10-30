@@ -8,6 +8,7 @@
 #include "auth/rbac.hpp"
 #include "common/db.hpp"
 #include "common/error.hpp"
+#include "common/input_validation.hpp"
 #include "reporting/interest.hpp"
 #include "reporting/statement.hpp"
 #include "transaction/deposit.hpp"
@@ -27,6 +28,7 @@ void register_routes(api::Router& router, Database& database) {
         const auth::Principal principal =
             auth::rbac::require(request, database, auth::rbac::Operation::ViewAccount);
         const std::string& account_number = request.param("acc");
+        validate_account_number(account_number, "account_number");
         auth::rbac::require_account_access(database, principal, account_number);
 
         const auto from = request.query("from");

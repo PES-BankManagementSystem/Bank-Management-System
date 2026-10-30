@@ -1,6 +1,8 @@
 #include "auth/routes.hpp"
 
 #include <array>
+#include <algorithm>
+#include <cctype>
 #include <chrono>
 #include <cstdint>
 #include <mutex>
@@ -234,7 +236,10 @@ void register_routes(api::Router& router, Database& database, bool allow_plain_h
             throw validation_error("newPassword", "A new password is required.");
         }
         const std::string password = body["newPassword"].get<std::string>();
-        if (password.size() < 12 || password.size() > 1024) {
+        const bool whitespace_only = std::all_of(password.begin(), password.end(), [](unsigned char ch) {
+            return std::isspace(ch) != 0;
+        });
+        if (password.size() < 12 || password.size() > 1024 || whitespace_only) {
             throw validation_error("newPassword", "Password must be at least 12 characters.");
         }
         if (!principal.must_change_password) {

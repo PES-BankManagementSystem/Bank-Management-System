@@ -7,6 +7,7 @@
 #include "api/router.hpp"
 #include "common/db.hpp"
 #include "common/error.hpp"
+#include "common/input_validation.hpp"
 
 namespace bms::audit {
 namespace {
@@ -76,6 +77,7 @@ void register_routes(api::Router& router, Database& database,
         std::int64_t account_id = 0;
         const bool filter_account = account_number && !account_number->empty();
         if (filter_account) {
+            validate_account_number(*account_number, "account");
             auto lookup = database.prepare("SELECT account_id FROM accounts WHERE account_number = ?");
             lookup->bind(1, *account_number);
             if (!lookup->step()) throw not_found("Account " + *account_number + " was not found.");
