@@ -51,6 +51,7 @@ const char* name(Operation operation) {
         case Operation::ViewAccount: return "VIEW_ACCOUNT";
         case Operation::RunInterest: return "RUN_INTEREST";
         case Operation::ManageStaff: return "MANAGE_STAFF";
+        case Operation::ViewAccountTypes: return "VIEW_ACCOUNT_TYPES";
         case Operation::ManageAccountTypes: return "MANAGE_ACCOUNT_TYPES";
         case Operation::UnlockUser: return "UNLOCK_USER";
         case Operation::ViewAudit: return "VIEW_AUDIT";
@@ -76,9 +77,12 @@ bool is_allowed(Operation operation, const std::string& role) {
             return role == kAdministrator || role == kBankOfficer || role == kCustomer;
         case Operation::RunInterest:
         case Operation::ManageStaff:
-        case Operation::ManageAccountTypes:
         case Operation::UnlockUser:
         case Operation::ViewAudit:
+            return role == kAdministrator;
+        case Operation::ViewAccountTypes:
+            return role == kAdministrator || role == kBankOfficer;
+        case Operation::ManageAccountTypes:
             return role == kAdministrator;
     }
     return false;

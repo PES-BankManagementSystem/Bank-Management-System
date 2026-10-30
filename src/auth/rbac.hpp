@@ -37,6 +37,7 @@ enum class Operation {
     // Administrator only.
     RunInterest,
     ManageStaff,
+    ViewAccountTypes,
     ManageAccountTypes,
     UnlockUser,
     ViewAudit,

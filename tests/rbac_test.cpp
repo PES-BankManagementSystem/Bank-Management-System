@@ -13,6 +13,7 @@
 #include <nlohmann/json.hpp>
 
 #include "api/router.hpp"
+#include "account/routes.hpp"
 #include "audit/routes.hpp"
 #include "auth/rbac.hpp"
 #include "auth/routes.hpp"
@@ -45,6 +46,7 @@ public:
         // Same wiring as main.cpp.
         bms::auth::register_routes(router_, database, true);
         bms::customer::register_routes(router_, database, true);
+        bms::account::register_routes(router_, database);
         bms::transaction::register_routes(router_, database);
         bms::reporting::register_routes(router_, database);
         bms::staff::register_routes(router_, database, true);
@@ -121,6 +123,9 @@ TEST(PermissionTable, MatchesTheBusinessRules) {
         EXPECT_TRUE(bms::auth::rbac::is_allowed(op, officer));
         EXPECT_TRUE(bms::auth::rbac::is_allowed(op, customer));
     }
+    EXPECT_TRUE(bms::auth::rbac::is_allowed(Operation::ViewAccountTypes, admin));
+    EXPECT_TRUE(bms::auth::rbac::is_allowed(Operation::ViewAccountTypes, officer));
+    EXPECT_FALSE(bms::auth::rbac::is_allowed(Operation::ViewAccountTypes, customer));
     for (const Operation op : {Operation::RunInterest, Operation::ManageStaff,
                                Operation::ManageAccountTypes, Operation::UnlockUser,
                                Operation::ViewAudit}) {
@@ -210,6 +215,9 @@ TEST_F(RbacTest, AnonymousRequestsGet401) {
     EXPECT_EQ(client.Post("/interest/run", "{}", "application/json")->status, 401);
     EXPECT_EQ(client.Post("/customers", "{}", "application/json")->status, 401);
     EXPECT_EQ(client.Get("/audit")->status, 401);
+    EXPECT_EQ(client.Get("/account-types")->status, 401);
+    EXPECT_EQ(client.Post("/account-types", "{}", "application/json")->status, 401);
+    EXPECT_EQ(client.Put("/account-types/1", "{}", "application/json")->status, 401);
 }
 
 TEST_F(RbacTest, StaffRolesReachTheirOwnOperations) {
@@ -225,7 +233,27 @@ TEST_F(RbacTest, StaffRolesReachTheirOwnOperations) {
     EXPECT_EQ(client.Get("/audit", admin)->status, 200);
     EXPECT_EQ(client.Get("/staff", admin)->status, 200);
     EXPECT_EQ(client.Get("/users/locked", admin)->status, 200);
-    EXPECT_EQ(denials_for(kOfficer) + denials_for(kAdmin), 0);
+    EXPECT_EQ(client.Get("/account-types", officer)->status, 200);
+    EXPECT_EQ(client.Post("/account-types", officer, "{}", "application/json")->status, 403);
+    EXPECT_EQ(client.Put("/account-types/1", officer, "{}", "application/json")->status, 403);
+    EXPECT_EQ(client.Get("/account-types", admin)->status, 200);
+    EXPECT_EQ(client.Post("/account-types", admin,
+                          R"({"name":"Checking","minimumBalance":0,"interestRate":0,"dailyWithdrawalLimit":0})",
+                          "application/json")->status, 201);
+    EXPECT_EQ(client.Put("/account-types/1", admin,
+                         R"({"name":"Savings","minimumBalance":1000,"interestRate":4,"dailyWithdrawalLimit":50000})",
+                         "application/json")->status, 200);
+    EXPECT_EQ(denials_for(kOfficer), 2);
+    EXPECT_EQ(denials_for(kAdmin), 0);
+}
+
+TEST_F(RbacTest, CustomersCannotAccessAccountTypeEndpoints) {
+    TestServer server(db());
+    auto& client = server.client();
+    const auto customer = bms::test::sign_in(client, "customer1");
+    EXPECT_EQ(client.Get("/account-types", customer)->status, 403);
+    EXPECT_EQ(client.Post("/account-types", customer, "{}", "application/json")->status, 403);
+    EXPECT_EQ(client.Put("/account-types/1", customer, "{}", "application/json")->status, 403);
 }
 
 TEST_F(RbacTest, CustomersReachOnlyTheirOwnCustomerRecordAndAccounts) {

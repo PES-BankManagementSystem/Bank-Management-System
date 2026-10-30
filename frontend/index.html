@@ -308,6 +308,44 @@
     <div id="audit-list"></div>
     <button id="audit-more" type="button" hidden>Load more</button>
   </section>
+  <section id="account-types-card" class="card customer-wide-card" aria-labelledby="account-types-heading"
+           data-nav-label="Account types" data-roles="administrator" hidden>
+    <p class="eyebrow">Administrator</p>
+    <h1 id="account-types-heading">Account types</h1>
+    <p class="intro">Configure minimum balances, interest rates and daily withdrawal limits.</p>
+    <p class="hint">Changes apply to future operations only. Past balances, transactions and audit entries are unchanged.</p>
+
+    <form id="account-type-form" novalidate>
+      <h2 id="account-type-form-heading">Add account type</h2>
+      <label for="account-type-name">Name</label>
+      <input id="account-type-name" name="name" type="text" maxlength="50" required
+             aria-describedby="account-type-name-error">
+      <p id="account-type-name-error" class="field-error"></p>
+
+      <label for="account-type-minimum">Minimum balance (INR)</label>
+      <input id="account-type-minimum" name="minimumBalance" type="text" inputmode="decimal"
+             placeholder="0.00" required aria-describedby="account-type-minimum-error account-type-money-hint">
+      <p id="account-type-minimum-error" class="field-error"></p>
+
+      <label for="account-type-interest">Interest rate (% per annum)</label>
+      <input id="account-type-interest" name="interestRate" type="text" inputmode="decimal"
+             placeholder="0.00" required aria-describedby="account-type-interest-error account-type-rate-hint">
+      <p id="account-type-interest-error" class="field-error"></p>
+
+      <label for="account-type-limit">Daily withdrawal limit (INR)</label>
+      <input id="account-type-limit" name="dailyWithdrawalLimit" type="text" inputmode="decimal"
+             placeholder="0.00" required aria-describedby="account-type-limit-error account-type-money-hint">
+      <p id="account-type-limit-error" class="field-error"></p>
+      <p id="account-type-money-hint" class="hint">Use rupees with up to two decimal places. Maximum INR 10,000,000.00; zero limit means no withdrawals.</p>
+      <p id="account-type-rate-hint" class="hint">Enter an annual percentage from 0.00% to 20.00%.</p>
+
+      <button id="account-type-submit" type="submit">Add account type</button>
+      <button id="account-type-cancel" class="secondary" type="button" hidden>Cancel edit</button>
+    </form>
+    <p id="account-type-form-status" class="result" role="status" aria-live="polite"></p>
+    <p id="account-types-status" class="result" role="status" aria-live="polite"></p>
+    <div id="account-types-list"></div>
+  </section>
   <section id="interest-card" class="card" aria-labelledby="interest-heading">
     <p class="eyebrow">Administrator</p>
     <h1 id="interest-heading">Run interest</h1>
@@ -332,5 +370,6 @@
   <script src="staff.js" defer></script>
   <script src="interest.js" defer></script>
   <script src="audit.js" defer></script>
+  <script src="account-types.js" defer></script>
 </body>
 </html>

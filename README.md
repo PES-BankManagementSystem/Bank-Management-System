@@ -15,17 +15,25 @@ sqlite3 bms.db < db/schema.sql
 sqlite3 bms.db < db/seed.sql
 ```
 
-For an existing version 1 database, apply both migrations in order:
+For an existing version 1 database, apply all migrations in order:
 
 ```powershell
 sqlite3 bms.db ".read db/migrations/002_customer_credentials.sql"
 sqlite3 bms.db ".read db/migrations/003_customer_status.sql"
+sqlite3 bms.db ".read db/migrations/004_account_type_rules.sql"
 ```
 
-For a version 2 database, apply only the customer-status migration:
+For a version 2 database, apply the customer-status and account-type rules migrations:
 
 ```powershell
 sqlite3 bms.db ".read db/migrations/003_customer_status.sql"
+sqlite3 bms.db ".read db/migrations/004_account_type_rules.sql"
+```
+
+For a version 3 database, apply the account-type rules migration:
+
+```powershell
+sqlite3 bms.db ".read db/migrations/004_account_type_rules.sql"
 ```
 
 The customer deactivation UI's manual verification steps are in [S-13 manual test](docs/S-13-MANUAL-TEST.md).
@@ -124,6 +132,10 @@ Sign-in, password change and one-time credential delivery are allowed on a loopb
       });
   }
   ```
+
+### Account type configuration
+
+`GET /account-types` is available to Administrators and Bank Officers; `POST /account-types` and `PUT /account-types/{id}` are Administrator-only. The write request uses JSON numbers: `minimumBalance` and `dailyWithdrawalLimit` are INR amounts (up to two decimal places), and `interestRate` is a percentage per annum from `0.00` to `20.00`. API responses return those amounts and rates as decimal strings to preserve two-place formatting. A daily withdrawal limit of `0.00` means withdrawals are not allowed. Changing a type affects later operations only; existing balances, transactions and audit entries are not rewritten.
 - The access log records the method, path and status only. Request bodies, query strings and headers are never logged.
 
 ### Customer registration and sign-in

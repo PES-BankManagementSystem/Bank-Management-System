@@ -37,10 +37,10 @@ CREATE TABLE IF NOT EXISTS customers (
 -- Account types table
 CREATE TABLE IF NOT EXISTS account_types (
     type_id INTEGER PRIMARY KEY,
-    type_name TEXT NOT NULL UNIQUE,
-    min_balance INTEGER NOT NULL CHECK (min_balance >= 0), -- in paise
-    interest_rate INTEGER NOT NULL, -- annual percentage in basis points (e.g., 400 = 4.00%)
-    daily_withdrawal_limit INTEGER NOT NULL CHECK (daily_withdrawal_limit >= 0), -- in paise
+    type_name TEXT NOT NULL COLLATE NOCASE UNIQUE,
+    min_balance INTEGER NOT NULL CHECK (min_balance >= 0 AND min_balance <= 1000000000), -- in paise
+    interest_rate INTEGER NOT NULL CHECK (interest_rate >= 0 AND interest_rate <= 2000), -- annual percentage in basis points (e.g., 400 = 4.00%)
+    daily_withdrawal_limit INTEGER NOT NULL CHECK (daily_withdrawal_limit >= 0 AND daily_withdrawal_limit <= 1000000000), -- in paise
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) STRICT;
 
@@ -150,5 +150,11 @@ BEGIN
     SELECT RAISE(ABORT, 'accounts cannot be deleted - use status change instead');
 END;
 
+CREATE TRIGGER IF NOT EXISTS prevent_account_types_delete
+BEFORE DELETE ON account_types
+BEGIN
+    SELECT RAISE(ABORT, 'account types cannot be deleted');
+END;
+
 -- Set user_version for migration tracking
-PRAGMA user_version = 3;
+PRAGMA user_version = 4;

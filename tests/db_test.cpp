@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
+#include <filesystem>
 
 #include "common/db.hpp"
 #include "support/check.hpp"
@@ -592,7 +593,7 @@ void test_actual_schema_file()
     // Verify user_version is set to the latest schema version.
     stmt = db.prepare("PRAGMA user_version");
     stmt->step();
-    CHECK_EQ(stmt->column_int(0), 3);
+    CHECK_EQ(stmt->column_int(0), 4);
 }
 
 void test_actual_seed_file()
@@ -727,6 +728,90 @@ void test_actual_seed_file()
     CHECK_EQ(audit_log_count, 8); // 8 audit log entries
 }
 
+void test_account_type_rules_migration()
+{
+    Database db(":memory:");
+    db.exec(R"(
+        CREATE TABLE account_types (
+            type_id INTEGER PRIMARY KEY,
+            type_name TEXT NOT NULL UNIQUE,
+            min_balance INTEGER NOT NULL CHECK (min_balance >= 0),
+            interest_rate INTEGER NOT NULL,
+            daily_withdrawal_limit INTEGER NOT NULL CHECK (daily_withdrawal_limit >= 0),
+            created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+        ) STRICT;
+        CREATE TABLE accounts (
+            account_id INTEGER PRIMARY KEY,
+            type_id INTEGER NOT NULL,
+            FOREIGN KEY (type_id) REFERENCES account_types(type_id)
+        ) STRICT;
+        INSERT INTO account_types VALUES (1, 'Savings', 100000, 400, 5000000, '2026-01-01');
+        INSERT INTO accounts VALUES (10, 1);
+        PRAGMA user_version = 3;
+    )");
+
+    std::string db_path = DB_PATH;
+    if (db_path.length() >= 2 && db_path.front() == '\"' && db_path.back() == '\"') {
+        db_path = db_path.substr(1, db_path.length() - 2);
+    }
+    std::ifstream migration(std::filesystem::path(db_path) / "migrations" /
+                            "004_account_type_rules.sql");
+    if (!migration.is_open()) {
+        throw std::runtime_error("Failed to open account-type migration.");
+    }
+    std::stringstream migration_stream;
+    migration_stream << migration.rdbuf();
+    db.exec_script(migration_stream.str());
+
+    auto version = db.prepare("PRAGMA user_version");
+    CHECK(version->step());
+    CHECK_EQ(version->column_int(0), 4);
+    auto existing = db.prepare(
+        "SELECT a.account_id, t.type_name, t.min_balance, t.interest_rate, "
+        "t.daily_withdrawal_limit FROM accounts a JOIN account_types t ON t.type_id = a.type_id");
+    CHECK(existing->step());
+    CHECK_EQ(existing->column_int(0), 10);
+    CHECK_EQ(std::string(reinterpret_cast<const char*>(existing->column_text(1))), "Savings");
+    CHECK_EQ(existing->column_int(2), 100000);
+    CHECK_EQ(existing->column_int(3), 400);
+    CHECK_EQ(existing->column_int(4), 5000000);
+    existing.reset();
+
+    auto foreign_keys = db.prepare("PRAGMA foreign_keys");
+    CHECK(foreign_keys->step());
+    CHECK_EQ(foreign_keys->column_int(0), 1);
+    auto violations = db.prepare("PRAGMA foreign_key_check");
+    CHECK(!violations->step());
+
+    bool rejects_out_of_range = false;
+    try {
+        db.exec("INSERT INTO account_types (type_name, min_balance, interest_rate, "
+                "daily_withdrawal_limit) VALUES ('Invalid', 0, 2001, 0)");
+    } catch (const DbError&) {
+        rejects_out_of_range = true;
+    }
+    CHECK(rejects_out_of_range);
+
+    bool rejects_case_duplicate = false;
+    try {
+        db.exec("INSERT INTO account_types (type_name, min_balance, interest_rate, "
+                "daily_withdrawal_limit) VALUES ('savings', 0, 0, 0)");
+    } catch (const DbError&) {
+        rejects_case_duplicate = true;
+    }
+    CHECK(rejects_case_duplicate);
+
+    db.exec("INSERT INTO account_types (type_name, min_balance, interest_rate, "
+            "daily_withdrawal_limit) VALUES ('Temporary', 0, 0, 0)");
+    bool rejects_type_delete = false;
+    try {
+        db.exec("DELETE FROM account_types WHERE type_name = 'Temporary'");
+    } catch (const DbError&) {
+        rejects_type_delete = true;
+    }
+    CHECK(rejects_type_delete);
+}
+
 int main()
 {
     bms::test::run("schema and seed loading", test_schema_and_seed_loading);
@@ -739,5 +824,6 @@ int main()
     bms::test::run("prepared statement binding", test_prepared_statement_binding);
     bms::test::run("actual schema file", test_actual_schema_file);
     bms::test::run("actual seed file", test_actual_seed_file);
+    bms::test::run("account-type rules migration", test_account_type_rules_migration);
     return bms::test::finish();
 }
