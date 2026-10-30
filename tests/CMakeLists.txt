@@ -102,6 +102,13 @@ if(BMS_NODE_EXECUTABLE)
         COMMAND ${BMS_NODE_EXECUTABLE} ${PROJECT_SOURCE_DIR}/tests/statement_csv_test.js)
 endif()
 
+# Unit tests for the pure helpers used by the local-only performance scripts.
+find_package(Python3 COMPONENTS Interpreter QUIET)
+if(Python3_Interpreter_FOUND)
+    add_test(NAME perf_helpers_test
+        COMMAND ${Python3_EXECUTABLE} ${PROJECT_SOURCE_DIR}/tests/perf_helpers_test.py)
+endif()
+
 # S-24: Bank Officer management (create, list, update, deactivate).
 add_executable(staff_test staff_test.cpp support/seeded_database.hpp)
 target_link_libraries(staff_test PRIVATE

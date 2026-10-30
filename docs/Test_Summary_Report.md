@@ -89,3 +89,85 @@ No TC was marked Fail, so no defect issue was created. The four Blocked cases ha
 ## Conclusion
 
 The automated suite passes and all 13 executable Test Plan cases passed. Four cases remain blocked by unavailable UI/API behavior. Several SRS requirements (notably FR-4, FR-5, FR-9/FR-10 and FR-14) therefore lack complete system-level evidence, and usability/browser verification remains outstanding. **The available evidence is not sufficient to conclude that the product meets the full SRS.** The report records the gaps rather than treating missing features or unrun walkthroughs as passes.
+
+## Performance verification (NFR-1, NFR-2, TC-14)
+
+### Requirements and method
+
+- **NFR-1 / TC-14:** measure authenticated deposit, withdrawal and transfer
+  requests through the HTTP response, with 2,000–3,000 accounts; each must
+  complete in under 2 seconds including persistence.
+- **NFR-2:** dashboard, account-list and transaction-history views must each
+  load in under 3 seconds. Measurements are full server-side HTTP response
+  times; this run does not include browser rendering.
+- Each available operation uses 30 samples after 3 warmups by default. The
+  report includes min, mean, median, nearest-rank p95/p99, max, threshold and
+  verdict. One transaction response balance is checked against a read-only
+  SQLite query after the response returns.
+
+The seed uses the real schema and seed SQL, adds 2,500 generated accounts and
+customers (2,505 total), and creates deterministic ledger histories. Five
+generated accounts have 300 transactions each; the other generated accounts
+have 12. Generated customers do not need login credentials because the seeded
+Bank Officer authenticates and performs the measurements.
+
+### Results
+
+Environment: macOS Darwin 24.5.0 arm64 (Apple T8103), memory amount unavailable
+to the local process; Apple Clang 17.0.0, CMake 4.4.4, Python 3.13.1, bundled
+SQLite 3.53.0 in the app (Python seed/readback SQLite 3.45.3), app version
+0.1.0, source commit `f626c3a9d3fba92564ebb629b9a7f19771a825d2`. The database
+contained 2,505 accounts (2,500 generated), each with a customer and history;
+five generated accounts had 300 transactions and the other generated accounts
+had 12. Measurements ran on loopback over HTTP with one serial client. The
+initial configure needed the pinned FetchContent downloads; the sandbox blocked
+network access, so configure was rerun with network permission. The first
+CTest attempt was also blocked from binding loopback; the full suite passed
+when rerun with local socket access.
+
+| Operation | Samples | Mean | Median | p95 | p99 | Max | Threshold | Verdict |
+|---|---:|---:|---:|---:|---:|---:|---:|---|
+| Deposit | 30 | 1.009 ms | 0.980 ms | 1.209 ms | 1.237 ms | 1.237 ms | 2,000 ms | Pass |
+| Withdrawal | 30 | 1.026 ms | 1.001 ms | 1.197 ms | 1.390 ms | 1.390 ms | 2,000 ms | Pass |
+| Transfer | 30 | 1.257 ms | 1.211 ms | 1.563 ms | 1.728 ms | 1.728 ms | 2,000 ms | Pass |
+| Dashboard (`GET /dashboard`) | 30 diagnostics, HTTP 404 | — | — | — | — | — | 3,000 ms | Blocked (route absent) |
+| Account list (`GET /accounts`) | 30 diagnostics, HTTP 404 | — | — | — | — | — | 3,000 ms | Blocked (route absent) |
+| Transaction history (`GET /accounts/{acc}/transactions`) | 30 diagnostics, HTTP 404 | — | — | — | — | — | 3,000 ms | Blocked (route absent) |
+
+All 90 timed transaction requests returned HTTP 201. The script compared a
+returned transaction balance with its persisted SQLite account balance after
+the response. Additional available-resource measurements: the static shell
+(`GET /`, 30 samples) mean 0.595 ms, median 0.431 ms, p95 1.224 ms, max
+4.339 ms; the statement API (30 samples) mean 5.282 ms, median 5.265 ms, p95
+5.397 ms, max 5.519 ms. The statement API and shell are not substitutes for
+the required dashboard/account-list/history views. The full CTest suite passed
+23/23 in 75.34 seconds, including the new performance-helper tests.
+
+Raw successful and blocked-probe measurements are recorded in
+[`docs/perf/results.json`](perf/results.json). No operation exceeded a
+threshold, so no defect issue was opened. The three blocked views are existing
+feature gaps, not measured slow operations.
+
+### Environment, limitations and reproduction
+
+Measurements are local, serial HTTP API response times; they are not
+browser-render timings or concurrent-load benchmarks. The app has a statement
+endpoint and static frontend shell, but the three NFR-2 views are not
+implemented in this revision.
+
+```sh
+python3 scripts/perf/seed.py --db "$(python3 -c 'import tempfile; print(tempfile.gettempdir() + "/bms-perf-s30.sqlite")')"
+cmake -S . -B build
+cmake --build build --parallel
+./build/bin/bms_server --db "$(python3 -c 'import tempfile; print(tempfile.gettempdir() + "/bms-perf-s30.sqlite")')" --port 8080
+# In another terminal:
+python3 scripts/perf/measure.py --base-url http://127.0.0.1:8080 \
+  --db "$(python3 -c 'import tempfile; print(tempfile.gettempdir() + "/bms-perf-s30.sqlite")')" --samples 30 --warmup 3
+ctest --test-dir build --output-on-failure
+```
+
+To repeat with the same path, add `--reset` to `seed.py`. The guard allows only
+paths in the OS temporary directory named `bms-perf-*.sqlite`; it refuses
+ordinary project and production-looking paths. On Windows, replace `python3`
+with `py -3`, use `build/bin/Debug/bms_server.exe`, and set the DB path with
+PowerShell: `$db = Join-Path ([IO.Path]::GetTempPath()) 'bms-perf-s30.sqlite'`.
