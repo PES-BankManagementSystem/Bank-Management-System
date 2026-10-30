@@ -4,6 +4,7 @@
 #include "auth/rbac.hpp"
 #include "common/db.hpp"
 #include "common/error.hpp"
+#include "common/input_validation.hpp"
 #include "transaction/deposit.hpp"
 #include "transaction/withdraw.hpp"
 #include "transaction/transfer.hpp"
@@ -35,6 +36,8 @@ void register_routes(api::Router& router, Database& database) {
 
         const std::string account_number = body["account_number"].get<std::string>();
         const std::string amount = body["amount"].get<std::string>();
+        validate_account_number(account_number, "account_number");
+        (void)parse_amount_paise(amount);
         const bool is_withdrawal = body["type"] == "withdraw";
         auth::rbac::require_permission(request, database, principal,
                                        is_withdrawal ? auth::rbac::Operation::Withdraw
@@ -72,6 +75,9 @@ void register_routes(api::Router& router, Database& database) {
 
         const std::string from_account_number = body["from_account_number"].get<std::string>();
         const std::string to_account_number = body["to_account_number"].get<std::string>();
+        validate_account_number(from_account_number, "from_account_number");
+        validate_account_number(to_account_number, "to_account_number");
+        (void)parse_amount_paise(body["amount"].get<std::string>());
         const TransferResult result = transfer(database, from_account_number, to_account_number,
                                                body["amount"].get<std::string>(), operator_id);
         const std::string formatted_amount = format_money(result.amount_paise);

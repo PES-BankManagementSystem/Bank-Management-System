@@ -10,6 +10,7 @@
 #include "auth/rbac.hpp"
 #include "common/db.hpp"
 #include "common/error.hpp"
+#include "common/input_validation.hpp"
 
 namespace bms::customer {
 namespace {
@@ -143,6 +144,7 @@ std::string audit_details(const std::string& customer_id,
 
 CustomerPage search_customers(Database& database, const std::string& query,
                               std::int64_t limit, std::int64_t offset) {
+    validate_maximum_length(query, "query", 100);
     const std::string trimmed = [&query] {
         const auto first = std::find_if_not(query.begin(), query.end(), [](unsigned char ch) {
             return std::isspace(ch) != 0;

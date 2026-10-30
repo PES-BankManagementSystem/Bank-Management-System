@@ -12,6 +12,7 @@
 #include "auth/routes.hpp"
 #include "common/db.hpp"
 #include "common/error.hpp"
+#include "common/input_validation.hpp"
 #include "customer/registration.hpp"
 #include "customer/records.hpp"
 #include "customer/validation.hpp"
@@ -141,6 +142,7 @@ void register_routes(api::Router& router, Database& database,
         require_staff_role(principal);
 
         const std::string query = request.query("query").value_or("");
+        validate_maximum_length(query, "query", 100);
         const std::int64_t limit = pagination_value(request, "limit", 20, 100);
         const std::int64_t offset =
             pagination_value(request, "offset", 0, std::numeric_limits<std::int64_t>::max());

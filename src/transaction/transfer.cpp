@@ -9,6 +9,7 @@
 #include "auth/rbac.hpp"
 #include "common/db.hpp"
 #include "common/error.hpp"
+#include "common/input_validation.hpp"
 #include "transaction/deposit.hpp"
 
 namespace bms::transaction {
@@ -95,12 +96,8 @@ TransferResult transfer(Database& database, const std::string& from_account_numb
                         std::int64_t operator_id) {
     auth::rbac::require_role(database, operator_id, auth::rbac::Operation::Transfer);
     const std::int64_t amount_paise = parse_amount_paise(amount);
-    if (from_account_number.empty()) {
-        throw validation_error("from_account_number", "Source account number is required.");
-    }
-    if (to_account_number.empty()) {
-        throw validation_error("to_account_number", "Destination account number is required.");
-    }
+    validate_account_number(from_account_number, "from_account_number");
+    validate_account_number(to_account_number, "to_account_number");
     if (from_account_number == to_account_number) {
         throw validation_error("to_account_number", "Source and destination accounts must be different.");
     }

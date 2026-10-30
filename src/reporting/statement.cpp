@@ -6,6 +6,7 @@
 
 #include "common/db.hpp"
 #include "common/error.hpp"
+#include "common/input_validation.hpp"
 
 namespace bms::reporting {
 namespace {
@@ -95,9 +96,7 @@ AccountStatement get_account_statement(Database& database, const std::string& ac
     if (!valid_date(from)) throw validation_error("from", "From must be a valid YYYY-MM-DD date.");
     if (!valid_date(to)) throw validation_error("to", "To must be a valid YYYY-MM-DD date.");
     if (from > to) throw validation_error("from", "From must be on or before to.");
-    if (account_number.empty()) {
-        throw validation_error("account_number", "Account number is required.");
-    }
+    validate_account_number(account_number, "account_number");
 
     Database::Transaction read_snapshot(database);
     std::int64_t account_id = 0;

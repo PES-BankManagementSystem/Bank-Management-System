@@ -150,3 +150,11 @@ target_link_libraries(log_secrets_test PRIVATE
     bms::api bms::auth bms::common bms::customer bms::staff GTest::gtest_main bms_options)
 target_compile_definitions(log_secrets_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
 add_test(NAME log_secrets_test COMMAND log_secrets_test)
+
+# S-33: validation at API/service boundaries and deterministic transaction fuzzing.
+add_executable(validation_test validation_test.cpp support/seeded_database.hpp support/login.hpp)
+target_link_libraries(validation_test PRIVATE
+    bms::api bms::auth bms::common bms::customer bms::transaction GTest::gtest_main bms_options)
+target_compile_definitions(validation_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
+add_test(NAME validation_test COMMAND validation_test)
+set_tests_properties(validation_test PROPERTIES TIMEOUT 60)
