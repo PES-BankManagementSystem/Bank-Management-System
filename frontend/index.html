@@ -358,6 +358,42 @@
     </form>
     <p id="interest-result" class="result" role="status" aria-live="polite"></p>
   </section>
+  <section id="statement-card" class="card customer-wide-card" aria-labelledby="statement-heading"
+           data-nav-label="Statements" data-roles="customer bank_officer administrator" hidden>
+    <p class="eyebrow">Account activity</p>
+    <h1 id="statement-heading">Account statement</h1>
+    <p class="intro">Choose an account and inclusive date range to view its transactions and balances.</p>
+
+    <form id="statement-form" class="no-print">
+      <label for="statement-account-number">Account number</label>
+      <input id="statement-account-number" name="account_number" type="text" autocomplete="off" required>
+      <label for="statement-from">From</label>
+      <input id="statement-from" name="from" type="date" required>
+      <label for="statement-to">To</label>
+      <input id="statement-to" name="to" type="date" required>
+      <button id="statement-submit" type="submit">Show statement</button>
+    </form>
+    <p id="statement-result" class="result" role="status" aria-live="polite"></p>
+    <div id="statement-output" hidden>
+      <h2 id="statement-period"></h2>
+      <p>Account: <strong id="statement-account-label"></strong></p>
+      <p>Opening balance: <strong id="statement-opening-balance"></strong></p>
+      <div class="table-scroll">
+        <table>
+          <caption>Transactions during the selected period</caption>
+          <thead><tr><th scope="col">Date and time</th><th scope="col">Type</th>
+            <th scope="col">Amount (INR)</th><th scope="col">Balance (INR)</th></tr></thead>
+          <tbody id="statement-entries"></tbody>
+        </table>
+      </div>
+      <p>Closing balance: <strong id="statement-closing-balance"></strong></p>
+      <p id="statement-empty-state" class="empty-state" hidden>No transactions in this period.</p>
+      <div class="no-print">
+        <button id="statement-download" type="button">Download CSV</button>
+        <button id="statement-print" class="secondary" type="button">Print statement</button>
+      </div>
+    </div>
+  </section>
   <script src="api.js" defer></script>
   <script src="components.js" defer></script>
   <script src="shell.js" defer></script>
@@ -371,5 +407,7 @@
   <script src="interest.js" defer></script>
   <script src="audit.js" defer></script>
   <script src="account-types.js" defer></script>
+  <script src="statement_csv.js" defer></script>
+  <script src="statement.js" defer></script>
 </body>
 </html>

@@ -96,6 +96,23 @@ button[hidden], [hidden] { display: none; }
 .customer-status-badge.active { background: #e6f4ec; color: #16794b; }
 .customer-status-badge.inactive { background: #fce8e6; color: #b42318; }
 
+@media print {
+  body.printing-statement {
+    display: block;
+    padding: 0;
+    background: #fff;
+  }
+  body.printing-statement > * { display: none !important; }
+  body.printing-statement #statement-card {
+    display: block !important;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    box-shadow: none;
+  }
+  body.printing-statement .no-print { display: none !important; }
+}
+
 /* Shared table and inline action styles (Set 1 admin screens). */
 .data-table { width: 100%; margin-top: 18px; border-collapse: collapse; font-size: 0.92rem; }
 .data-table th, .data-table td { padding: 9px 6px; border-bottom: 1px solid #e1e7ef; text-align: left; }

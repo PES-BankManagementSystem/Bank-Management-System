@@ -88,6 +88,20 @@ target_link_libraries(interest_test PRIVATE bms::reporting bms_options)
 target_compile_definitions(interest_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
 add_test(NAME interest_test COMMAND interest_test)
 
+# S-23: account statements, date-range balances and customer ownership.
+add_executable(statement_test statement_test.cpp support/seeded_database.hpp support/login.hpp)
+target_link_libraries(statement_test PRIVATE
+    bms::api bms::auth bms::common bms::reporting bms::transaction
+    GTest::gtest_main bms_options)
+target_compile_definitions(statement_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
+add_test(NAME statement_test COMMAND statement_test)
+
+find_program(BMS_NODE_EXECUTABLE node)
+if(BMS_NODE_EXECUTABLE)
+    add_test(NAME statement_csv_test
+        COMMAND ${BMS_NODE_EXECUTABLE} ${PROJECT_SOURCE_DIR}/tests/statement_csv_test.js)
+endif()
+
 # S-24: Bank Officer management (create, list, update, deactivate).
 add_executable(staff_test staff_test.cpp support/seeded_database.hpp)
 target_link_libraries(staff_test PRIVATE
