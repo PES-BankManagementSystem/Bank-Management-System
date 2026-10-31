@@ -3,6 +3,7 @@
 #include <limits>
 #include <string>
 
+#include "account/account_status.hpp"
 #include "audit/record.hpp"
 #include "auth/rbac.hpp"
 #include "common/db.hpp"
@@ -88,9 +89,7 @@ DepositResult deposit(Database& database, const std::string& account_number,
         balance = account->column_int(2);
     }
 
-    if (status != "active") {
-        throw business_rule("ACCOUNT_NOT_ACTIVE", "Account " + account_number + " is " + status + ".");
-    }
+    account::require_active_status(status, account_number);
     if (balance > std::numeric_limits<std::int64_t>::max() - amount_paise) {
         throw business_rule("BALANCE_LIMIT_EXCEEDED", "The deposit would exceed the supported balance.");
     }
