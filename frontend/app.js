@@ -29,7 +29,9 @@ form.addEventListener("submit", async (event) => {
     result.className = "result success";
     form.reset();
   } catch (error) {
-    result.textContent = error.message || "The deposit could not be completed. Please try again.";
+    result.textContent = error.code === "ACCOUNT_NOT_ACTIVE"
+      ? `The deposit was not completed. ${error.message} No balance or transaction history was changed.`
+      : error.message || "The deposit could not be completed. Please try again.";
     result.className = "result error";
   } finally {
     submitButton.disabled = false;

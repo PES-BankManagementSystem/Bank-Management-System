@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <string>
 
+#include "account/account_status.hpp"
 #include "audit/record.hpp"
 #include "auth/rbac.hpp"
 #include "common/db.hpp"
@@ -109,14 +110,8 @@ TransferResult transfer(Database& database, const std::string& from_account_numb
     const Account source = load_account(database, from_account_number);
     const Account destination = load_account(database, to_account_number);
 
-    if (source.status != "active") {
-        throw business_rule("ACCOUNT_NOT_ACTIVE",
-                            "Source account " + from_account_number + " is " + source.status + ".");
-    }
-    if (destination.status != "active") {
-        throw business_rule("ACCOUNT_NOT_ACTIVE",
-                            "Destination account " + to_account_number + " is " + destination.status + ".");
-    }
+    account::require_active_status(source.status, from_account_number, "Source");
+    account::require_active_status(destination.status, to_account_number, "Destination");
 
     if (source.balance < source.minimum_balance ||
         amount_paise > source.balance - source.minimum_balance) {
