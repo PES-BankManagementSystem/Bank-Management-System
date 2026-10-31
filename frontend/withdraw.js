@@ -29,7 +29,9 @@ withdrawForm.addEventListener("submit", async (event) => {
     withdrawResult.className = "result success";
     withdrawForm.reset();
   } catch (error) {
-    withdrawResult.textContent = error.message || "The withdrawal could not be completed. Please try again.";
+    withdrawResult.textContent = error.code === "ACCOUNT_NOT_ACTIVE"
+      ? `The withdrawal was not completed. ${error.message} No balance or transaction history was changed.`
+      : error.message || "The withdrawal could not be completed. Please try again.";
     withdrawResult.className = "result error";
   } finally {
     withdrawSubmitButton.disabled = false;

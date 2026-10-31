@@ -126,7 +126,7 @@ function appendStatus(details, status) {
   details.append(term, description);
 }
 
-function renderCustomerDetails(detailsElement, accountsElement, customer) {
+function renderCustomerDetails(detailsElement, accountsElement, customer, allowAccountActions) {
   detailsElement.replaceChildren();
   for (const [label, value] of [
     ["Customer ID", customer.customerId],
@@ -146,19 +146,48 @@ function renderCustomerDetails(detailsElement, accountsElement, customer) {
   accountsElement.replaceChildren();
   for (const account of customer.accounts || []) {
     const row = document.createElement("tr");
-    for (const value of [
-      account.accountNumber, account.type, account.status, account.balance,
-    ]) {
+    for (const value of [account.accountNumber, account.type]) {
       const cell = document.createElement("td");
       cell.textContent = value == null ? "" : String(value);
       row.append(cell);
+    }
+    const statusCell = document.createElement("td");
+    const badge = document.createElement("span");
+    badge.className = `account-status-badge ${account.status}`;
+    badge.textContent = account.status === "active" ? "Active" :
+      account.status === "frozen" ? "Frozen" : "Closed";
+    statusCell.append(badge);
+    row.append(statusCell);
+
+    const balanceCell = document.createElement("td");
+    balanceCell.textContent = account.balance == null ? "" : String(account.balance);
+    row.append(balanceCell);
+
+    if (allowAccountActions) {
+      const actionsCell = document.createElement("td");
+      if (account.status !== "closed") {
+        const actions = account.status === "active"
+          ? [["freeze", "Freeze"], ["close", "Close account"]]
+          : [["unfreeze", "Unfreeze"], ["close", "Close account"]];
+        for (const [action, label] of actions) {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.textContent = label;
+          button.setAttribute("aria-label", `${label} ${account.accountNumber}`);
+          button.addEventListener("click", () => {
+            void changeAccountStatus(account.accountNumber, action);
+          });
+          actionsCell.append(button);
+        }
+      }
+      row.append(actionsCell);
     }
     accountsElement.append(row);
   }
   if (!accountsElement.childElementCount) {
     const row = document.createElement("tr");
     const cell = document.createElement("td");
-    cell.colSpan = 4;
+    cell.colSpan = allowAccountActions ? 5 : 4;
     cell.textContent = "No accounts are linked to this customer.";
     row.append(cell);
     accountsElement.append(row);
@@ -230,6 +259,7 @@ async function loadCustomerPage() {
 
 async function openCustomer(customerId) {
   customerDetailCard.hidden = false;
+  customerDetailStatus.classList.remove("error", "success");
   customerDetailStatus.textContent = "Loading customer details…";
   customerEditForm.hidden = true;
   customerEditButton.hidden = true;
@@ -245,7 +275,7 @@ async function openCustomer(customerId) {
     }
     const body = await response.json();
     if (!response.ok) throw new Error(body.message || "Unable to load customer details.");
-    renderCustomerDetails(customerDetailFields, customerDetailAccounts, body);
+    renderCustomerDetails(customerDetailFields, customerDetailAccounts, body, true);
     for (const [field, value] of [
       ["name", body.name],
       ["dateOfBirth", body.dateOfBirth],
@@ -261,8 +291,11 @@ async function openCustomer(customerId) {
     customerDeactivateButton.hidden =
       currentRole !== "administrator" || body.status === "inactive";
     customerDetailCard.scrollIntoView({ behavior: "smooth", block: "start" });
+    return true;
   } catch (error) {
+    customerDetailStatus.classList.add("error");
     customerDetailStatus.textContent = error.message || "Unable to load customer details.";
+    return false;
   }
 }
 
@@ -278,7 +311,7 @@ async function loadMyProfile() {
     }
     const body = await response.json();
     if (!response.ok) throw new Error(body.message || "Unable to load your profile.");
-    renderCustomerDetails(customerProfileFields, customerProfileAccounts, body);
+    renderCustomerDetails(customerProfileFields, customerProfileAccounts, body, false);
     customerProfileStatus.textContent = "";
   } catch (error) {
     customerProfileStatus.textContent = error.message || "Unable to load your profile.";
@@ -555,6 +588,36 @@ customerDeactivateButton.addEventListener("click", async () => {
     customerDeactivateButton.disabled = false;
   }
 });
+
+async function changeAccountStatus(accountNumber, action) {
+  const verb = action === "close" ? "close" : action;
+  if ((action === "freeze" || action === "close") &&
+      !window.confirm(`${verb === "close" ? "Close" : "Freeze"} account ${accountNumber}?`)) {
+    return;
+  }
+  const buttons = customerDetailAccounts.querySelectorAll("button");
+  buttons.forEach((item) => { item.disabled = true; });
+  customerDetailStatus.classList.remove("error", "success");
+  customerDetailStatus.textContent = `Updating account ${accountNumber}...`;
+  try {
+    await window.BmsApi.patch(`/accounts/${encodeURIComponent(accountNumber)}/status`, { action });
+    if (await openCustomer(selectedCustomerId)) {
+      customerDetailStatus.classList.add("success");
+      customerDetailStatus.textContent = `Account ${accountNumber} is now ${
+        action === "freeze" ? "frozen" : action === "unfreeze" ? "active" : "closed"
+      }.`;
+      customerDetailStatus.focus();
+    }
+  } catch (error) {
+    customerDetailStatus.classList.add("error");
+    customerDetailStatus.textContent = error.message || "Unable to update account status.";
+    customerDetailStatus.focus();
+  } finally {
+    customerDetailAccounts.querySelectorAll("button").forEach((item) => {
+      item.disabled = false;
+    });
+  }
+}
 
 document.querySelector("#customer-edit-cancel").addEventListener("click", () => {
   clearEditFieldErrors();
