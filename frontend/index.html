@@ -146,12 +146,13 @@
         <caption>Accounts linked to this customer</caption>
         <thead>
           <tr><th scope="col">Account number</th><th scope="col">Type</th>
-            <th scope="col">Status</th><th scope="col">Balance (INR)</th></tr>
+            <th scope="col">Status</th><th scope="col">Balance (INR)</th>
+            <th scope="col">Actions</th></tr>
         </thead>
         <tbody id="customer-detail-accounts"></tbody>
       </table>
     </div>
-    <p id="customer-detail-status" class="result" role="status" aria-live="polite"></p>
+    <p id="customer-detail-status" class="result" role="status" aria-live="polite" tabindex="-1"></p>
     <button id="customer-edit-button" type="button">Edit customer</button>
     <button id="customer-deactivate-button" type="button" hidden>Deactivate customer</button>
     <form id="customer-edit-form" novalidate hidden>

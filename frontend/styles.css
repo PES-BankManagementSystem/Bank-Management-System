@@ -95,6 +95,16 @@ button[hidden], [hidden] { display: none; }
 }
 .customer-status-badge.active { background: #e6f4ec; color: #16794b; }
 .customer-status-badge.inactive { background: #fce8e6; color: #b42318; }
+.account-status-badge {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.account-status-badge.active { background: #e6f4ec; color: #16794b; }
+.account-status-badge.frozen { background: #fff4d6; color: #795600; }
+.account-status-badge.closed { background: #e8ebf0; color: #5e6c84; }
 
 @media print {
   body.printing-statement {

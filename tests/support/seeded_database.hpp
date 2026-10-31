@@ -33,6 +33,7 @@ protected:
     }
 
     Database& db() { return *db_; }
+    const std::filesystem::path& db_path() const { return db_path_; }
 
 private:
     static std::string read_file(const std::filesystem::path& path) {

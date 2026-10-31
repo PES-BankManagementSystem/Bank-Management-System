@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include "account/account_status.hpp"
 #include "audit/record.hpp"
 #include "auth/rbac.hpp"
 #include "common/db.hpp"
@@ -41,9 +42,7 @@ DepositResult withdraw(Database& database, const std::string& account_number,
         daily_limit = account->column_int(4);
     }
 
-    if (status != "active") {
-        throw business_rule("ACCOUNT_NOT_ACTIVE", "Account " + account_number + " is " + status + ".");
-    }
+    account::require_active_status(status, account_number);
 
     if (balance < minimum_balance || amount_paise > balance - minimum_balance) {
         const std::int64_t maximum = balance > minimum_balance ? balance - minimum_balance : 0;

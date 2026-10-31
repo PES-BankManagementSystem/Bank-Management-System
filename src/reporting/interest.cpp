@@ -7,6 +7,7 @@
 #include <string>
 #include <vector>
 
+#include "account/account_status.hpp"
 #include "audit/record.hpp"
 #include "auth/rbac.hpp"
 #include "common/db.hpp"
@@ -69,6 +70,7 @@ struct EligibleAccount {
     std::string opened_at;
     std::int64_t current_balance;
     std::int64_t annual_rate;
+    std::string status;
 };
 
 std::int64_t period_end_balance(Database& database, std::int64_t account_id,
@@ -206,7 +208,7 @@ InterestRunResult run_interest(Database& database, const std::string& period_lab
     std::vector<EligibleAccount> eligible;
     {
         auto accounts = database.prepare(
-            "SELECT a.account_id, a.account_number, a.opened_at, a.balance, t.interest_rate "
+            "SELECT a.account_id, a.account_number, a.opened_at, a.balance, t.interest_rate, a.status "
             "FROM accounts a JOIN account_types t ON t.type_id = a.type_id "
             "WHERE a.status = 'active' AND t.interest_rate > 0 ORDER BY a.account_id");
         while (accounts->step()) {
@@ -215,12 +217,16 @@ InterestRunResult run_interest(Database& database, const std::string& period_lab
             eligible.push_back({accounts->column_int(0),
                                 number ? reinterpret_cast<const char*>(number) : "",
                                 opened_at ? reinterpret_cast<const char*>(opened_at) : "",
-                                accounts->column_int(3), accounts->column_int(4)});
+                                accounts->column_int(3), accounts->column_int(4),
+                                accounts->column_text(5)
+                                    ? reinterpret_cast<const char*>(accounts->column_text(5))
+                                    : ""});
         }
     }
 
     InterestRunResult result{period.label, run_id, 0, 0, {}};
     for (const EligibleAccount& account : eligible) {
+        account::require_active_status(account.status, account.number);
         if (account.opened_at.size() >= 10 && account.opened_at.substr(0, 10) >= period.end_exclusive) {
             continue;
         }

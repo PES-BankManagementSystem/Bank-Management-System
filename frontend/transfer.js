@@ -30,7 +30,9 @@ transferForm.addEventListener("submit", async (event) => {
     transferResult.className = "result success";
     transferForm.reset();
   } catch (error) {
-    transferResult.textContent = error.message || "The transfer could not be completed. Please try again.";
+    transferResult.textContent = error.code === "ACCOUNT_NOT_ACTIVE"
+      ? `The transfer was not completed. ${error.message} Neither balance nor transaction history was changed.`
+      : error.message || "The transfer could not be completed. Please try again.";
     transferResult.className = "result error";
   } finally {
     transferSubmitButton.disabled = false;
