@@ -12,6 +12,7 @@
 #include <httplib.h>
 
 #include "account/account_types.hpp"
+#include "account/account_status.hpp"
 #include "api/router.hpp"
 #include "auth/rbac.hpp"
 #include "common/db.hpp"
@@ -235,9 +236,50 @@ api::Json account_type_json(const AccountType& type) {
     };
 }
 
+api::Json account_status_json(const AccountStatus& account) {
+    const std::int64_t rupees = account.balance_paise / 100;
+    const std::int64_t paise = account.balance_paise % 100;
+    return {
+        {"accountNumber", account.account_number},
+        {"type", account.type},
+        {"status", account.status},
+        {"balance", std::to_string(rupees) + "." +
+                        (paise < 10 ? "0" : "") + std::to_string(paise)},
+    };
+}
+
 }  // namespace
 
 void register_routes(api::Router& router, Database& database) {
+    router.patch("/accounts/:acc/status", [&database](const api::Request& request) {
+        const auth::Principal principal = auth::authenticate(request, database);
+        const api::Json& body = request.json();
+        Error::FieldErrors errors;
+        for (auto it = body.begin(); it != body.end(); ++it) {
+            if (it.key() != "action") errors.emplace_back(it.key(), "Unknown field.");
+        }
+        std::string action;
+        if (!body.contains("action")) {
+            errors.emplace_back("action", "This field is required.");
+        } else if (!body["action"].is_string()) {
+            errors.emplace_back("action", "This field must be a string.");
+        } else {
+            action = body["action"].get<std::string>();
+            if (action != "freeze" && action != "unfreeze" && action != "close") {
+                errors.emplace_back("action", "Action must be freeze, unfreeze, or close.");
+            }
+        }
+        if (!errors.empty()) throw validation_errors(std::move(errors));
+
+        auth::rbac::require_permission(
+            request, database, principal,
+            action == "close" ? auth::rbac::Operation::CloseAccount
+                              : auth::rbac::Operation::FreezeAccount);
+        const AccountStatus account =
+            change_status(database, request.param("acc"), action, principal.user_id);
+        return api::Response::ok({{"account", account_status_json(account)}});
+    });
+
     router.get("/account-types", [&database](const api::Request& request) {
         const auth::Principal principal =
             auth::rbac::require(request, database, auth::rbac::Operation::ViewAccountTypes);
