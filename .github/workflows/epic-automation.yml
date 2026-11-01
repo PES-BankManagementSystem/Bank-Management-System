@@ -1,0 +1,69 @@
+name: Epic Automation
+
+# Closes an epic once every story linked to it as a sub-issue is closed.
+# Backlog Sync creates the epic -> story sub-issue links; GitHub does not close
+# the parent on its own.
+
+on:
+  issues:
+    types: [closed]
+
+permissions:
+  issues: write
+
+concurrency:
+  group: epic-automation-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  close-epic:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close the parent epic when all its stories are done
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const story = context.payload.issue;
+            const { repository } = await github.graphql(`
+              query($owner: String!, $repo: String!, $number: Int!) {
+                repository(owner: $owner, name: $repo) {
+                  issue(number: $number) {
+                    parent {
+                      number
+                      state
+                      labels(first: 20) { nodes { name } }
+                      subIssuesSummary { total completed }
+                    }
+                  }
+                }
+              }`, { ...context.repo, number: story.number });
+
+            const epic = repository.issue.parent;
+            if (!epic) {
+              core.info(`#${story.number} has no parent epic.`);
+              return;
+            }
+            if (epic.state !== 'OPEN' || !epic.labels.nodes.some((l) => l.name === 'epic')) {
+              core.info(`Parent #${epic.number} is not an open epic.`);
+              return;
+            }
+            const { total, completed } = epic.subIssuesSummary;
+            if (completed < total) {
+              core.info(`Epic #${epic.number}: ${completed}/${total} stories done.`);
+              return;
+            }
+
+            // e.g. 01-Nov-2026, matching the comments on epics closed by hand.
+            const closed = new Date(story.closed_at);
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const date = `${String(closed.getUTCDate()).padStart(2, '0')}-` +
+              `${months[closed.getUTCMonth()]}-${closed.getUTCFullYear()}`;
+            await github.rest.issues.createComment({
+              ...context.repo,
+              issue_number: epic.number,
+              body: `All stories in this epic were complete as of ${date} (last story: #${story.number}).`,
+            });
+            await github.rest.issues.update({
+              ...context.repo, issue_number: epic.number, state: 'closed', state_reason: 'completed',
+            });
+            core.info(`Closed epic #${epic.number}.`);
