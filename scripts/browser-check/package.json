@@ -1,0 +1,12 @@
+{
+  "name": "bms-browser-check",
+  "private": true,
+  "description": "S-31 (NFR-9): core-flow walkthrough in Chrome and Firefox",
+  "scripts": {
+    "chrome": "node walkthrough.js chrome http://127.0.0.1:8080/ shots-chrome",
+    "firefox": "node walkthrough.js firefox http://127.0.0.1:8080/ shots-firefox"
+  },
+  "dependencies": {
+    "puppeteer-core": "24.43.1"
+  }
+}

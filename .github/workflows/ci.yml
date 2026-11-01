@@ -22,6 +22,14 @@ jobs:
       - name: Check for secrets
         run: ./scripts/check-secrets.sh
 
+  portability:
+    name: No platform-specific business logic
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check business modules
+        run: ./scripts/check-portability.sh
+
   backend:
     name: Build & test (${{ matrix.os }})
     strategy:

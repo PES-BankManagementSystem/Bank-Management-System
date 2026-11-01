@@ -20,6 +20,7 @@
 #include "auth/routes.hpp"
 #include "common/db.hpp"
 #include "common/error.hpp"
+#include "common/calendar.hpp"
 #include "customer/registration.hpp"
 #include "customer/records.hpp"
 #include "customer/routes.hpp"
@@ -153,13 +154,7 @@ TEST_F(CustomerTest, ValidationEnforcesLengthPhoneAndDateBoundaries) {
     input.phone = "1234567890123456";
     EXPECT_THROW((void)bms::customer::validate_customer_input(input), bms::Error);
 
-    std::time_t now = std::time(nullptr);
-    std::tm today{};
-#ifdef _WIN32
-    localtime_s(&today, &now);
-#else
-    localtime_r(&now, &today);
-#endif
+    std::tm today = bms::calendar::to_local(std::time(nullptr));
     input = valid_input();
     input.date_of_birth = format_date(shift_day(today, -1));
     EXPECT_NO_THROW((void)bms::customer::validate_customer_input(input));

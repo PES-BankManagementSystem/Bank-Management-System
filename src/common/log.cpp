@@ -1,5 +1,7 @@
 #include "common/log.hpp"
 
+#include "common/calendar.hpp"
+
 #include <chrono>
 #include <ctime>
 #include <iostream>
@@ -16,12 +18,7 @@ std::mutex& sink_mutex() {
 
 std::string utc_timestamp() {
     const std::time_t now = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
-    std::tm tm{};
-#ifdef _WIN32
-    gmtime_s(&tm, &now);
-#else
-    gmtime_r(&now, &tm);
-#endif
+    const std::tm tm = bms::calendar::to_utc(now);
     char buf[32];
     std::strftime(buf, sizeof buf, "%Y-%m-%dT%H:%M:%SZ", &tm);
     return buf;
