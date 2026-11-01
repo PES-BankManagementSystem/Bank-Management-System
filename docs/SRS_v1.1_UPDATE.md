@@ -1,7 +1,7 @@
 # Software Requirements Specification (SRS) — v1.1 Revision & Gap Fixes
 
 - **Project:** Bank Management System (BMS)
-- **Course Code:** `UE24CS341A` (Software Engineering and Architecture)
+- **Course Code:** `UE24CS341A` (Software Engineering and System Design)
 - **Story:** [S-34] Fix SRS gaps: use case diagram, security objectives, references (#65)
 - **Version:** 1.1
 - **Effective Date:** 18 October 2026
@@ -13,7 +13,7 @@
 | Version | Date | Primary Author(s) | Description of Changes |
 | :---: | :---: | :---: | :--- |
 | **1.0** | 02 Sep 2026 | Team BMS | Initial draft of Software Requirements Specification. |
-| **1.1** | 18 Oct 2026 | Abhishek Kinagi & Team | **Sprint 2 Gap Remediation:**<br>1. Added Section 5.3 Security Objectives (SO-1, SO-2, SO-3) alongside NFR-4/NFR-5.<br>2. Corrected course code citations to `UE24CS341A` across all references.<br>3. Added UML Use Case Diagram covering Administrator, Bank Officer, and Customer roles to Appendix B.<br>4. Added reference to relational ER Diagram in `design/er_diagram.md` (Appendix B).<br>5. Clarified lockout policy (3 consecutive failures) and administrative unlock workflow (FR-2, FR-13). |
+| **1.1** | 18 Oct 2026 | Abhishek Kinagi & Team | **Sprint 2 Gap Remediation:**<br>1. Added Section 5.3 Security Objectives (SO-1, SO-2, SO-3) alongside NFR-4/NFR-5.<br>2. Corrected course code citations to `UE24CS341A` across all references.<br>3. Added UML Use Case Diagram covering Administrator, Bank Officer, and Customer roles to Appendix B.<br>4. Referenced the existing schema-backed ER Diagram source in `design/er-diagram.mmd` (Appendix B).<br>5. Clarified lockout policy (3 consecutive failures) and administrative unlock workflow (FR-2, FR-13). |
 
 ---
 
@@ -35,7 +35,7 @@ In addition to Non-Functional Requirements NFR-4 (Credential Protection) and NFR
 ## 3. References & Course Code Consistency
 
 All references citing the academic curriculum and syllabus are standardized to:
-- **Course Code:** `UE24CS341A` — Software Engineering Laboratory and System Design.
+- **Course Code:** `UE24CS341A` — Software Engineering and System Design.
 - **Reference 1:** Course Syllabus and Deliverable Guidelines for `UE24CS341A`, Department of Computer Science and Engineering, PES University, Academic Year 2026–2027.
 - **Reference 2:** IEEE Std 830-1998, *IEEE Recommended Practice for Software Requirements Specifications*.
 - **Reference 3:** OWASP Top 10 API Security Risks (2023 edition), Open Web Application Security Project.
@@ -60,15 +60,21 @@ flowchart LR
         UC_Unlock(["UC-03: Unlock Locked User Account"])
         UC_Staff(["UC-04: Manage Bank Officers (CRUD/Deactivate)"])
         UC_AdminDash(["UC-05: View System Stats & Daily Volume"])
+        UC_Interest(["UC-06: Credit Account Interest"])
         
-        UC_Deposit(["UC-06: Process Cash Deposit"])
-        UC_Withdraw(["UC-07: Process Cash Withdrawal"])
-        UC_OfficerDash(["UC-08: View Daily Processed Txns"])
+        UC_Register(["UC-07: Register & Manage Customers"])
+        UC_Open(["UC-08: Open Customer Account"])
+        UC_Status(["UC-09: Freeze, Unfreeze & Close Account"])
+        UC_Transfer(["UC-10: Process Account Transfer"])
+        UC_ViewAnyBalance(["UC-11: View Any Account Balance"])
+        UC_Deposit(["UC-12: Process Cash Deposit"])
+        UC_Withdraw(["UC-13: Process Cash Withdrawal"])
+        UC_OfficerDash(["UC-14: View Daily Processed Txns"])
         
-        UC_Balances(["UC-09: View Account Balances"])
-        UC_History(["UC-10: View Transaction History"])
-        UC_Statement(["UC-11: Generate Account Statement"])
-        UC_CustDash(["UC-12: View Customer Dashboard"])
+        UC_Balances(["UC-15: View Account Balances"])
+        UC_History(["UC-16: View Transaction History"])
+        UC_Statement(["UC-17: Generate Account Statement"])
+        UC_CustDash(["UC-18: View Customer Dashboard"])
     end
 
     Admin --> UC_Login
@@ -76,9 +82,15 @@ flowchart LR
     Admin --> UC_Unlock
     Admin --> UC_Staff
     Admin --> UC_AdminDash
+    Admin --> UC_Interest
 
     Officer --> UC_Login
     Officer --> UC_Logout
+    Officer --> UC_Register
+    Officer --> UC_Open
+    Officer --> UC_Status
+    Officer --> UC_Transfer
+    Officer --> UC_ViewAnyBalance
     Officer --> UC_Deposit
     Officer --> UC_Withdraw
     Officer --> UC_OfficerDash
@@ -93,5 +105,5 @@ flowchart LR
 
 ### Entity Relationship Diagram Reference
 As required by Part-1 Deliverables Checklist, the relational database design is documented in:
-👉 [`design/er_diagram.md`](../design/er_diagram.md)
-It details table definitions, primary/foreign key relationships, indexing strategies, and constraints for `users`, `sessions`, `customers`, `accounts`, `transactions`, and `audit_log`.
+👉 [`design/er-diagram.mmd`](../design/er-diagram.mmd)
+It is the schema-backed source for the ER diagram and covers `users`, `customers`, `account_types`, `accounts`, `transactions`, `audit_log`, and `interest_runs`.
