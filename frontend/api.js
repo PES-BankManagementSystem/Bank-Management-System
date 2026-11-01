@@ -10,13 +10,16 @@ window.BmsApi = (() => {
   });
 
   class ApiError extends Error {
-    constructor(message, { status = 0, code = "", field = null, fields = [] } = {}) {
+    constructor(message, {
+      status = 0, code = "", field = null, fields = [], minimumBalance = null,
+    } = {}) {
       super(message);
       this.name = "ApiError";
       this.status = status;
       this.code = code;
       this.field = field;
       this.fields = fields;
+      this.minimumBalance = minimumBalance;
     }
   }
 
@@ -58,6 +61,7 @@ window.BmsApi = (() => {
         code: data.code || "",
         field: data.field || null,
         fields,
+        minimumBalance: data.minimumBalance || null,
       });
     }
     return data;

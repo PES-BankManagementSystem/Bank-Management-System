@@ -24,6 +24,7 @@ const customerDetailAccounts = document.querySelector("#customer-detail-accounts
 const customerDetailStatus = document.querySelector("#customer-detail-status");
 const customerEditButton = document.querySelector("#customer-edit-button");
 const customerDeactivateButton = document.querySelector("#customer-deactivate-button");
+const customerOpenAccountButton = document.querySelector("#customer-open-account-button");
 const customerEditForm = document.querySelector("#customer-edit-form");
 const customerEditSubmit = document.querySelector("#customer-edit-submit");
 const customerProfileCard = document.querySelector("#customer-profile-card");
@@ -271,6 +272,7 @@ async function openCustomer(customerId) {
   customerEditForm.hidden = true;
   customerEditButton.hidden = true;
   customerDeactivateButton.hidden = true;
+  customerOpenAccountButton.hidden = true;
   selectedCustomerId = customerId;
   try {
     const response = await fetch(`/customers/${encodeURIComponent(customerId)}`, {
@@ -297,6 +299,9 @@ async function openCustomer(customerId) {
     customerEditButton.hidden = false;
     customerDeactivateButton.hidden =
       currentRole !== "administrator" || body.status === "inactive";
+    customerOpenAccountButton.hidden =
+      (currentRole !== "administrator" && currentRole !== "bank_officer") ||
+      body.status !== "active";
     customerDetailCard.scrollIntoView({ behavior: "smooth", block: "start" });
     return true;
   } catch (error) {
@@ -422,6 +427,7 @@ function updateSessionView() {
   customerDetailCard.hidden = true;
   customerDeactivateButton.hidden = true;
   customerDeactivateButton.disabled = false;
+  customerOpenAccountButton.hidden = true;
   document.dispatchEvent(new CustomEvent("bms:session", {
     detail: { accessToken, role: currentRole, mustChangePassword },
   }));
@@ -727,6 +733,23 @@ customerEditForm.addEventListener("submit", async (event) => {
 // Shared session hook for the other front-end modules: they listen for
 // "bms:session" and raise "bms:session-expired" when the server answers 401,
 // which returns the page to the sign-in form.
+customerOpenAccountButton.addEventListener("click", () => {
+  document.dispatchEvent(new CustomEvent("bms:open-account-for-customer", {
+    detail: { customerId: selectedCustomerId },
+  }));
+});
+
+document.addEventListener("bms:account-opened", async (event) => {
+  const { customerId, accountNumber } = event.detail;
+  if (!customerDetailCard.hidden && selectedCustomerId === customerId) {
+    if (await openCustomer(customerId)) {
+      customerDetailStatus.classList.add("success");
+      customerDetailStatus.textContent = `Account ${accountNumber} opened successfully.`;
+      customerDetailStatus.focus();
+    }
+  }
+});
+
 document.addEventListener("bms:session-expired", () => {
   accessToken = "";
   currentRole = "";

@@ -80,6 +80,13 @@ target_link_libraries(account_status_test PRIVATE
 target_compile_definitions(account_status_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
 add_test(NAME account_status_test COMMAND account_status_test)
 
+add_executable(account_opening_test account_opening_test.cpp support/seeded_database.hpp support/login.hpp)
+target_link_libraries(account_opening_test PRIVATE
+    bms::account bms::api bms::audit bms::auth bms::common bms::customer
+    bms::transaction GTest::gtest_main bms_options)
+target_compile_definitions(account_opening_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
+add_test(NAME account_opening_test COMMAND account_opening_test)
+
 add_executable(customer_test customer_test.cpp support/seeded_database.hpp)
 target_link_libraries(customer_test PRIVATE
     bms::api bms::auth bms::common bms::customer GTest::gtest_main bms_options)

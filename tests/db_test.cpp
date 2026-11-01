@@ -639,7 +639,7 @@ void test_actual_schema_file()
     // Verify user_version is set to the latest schema version.
     stmt = db.prepare("PRAGMA user_version");
     stmt->step();
-    CHECK_EQ(stmt->column_int(0), 4);
+    CHECK_EQ(stmt->column_int(0), 5);
 }
 
 void test_actual_seed_file()
@@ -858,6 +858,86 @@ void test_account_type_rules_migration()
     CHECK(rejects_type_delete);
 }
 
+void test_zero_opening_deposit_migration()
+{
+    Database db(":memory:");
+    db.exec(R"(
+        CREATE TABLE users (user_id INTEGER PRIMARY KEY) STRICT;
+        CREATE TABLE accounts (account_id INTEGER PRIMARY KEY) STRICT;
+        CREATE TABLE transactions (
+            transaction_id INTEGER PRIMARY KEY,
+            account_id INTEGER NOT NULL,
+            operator_id INTEGER NOT NULL,
+            type TEXT NOT NULL CHECK (
+                type IN ('deposit', 'withdrawal', 'transfer_debit', 'transfer_credit', 'interest')
+            ),
+            amount INTEGER NOT NULL CHECK (amount > 0),
+            resulting_balance INTEGER NOT NULL CHECK (resulting_balance >= 0),
+            created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            transfer_ref TEXT,
+            interest_run_id INTEGER,
+            FOREIGN KEY (account_id) REFERENCES accounts(account_id) ON DELETE RESTRICT,
+            FOREIGN KEY (operator_id) REFERENCES users(user_id) ON DELETE RESTRICT
+        ) STRICT;
+        CREATE UNIQUE INDEX idx_transactions_transfer_ref_type
+            ON transactions(transfer_ref, type) WHERE transfer_ref IS NOT NULL;
+        CREATE UNIQUE INDEX idx_transactions_account_interest_run
+            ON transactions(account_id, interest_run_id) WHERE interest_run_id IS NOT NULL;
+        CREATE INDEX idx_transactions_account_created
+            ON transactions(account_id, created_at);
+        INSERT INTO users VALUES (1);
+        INSERT INTO accounts VALUES (10);
+        INSERT INTO transactions
+            (transaction_id, account_id, operator_id, type, amount, resulting_balance)
+        VALUES (7, 10, 1, 'deposit', 100000, 100000);
+        PRAGMA user_version = 4;
+    )");
+
+    std::string db_path = DB_PATH;
+    if (db_path.length() >= 2 && db_path.front() == '\"' && db_path.back() == '\"') {
+        db_path = db_path.substr(1, db_path.length() - 2);
+    }
+    std::ifstream migration(std::filesystem::path(db_path) / "migrations" /
+                            "005_zero_opening_deposit.sql");
+    if (!migration.is_open()) {
+        throw std::runtime_error("Failed to open zero-opening-deposit migration.");
+    }
+    std::stringstream migration_stream;
+    migration_stream << migration.rdbuf();
+    db.exec_script(migration_stream.str());
+
+    auto version = db.prepare("PRAGMA user_version");
+    CHECK(version->step());
+    CHECK_EQ(version->column_int(0), 5);
+    auto existing = db.prepare(
+        "SELECT transaction_id, account_id, operator_id, type, amount, resulting_balance "
+        "FROM transactions");
+    CHECK(existing->step());
+    CHECK_EQ(existing->column_int(0), 7);
+    CHECK_EQ(existing->column_int(1), 10);
+    CHECK_EQ(existing->column_int(2), 1);
+    CHECK_EQ(std::string(reinterpret_cast<const char*>(existing->column_text(3))), "deposit");
+    CHECK_EQ(existing->column_int(4), 100000);
+    CHECK_EQ(existing->column_int(5), 100000);
+    existing.reset();
+
+    db.exec("INSERT INTO transactions "
+            "(account_id, operator_id, type, amount, resulting_balance) "
+            "VALUES (10, 1, 'deposit', 0, 0)");
+    bool rejects_zero_withdrawal = false;
+    try {
+        db.exec("INSERT INTO transactions "
+                "(account_id, operator_id, type, amount, resulting_balance) "
+                "VALUES (10, 1, 'withdrawal', 0, 0)");
+    } catch (const DbError&) {
+        rejects_zero_withdrawal = true;
+    }
+    CHECK(rejects_zero_withdrawal);
+
+    auto violations = db.prepare("PRAGMA foreign_key_check");
+    CHECK(!violations->step());
+}
+
 int main()
 {
     bms::test::run("schema and seed loading", test_schema_and_seed_loading);
@@ -872,5 +952,6 @@ int main()
     bms::test::run("actual schema file", test_actual_schema_file);
     bms::test::run("actual seed file", test_actual_seed_file);
     bms::test::run("account-type rules migration", test_account_type_rules_migration);
+    bms::test::run("zero opening deposit migration", test_zero_opening_deposit_migration);
     return bms::test::finish();
 }

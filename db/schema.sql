@@ -65,7 +65,9 @@ CREATE TABLE IF NOT EXISTS transactions (
     account_id INTEGER NOT NULL,
     operator_id INTEGER NOT NULL, -- FK to users (administrator who triggered interest runs)
     type TEXT NOT NULL CHECK (type IN ('deposit', 'withdrawal', 'transfer_debit', 'transfer_credit', 'interest')),
-    amount INTEGER NOT NULL CHECK (amount > 0), -- in paise
+    amount INTEGER NOT NULL CHECK (
+        amount > 0 OR (amount = 0 AND type = 'deposit')
+    ), -- in paise; a zero opening deposit is recorded when the type minimum is zero
     resulting_balance INTEGER NOT NULL CHECK (resulting_balance >= 0), -- in paise
     created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
     transfer_ref TEXT, -- NULL for non-transfer transactions
@@ -157,4 +159,4 @@ BEGIN
 END;
 
 -- Set user_version for migration tracking
-PRAGMA user_version = 4;
+PRAGMA user_version = 5;
