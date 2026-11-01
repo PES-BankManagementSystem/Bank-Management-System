@@ -173,6 +173,7 @@ frontend/        HTML, CSS and JavaScript served by the server
 db/              schema.sql and seed.sql
 tests/           unit tests (ctest)
 docs/            SRS, SADS, Test Plan, decision records, deviations log
+demos/           sprint demo videos
 cmake/           dependency pins and build helpers
 ```
 
@@ -186,3 +187,7 @@ Each folder under `src/` builds a static library `bms_<name>` (alias `bms::<name
 - [Architecture decision records](docs/decisions/)
 - [Deviations log](docs/DEVIATIONS.md)
 - [Contributing guide](CONTRIBUTING.md)
+
+## Demos
+
+- [Sprint 1 demo](demos/sprint-1.mp4) (49 s): deposit, withdrawal, transfer and a refused deposit to a frozen account, using the code on `main` at the end of Sprint 1 (commit `b929286`). Its scope and timing are recorded in [deviation 25](docs/DEVIATIONS.md).
