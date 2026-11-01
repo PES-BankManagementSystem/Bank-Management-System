@@ -296,7 +296,8 @@ void require_active_customer(Database& database, const std::string& customer_id)
     }
     if (column_string(*query, 0) != "active") {
         throw conflict("CUSTOMER_INACTIVE",
-                       "This customer is inactive and cannot open a new account.");
+                       "Customer " + customer_id +
+                           " has status inactive and cannot open a new account.");
     }
 }
 

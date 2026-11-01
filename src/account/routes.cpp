@@ -1,8 +1,11 @@
 #include "account/routes.hpp"
 
+#include <algorithm>
 #include <charconv>
+#include <cctype>
 #include <cstdint>
 #include <map>
+#include <limits>
 #include <regex>
 #include <set>
 #include <string>
@@ -13,6 +16,7 @@
 
 #include "account/account_types.hpp"
 #include "account/account_status.hpp"
+#include "account/account_opening.hpp"
 #include "api/router.hpp"
 #include "auth/rbac.hpp"
 #include "common/db.hpp"
@@ -200,6 +204,114 @@ AccountTypeInput read_input(const api::Json& body, const std::string& raw_body,
     return input;
 }
 
+OpenAccountInput read_open_account_input(const api::Json& body,
+                                         const std::string& raw_body) {
+    const std::set<std::string> accepted = {"customerId", "accountType", "initialDeposit"};
+    Error::FieldErrors errors;
+    for (auto it = body.begin(); it != body.end(); ++it) {
+        if (accepted.count(it.key()) == 0) {
+            errors.emplace_back(it.key(), "Unknown field.");
+        }
+    }
+
+    const RawFields raw = raw_fields(raw_body);
+    for (const auto& entry : raw) {
+        if (entry.second.empty()) {
+            errors.emplace_back(entry.first, "Duplicate fields are not allowed.");
+        }
+    }
+
+    std::string customer_id;
+    if (!body.contains("customerId")) {
+        errors.emplace_back("customerId", "This field is required.");
+    } else if (!body["customerId"].is_string()) {
+        errors.emplace_back("customerId", "This field must be a string.");
+    } else {
+        customer_id = body["customerId"].get<std::string>();
+        const auto first = std::find_if_not(customer_id.begin(), customer_id.end(),
+                                            [](unsigned char ch) {
+                                                return std::isspace(ch) != 0;
+                                            });
+        const auto last = std::find_if_not(customer_id.rbegin(), customer_id.rend(),
+                                           [](unsigned char ch) {
+                                               return std::isspace(ch) != 0;
+                                           }).base();
+        customer_id = first < last ? std::string(first, last) : std::string{};
+        if (customer_id.empty()) {
+            errors.emplace_back("customerId", "Customer ID cannot be blank.");
+        }
+    }
+
+    std::int64_t account_type_id = 0;
+    if (!body.contains("accountType")) {
+        errors.emplace_back("accountType", "This field is required.");
+    } else if (!body["accountType"].is_number_integer() ||
+               raw.find("accountType") == raw.end()) {
+        errors.emplace_back("accountType", "Select an account type ID from the account-type list.");
+    } else {
+        const std::string token = raw.at("accountType");
+        const auto parsed = std::from_chars(token.data(), token.data() + token.size(),
+                                            account_type_id);
+        if (parsed.ec != std::errc{} || parsed.ptr != token.data() + token.size() ||
+            account_type_id <= 0) {
+            errors.emplace_back("accountType", "Select a valid account type ID.");
+        }
+    }
+
+    std::int64_t initial_deposit_paise = 0;
+    if (!body.contains("initialDeposit")) {
+        errors.emplace_back("initialDeposit", "This field is required.");
+    } else {
+        std::string token;
+        if (body["initialDeposit"].is_number() &&
+            raw.find("initialDeposit") != raw.end()) {
+            token = raw.at("initialDeposit");
+        } else if (body["initialDeposit"].is_string()) {
+            token = body["initialDeposit"].get<std::string>();
+        } else {
+            errors.emplace_back(
+                "initialDeposit",
+                "Enter a decimal number with up to two decimal places, without exponent notation.");
+        }
+
+        if (!token.empty()) {
+            static const std::regex amount_pattern(
+                R"(^(0|[1-9][0-9]*)(?:\.([0-9]{1,2}))?$)");
+            std::smatch match;
+            if (!std::regex_match(token, match, amount_pattern)) {
+                errors.emplace_back(
+                    "initialDeposit",
+                    "Enter a non-negative decimal amount with up to two decimal places and no exponent notation.");
+            } else {
+                std::int64_t whole = 0;
+                const std::string whole_text = match[1].str();
+                const auto parsed =
+                    std::from_chars(whole_text.data(), whole_text.data() + whole_text.size(), whole);
+                std::int64_t fraction = 0;
+                const std::string fraction_text =
+                    match[2].matched ? match[2].str() : std::string{};
+                if (!fraction_text.empty()) {
+                    const auto fraction_parsed = std::from_chars(
+                        fraction_text.data(), fraction_text.data() + fraction_text.size(), fraction);
+                    if (fraction_parsed.ec != std::errc{}) {
+                        errors.emplace_back("initialDeposit", "Enter a valid decimal amount.");
+                    }
+                    if (fraction_text.size() == 1) fraction *= 10;
+                }
+                if (parsed.ec != std::errc{} ||
+                    whole > (std::numeric_limits<std::int64_t>::max() - fraction) / 100) {
+                    errors.emplace_back("initialDeposit", "The initial deposit is too large.");
+                } else {
+                    initial_deposit_paise = whole * 100 + fraction;
+                }
+            }
+        }
+    }
+
+    if (!errors.empty()) throw validation_errors(std::move(errors));
+    return {std::move(customer_id), account_type_id, initial_deposit_paise};
+}
+
 std::int64_t parse_type_id(const std::string& value) {
     std::int64_t type_id = 0;
     const char* first = value.data();
@@ -251,6 +363,30 @@ api::Json account_status_json(const AccountStatus& account) {
 }  // namespace
 
 void register_routes(api::Router& router, Database& database) {
+    router.post("/accounts", [&database](const api::Request& request) {
+        const auth::Principal principal =
+            auth::rbac::require(request, database, auth::rbac::Operation::OpenAccount);
+        const OpenAccountInput input =
+            read_open_account_input(request.json(), request.raw().body);
+        const OpenAccountResult opened =
+            open_account(database, input, principal.user_id);
+        AccountStatus account{opened.account_number, opened.account_type,
+                              opened.status, opened.balance_paise};
+        api::Response response = api::Response::created({
+            {"account", account_status_json(account)},
+            {"transaction",
+             {{"id", opened.transaction_id},
+              {"referenceNumber", opened.transaction_reference},
+              {"type", "deposit"},
+              {"amount", format_money(opened.balance_paise)},
+              {"resultingBalance", format_money(opened.balance_paise)},
+              {"operatorId", principal.user_id},
+              {"createdAt", opened.transaction_created_at}}},
+        });
+        response.headers.emplace("Location", "/accounts/" + opened.account_number);
+        return response;
+    });
+
     router.patch("/accounts/:acc/status", [&database](const api::Request& request) {
         const auth::Principal principal = auth::authenticate(request, database);
         const api::Json& body = request.json();

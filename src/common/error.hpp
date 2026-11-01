@@ -21,7 +21,7 @@ enum class ErrorKind {
 
 // An expected failure with a stable machine-readable code and a message that is
 // safe to show to the user (SADS 3.3). Throw it from any module; the API layer
-// turns it into { "code", "message", "field"? }. Anything that is not a
+// turns it into { "code", "message", "field?", "fields?", "minimumBalance?" }. Anything that is not a
 // bms::Error is treated as an unexpected internal error.
 class Error : public std::runtime_error {
 public:
@@ -29,18 +29,23 @@ public:
 
     Error(ErrorKind kind, std::string code, std::string message,
           std::optional<std::string> field = std::nullopt,
-          FieldErrors fields = {});
+          FieldErrors fields = {},
+          std::optional<std::string> minimum_balance = std::nullopt);
 
     ErrorKind kind() const noexcept { return kind_; }
     const std::string& code() const noexcept { return code_; }
     const std::optional<std::string>& field() const noexcept { return field_; }
     const FieldErrors& fields() const noexcept { return fields_; }
+    const std::optional<std::string>& minimum_balance() const noexcept {
+        return minimum_balance_;
+    }
 
 private:
     ErrorKind kind_;
     std::string code_;
     std::optional<std::string> field_;
     FieldErrors fields_;
+    std::optional<std::string> minimum_balance_;
 };
 
 // Shorthands for the common cases. Business-rule errors take their own code,
@@ -52,6 +57,7 @@ Error forbidden(std::string message = "You are not allowed to perform this actio
 Error not_found(std::string message);
 Error conflict(std::string code, std::string message,
                std::optional<std::string> field = std::nullopt);
-Error business_rule(std::string code, std::string message);
+Error business_rule(std::string code, std::string message,
+                    std::optional<std::string> minimum_balance = std::nullopt);
 
 }  // namespace bms

@@ -21,6 +21,7 @@ For an existing version 1 database, apply all migrations in order:
 sqlite3 bms.db ".read db/migrations/002_customer_credentials.sql"
 sqlite3 bms.db ".read db/migrations/003_customer_status.sql"
 sqlite3 bms.db ".read db/migrations/004_account_type_rules.sql"
+sqlite3 bms.db ".read db/migrations/005_zero_opening_deposit.sql"
 ```
 
 For a version 2 database, apply the customer-status and account-type rules migrations:
@@ -28,13 +29,23 @@ For a version 2 database, apply the customer-status and account-type rules migra
 ```powershell
 sqlite3 bms.db ".read db/migrations/003_customer_status.sql"
 sqlite3 bms.db ".read db/migrations/004_account_type_rules.sql"
+sqlite3 bms.db ".read db/migrations/005_zero_opening_deposit.sql"
 ```
 
-For a version 3 database, apply the account-type rules migration:
+For a version 3 database, apply the account-type rules and zero-opening-deposit migrations:
 
 ```powershell
 sqlite3 bms.db ".read db/migrations/004_account_type_rules.sql"
+sqlite3 bms.db ".read db/migrations/005_zero_opening_deposit.sql"
 ```
+
+For a version 4 database, apply the zero-opening-deposit migration:
+
+```powershell
+sqlite3 bms.db ".read db/migrations/005_zero_opening_deposit.sql"
+```
+
+The account-opening UI manual verification steps are in [S-15 manual test](docs/S-15-MANUAL-TEST.md).
 
 The customer deactivation UI's manual verification steps are in [S-13 manual test](docs/S-13-MANUAL-TEST.md).
 
