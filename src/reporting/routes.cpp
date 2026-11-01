@@ -1,14 +1,17 @@
 #include "reporting/routes.hpp"
 
+#include <optional>
 #include <utility>
 
 #include <nlohmann/json.hpp>
 
 #include "api/router.hpp"
+#include "audit/record.hpp"
 #include "auth/rbac.hpp"
 #include "common/db.hpp"
 #include "common/error.hpp"
 #include "common/input_validation.hpp"
+#include "common/log.hpp"
 #include "reporting/interest.hpp"
 #include "reporting/statement.hpp"
 #include "transaction/deposit.hpp"
@@ -21,9 +24,63 @@ std::string format_signed_money(std::int64_t amount_paise) {
     return transaction::format_money(amount_paise);
 }
 
+void record_denied_history(Database& database, const auth::Principal& principal,
+                           const std::string& account_number, std::int64_t account_id) {
+    try {
+        Database::Transaction transaction(database, true);
+        audit::record(database, principal.user_id, "VIEW_TRANSACTIONS_DENIED", "accounts",
+                      account_id, "Customer attempted transaction history for account " +
+                                      account_number + ".");
+        transaction.commit();
+    } catch (const std::exception&) {
+        log::error("Unable to record denied transaction-history access.");
+    } catch (...) {
+        log::error("Unable to record denied transaction-history access.");
+    }
+}
+
 }  // namespace
 
 void register_routes(api::Router& router, Database& database) {
+    router.get("/accounts/:acc/transactions", [&database](const api::Request& request) {
+        const auth::Principal principal =
+            auth::rbac::require(request, database, auth::rbac::Operation::ViewAccount);
+        const std::string& account_number = request.param("acc");
+        const std::optional<std::int64_t> customer_user_id =
+            principal.role == "customer" ? std::optional<std::int64_t>(principal.user_id)
+                                         : std::nullopt;
+        const AccountTransactionHistory history = get_account_transaction_history(
+            database, account_number, customer_user_id,
+            request.query("from"), request.query("to"),
+            request.query("limit"), request.query("offset"), request.query("snapshot"));
+        if (history.access_denied) {
+            record_denied_history(database, principal, account_number, history.account_id);
+            throw forbidden();
+        }
+
+        nlohmann::json transactions = nlohmann::json::array();
+        for (const HistoryEntry& entry : history.transactions) {
+            transactions.push_back({
+                {"transactionId", entry.transaction_id},
+                {"dateTime", entry.date_time},
+                {"type", entry.type},
+                {"amount", format_signed_money(entry.amount_paise)},
+                {"balanceAfter", transaction::format_money(entry.resulting_balance_paise)},
+                {"counterpartAccount", entry.counterpart_account
+                                           ? nlohmann::json(*entry.counterpart_account)
+                                           : nlohmann::json(nullptr)},
+            });
+        }
+        return api::Response::ok({
+            {"accountNumber", history.account_number},
+            {"transactions", std::move(transactions)},
+            {"total", history.total},
+            {"limit", history.limit},
+            {"offset", history.offset},
+            {"snapshot", history.snapshot},
+        });
+    });
+
     router.get("/accounts/:acc/statement", [&database](const api::Request& request) {
         const auth::Principal principal =
             auth::rbac::require(request, database, auth::rbac::Operation::ViewAccount);

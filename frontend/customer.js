@@ -31,6 +31,9 @@ const customerProfileCard = document.querySelector("#customer-profile-card");
 const customerProfileFields = document.querySelector("#customer-profile-fields");
 const customerProfileAccounts = document.querySelector("#customer-profile-accounts");
 const customerProfileStatus = document.querySelector("#customer-profile-status");
+const customerAccountsCard = document.querySelector("#customer-accounts-card");
+const customerAccounts = document.querySelector("#customer-accounts");
+const customerAccountsStatus = document.querySelector("#customer-accounts-status");
 const staffTransactionCards = [
   document.querySelector("#deposit-card"),
   document.querySelector("#withdraw-card"),
@@ -127,27 +130,11 @@ function appendStatus(details, status) {
   details.append(term, description);
 }
 
-function renderCustomerDetails(detailsElement, accountsElement, customer, allowAccountActions) {
-  detailsElement.replaceChildren();
-  for (const [label, value] of [
-    ["Customer ID", customer.customerId],
-    ["Name", customer.name],
-    ["Date of birth", customer.dateOfBirth],
-    ["Address", customer.address],
-    ["Phone", customer.phone],
-    ["Email", customer.email],
-    ["Identification reference", customer.identificationReference],
-    ["Created", customer.createdAt],
-    ["Updated", customer.updatedAt],
-  ]) {
-    appendDetail(detailsElement, label, value);
-  }
-  appendStatus(detailsElement, customer.status);
-
+function renderAccountRows(accountsElement, accounts, allowAccountActions, emptyMessage) {
   accountsElement.replaceChildren();
-  for (const account of customer.accounts || []) {
+  for (const account of accounts || []) {
     const row = document.createElement("tr");
-    for (const value of [account.accountNumber, account.type]) {
+    for (const value of [account.accountNumber, account.accountType || account.type]) {
       const cell = document.createElement("td");
       cell.textContent = value == null ? "" : String(value);
       row.append(cell);
@@ -189,10 +176,30 @@ function renderCustomerDetails(detailsElement, accountsElement, customer, allowA
     const row = document.createElement("tr");
     const cell = document.createElement("td");
     cell.colSpan = allowAccountActions ? 5 : 4;
-    cell.textContent = "No accounts are linked to this customer.";
+    cell.textContent = emptyMessage;
     row.append(cell);
     accountsElement.append(row);
   }
+}
+
+function renderCustomerDetails(detailsElement, accountsElement, customer, allowAccountActions) {
+  detailsElement.replaceChildren();
+  for (const [label, value] of [
+    ["Customer ID", customer.customerId],
+    ["Name", customer.name],
+    ["Date of birth", customer.dateOfBirth],
+    ["Address", customer.address],
+    ["Phone", customer.phone],
+    ["Email", customer.email],
+    ["Identification reference", customer.identificationReference],
+    ["Created", customer.createdAt],
+    ["Updated", customer.updatedAt],
+  ]) {
+    appendDetail(detailsElement, label, value);
+  }
+  appendStatus(detailsElement, customer.status);
+  renderAccountRows(accountsElement, customer.accounts, allowAccountActions,
+    "No accounts are linked to this customer.");
 }
 
 async function loadCustomerPage() {
@@ -323,6 +330,32 @@ async function loadMyProfile() {
   }
 }
 
+async function loadMyAccounts() {
+  customerAccountsStatus.classList.remove("error");
+  customerAccountsStatus.textContent = "Loading your accounts...";
+  customerAccounts.replaceChildren();
+  try {
+    const response = await fetch("/customers/me/accounts", {
+      headers: { Authorization: "Bearer " + accessToken },
+    });
+    if (response.status === 401) {
+      document.dispatchEvent(new CustomEvent("bms:session-expired"));
+      return;
+    }
+    const body = await response.json();
+    if (!response.ok) throw new Error(body.message || "Unable to load your accounts.");
+    renderAccountRows(customerAccounts, body.accounts, false, "You have no accounts yet.");
+    customerAccountsStatus.textContent = "";
+  } catch (error) {
+    customerAccountsStatus.classList.add("error");
+    customerAccountsStatus.textContent = error.message || "Unable to load your accounts.";
+  }
+}
+
+document.querySelector("#customer-accounts-refresh").addEventListener("click", () => {
+  void loadMyAccounts();
+});
+
 function displayApiFieldErrors(body) {
   const errors = Array.isArray(body.fields)
     ? body.fields
@@ -383,6 +416,7 @@ function updateSessionView() {
   registrationCard.hidden = !accessToken || mustChangePassword || !authorizedRole;
   customerManagementCard.hidden = !accessToken || mustChangePassword || !authorizedRole;
   customerProfileCard.hidden = !accessToken || mustChangePassword || currentRole !== "customer";
+  customerAccountsCard.hidden = !accessToken || mustChangePassword || currentRole !== "customer";
   for (const card of staffTransactionCards) {
     card.hidden = Boolean(accessToken) && currentRole === "customer";
   }
@@ -399,7 +433,10 @@ function updateSessionView() {
   }));
   if (accessToken && !mustChangePassword) {
     if (authorizedRole) void loadCustomerPage();
-    if (currentRole === "customer") void loadMyProfile();
+    if (currentRole === "customer") {
+      void loadMyProfile();
+      void loadMyAccounts();
+    }
   }
 }
 

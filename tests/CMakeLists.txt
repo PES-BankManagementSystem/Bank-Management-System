@@ -111,13 +111,31 @@ target_link_libraries(statement_test PRIVATE
 target_compile_definitions(statement_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
 add_test(NAME statement_test COMMAND statement_test)
 
+# S-21: paginated, date-filtered transaction history with ownership auditing.
+add_executable(account_history_test account_history_test.cpp
+    support/seeded_database.hpp support/login.hpp)
+target_link_libraries(account_history_test PRIVATE
+    bms::api bms::auth bms::common bms::reporting bms::transaction
+    GTest::gtest_main bms_options)
+target_compile_definitions(account_history_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
+add_test(NAME account_history_test COMMAND account_history_test)
+
 find_program(BMS_NODE_EXECUTABLE node)
 if(BMS_NODE_EXECUTABLE)
     add_test(NAME statement_csv_test
         COMMAND ${BMS_NODE_EXECUTABLE} ${PROJECT_SOURCE_DIR}/tests/statement_csv_test.js)
 endif()
 
-# Unit tests for the pure helpers used by the local-only performance scripts.
+    # S-20: customer account list and role-scoped balance inquiry.
+    add_executable(account_balance_test account_balance_test.cpp support/seeded_database.hpp
+        support/login.hpp)
+    target_link_libraries(account_balance_test PRIVATE
+        bms::account bms::api bms::auth bms::common bms::customer bms::transaction
+        GTest::gtest_main bms_options)
+    target_compile_definitions(account_balance_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
+    add_test(NAME account_balance_test COMMAND account_balance_test)
+
+    # Unit tests for the pure helpers used by the local-only performance scripts.
 find_package(Python3 COMPONENTS Interpreter QUIET)
 if(Python3_Interpreter_FOUND)
     add_test(NAME perf_helpers_test

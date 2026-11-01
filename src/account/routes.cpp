@@ -17,10 +17,12 @@
 #include "account/account_types.hpp"
 #include "account/account_status.hpp"
 #include "account/account_opening.hpp"
+#include "account/account_queries.hpp"
 #include "api/router.hpp"
 #include "auth/rbac.hpp"
 #include "common/db.hpp"
 #include "common/error.hpp"
+#include "common/input_validation.hpp"
 
 namespace bms::account {
 namespace {
@@ -360,6 +362,26 @@ api::Json account_status_json(const AccountStatus& account) {
     };
 }
 
+api::Json account_summary_json(const AccountSummary& account) {
+    return {
+        {"accountNumber", account.account_number},
+        {"accountType", account.account_type},
+        {"status", account.status},
+        {"balance", format_money(account.balance_paise)},
+    };
+}
+
+api::Json account_balance_json(const AccountBalance& account) {
+    return {
+        {"accountNumber", account.account_number},
+        {"accountType", account.account_type},
+        {"status", account.status},
+        {"balance", format_money(account.balance_paise)},
+        {"currency", "INR"},
+        {"asOf", account.as_of},
+    };
+}
+
 }  // namespace
 
 void register_routes(api::Router& router, Database& database) {
@@ -385,6 +407,32 @@ void register_routes(api::Router& router, Database& database) {
         });
         response.headers.emplace("Location", "/accounts/" + opened.account_number);
         return response;
+    });
+
+    router.get("/customers/me/accounts", [&database](const api::Request& request) {
+        const auth::Principal principal =
+            auth::rbac::require(request, database, auth::rbac::Operation::ViewOwnAccounts);
+
+        api::Json accounts = api::Json::array();
+        for (const AccountSummary& account :
+             list_customer_accounts(database, principal.user_id)) {
+            accounts.push_back(account_summary_json(account));
+        }
+        const std::size_t count = accounts.size();
+        return api::Response::ok({
+            {"accounts", std::move(accounts)},
+            {"count", count},
+        });
+    });
+
+    router.get("/accounts/:acc/balance", [&database](const api::Request& request) {
+        const auth::Principal principal =
+            auth::rbac::require(request, database, auth::rbac::Operation::ViewAccount);
+        const std::string& account_number = request.param("acc");
+        validate_account_number(account_number, "account_number");
+        auth::rbac::require_account_access(database, principal, account_number);
+        return api::Response::ok(
+            account_balance_json(get_account_balance(database, account_number)));
     });
 
     router.patch("/accounts/:acc/status", [&database](const api::Request& request) {
