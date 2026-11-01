@@ -4,6 +4,10 @@
 #include <sstream>
 #include <stdexcept>
 #include <filesystem>
+#include <atomic>
+#include <chrono>
+#include <exception>
+#include <thread>
 
 #include "common/db.hpp"
 #include "support/check.hpp"
@@ -475,6 +479,48 @@ void test_transaction_guard()
     CHECK_EQ(stmt->column_int(0), 1);
 }
 
+void test_concurrent_transactions_are_serialized()
+{
+    Database db(":memory:");
+    db.exec("CREATE TABLE values_table (value INTEGER NOT NULL)");
+
+    Transaction first(db, true);
+    auto first_insert = db.prepare("INSERT INTO values_table VALUES (1)");
+    first_insert->step();
+
+    std::atomic<bool> second_attempting{false};
+    std::atomic<bool> second_finished{false};
+    std::exception_ptr second_error;
+    std::thread second([&] {
+        second_attempting.store(true);
+        try {
+            Transaction transaction(db, true);
+            auto insert = db.prepare("INSERT INTO values_table VALUES (2)");
+            insert->step();
+            transaction.commit();
+        } catch (...) {
+            second_error = std::current_exception();
+        }
+        second_finished.store(true);
+    });
+
+    while (!second_attempting.load()) {
+        std::this_thread::yield();
+    }
+    std::this_thread::sleep_for(std::chrono::milliseconds(25));
+    const bool second_waited_for_first = !second_finished.load();
+    first.commit();
+    second.join();
+
+    CHECK(second_waited_for_first);
+    if (second_error) std::rethrow_exception(second_error);
+    CHECK(second_finished.load());
+
+    auto count = db.prepare("SELECT COUNT(*) FROM values_table");
+    CHECK(count->step());
+    CHECK_EQ(count->column_int(0), 2);
+}
+
 void test_prepared_statement_binding()
 {
     Database db(":memory:");
@@ -821,6 +867,7 @@ int main()
     bms::test::run("duplicate constraints", test_duplicate_constraints);
     bms::test::run("append-only tables", test_append_only_tables);
     bms::test::run("transaction guard", test_transaction_guard);
+    bms::test::run("concurrent transaction serialization", test_concurrent_transactions_are_serialized);
     bms::test::run("prepared statement binding", test_prepared_statement_binding);
     bms::test::run("actual schema file", test_actual_schema_file);
     bms::test::run("actual seed file", test_actual_seed_file);

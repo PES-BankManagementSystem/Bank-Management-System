@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <memory>
+#include <mutex>
 #include <sqlite3.h>
 #include <stdexcept>
 #include <string>
@@ -44,10 +45,10 @@ namespace bms
         void open(const std::string &path);
         void close();
 
-        bool is_open() const noexcept { return db_ != nullptr; }
+        bool is_open() const;
 
         // True between begin() and commit()/rollback().
-        bool in_transaction() const noexcept { return db_ != nullptr && sqlite3_get_autocommit(db_) == 0; }
+        bool in_transaction() const;
 
         void exec(const std::string &sql);
         void exec_script(const std::string &sql);
@@ -63,7 +64,7 @@ namespace bms
         {
         public:
             explicit Transaction(Database &db, bool immediate = false)
-                : db_(db), done_(false)
+                : db_(db), lock_(db.mutex_), done_(false)
             {
                 db_.begin(immediate);
             }
@@ -89,20 +90,26 @@ namespace bms
             {
                 db_.commit();
                 done_ = true;
+                lock_.unlock();
             }
             void rollback()
             {
                 db_.rollback();
                 done_ = true;
+                lock_.unlock();
             }
 
         private:
             Database &db_;
+            std::unique_lock<std::recursive_mutex> lock_;
             bool done_;
         };
 
     private:
+        friend class Statement;
+
         sqlite3 *db_ = nullptr;
+        mutable std::recursive_mutex mutex_;
     };
 
     class Statement
@@ -128,10 +135,7 @@ namespace bms
         const unsigned char *column_text(int index) const;
         bool column_null(int index) const;
 
-        int column_count() const noexcept
-        {
-            return sqlite3_stmt_ ? sqlite3_column_count(sqlite3_stmt_) : 0;
-        }
+        int column_count() const;
 
     private:
         sqlite3_stmt *sqlite3_stmt_ = nullptr;
