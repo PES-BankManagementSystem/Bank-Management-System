@@ -30,3 +30,7 @@ config.local.*
 *~
 .DS_Store
 Thumbs.db
+
+# Browser check (scripts/browser-check)
+node_modules/
+shots-*/

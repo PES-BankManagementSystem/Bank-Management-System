@@ -1,5 +1,7 @@
 #include "customer/validation.hpp"
 
+#include "common/calendar.hpp"
+
 #include <algorithm>
 #include <cctype>
 #include <cstdint>
@@ -94,17 +96,6 @@ bool valid_date(const std::string& date, int& year, int& month, int& day) {
     return day >= 1 && day <= days_in_month;
 }
 
-std::tm local_today() {
-    const std::time_t now = std::time(nullptr);
-    std::tm result{};
-#ifdef _WIN32
-    localtime_s(&result, &now);
-#else
-    localtime_r(&now, &result);
-#endif
-    return result;
-}
-
 }  // namespace
 
 CustomerInput validate_customer_input(CustomerInput input,
@@ -139,7 +130,7 @@ CustomerInput validate_customer_input(CustomerInput input,
     } else if (!valid_date(input.date_of_birth, birth_year, birth_month, birth_day)) {
         add_if_missing_error("dateOfBirth", "Date of birth must be a real date in YYYY-MM-DD format.");
     } else {
-        const std::tm today = local_today();
+        const std::tm today = bms::calendar::to_local(std::time(nullptr));
         const int current_year = today.tm_year + 1900;
         const int current_month = today.tm_mon + 1;
         const int current_day = today.tm_mday;

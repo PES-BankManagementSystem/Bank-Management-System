@@ -191,3 +191,8 @@ target_link_libraries(validation_test PRIVATE
 target_compile_definitions(validation_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
 add_test(NAME validation_test COMMAND validation_test)
 set_tests_properties(validation_test PROPERTIES TIMEOUT 60)
+
+# S-31: portable calendar helpers used instead of platform-specific calls.
+add_executable(calendar_test calendar_test.cpp)
+target_link_libraries(calendar_test PRIVATE bms::common GTest::gtest_main bms_options)
+add_test(NAME calendar_test COMMAND calendar_test)

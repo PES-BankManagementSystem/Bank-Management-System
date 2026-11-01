@@ -46,7 +46,7 @@ The four blocked cases are TC-01 (browser dashboard walkthrough), TC-05 (account
 - **NFR-6, usability:** no representative-user walkthrough was conducted. This requires at least three users per role and is not inferred from automated tests.
 - **NFR-7 / TC-17, reliability:** invalid amounts and unknown accounts returned structured errors; the automated tests verified unchanged balances/records on rejection.
 - **NFR-8, maintainability:** source/CMake inspection confirmed separate functional modules and static-library targets. This is a structural observation, not a maintainability study.
-- **NFR-9, portability:** the local run was macOS arm64. The repository CI workflow is configured to build and run CTest on Ubuntu and Windows, but its PR results are not available in this report yet. Chrome/Firefox compatibility was not tested; no browser walkthrough was conducted.
+- **NFR-9, portability:** the local run was macOS arm64. The repository CI workflow is configured to build and run CTest on Ubuntu and Windows, but its PR results are not available in this report yet. Chrome/Firefox compatibility was not tested; no browser walkthrough was conducted. **Updated by S-31:** CI results on Ubuntu and Windows, the business-logic check and a Chrome/Firefox walkthrough of the core flows are in [Portability verification](#portability-verification-nfr-9-s-31).
 
 ## Requirements coverage
 
@@ -73,7 +73,7 @@ The four blocked cases are TC-01 (browser dashboard walkthrough), TC-05 (account
 | NFR-6 | No TC in primary Test Plan traceability table | Not executed; representative users were unavailable. |
 | NFR-7 | TC-17 | Pass for tested invalid input cases. |
 | NFR-8 | No TC in primary Test Plan traceability table | Partial structural inspection only. |
-| NFR-9 | No TC in primary Test Plan traceability table; local build and configured CI matrix | Linux/Windows CI and Chrome/Firefox behavior are not yet evidenced here. |
+| NFR-9 | No TC in primary Test Plan traceability table; CI matrix, `scripts/check-portability.sh` and the S-31 browser walkthrough | Pass for Linux/Windows build and tests in CI, no platform-specific business logic, and 21/21 core-flow steps in Chrome and in Firefox on Linux. Browsers on Windows were not checked. See [Portability verification](#portability-verification-nfr-9-s-31). |
 
 ## Defects
 
@@ -83,8 +83,8 @@ No TC was marked Fail, so no defect issue was created. The four Blocked cases ha
 
 - The account-opening, account-status, balance, transaction-history and dashboard endpoints are absent on the tested revision; this prevents completion of four planned system cases and full FR coverage.
 - The separate test-case documents conflict with the primary Test Plan's IDs/mappings. Backlog S-35 calls for consolidation; this report follows the primary PDF and records the discrepancy without silently remapping cases.
-- Usability and browser compatibility need human walkthroughs. NFR-2 needs representative pages and a larger/repeated timing sample; TC-14 used only a single sample per operation.
-- Local macOS tests do not demonstrate Linux/Windows portability. CI should supply that evidence after this report's PR is opened.
+- Usability needs a human walkthrough. Browser compatibility was checked by a scripted walkthrough in Chrome and Firefox on Linux (S-31), not by hand. NFR-2 needs representative pages and a larger/repeated timing sample; TC-14 used only a single sample per operation.
+- Local macOS tests do not demonstrate Linux/Windows portability. CI should supply that evidence after this report's PR is opened. **Updated by S-31:** CI builds and tests on ubuntu-latest and windows-latest; see [Portability verification](#portability-verification-nfr-9-s-31).
 
 ## Conclusion
 
@@ -171,3 +171,78 @@ paths in the OS temporary directory named `bms-perf-*.sqlite`; it refuses
 ordinary project and production-looking paths. On Windows, replace `python3`
 with `py -3`, use `build/bin/Debug/bms_server.exe`, and set the DB path with
 PowerShell: `$db = Join-Path ([IO.Path]::GetTempPath()) 'bms-perf-s30.sqlite'`.
+
+## Portability verification (NFR-9, S-31)
+
+NFR-9 asks for the back-end core to build and run on at least two platforms without platform-specific code paths in the business logic, and for the front end to work in at least two major browsers. Test Plan 5.3 and 9 name Chrome and Firefox for the browser checks.
+
+### Build and test on Linux and Windows
+
+The `CI` workflow builds the back end and runs the full CTest suite on `ubuntu-latest` and `windows-latest` (MSVC) for every pull request and every push to `main`. On `main` at `4975424` (run [41321653023](https://github.com/PES-BankManagementSystem/Bank-Management-System/actions/runs/41321653023)), both `Build & test` jobs passed. The S-31 pull request runs the same matrix on its own changes.
+
+Locally, the S-31 branch was built and tested on Arch Linux x86_64 (GCC 16.2.1, CMake 4.4.5, Debug), and all 29 CTest targets passed. The new `calendar_test` was one of them.
+
+### No platform-specific code paths in business logic
+
+Before S-31, `src/customer/validation.cpp` (customer date-of-birth validation) chose between `localtime_s` and `localtime_r` with `#ifdef _WIN32`. That choice now lives in one shared helper, `src/common/calendar.{hpp,cpp}`, which `common/log.cpp` also uses. The business modules (`account`, `audit`, `auth`, `customer`, `reporting`, `staff`, `transaction`) contain no platform conditionals or OS headers.
+
+`scripts/check-portability.sh` searches those modules for platform macros (`_WIN32`, `_MSC_VER`, `__linux__`, `__APPLE__` and similar) and OS headers (`<windows.h>`, `<unistd.h>`, `<sys/...>`). It fails on the old code and passes now, and CI runs it as the `No platform-specific business logic` job. Platform-specific code remains only where it belongs: `src/common/calendar.cpp` (time conversion), `src/api/server.cpp` (socket options) and the build files.
+
+### Core flows in Chrome and Firefox
+
+`scripts/browser-check/walkthrough.js` drives the real browsers through puppeteer-core 24.43.1. Each browser ran against its own server (`bms_server --port 8120`) on a fresh database built from `db/schema.sql` and `db/seed.sql`. The run was on 2026-11-01 from the S-31 branch.
+
+- **Browsers:** Google Chrome 156.0.8078.79 and Mozilla Firefox 159.0, both headless at 1280×900, on Arch Linux x86_64.
+- **What the script does:** it types into the forms, clicks the buttons, and accepts the browser's confirmation dialogs. It then checks the text and visibility of what the page shows, and saves a screenshot after every step.
+- **What was not done:** nobody carried out a hands-on manual pass. Browsers on Windows or macOS were not checked.
+
+| # | Step | Chrome 156 | Firefox 159 |
+|---|---|---|---|
+| 1 | Sign-in page loads (HTTP 200) | Pass | Pass |
+| 2 | Wrong password shows "Invalid username or password." | Pass | Pass |
+| 3 | Bank Officer signs in and lands on the Bank Officer home with officer navigation | Pass | Pass |
+| 4 | Officer deposits INR 500.00 into ACC001 (balance 50,500.00) | Pass | Pass |
+| 5 | Officer withdraws INR 200.00 from ACC001 (balance 50,300.00) | Pass | Pass |
+| 6 | Officer transfers INR 100.00 from ACC001 to ACC004; the reference and both balances are shown | Pass | Pass |
+| 7 | Deposit to frozen ACC002 is refused with an error message and no change | Pass | Pass |
+| 8 | Officer registers a customer; customer ID and one-time password are shown | Pass | Pass |
+| 9 | Officer views ACC001 transaction history | Pass | Pass |
+| 10 | Bank Officer signs out and returns to sign-in | Pass | Pass |
+| 11 | Customer signs in and sees only customer navigation (My profile, Accounts, Statements, History) | Pass | Pass |
+| 12 | Customer sees own accounts ACC001 and ACC004 with balances, and not ACC002 | Pass | Pass |
+| 13 | Customer filters ACC001 history to today; the deposit, withdrawal and transfer are shown newest first | Pass | Pass |
+| 14 | Customer views the ACC001 statement (opening INR 0.00, closing INR 50,200.00) | Pass | Pass |
+| 15 | Deposit, withdraw and transfer screens are hidden from the Customer | Pass | Pass |
+| 16 | Customer signs out | Pass | Pass |
+| 17 | Administrator signs in and lands on the Administrator home with administrator navigation | Pass | Pass |
+| 18 | Administrator views the audit trail; today's deposit is listed | Pass | Pass |
+| 19 | Administrator views the staff list (officer1, officer2) | Pass | Pass |
+| 20 | Administrator views account types (Savings, Current) | Pass | Pass |
+| 21 | Administrator signs out | Pass | Pass |
+
+Neither browser raised a JavaScript error. The server access logs for the two runs match: 49 requests each. Only three requests failed, and the walkthrough caused all three on purpose:
+
+- `GET /favicon.ico` returned 404 because the app has no favicon.
+- The wrong-password login (step 2) returned 401.
+- The frozen-account deposit (step 7) returned 422.
+
+### Not covered
+
+- Browsers on Windows or macOS, and any browser other than Chrome and Firefox.
+- Visual layout, which was spot-checked from a few screenshots only.
+- Printing a statement and downloading a statement CSV, which open browser dialogs or downloads.
+- The role dashboards, which don't exist yet (S-25, #57). The role home pages are still placeholders.
+
+### Reproduce
+
+```sh
+cmake -S . -B build && cmake --build build --parallel
+sqlite3 /tmp/bms-browser.db < db/schema.sql && sqlite3 /tmp/bms-browser.db < db/seed.sql
+./build/bin/bms_server --db /tmp/bms-browser.db          # http://127.0.0.1:8080
+# In another terminal:
+./scripts/check-portability.sh
+cd scripts/browser-check && npm install
+npm run chrome      # or: npm run firefox (use a fresh database for each run)
+```
+
+Set `CHROME_PATH` or `FIREFOX_PATH` if the browser is not at `/usr/bin/google-chrome-stable` or `/usr/bin/firefox`.
