@@ -6,7 +6,7 @@
 **Tested source:** `origin/main` at `14291f31d9c32f8f4b719c1f56194578afe2e995`.
 **Environment:** macOS Darwin 24.5.0, arm64; Apple Clang 17.0.0; CMake 4.4.4; Node.js 25.1.0. A disposable SQLite database was created from `db/schema.sql` and `db/seed.sql` for API probes.
 
-The primary Test Plan PDF explicitly defines 17 cases. The separate Test Cases PDF and DOCX contain overlapping cases with different numbering and requirement mappings; those are not counted again. See deviation 14 in `DEVIATIONS.md`.
+The primary Test Plan PDF explicitly defines 17 cases. The separate Test Cases PDF and DOCX contain overlapping cases with different numbering and requirement mappings; those are not counted again. See deviation 15 in `DEVIATIONS.md`.
 
 | TC ID | Title | Requirement | Preconditions / test data | Steps or command used | Expected result | Actual result observed | Status | Date | Executed by | Defect |
 |---|---|---|---|---|---|---|---|---|---|---|
@@ -28,4 +28,4 @@ The primary Test Plan PDF explicitly defines 17 cases. The separate Test Cases P
 | TC-16 | Audit trail is complete and append-only | NFR-5 | Seeded database; deposit/withdraw/transfer events and audit viewer | `ctest --test-dir build-arm64 -V` (`audit_test`, `audit_viewer_test`) | Entries contain timestamp, accounts, amount and operator; application has no edit/delete path | `AuditTest.RecordStoresOperatorActionAccountAndAmount`, `EntriesCannotBeUpdatedOrDeleted`, and `AuditViewerTest.NoRouteEditsOrDeletesAnEntry` passed; trigger rejection and read-only API behavior were observed. | Pass | 2026-10-30 | Codex (automated) | — |
 | TC-17 | Invalid input fails safely | NFR-7 | Active account; negative/non-numeric amounts and unknown account | `ctest --test-dir build-arm64 -V` (`transaction_test`, `withdraw_test`) | Clear errors, no crash, unchanged balance, no transaction for invalid requests | Tests passed for negative/zero/malformed amounts, unknown account, frozen/closed accounts and API error responses; no balance or record mutation occurred for rejected operations. | Pass | 2026-10-30 | Codex (automated) | — |
 
-**Defects:** none created. No case is marked Fail; the four Blocked cases describe functionality unavailable on the tested revision and tracked by existing backlog stories. See the summary report and deviation 14.
+**Defects:** none created. No case is marked Fail; the four Blocked cases describe functionality unavailable on the tested revision and tracked by existing backlog stories. See the summary report and deviation 15.
