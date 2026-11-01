@@ -205,6 +205,26 @@
     <p id="customer-profile-status" class="result" role="status" aria-live="polite"></p>
   </section>
 
+  <section id="customer-accounts-card" class="card customer-wide-card"
+           aria-labelledby="customer-accounts-heading" data-nav-label="Accounts"
+           data-roles="customer" hidden>
+    <p class="eyebrow">Customer account</p>
+    <h1 id="customer-accounts-heading">Accounts</h1>
+    <p class="intro">View the balances and status of your accounts.</p>
+    <div class="table-scroll">
+      <table>
+        <caption>Your accounts</caption>
+        <thead>
+          <tr><th scope="col">Account number</th><th scope="col">Type</th>
+            <th scope="col">Status</th><th scope="col">Balance (INR)</th></tr>
+        </thead>
+        <tbody id="customer-accounts"></tbody>
+      </table>
+    </div>
+    <p id="customer-accounts-status" class="result" role="status" aria-live="polite"></p>
+    <button id="customer-accounts-refresh" type="button" class="secondary">Refresh accounts</button>
+  </section>
+
   <main id="deposit-card" class="card">
     <p class="eyebrow">Bank Management System</p>
     <h1>Deposit money</h1>
