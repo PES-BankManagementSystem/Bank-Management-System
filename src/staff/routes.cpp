@@ -227,6 +227,85 @@ void register_routes(api::Router& router, Database& database,
         transaction.commit();
         return api::Response::ok(std::move(officer));
     });
+
+    router.get("/dashboard", [&database](const api::Request& request) {
+        const auth::Principal principal = auth::authenticate(request, database);
+        api::Json dashboard = {
+            {"role", principal.role},
+            {"userId", principal.user_id},
+        };
+
+        if (principal.role == "administrator") {
+            auto customers = database.prepare(
+                "SELECT COUNT(*) FROM customers WHERE status = 'active'");
+            customers->step();
+            dashboard["customerCount"] = customers->column_int(0);
+
+            auto accounts = database.prepare(
+                "SELECT COUNT(*) FROM accounts WHERE status = 'active'");
+            accounts->step();
+            dashboard["accountCount"] = accounts->column_int(0);
+
+            auto staff = database.prepare(
+                "SELECT COUNT(*) FROM users "
+                "WHERE role = 'bank_officer' AND status = 'active'");
+            staff->step();
+            dashboard["staffCount"] = staff->column_int(0);
+
+            auto transactions = database.prepare(
+                "SELECT COUNT(*), COALESCE(SUM(amount), 0) FROM transactions "
+                "WHERE date(created_at) = date('now')");
+            transactions->step();
+            dashboard["todayTransactionCount"] = transactions->column_int(0);
+            dashboard["todayTransactionTotalPaise"] = transactions->column_int(1);
+        } else if (principal.role == "bank_officer") {
+            auto transactions = database.prepare(
+                "SELECT COUNT(*), COALESCE(SUM(amount), 0) FROM transactions "
+                "WHERE operator_id = ? AND date(created_at) = date('now')");
+            transactions->bind(1, principal.user_id);
+            transactions->step();
+            dashboard["todayTransactionCount"] = transactions->column_int(0);
+            dashboard["todayTransactionTotalPaise"] = transactions->column_int(1);
+
+            auto recent = database.prepare(
+                "SELECT transaction_id, account_id, type, amount, created_at "
+                "FROM transactions WHERE operator_id = ? "
+                "ORDER BY created_at DESC, transaction_id DESC LIMIT 10");
+            recent->bind(1, principal.user_id);
+            dashboard["recentTransactions"] = api::Json::array();
+            while (recent->step()) {
+                dashboard["recentTransactions"].push_back({
+                    {"transactionId", recent->column_int(0)},
+                    {"accountId", recent->column_int(1)},
+                    {"type", column_string(*recent, 2)},
+                    {"amountPaise", recent->column_int(3)},
+                    {"createdAt", column_string(*recent, 4)},
+                });
+            }
+        } else if (principal.role == "customer") {
+            auto accounts = database.prepare(
+                "SELECT a.account_id, a.account_number, at.type_name, a.balance, a.status "
+                "FROM accounts a "
+                "JOIN customers c ON c.customer_id = a.customer_id "
+                "JOIN account_types at ON at.type_id = a.type_id "
+                "WHERE c.user_id = ? ORDER BY a.account_id");
+            accounts->bind(1, principal.user_id);
+            dashboard["accounts"] = api::Json::array();
+            while (accounts->step()) {
+                dashboard["accounts"].push_back({
+                    {"accountId", accounts->column_int(0)},
+                    {"accountNumber", column_string(*accounts, 1)},
+                    {"accountType", column_string(*accounts, 2)},
+                    {"balancePaise", accounts->column_int(3)},
+                    {"status", column_string(*accounts, 4)},
+                });
+            }
+        } else {
+            throw forbidden("This role does not have a dashboard.");
+        }
+
+        return api::Response::ok(std::move(dashboard));
+    });
 }
 
 }  // namespace bms::staff
