@@ -104,6 +104,15 @@ target_link_libraries(statement_test PRIVATE
 target_compile_definitions(statement_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
 add_test(NAME statement_test COMMAND statement_test)
 
+# S-21: paginated, date-filtered transaction history with ownership auditing.
+add_executable(account_history_test account_history_test.cpp
+    support/seeded_database.hpp support/login.hpp)
+target_link_libraries(account_history_test PRIVATE
+    bms::api bms::auth bms::common bms::reporting bms::transaction
+    GTest::gtest_main bms_options)
+target_compile_definitions(account_history_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
+add_test(NAME account_history_test COMMAND account_history_test)
+
 find_program(BMS_NODE_EXECUTABLE node)
 if(BMS_NODE_EXECUTABLE)
     add_test(NAME statement_csv_test
