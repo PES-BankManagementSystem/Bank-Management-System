@@ -415,6 +415,50 @@
       </div>
     </div>
   </section>
+  <section id="history-card" class="card customer-wide-card" aria-labelledby="history-heading"
+           data-nav-label="History" data-roles="customer bank_officer administrator" hidden>
+    <p class="eyebrow">Account activity</p>
+    <h1 id="history-heading">Transaction history</h1>
+    <p class="intro">Review the latest account transactions and filter by date. Dates use UTC.</p>
+
+    <form id="history-form" novalidate>
+      <label id="history-account-label" for="history-account">Account</label>
+      <select id="history-account" name="account" aria-describedby="history-account-error" hidden>
+        <option value="">Choose an account</option>
+      </select>
+      <input id="history-account-number" name="accountNumber" type="text"
+             autocomplete="off" aria-describedby="history-account-error" hidden>
+      <p id="history-account-error" class="field-error"></p>
+
+      <label for="history-from">From</label>
+      <input id="history-from" name="from" type="date" aria-describedby="history-from-error">
+      <p id="history-from-error" class="field-error"></p>
+
+      <label for="history-to">To</label>
+      <input id="history-to" name="to" type="date" aria-describedby="history-to-error">
+      <p id="history-to-error" class="field-error"></p>
+
+      <button id="history-apply" type="submit">Apply filters</button>
+      <button id="history-clear" type="button" class="secondary">Clear</button>
+    </form>
+    <p id="history-result" class="result" role="status" aria-live="polite"></p>
+    <div class="table-scroll">
+      <table>
+        <caption>Account transactions, newest first</caption>
+        <thead>
+          <tr><th scope="col">Date and time</th><th scope="col">Type</th>
+            <th scope="col">Amount (INR)</th><th scope="col">Balance after (INR)</th></tr>
+        </thead>
+        <tbody id="history-entries"></tbody>
+      </table>
+    </div>
+    <p id="history-empty" class="empty-state" hidden>No transactions in this period.</p>
+    <nav class="pagination" aria-label="Transaction history pages">
+      <button id="history-newer" type="button" disabled>Newer</button>
+      <span id="history-page-status" aria-live="polite"></span>
+      <button id="history-older" type="button" disabled>Older</button>
+    </nav>
+  </section>
   <script src="api.js" defer></script>
   <script src="components.js" defer></script>
   <script src="shell.js" defer></script>
@@ -430,5 +474,6 @@
   <script src="account-types.js" defer></script>
   <script src="statement_csv.js" defer></script>
   <script src="statement.js" defer></script>
+  <script src="history.js" defer></script>
 </body>
 </html>
