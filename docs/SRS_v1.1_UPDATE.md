@@ -4,7 +4,7 @@
 - **Course Code:** `UE24CS341A` (Software Engineering and System Design)
 - **Story:** [S-34] Fix SRS gaps: use case diagram, security objectives, references (#65)
 - **Version:** 1.1
-- **Effective Date:** 18 October 2026
+- **Effective Date:** 1 November 2026
 
 ---
 
@@ -13,7 +13,7 @@
 | Version | Date | Primary Author(s) | Description of Changes |
 | :---: | :---: | :---: | :--- |
 | **1.0** | 02 Sep 2026 | Team BMS | Initial draft of Software Requirements Specification. |
-| **1.1** | 18 Oct 2026 | Abhishek Kinagi & Team | **Sprint 2 Gap Remediation:**<br>1. Added Section 5.3 Security Objectives (SO-1, SO-2, SO-3) alongside NFR-4/NFR-5.<br>2. Corrected course code citations to `UE24CS341A` across all references.<br>3. Added UML Use Case Diagram covering Administrator, Bank Officer, and Customer roles to Appendix B.<br>4. Referenced the existing schema-backed ER Diagram source in `design/er-diagram.mmd` (Appendix B).<br>5. Clarified lockout policy (3 consecutive failures) and administrative unlock workflow (FR-2, FR-13). |
+| **1.1** | 1 Nov 2026 | Abhishek Kinagi & Team | **Sprint 2 Gap Remediation:**<br>1. Added Section 5.3 Security Objectives (SO-1, SO-2, SO-3) alongside NFR-4/NFR-5.<br>2. Corrected course code citations to `UE24CS341A` across all references.<br>3. Added UML Use Case Diagram covering Administrator, Bank Officer, and Customer roles to Appendix B.<br>4. Referenced the existing schema-backed ER Diagram source in `design/er-diagram.mmd` (Appendix B).<br>5. Clarified lockout policy (3 consecutive failures) and administrative unlock workflow (FR-2, FR-13). |
 
 ---
 
@@ -28,7 +28,7 @@ In addition to Non-Functional Requirements NFR-4 (Credential Protection) and NFR
   All stored passwords must be protected using high-work-factor salted cryptographic hashing (Argon2id via libsodium). To mitigate online brute-force credential stuffing, the system must enforce automatic account lockout immediately upon the **third consecutive failed login attempt** (`failed_attempts >= 3`). Locked accounts cannot authenticate until explicitly reinstated by an Administrator via `PATCH /users/:id/unlock`.
 
 - **SO-3: Ephemeral Session Integrity & Invalidation (Session Security)**
-  Authenticated sessions must be governed by cryptographically random 64-character tokens stored server-side with an idle timeout of 30 minutes. All sessions belonging to a user must be immediately terminated upon user deactivation or explicit logout (`POST /auth/logout`), preventing replay or session hijacking.
+  Authenticated sessions must be governed by cryptographically random 64-character tokens stored server-side with a fixed 30-minute lifetime from sign-in. All sessions belonging to a user must be immediately terminated upon user deactivation or explicit logout (`POST /auth/logout`), preventing replay or session hijacking.
 
 ---
 
