@@ -2,7 +2,7 @@
 
 ## Purpose and scope
 
-This report records execution of the primary Bank Management System Test Plan v1.0, Section 14 (TC-01–TC-17), and verification relevant to its Sections 6–8 and 14. The companion `Test_Cases_Bank_Management_System.docx` and `Test_Plan_Test_Cases_BankManagementSystem.pdf` contain an overlapping 11-case set with conflicting numbering and traceability. The primary `Test_Plan_BankManagementSystem.pdf`, which explicitly enumerates 17 cases, is used as the execution baseline. The discrepancy is recorded in [DEVIATIONS.md](DEVIATIONS.md#14).
+This report records execution of the primary Bank Management System Test Plan v1.0, Section 14 (TC-01–TC-17), and verification relevant to its Sections 6–8 and 14. The companion `Test_Cases_Bank_Management_System.docx` and `Test_Plan_Test_Cases_BankManagementSystem.pdf` contain an overlapping 11-case set with conflicting numbering and traceability. The primary `Test_Plan_BankManagementSystem.pdf`, which explicitly enumerates 17 cases, is used as the execution baseline. The discrepancy is recorded in [DEVIATIONS.md](DEVIATIONS.md), row 15.
 
 ## Tested environment and revision
 
