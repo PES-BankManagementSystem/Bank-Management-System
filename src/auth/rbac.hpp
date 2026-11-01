@@ -34,6 +34,7 @@ enum class Operation {
     // Read access. A Customer is limited to their own records (see require_*_access).
     ViewCustomer,
     ViewAccount,
+    ViewOwnAccounts,
     // Administrator only.
     RunInterest,
     ManageStaff,

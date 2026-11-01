@@ -123,6 +123,9 @@ TEST(PermissionTable, MatchesTheBusinessRules) {
         EXPECT_TRUE(bms::auth::rbac::is_allowed(op, officer));
         EXPECT_TRUE(bms::auth::rbac::is_allowed(op, customer));
     }
+    EXPECT_FALSE(bms::auth::rbac::is_allowed(Operation::ViewOwnAccounts, admin));
+    EXPECT_FALSE(bms::auth::rbac::is_allowed(Operation::ViewOwnAccounts, officer));
+    EXPECT_TRUE(bms::auth::rbac::is_allowed(Operation::ViewOwnAccounts, customer));
     EXPECT_TRUE(bms::auth::rbac::is_allowed(Operation::ViewAccountTypes, admin));
     EXPECT_TRUE(bms::auth::rbac::is_allowed(Operation::ViewAccountTypes, officer));
     EXPECT_FALSE(bms::auth::rbac::is_allowed(Operation::ViewAccountTypes, customer));

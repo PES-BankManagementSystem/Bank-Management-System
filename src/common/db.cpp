@@ -20,13 +20,18 @@ Database::~Database() {
     close();
 }
 
-Database::Database(Database&& other) noexcept : db_(other.db_) {
+Database::Database(Database&& other) noexcept {
+    std::lock_guard<std::recursive_mutex> lock(other.mutex_);
+    db_ = other.db_;
     other.db_ = nullptr;
 }
 
 Database& Database::operator=(Database&& other) noexcept {
     if (this != &other) {
-        close();
+        std::scoped_lock lock(mutex_, other.mutex_);
+        if (db_) {
+            sqlite3_close(db_);
+        }
         db_ = other.db_;
         other.db_ = nullptr;
     }
@@ -34,6 +39,7 @@ Database& Database::operator=(Database&& other) noexcept {
 }
 
 void Database::open(const std::string& path) {
+    std::lock_guard<std::recursive_mutex> lock(mutex_);
     if (is_open()) {
         throw DbError("Database already open");
     }
@@ -51,13 +57,25 @@ void Database::open(const std::string& path) {
 }
 
 void Database::close() {
+    std::lock_guard<std::recursive_mutex> lock(mutex_);
     if (db_) {
         sqlite3_close(db_);
         db_ = nullptr;
     }
 }
 
+bool Database::is_open() const {
+    std::lock_guard<std::recursive_mutex> lock(mutex_);
+    return db_ != nullptr;
+}
+
+bool Database::in_transaction() const {
+    std::lock_guard<std::recursive_mutex> lock(mutex_);
+    return db_ != nullptr && sqlite3_get_autocommit(db_) == 0;
+}
+
 void Database::exec(const std::string& sql) {
+    std::lock_guard<std::recursive_mutex> lock(mutex_);
     if (!db_) {
         throw DbError("Database not open");
     }
@@ -76,6 +94,7 @@ void Database::exec_script(const std::string& sql) {
 }
 
 std::unique_ptr<Statement> Database::prepare(const std::string& sql) {
+    std::lock_guard<std::recursive_mutex> lock(mutex_);
     if (!db_) {
         throw DbError("Database not open");
     }
@@ -90,6 +109,7 @@ std::unique_ptr<Statement> Database::prepare(const std::string& sql) {
 }
 
 void Database::begin(bool immediate) {
+    std::lock_guard<std::recursive_mutex> lock(mutex_);
     if (!db_) {
         throw DbError("Database not open");
     }
@@ -99,6 +119,7 @@ void Database::begin(bool immediate) {
 }
 
 void Database::commit() {
+    std::lock_guard<std::recursive_mutex> lock(mutex_);
     if (!db_) {
         throw DbError("Database not open");
     }
@@ -107,6 +128,7 @@ void Database::commit() {
 }
 
 void Database::rollback() {
+    std::lock_guard<std::recursive_mutex> lock(mutex_);
     if (!db_) {
         throw DbError("Database not open");
     }
@@ -119,6 +141,7 @@ Statement::Statement(sqlite3_stmt* stmt, Database& db)
 
 Statement::~Statement() {
     if (sqlite3_stmt_) {
+        std::lock_guard<std::recursive_mutex> lock(db_->mutex_);
         sqlite3_finalize(sqlite3_stmt_);
     }
 }
@@ -132,6 +155,7 @@ Statement::Statement(Statement&& other) noexcept
 Statement& Statement::operator=(Statement&& other) noexcept {
     if (this != &other) {
         if (sqlite3_stmt_) {
+            std::lock_guard<std::recursive_mutex> lock(db_->mutex_);
             sqlite3_finalize(sqlite3_stmt_);
         }
         sqlite3_stmt_ = other.sqlite3_stmt_;
@@ -147,6 +171,7 @@ void Statement::bind(int index, std::int64_t value) {
         throw DbError("Statement not prepared");
     }
 
+    std::lock_guard<std::recursive_mutex> lock(db_->mutex_);
     int rc = sqlite3_bind_int64(sqlite3_stmt_, index, value);
     if (rc != SQLITE_OK) {
         throw DbError(rc, "Failed to bind int64 value");
@@ -158,6 +183,7 @@ void Statement::bind(int index, const std::string& value) {
         throw DbError("Statement not prepared");
     }
 
+    std::lock_guard<std::recursive_mutex> lock(db_->mutex_);
     int rc = sqlite3_bind_text(sqlite3_stmt_, index, value.c_str(), -1, SQLITE_TRANSIENT);
     if (rc != SQLITE_OK) {
         throw DbError(rc, "Failed to bind text value");
@@ -169,6 +195,7 @@ void Statement::bind(int index, std::nullptr_t) {
         throw DbError("Statement not prepared");
     }
 
+    std::lock_guard<std::recursive_mutex> lock(db_->mutex_);
     int rc = sqlite3_bind_null(sqlite3_stmt_, index);
     if (rc != SQLITE_OK) {
         throw DbError(rc, "Failed to bind NULL value");
@@ -180,6 +207,7 @@ bool Statement::step() {
         throw DbError("Statement not prepared");
     }
 
+    std::lock_guard<std::recursive_mutex> lock(db_->mutex_);
     int rc = sqlite3_step(sqlite3_stmt_);
     if (rc == SQLITE_ROW) {
         return true;
@@ -195,6 +223,7 @@ void Statement::reset() {
         throw DbError("Statement not prepared");
     }
 
+    std::lock_guard<std::recursive_mutex> lock(db_->mutex_);
     int rc = sqlite3_reset(sqlite3_stmt_);
     if (rc != SQLITE_OK) {
         throw DbError(rc, "Failed to reset statement");
@@ -206,6 +235,7 @@ std::int64_t Statement::column_int(int index) const {
         throw DbError("Statement not prepared");
     }
 
+    std::lock_guard<std::recursive_mutex> lock(db_->mutex_);
     return sqlite3_column_int64(sqlite3_stmt_, index);
 }
 
@@ -214,6 +244,7 @@ const unsigned char* Statement::column_text(int index) const {
         throw DbError("Statement not prepared");
     }
 
+    std::lock_guard<std::recursive_mutex> lock(db_->mutex_);
     return sqlite3_column_text(sqlite3_stmt_, index);
 }
 
@@ -222,7 +253,14 @@ bool Statement::column_null(int index) const {
         throw DbError("Statement not prepared");
     }
 
+    std::lock_guard<std::recursive_mutex> lock(db_->mutex_);
     return sqlite3_column_type(sqlite3_stmt_, index) == SQLITE_NULL;
+}
+
+int Statement::column_count() const {
+    if (!sqlite3_stmt_) return 0;
+    std::lock_guard<std::recursive_mutex> lock(db_->mutex_);
+    return sqlite3_column_count(sqlite3_stmt_);
 }
 
 } // namespace bms
