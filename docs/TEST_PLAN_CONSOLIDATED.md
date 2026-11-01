@@ -3,7 +3,7 @@
 - **Document ID:** TP-BMS-2026-v1.1
 - **Course:** `UE24CS341A` (Software Engineering and System Design)
 - **Story:** [S-35] Consolidate the Test Plan and test cases (#66)
-- **Supersedes:** `Test_Cases_Bank_Management_System.docx` and `Test_Plan_Test_Cases_BankManagementSystem.pdf` (merged into Section 14 to resolve conflicting numbering)
+- **Related source documents:** `Test_Cases_Bank_Management_System.docx` and `Test_Plan_Test_Cases_BankManagementSystem.pdf` (retained for historical traceability; this document consolidates their coverage)
 - **Governing SRS Reference:** SRS v1.1 (Dated **02/09/2026**; corrected from erroneous 11/09/2026 citation)
 
 ---
@@ -13,7 +13,7 @@
 | Version | Date | Author | Description |
 | :---: | :---: | :---: | :--- |
 | **1.0** | 15 Sep 2026 | QA Team | Initial draft with split standalone test suites. |
-| **1.1** | 18 Oct 2026 | Abhishek Kinagi & Team | **Consolidation & Gap Resolution (S-35):**<br>1. Merged standalone test suites into unified Section 14 with continuous TC IDs.<br>2. Retained the legacy source documents as supporting references.<br>3. Corrected SRS citation date from 11/09/2026 to 02/09/2026.<br>4. Added test cases for FR-12 (statements), FR-14 (dashboards), FR-7 (daily limit), admin unlock (TC-02B), NFR-2 (performance), NFR-6 (usability), and NFR-9 (portability).<br>5. Refined TC-15 wording regarding HTTPS TLS handshake.<br>6. Preserved the canonical TC-11 balance/history ownership mapping.<br>7. Built 100% complete Requirements Traceability Matrix. |
+| **1.1** | 1 Nov 2026 | Abhishek Kinagi & Team | **Consolidation & Gap Resolution (S-35):**<br>1. Merged standalone test suites into unified Section 14 with continuous TC IDs.<br>2. Retained the legacy source documents as supporting references.<br>3. Corrected SRS citation date from 11/09/2026 to 02/09/2026.<br>4. Added test cases for FR-12 (statements), FR-14 (dashboards), FR-7 (daily limit), admin unlock (TC-02B), NFR-2 (performance), NFR-6 (usability), and NFR-9 (portability).<br>5. Refined TC-15 wording regarding HTTPS TLS handshake.<br>6. Preserved the canonical TC-11 balance/history ownership mapping.<br>7. Built 100% complete Requirements Traceability Matrix. |
 
 ---
 
@@ -24,7 +24,7 @@
 | **TS-01** | **Authentication & Lockout** | Credential checks, session creation, lockout after 3 fails, admin unlock | TC-01, TC-02, TC-02B, TC-03 |
 | **TS-02** | **Customer & Account Ops** | Customer onboarding, account opening, status management | TC-04, TC-05, TC-06, TC-07 |
 | **TS-03** | **Financial Transactions** | Deposits, withdrawals, daily limits, atomic transfers | TC-08, TC-09, TC-09B, TC-10, TC-10B |
-| **TS-04** | **Security & Access Control** | Least privilege, role barriers, HTTPS, audit trail | TC-14, TC-15, TC-16 |
+| **TS-04** | **Security & Access Control** | Least privilege, role barriers, HTTPS, audit trail | TC-11, TC-14, TC-15, TC-16 |
 | **TS-05** | **Staff & Administration** | Bank Officer CRUD, deactivation session clearance | TC-12, TC-13 |
 | **TS-06** | **Reporting & Analytics** | History queries, statements export, role dashboards | TC-17, TC-18, TC-19 |
 | **TS-07** | **Non-Functional Requirements**| Performance (<3s load), usability walkthrough, cross-platform | TC-20, TC-21, TC-22 |
@@ -56,7 +56,7 @@
 ### TC-03: Session Expiry and Logout (FR-2, SEC-1, S-08)
 - **Preconditions:** User is logged in with active session token.
 - **Input:** User sends `POST /auth/logout`; subsequent request sent with invalidated token.
-- **Expected Result:** Logout returns HTTP 200; token removed from `sessions` table; subsequent request receives HTTP 401 Unauthorized; UI redirects to login screen.
+- **Expected Result:** Logout returns HTTP 200; the server removes the token from its in-memory session store; subsequent request receives HTTP 401 Unauthorized; UI redirects to login screen.
 
 ### TC-04: Customer Registration Validation (FR-3)
 - **Preconditions:** Bank Officer is authenticated; customer registration form is available.
@@ -81,12 +81,12 @@
 ### TC-08: Deposit Funds with Confirmation Dialog (FR-6, SRS 3.1, S-17)
 - **Preconditions:** Account `ACC001` active with balance ₹10,000.
 - **Input:** Bank Officer initiates ₹5,000 cash deposit.
-- **Expected Result:** UI renders modal confirmation showing account number (`ACC001`), deposit amount (`₹5,000.00`), and resulting balance (`₹15,000.00`); upon confirmation, ledger updates atomically and balance becomes ₹15,000.
+- **Expected Result:** UI renders modal confirmation showing account number (`ACC001`) and deposit amount (`₹5,000.00`); upon confirmation, ledger updates atomically and the post-success view shows the resulting balance (`₹15,000.00`).
 
 ### TC-09: Daily Withdrawal Limit Check (FR-7, S-18) *(NEW)*
 - **Preconditions:** Savings account with balance ₹50,000; daily withdrawal limit is ₹25,000.
 - **Input:** Attempt withdrawal of ₹30,000 in a single calendar day.
-- **Expected Result:** HTTP 400 Bad Request; error code `LIMIT_EXCEEDED`; balance remains unchanged; message states daily limit of ₹25,000 exceeded.
+- **Expected Result:** HTTP 422 Unprocessable Entity; error code `DAILY_LIMIT_EXCEEDED`; balance remains unchanged; message states daily limit of ₹25,000 exceeded.
 
 ### TC-09B: Credit Account Interest Once per Period (FR-11, S-22)
 - **Preconditions:** Administrator is authenticated; an eligible interest-bearing account has not yet been credited for the selected period.
@@ -110,7 +110,7 @@
 
 ### TC-12: Create Bank Officer Account (FR-13, S-24)
 - **Preconditions:** Administrator logged in.
-- **Input:** `POST /staff` with `id = "officer_new"`, `name = "Alice"`, `password = "SecretPass1"`.
+- **Input:** `POST /staff` with `username = "officer_new"` and the required staff-creation fields.
 - **Expected Result:** HTTP 201 Created; officer stored with Argon2id hash; officer can immediately authenticate.
 
 ### TC-13: Deactivate Bank Officer & Session Invalidation (FR-13, S-24)
@@ -203,7 +203,7 @@
 
 ## 5. Summary of Remediation Actions (S-35 Done Criteria)
 
-1. **Documents Merged:** Standalone test documents consolidated into Section 14 above; redundant files removed.
+1. **Documents Consolidated:** Standalone test documents are retained as supporting source references, while their coverage is consolidated into Section 14 above.
 2. **Missing Test Cases Added:** Explicit TCs written for FR-12 (TC-18), FR-14 (TC-14), FR-7 daily limit (TC-09), Admin unlock (TC-02B), NFR-2 (TC-20), NFR-6 (TC-21), and NFR-9 (TC-22).
 3. **Traceability Table:** Covers 100% of functional requirements (FR-1 to FR-14), non-functional requirements (NFR-1 to NFR-9), and security rules (SEC-1, SEC-2).
 4. **SRS Citation Corrected:** Date standardized to 02/09/2026.
