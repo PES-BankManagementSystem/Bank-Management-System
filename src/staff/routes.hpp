@@ -14,7 +14,7 @@ namespace bms::staff {
 //   POST  /staff       create a Bank Officer with a one-time initial password
 //   GET   /staff       list Bank Officers
 //   PATCH /staff/:id   rename, deactivate or reactivate a Bank Officer
-// GET /dashboard (S-25) will be added here later.
+// GET /dashboard returns the authenticated role's dashboard data.
 //
 // allow_initial_credential_delivery is true only on loopback listeners or when
 // the server serves HTTPS: the initial password is returned once in the
