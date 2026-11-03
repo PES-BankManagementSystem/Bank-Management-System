@@ -806,62 +806,11 @@ stories:
       - "A CI job on ubuntu-latest builds with coverage, runs ctest and measures line and branch coverage of `src/`, excluding third-party code in `build/_deps` and the tests themselves."
       - "The HTML report and a summary are uploaded as a workflow artifact, and the line and branch percentages appear in the job summary."
       - "README explains how to produce the same report locally."
-      - "Baseline line and branch coverage per module is posted on this issue so S-45 to S-48 know where the gaps are."
+      - "Baseline line and branch coverage per module is posted on this issue, and module owners are told where the gaps are."
     tasks:
       - "Suggested tool: gcovr with `--branches`, `--exclude-throw-branches` and `--exclude-unreachable-branches`, or lcov/genhtml."
-      - "Finish by 3 Nov: S-42 and S-45 to S-48 depend on it."
+      - "Finish by 3 Nov: S-42 depends on it."
   - id: S-41
-    epic: E-13
-    title: "Write the Unit Test Report"
-    points: 2
-    sprint: S3
-    set: m3
-    priority: high
-    refs: ["Deliverables Part-3 2.b i", "Test Plan 5.4", "Test Plan 8"]
-    story: "As the team, we want a unit test report for the final build so that we can show which unit tests were run and their results."
-    acceptance:
-      - "`docs/Unit_Test_Report.md` names the commit tested, the platforms (Linux and Windows CI runs) and the commands used."
-      - "Every CTest target is listed with its number of checks, result and duration, grouped by module (auth, customer, account, transaction, reporting, staff, audit, api/common)."
-      - "Each test file is mapped to the FRs/NFRs and Test Plan test cases it covers."
-      - "The JUnit XML from `ctest --output-junit` is saved under `docs/reports/`."
-      - "Any failing or skipped test is explained and linked to a bug issue."
-    tasks:
-      - "Run on the final Sprint 3 build, after S-25 and S-45 to S-48 merge; re-run if more code lands."
-  - id: S-42
-    epic: E-13
-    title: "Generate the Code Coverage and Branch Coverage reports"
-    points: 3
-    sprint: S3
-    set: m3
-    priority: high
-    refs: ["Deliverables Part-3 2.b iii-iv", "Test Plan 14"]
-    story: "As the team, we want code and branch coverage reports for the final build so that we can show how much of the core the tests exercise."
-    acceptance:
-      - "`docs/Code_Coverage_Report.md` gives line and function coverage overall and per module, from the S-40 coverage job on the final Sprint 3 commit."
-      - "`docs/Branch_Coverage_Report.md` gives branch coverage overall and per module, and lists the uncovered branches that remain with the reason each is acceptable."
-      - "Both reports name the commit, the tool and its version, and the exclusions used; the HTML report is saved under `docs/reports/coverage/`."
-      - "Before-and-after numbers show the change from the S-40 baseline after S-45 to S-48."
-    tasks:
-      - "Depends on S-40 and S-45 to S-48."
-  - id: S-43
-    epic: E-13
-    title: "Execute system validation and write the System Validation Report"
-    points: 5
-    sprint: S3
-    set: m2
-    priority: high
-    refs: ["Deliverables Part-3 2.a-b ii", "Test Plan 5.4", "Test Plan 14", "SRS 6"]
-    story: "As the team, we want every Test Plan test case run end to end against the final build so that we can show the system meets the SRS."
-    acceptance:
-      - "Every test case in the updated Test Plan (S-44) is executed through the web UI or API on a freshly seeded database, as the role the case names."
-      - "`docs/System_Validation_Report.md` records for each case the steps run, expected and actual result, pass/fail, evidence (screenshot or response) and the FR/NFR it validates."
-      - "A requirement validation table marks every FR and NFR as validated or not, with its test case IDs."
-      - "Defects are raised as bug issues, linked from the report and retested after the fix."
-      - "The Test Plan exit criteria are checked: all planned cases executed and no critical defect open."
-      - "The per-story manual test notes (`docs/S-13`, `S-14`, `S-15`, `S-16`, `S-21-MANUAL-TEST.md`) are folded in or referenced."
-    tasks:
-      - "Use the test case IDs from S-44 and run after S-25 is merged; keep evidence under `docs/reports/system-validation/`."
-  - id: S-44
     epic: E-12
     title: "Update the test cases and the Test Plan for sprint changes"
     points: 3
@@ -878,72 +827,44 @@ stories:
       - "Changes from Test Plan v1.0 are noted in `docs/DEVIATIONS.md`."
     tasks:
       - "Finish by 4 Nov: S-43 executes these cases."
-      - "Use any new requirement IDs from S-49."
-  - id: S-45
+      - "Use any new requirement IDs from S-44."
+  - id: S-42
     epic: E-13
-    title: "Raise test coverage of the API, common, audit and RBAC code"
-    points: 2
-    sprint: S3
-    set: lead
-    priority: medium
-    refs: ["Test Plan 5.4", "NFR-5", "NFR-7", "SEC-1"]
-    story: "As the team, we want the platform code covered by unit tests so that the coverage reports show the error paths are tested."
-    acceptance:
-      - "Using the S-40 baseline, unit tests are added for uncovered lines and branches in `src/api/`, `src/common/`, `src/audit/` and the RBAC and TLS/config code."
-      - "These modules reach at least 80% line and 60% branch coverage, or each remaining gap is listed with a reason for S-42."
-      - "Error paths are tested: malformed JSON, unknown routes, permission refused, and audit writes refused."
-      - "Production code changes only to fix bugs the new tests find, each linked to a bug issue."
-    tasks:
-      - "Add tests, check the coverage job, post the new numbers on this issue."
-  - id: S-46
-    epic: E-13
-    title: "Raise test coverage of the auth and staff code"
-    points: 2
-    sprint: S3
-    set: m1
-    priority: medium
-    refs: ["Test Plan 5.4", "FR-1", "FR-2", "FR-13", "FR-14"]
-    story: "As the team, we want login, sessions, lockout, staff management and dashboards covered by unit tests so that the coverage reports show their edge cases are tested."
-    acceptance:
-      - "Using the S-40 baseline, unit tests are added for uncovered lines and branches in the login, session and lockout code in `src/auth/` and in `src/staff/` (including the S-25 dashboard)."
-      - "These modules reach at least 80% line and 60% branch coverage, or each remaining gap is listed with a reason for S-42."
-      - "Edge cases are tested: expired and revoked tokens, the third failed login, unlocking a user who is not locked, and a deactivated officer signing in."
-      - "Production code changes only to fix bugs the new tests find, each linked to a bug issue."
-    tasks:
-      - "Add tests, check the coverage job, post the new numbers on this issue."
-  - id: S-47
-    epic: E-13
-    title: "Raise test coverage of the customer and account code"
-    points: 2
-    sprint: S3
-    set: m2
-    priority: medium
-    refs: ["Test Plan 5.4", "FR-3", "FR-4", "FR-5", "FR-9", "FR-10"]
-    story: "As the team, we want customer records, accounts, balances and history covered by unit tests so that the coverage reports show their rules are tested."
-    acceptance:
-      - "Using the S-40 baseline, unit tests are added for uncovered lines and branches in `src/customer/`, `src/account/` and the balance and history code."
-      - "These modules reach at least 80% line and 60% branch coverage, or each remaining gap is listed with a reason for S-42."
-      - "Edge cases are tested: duplicate identification references, opening an account for an inactive customer, invalid status changes (for example unfreezing an active account or closing an account with a balance), and empty or reversed history date ranges."
-      - "Production code changes only to fix bugs the new tests find, each linked to a bug issue."
-    tasks:
-      - "Add tests, check the coverage job, post the new numbers on this issue."
-  - id: S-48
-    epic: E-13
-    title: "Raise test coverage of the transaction and reporting code"
-    points: 2
+    title: "Write the Unit Test, Code Coverage and Branch Coverage reports"
+    points: 5
     sprint: S3
     set: m3
-    priority: medium
-    refs: ["Test Plan 5.4", "FR-6", "FR-7", "FR-8", "FR-11", "FR-12", "NFR-3"]
-    story: "As the team, we want deposits, withdrawals, transfers, interest and statements covered by unit tests so that the coverage reports show the money rules are tested."
+    priority: high
+    refs: ["Deliverables Part-3 2.b i, iii-iv", "Test Plan 5.4", "Test Plan 8"]
+    story: "As the team, we want unit test and coverage reports for the final build so that we can show which tests were run and how much of the core they exercise."
     acceptance:
-      - "Using the S-40 baseline, unit tests are added for uncovered lines and branches in `src/transaction/` and the interest and statement code in `src/reporting/`."
-      - "These modules reach at least 80% line and 60% branch coverage, or each remaining gap is listed with a reason for S-42."
-      - "Edge cases are tested: amounts with more than two decimals, a withdrawal exactly at the minimum balance and the daily limit, a transfer to a frozen or closed account rolling back, and interest re-run for a period already credited."
-      - "Production code changes only to fix bugs the new tests find, each linked to a bug issue."
+      - "`docs/Unit_Test_Report.md` names the commit tested, the platforms (Linux and Windows CI runs) and the commands used, lists every CTest target with its checks, result and duration grouped by module, and maps each test file to the FRs/NFRs and Test Plan cases it covers."
+      - "`docs/Code_Coverage_Report.md` gives line and function coverage overall and per module, from the S-40 coverage job on the final Sprint 3 commit."
+      - "`docs/Branch_Coverage_Report.md` gives branch coverage overall and per module."
+      - "Modules below 80% line or 60% branch coverage either get new unit tests (error paths such as validation failures, permission refused and rollback) or have each remaining gap explained in the report."
+      - "The reports name the tool and its version and the exclusions used; the JUnit XML from `ctest --output-junit` and the HTML coverage report are saved under `docs/reports/`."
+      - "Any failing or skipped test is explained and linked to a bug issue."
     tasks:
-      - "Add tests, check the coverage job, post the new numbers on this issue."
-  - id: S-49
+      - "Depends on S-40; run on the final Sprint 3 build, after S-25 merges."
+  - id: S-43
+    epic: E-13
+    title: "Execute system validation and write the System Validation Report"
+    points: 5
+    sprint: S3
+    set: m2
+    priority: high
+    refs: ["Deliverables Part-3 2.a-b ii", "Test Plan 5.4", "Test Plan 14", "SRS 6"]
+    story: "As the team, we want every Test Plan test case run end to end against the final build so that we can show the system meets the SRS."
+    acceptance:
+      - "Every test case in the updated Test Plan (S-41) is executed through the web UI or API on a freshly seeded database, as the role the case names."
+      - "`docs/System_Validation_Report.md` records for each case the steps run, expected and actual result, pass/fail, evidence (screenshot or response) and the FR/NFR it validates."
+      - "A requirement validation table marks every FR and NFR as validated or not, with its test case IDs."
+      - "Defects are raised as bug issues, linked from the report and retested after the fix."
+      - "The Test Plan exit criteria are checked: all planned cases executed and no critical defect open."
+      - "The per-story manual test notes (`docs/S-13`, `S-14`, `S-15`, `S-16`, `S-21-MANUAL-TEST.md`) are folded in or referenced."
+    tasks:
+      - "Use the test case IDs from S-41 and run after S-25 is merged; keep evidence under `docs/reports/system-validation/`."
+  - id: S-44
     epic: E-12
     title: "Finalize the SRS as v1.2 in IEEE format"
     points: 2
@@ -955,30 +876,13 @@ stories:
     acceptance:
       - "The S-34 changes in `docs/SRS_v1.1_UPDATE.md` (use case diagram, security objectives, references, ER diagram) are merged into the IEEE-format SRS itself and exported to `docs/SRS_Bank_Management_System.pdf`."
       - "Accepted deviations that change a requirement are reflected in its text and cross-referenced to `docs/DEVIATIONS.md`."
-      - "Built features without a requirement of their own (account-type management S-14, admin unlock S-09, audit trail viewer S-27) get FR IDs, so the SRS has at least 15 FRs as the course SRS template asks; the new IDs are passed to S-44 and S-50."
+      - "Built features without a requirement of their own (account-type management S-14, admin unlock S-09, audit trail viewer S-27) get FR IDs, so the SRS has at least 15 FRs as the course SRS template asks; the new IDs are passed to S-41 and S-46."
       - "Section 5.3 has at least two security objectives and a table of security requirements with IDs and acceptance criteria."
       - "The traceability matrix shows each requirement's design component, test cases and final status from the System Validation Report (S-43)."
       - "Revision history updated to v1.2; `SRS_v1.1_UPDATE.md` removed or marked superseded."
     tasks:
       - "Edit the source document, export PDF."
-  - id: S-50
-    epic: E-12
-    title: "Finalize the SADS and review the deviations log for Sprint 3"
-    points: 2
-    sprint: S3
-    set: lead
-    priority: medium
-    refs: ["SADS", "Deliverables Part-1 3", "Deliverables Part-2, Sprint-1 i"]
-    story: "As the team, we want the design document and the deviations log to match the final build so that we can justify the architecture at the viva."
-    acceptance:
-      - "The SADS covers the Sprint 2 and 3 changes: the dashboard endpoint and component (S-25), the final API table and error codes."
-      - "The security architecture includes a STRIDE threat summary, and an 'Open issues and next steps' section is added, as in the course SAD template."
-      - "The traceability matrix uses the final SRS v1.2 requirement IDs (S-49)."
-      - "Revision history updated to v1.2; the .docx and a PDF export are in `docs/`."
-      - "`docs/DEVIATIONS.md` is reviewed against every pull request merged in Sprint 3 and a review-log row is added."
-    tasks:
-      - "Edit the SADS, regenerate diagrams if needed, review merged PRs."
-  - id: S-51
+  - id: S-45
     epic: E-13
     title: "Update the Test Summary Report with the Sprint 3 results"
     points: 2
@@ -989,25 +893,25 @@ stories:
     story: "As the team, we want one summary of all testing on the final build so that we can show whether the Test Plan exit criteria are met."
     acceptance:
       - "`docs/Test_Summary_Report.md` names the final commit tested and links the Unit Test, System Validation, Code Coverage and Branch Coverage reports."
-      - "It uses the updated Test Plan test case IDs (S-44); the S-29 report used the v1.0 TC-01 to TC-17 numbering."
+      - "It uses the updated Test Plan test case IDs (S-41); the S-29 report used the v1.0 TC-01 to TC-17 numbering."
       - "It reports the metrics from the Test Plan: percentage of cases executed, passed and failed, defects by severity and status, and requirement coverage."
       - "NFR-1 and NFR-2 are re-measured on the final build, including the dashboard (S-25)."
       - "It states whether the exit criteria are met and lists the open risks."
     tasks:
-      - "Do last, after S-41, S-42 and S-43."
-  - id: S-52
+      - "Do last, after S-42 and S-43."
+  - id: S-46
     epic: E-12
-    title: "Freeze the final release and prepare the demo and viva"
-    points: 1
+    title: "Finalize the SADS, review the deviations log and freeze the release"
+    points: 3
     sprint: S3
     set: lead
     priority: high
-    refs: ["Deliverables Part-3 3", "Evaluation checklist Part-4", "Mini-project FAQ"]
-    story: "As the team, we want a tagged final release and a demo plan so that every member can show their work at the final evaluation."
+    refs: ["SADS", "Deliverables Part-2, Sprint-1 i", "Deliverables Part-3 3", "Evaluation checklist Part-4"]
+    story: "As the team, we want the design document and deviations log to match the final build, and a tagged release with a demo plan, so that every member can show and justify their work at the final evaluation."
     acceptance:
-      - "Once every Sprint 3 story is merged, `main` is tagged `v1.0.0` and a GitHub release links the documents, test reports and demo videos."
-      - "The README links the SRS, SADS, Test Plan, all four test reports, the deviations log and both demo videos."
+      - "The SADS covers the Sprint 2 and 3 changes (the dashboard endpoint and component, the final API table and error codes), adds a STRIDE threat summary and an 'Open issues and next steps' section as in the course SAD template, and uses the SRS v1.2 requirement IDs (S-44); revision history v1.2, .docx and PDF in `docs/`."
+      - "`docs/DEVIATIONS.md` is reviewed against every pull request merged in Sprint 3 and a review-log row is added."
+      - "Once every Sprint 3 story is merged, `main` is tagged `v1.0.0` and a GitHub release links the documents, test reports and demo videos; the README links them too."
       - "`docs/FINAL_DEMO.md` gives a demo script covering the core use cases for all three roles, the deviations to explain, and a table of each member's stories, story points and PRs for the viva."
-      - "Every Sprint 3 issue is closed or explicitly carried over."
     tasks:
-      - "Tag, release, README pass, demo script."
+      - "Edit the SADS, review merged PRs, tag and release, write the demo script."
