@@ -29,6 +29,47 @@ std::string column_string(const Statement& row, int index) {
     return value == nullptr ? std::string{} : reinterpret_cast<const char*>(value);
 }
 
+std::string money_string(std::int64_t paise) {
+    const std::int64_t rupees = paise / 100;
+    const std::int64_t remainder = paise % 100;
+    return std::to_string(rupees) + "." +
+           (remainder < 10 ? "0" : "") + std::to_string(remainder);
+}
+
+std::int64_t scalar_int(Database& database, const char* sql, std::int64_t user_id = 0) {
+    auto query = database.prepare(sql);
+    if (user_id != 0) query->bind(1, user_id);
+    if (!query->step()) throw std::runtime_error("Dashboard query returned no result.");
+    return query->column_int(0);
+}
+
+api::Json dashboard_transactions(Database& database, std::int64_t user_id,
+                                 std::int64_t& count, std::int64_t& total_paise) {
+    auto query = database.prepare(
+        "SELECT transactions.transaction_id, transactions.type, transactions.amount, "
+        "account_number, transactions.created_at "
+        "FROM transactions JOIN accounts USING (account_id) "
+        "WHERE operator_id = ? AND type <> 'transfer_credit' "
+        "AND date(transactions.created_at) = date('now') "
+        "ORDER BY transactions.created_at DESC, transactions.transaction_id DESC");
+    query->bind(1, user_id);
+    api::Json transactions = api::Json::array();
+    count = 0;
+    total_paise = 0;
+    while (query->step()) {
+        ++count;
+        total_paise += query->column_int(2);
+        transactions.push_back({
+            {"transactionId", query->column_int(0)},
+            {"type", column_string(*query, 1)},
+            {"amount", money_string(query->column_int(2))},
+            {"accountNumber", column_string(*query, 3)},
+            {"createdAt", column_string(*query, 4)},
+        });
+    }
+    return transactions;
+}
+
 auth::Principal require_administrator(const api::Request& request, Database& database) {
     return auth::rbac::require(request, database, auth::rbac::Operation::ManageStaff);
 }
@@ -107,6 +148,92 @@ std::optional<api::Json> find_officer(Database& database, std::int64_t user_id) 
 
 void register_routes(api::Router& router, Database& database,
                      bool allow_initial_credential_delivery) {
+    router.get("/dashboard", [&database](const api::Request& request) {
+        const auth::Principal principal = auth::authenticate(request, database);
+
+        if (principal.role == "administrator") {
+            auto transactions = database.prepare(
+                "SELECT COUNT(*), COALESCE(SUM(amount), 0) FROM transactions "
+                "WHERE type <> 'transfer_credit' AND date(created_at) = date('now')");
+            if (!transactions->step()) {
+                throw std::runtime_error("Administrator dashboard query returned no result.");
+            }
+            return api::Response::ok({
+                {"role", principal.role},
+                {"counts", {
+                    {"customers", scalar_int(database, "SELECT COUNT(*) FROM customers")},
+                    {"accounts", scalar_int(database, "SELECT COUNT(*) FROM accounts")},
+                    {"staff", scalar_int(database,
+                        "SELECT COUNT(*) FROM users "
+                        "WHERE role = 'bank_officer' AND status = 'active'")},
+                }},
+                {"transactionsToday", {
+                    {"count", transactions->column_int(0)},
+                    {"totalAmount", money_string(transactions->column_int(1))},
+                }},
+                {"quickLinks", {
+                    {{"label", "Manage customers"}, {"href", "#customer-management-card"}},
+                    {{"label", "Manage staff"}, {"href", "#staff-card"}},
+                    {{"label", "Review audit log"}, {"href", "#audit-card"}},
+                }},
+            });
+        }
+
+        if (principal.role == "bank_officer") {
+            std::int64_t count = 0;
+            std::int64_t total_paise = 0;
+            api::Json transactions =
+                dashboard_transactions(database, principal.user_id, count, total_paise);
+            return api::Response::ok({
+                {"role", principal.role},
+                {"transactionsToday", {
+                    {"count", count},
+                    {"totalAmount", money_string(total_paise)},
+                    {"items", std::move(transactions)},
+                }},
+                {"quickLinks", {
+                    {{"label", "Deposit"}, {"href", "#deposit-form"}},
+                    {{"label", "Withdraw"}, {"href", "#withdraw-form"}},
+                    {{"label", "Transfer"}, {"href", "#transfer-form"}},
+                    {{"label", "Customers"}, {"href", "#customer-management-card"}},
+                }},
+            });
+        }
+
+        if (principal.role == "customer") {
+            auto query = database.prepare(
+                "SELECT account_number, type_name, accounts.status, balance "
+                "FROM accounts JOIN customers USING (customer_id) "
+                "JOIN account_types USING (type_id) WHERE customers.user_id = ? "
+                "ORDER BY account_number");
+            query->bind(1, principal.user_id);
+            api::Json accounts = api::Json::array();
+            while (query->step()) {
+                const std::string account_number = column_string(*query, 0);
+                accounts.push_back({
+                    {"accountNumber", account_number},
+                    {"type", column_string(*query, 1)},
+                    {"status", column_string(*query, 2)},
+                    {"balance", money_string(query->column_int(3))},
+                    {"links", {
+                        {{"label", "History"}, {"href", "#history-card"}},
+                        {{"label", "Statement"}, {"href", "#statement-card"}},
+                    }},
+                });
+            }
+            return api::Response::ok({
+                {"role", principal.role},
+                {"accounts", std::move(accounts)},
+                {"quickLinks", {
+                    {{"label", "Transaction history"}, {"href", "#history-card"}},
+                    {{"label", "Statements"}, {"href", "#statement-card"}},
+                }},
+            });
+        }
+
+        throw forbidden();
+    });
+
     router.post("/staff", [&database, allow_initial_credential_delivery](
                               const api::Request& request) {
         const auth::Principal admin = require_administrator(request, database);

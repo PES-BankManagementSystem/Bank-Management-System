@@ -18,6 +18,7 @@
 #include "common/db.hpp"
 #include "staff/routes.hpp"
 #include "support/seeded_database.hpp"
+#include "transaction/transfer.hpp"
 
 namespace {
 
@@ -260,6 +261,73 @@ TEST_F(StaffTest, OnlyBankOfficersCanBeManaged) {
         EXPECT_EQ(response->status, 404) << path;
     }
     EXPECT_EQ(scalar("SELECT COUNT(*) FROM users WHERE status = 'inactive'"), 0);
+}
+
+TEST_F(StaffTest, DashboardReturnsRoleSpecificDataForToday) {
+    db().exec(
+        "INSERT INTO transactions "
+        "(account_id, operator_id, type, amount, resulting_balance, created_at) "
+        "VALUES (1, 2, 'deposit', 1, 5000001, datetime('now'))");
+    TestServer server(db(), true);
+
+    auto administrator = server.client().Get("/dashboard", bearer(server, "admin"));
+    ASSERT_TRUE(administrator);
+    ASSERT_EQ(administrator->status, 200) << administrator->body;
+    const json admin_body = json::parse(administrator->body);
+    EXPECT_EQ(admin_body["role"], "administrator");
+    EXPECT_EQ(admin_body["counts"]["customers"], 3);
+    EXPECT_EQ(admin_body["counts"]["accounts"], 5);
+    EXPECT_EQ(admin_body["counts"]["staff"], 2);
+    EXPECT_EQ(admin_body["transactionsToday"]["count"], 1);
+    EXPECT_EQ(admin_body["transactionsToday"]["totalAmount"], "0.01");
+
+    auto officer = server.client().Get("/dashboard", bearer(server, "officer1"));
+    ASSERT_TRUE(officer);
+    ASSERT_EQ(officer->status, 200) << officer->body;
+    const json officer_body = json::parse(officer->body);
+    EXPECT_EQ(officer_body["role"], "bank_officer");
+    EXPECT_EQ(officer_body["transactionsToday"]["count"], 1);
+    ASSERT_EQ(officer_body["transactionsToday"]["items"].size(), 1U);
+    EXPECT_EQ(officer_body["transactionsToday"]["items"][0]["accountNumber"], "ACC001");
+    EXPECT_EQ(officer_body["transactionsToday"]["items"][0]["amount"], "0.01");
+
+    auto customer = server.client().Get("/dashboard", bearer(server, "customer1"));
+    ASSERT_TRUE(customer);
+    ASSERT_EQ(customer->status, 200) << customer->body;
+    const json customer_body = json::parse(customer->body);
+    EXPECT_EQ(customer_body["role"], "customer");
+    ASSERT_EQ(customer_body["accounts"].size(), 2U);
+    EXPECT_EQ(customer_body["accounts"][0]["accountNumber"], "ACC001");
+    EXPECT_EQ(customer_body["accounts"][0]["balance"], "50000.00");
+    EXPECT_EQ(customer_body["accounts"][0]["links"][0]["href"], "#history-card");
+    EXPECT_EQ(customer_body["accounts"][0]["links"][1]["href"], "#statement-card");
+
+    auto anonymous = server.client().Get("/dashboard");
+    ASSERT_TRUE(anonymous);
+    EXPECT_EQ(anonymous->status, 401);
+}
+
+TEST_F(StaffTest, DashboardCountsTransfersOnceAndOnlyActiveStaff) {
+    bms::transaction::transfer(db(), "ACC001", "ACC004", "10.00", 2);
+    db().exec("UPDATE users SET status = 'inactive' WHERE user_id = 3");
+    TestServer server(db(), true);
+
+    auto administrator = server.client().Get("/dashboard", bearer(server, "admin"));
+    ASSERT_TRUE(administrator);
+    ASSERT_EQ(administrator->status, 200) << administrator->body;
+    const json admin_body = json::parse(administrator->body);
+    EXPECT_EQ(admin_body["counts"]["staff"], 1);
+    EXPECT_EQ(admin_body["transactionsToday"]["count"], 1);
+    EXPECT_EQ(admin_body["transactionsToday"]["totalAmount"], "10.00");
+
+    auto officer = server.client().Get("/dashboard", bearer(server, "officer1"));
+    ASSERT_TRUE(officer);
+    ASSERT_EQ(officer->status, 200) << officer->body;
+    const json officer_body = json::parse(officer->body);
+    EXPECT_EQ(officer_body["transactionsToday"]["count"], 1);
+    EXPECT_EQ(officer_body["transactionsToday"]["totalAmount"], "10.00");
+    ASSERT_EQ(officer_body["transactionsToday"]["items"].size(), 1U);
+    EXPECT_EQ(officer_body["transactionsToday"]["items"][0]["type"], "transfer_debit");
 }
 
 TEST_F(StaffTest, CreatingStaffIsDisabledOnNetworkListeners) {
