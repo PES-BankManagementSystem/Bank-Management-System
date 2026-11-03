@@ -49,7 +49,8 @@ api::Json dashboard_transactions(Database& database, std::int64_t user_id,
         "SELECT transactions.transaction_id, transactions.type, transactions.amount, "
         "account_number, transactions.created_at "
         "FROM transactions JOIN accounts USING (account_id) "
-        "WHERE operator_id = ? AND date(transactions.created_at) = date('now') "
+        "WHERE operator_id = ? AND type <> 'transfer_credit' "
+        "AND date(transactions.created_at) = date('now') "
         "ORDER BY transactions.created_at DESC, transactions.transaction_id DESC");
     query->bind(1, user_id);
     api::Json transactions = api::Json::array();
@@ -153,7 +154,7 @@ void register_routes(api::Router& router, Database& database,
         if (principal.role == "administrator") {
             auto transactions = database.prepare(
                 "SELECT COUNT(*), COALESCE(SUM(amount), 0) FROM transactions "
-                "WHERE date(created_at) = date('now')");
+                "WHERE type <> 'transfer_credit' AND date(created_at) = date('now')");
             if (!transactions->step()) {
                 throw std::runtime_error("Administrator dashboard query returned no result.");
             }
@@ -163,7 +164,8 @@ void register_routes(api::Router& router, Database& database,
                     {"customers", scalar_int(database, "SELECT COUNT(*) FROM customers")},
                     {"accounts", scalar_int(database, "SELECT COUNT(*) FROM accounts")},
                     {"staff", scalar_int(database,
-                        "SELECT COUNT(*) FROM users WHERE role = 'bank_officer'")},
+                        "SELECT COUNT(*) FROM users "
+                        "WHERE role = 'bank_officer' AND status = 'active'")},
                 }},
                 {"transactionsToday", {
                     {"count", transactions->column_int(0)},

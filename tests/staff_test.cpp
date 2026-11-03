@@ -18,6 +18,7 @@
 #include "common/db.hpp"
 #include "staff/routes.hpp"
 #include "support/seeded_database.hpp"
+#include "transaction/transfer.hpp"
 
 namespace {
 
@@ -304,6 +305,29 @@ TEST_F(StaffTest, DashboardReturnsRoleSpecificDataForToday) {
     auto anonymous = server.client().Get("/dashboard");
     ASSERT_TRUE(anonymous);
     EXPECT_EQ(anonymous->status, 401);
+}
+
+TEST_F(StaffTest, DashboardCountsTransfersOnceAndOnlyActiveStaff) {
+    bms::transaction::transfer(db(), "ACC001", "ACC004", "10.00", 2);
+    db().exec("UPDATE users SET status = 'inactive' WHERE user_id = 3");
+    TestServer server(db(), true);
+
+    auto administrator = server.client().Get("/dashboard", bearer(server, "admin"));
+    ASSERT_TRUE(administrator);
+    ASSERT_EQ(administrator->status, 200) << administrator->body;
+    const json admin_body = json::parse(administrator->body);
+    EXPECT_EQ(admin_body["counts"]["staff"], 1);
+    EXPECT_EQ(admin_body["transactionsToday"]["count"], 1);
+    EXPECT_EQ(admin_body["transactionsToday"]["totalAmount"], "10.00");
+
+    auto officer = server.client().Get("/dashboard", bearer(server, "officer1"));
+    ASSERT_TRUE(officer);
+    ASSERT_EQ(officer->status, 200) << officer->body;
+    const json officer_body = json::parse(officer->body);
+    EXPECT_EQ(officer_body["transactionsToday"]["count"], 1);
+    EXPECT_EQ(officer_body["transactionsToday"]["totalAmount"], "10.00");
+    ASSERT_EQ(officer_body["transactionsToday"]["items"].size(), 1U);
+    EXPECT_EQ(officer_body["transactionsToday"]["items"][0]["type"], "transfer_debit");
 }
 
 TEST_F(StaffTest, CreatingStaffIsDisabledOnNetworkListeners) {

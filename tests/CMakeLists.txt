@@ -145,7 +145,7 @@ endif()
 # S-24: Bank Officer management (create, list, update, deactivate).
 add_executable(staff_test staff_test.cpp support/seeded_database.hpp)
 target_link_libraries(staff_test PRIVATE
-    bms::api bms::auth bms::common bms::staff GTest::gtest_main bms_options)
+    bms::api bms::auth bms::common bms::staff bms::transaction GTest::gtest_main bms_options)
 target_compile_definitions(staff_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
 add_test(NAME staff_test COMMAND staff_test)
 
