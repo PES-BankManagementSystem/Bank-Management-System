@@ -33,7 +33,7 @@ sprints:
     title: "Sprint 3"
     start: 2026-11-02
     days: 5
-    description: "2-6 Nov. Optional Sprint 3 (Deliverables Part-3): Sprint 2 spill-overs (S-25, S-38), test cases updated for sprint changes, all Test Plan testing, and the Unit Test, System Validation, Code Coverage and Branch Coverage reports in docs/. Final documentation and release freeze."
+    description: "2-6 Nov. Final sprint (Deliverables Part-3): Sprint 2 spill-overs (S-25, S-38), test cases updated for sprint changes, all Test Plan testing, and the Unit Test, System Validation, Code Coverage and Branch Coverage reports in docs/. Ends with the final documentation and the frozen v1.0.0 release; nothing carries over."
 
 # Task sets offered to team members. Owners are mapped in assignees.yml.
 sets:
@@ -789,7 +789,7 @@ stories:
       - "Create the file; collect deviations from PRs."
 
   # ---------------------------------------------------------------- Sprint 3
-  # Deliverables Part-3 (2-6 Nov): test case updates, testing and test reports,
+  # Final sprint. Deliverables Part-3 (2-6 Nov): test case updates, testing and test reports,
   # run alongside the Sprint 2 spill-overs (S-25, S-38). Each member's stories
   # follow the modules and documents they owned in earlier sprints.
   - id: S-40
@@ -911,7 +911,7 @@ stories:
     acceptance:
       - "The SADS covers the Sprint 2 and 3 changes (the dashboard endpoint and component, the final API table and error codes), adds a STRIDE threat summary and an 'Open issues and next steps' section as in the course SAD template, and uses the SRS v1.2 requirement IDs (S-44); revision history v1.2, .docx and PDF in `docs/`."
       - "`docs/DEVIATIONS.md` is reviewed against every pull request merged in Sprint 3 and a review-log row is added."
-      - "Once every Sprint 3 story is merged, `main` is tagged `v1.0.0` and a GitHub release links the documents, test reports and demo videos; the README links them too."
+      - "This is the final sprint: once every Sprint 3 story is merged, `main` is tagged `v1.0.0` and a GitHub release links the documents, test reports and demo videos; the README links them too."
       - "`docs/FINAL_DEMO.md` gives a demo script covering the core use cases for all three roles, the deviations to explain, and a table of each member's stories, story points and PRs for the viva."
     tasks:
       - "Edit the SADS, review merged PRs, tag and release, write the demo script."
