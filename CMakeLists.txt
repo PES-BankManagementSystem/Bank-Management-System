@@ -15,6 +15,7 @@ endif()
 
 option(BUILD_TESTING "Build the unit tests" ON)
 option(BMS_WARNINGS_AS_ERRORS "Treat compiler warnings as errors" OFF)
+option(BMS_COVERAGE "Instrument first-party code for gcov coverage (GCC or Clang)" OFF)
 
 include(cmake/Dependencies.cmake)
 include(cmake/BmsModule.cmake)
@@ -33,6 +34,16 @@ else()
     if(BMS_WARNINGS_AS_ERRORS)
         target_compile_options(bms_options INTERFACE -Werror)
     endif()
+endif()
+
+# Set on bms_options only, so third-party code is not instrumented. Atomic
+# counters keep the counts correct in tests that run the threaded HTTP server.
+if(BMS_COVERAGE)
+    if(NOT CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        message(FATAL_ERROR "BMS_COVERAGE needs GCC or Clang, not ${CMAKE_CXX_COMPILER_ID}")
+    endif()
+    target_compile_options(bms_options INTERFACE --coverage -fprofile-update=atomic -O0 -g)
+    target_link_options(bms_options INTERFACE --coverage)
 endif()
 
 add_subdirectory(src)
