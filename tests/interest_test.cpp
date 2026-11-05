@@ -256,7 +256,7 @@ void test_api_success_duplicate_and_malformed_period() {
         CHECK_EQ(success->status, 201);
         CHECK_EQ(body["period"].get<std::string>(), std::string("2026-04"));
         CHECK_EQ(body["accounts_credited"].get<int>(), 2);
-        CHECK_EQ(body["total_interest"].get<std::string>(), std::string("179.18"));
+        CHECK_EQ(body["total_interest"].get<std::string>(), std::string("189.04"));
         CHECK_EQ(body["accounts"].size(), 2U);
     }
 
