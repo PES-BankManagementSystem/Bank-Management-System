@@ -97,8 +97,8 @@ void test_run_credits_each_eligible_account_and_records_ledger_and_audit() {
     const auto run = bms::reporting::run_interest(database, "2026-04", 1);
 
     CHECK_EQ(run.accounts_credited, 2);
-    CHECK_EQ(run.total_interest_paise, 17918);
-    CHECK_EQ(balance(database, "ACC001"), 5015452);
+    CHECK_EQ(run.total_interest_paise, 18904);
+    CHECK_EQ(balance(database, "ACC001"), 5016438);
     CHECK_EQ(balance(database, "ACC005"), 752466);
     CHECK_EQ(balance(database, "ACC002"), 2500000);  // Frozen.
     CHECK_EQ(balance(database, "ACC003"), 0);        // Closed.
@@ -110,7 +110,7 @@ void test_run_credits_each_eligible_account_and_records_ledger_and_audit() {
     CHECK(run_row->step());
     CHECK_EQ(run_row->column_int(0), 1);
     CHECK_EQ(run_row->column_int(1), 2);
-    CHECK_EQ(run_row->column_int(2), 17918);
+    CHECK_EQ(run_row->column_int(2), 18904);
 
     auto credits = database.prepare(
         "SELECT account_id, operator_id, type, amount, resulting_balance, interest_run_id, created_at "
@@ -120,8 +120,8 @@ void test_run_credits_each_eligible_account_and_records_ledger_and_audit() {
     CHECK_EQ(credits->column_int(0), 1);
     CHECK_EQ(credits->column_int(1), 1);
     CHECK_EQ(std::string(reinterpret_cast<const char*>(credits->column_text(2))), std::string("interest"));
-    CHECK_EQ(credits->column_int(3), 15452);
-    CHECK_EQ(credits->column_int(4), 5015452);
+    CHECK_EQ(credits->column_int(3), 16438);
+    CHECK_EQ(credits->column_int(4), 5016438);
     CHECK_EQ(credits->column_int(5), run.run_id);
     CHECK(credits->column_text(6) != nullptr);
     CHECK(credits->step());

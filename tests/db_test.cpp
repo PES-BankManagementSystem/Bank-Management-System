@@ -772,6 +772,14 @@ void test_actual_seed_file()
     stmt->step();
     int audit_log_count = stmt->column_int(0);
     CHECK_EQ(audit_log_count, 8); // 8 audit log entries
+
+    // Each account's balance equals the resulting balance of its latest transaction
+    stmt = db.prepare(
+        "SELECT COUNT(*) FROM accounts a WHERE a.balance <> COALESCE(("
+        "SELECT t.resulting_balance FROM transactions t WHERE t.account_id = a.account_id "
+        "ORDER BY t.created_at DESC, t.transaction_id DESC LIMIT 1), a.balance)");
+    stmt->step();
+    CHECK_EQ(stmt->column_int(0), 0);
 }
 
 void test_account_type_rules_migration()
