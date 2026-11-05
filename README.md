@@ -221,6 +221,7 @@ Each folder under `src/` builds a static library `bms_<name>` (alias `bms::<name
 - [Test Summary Report](docs/Test_Summary_Report.md)
 - [Architecture decision records](docs/decisions/)
 - [Deviations log](docs/DEVIATIONS.md)
+- [Final demo script](docs/FINAL_DEMO.md)
 - [Contributing guide](CONTRIBUTING.md)
 
 ## Demos
