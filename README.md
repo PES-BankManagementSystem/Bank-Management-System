@@ -88,6 +88,22 @@ Useful options:
 - `-DCMAKE_BUILD_TYPE=Release` (single-config generators such as Ninja or Make) or `--config Release` (Visual Studio)
 - `-DBUILD_TESTING=OFF` skips the tests
 - `-DBMS_WARNINGS_AS_ERRORS=ON` fails the build on any compiler warning
+- `-DBMS_COVERAGE=ON` instruments first-party code for coverage (GCC or Clang only; off by default)
+
+### Coverage
+
+CI measures line, function and branch coverage of `src/` on every build. Third-party code and `tests/` are left out. The **Code and branch coverage** job shows the percentages per module in its job summary and uploads the HTML report as the `coverage-report` artifact.
+
+To produce the same report locally on Linux, install [gcovr](https://gcovr.com) and run the script CI runs:
+
+```sh
+pipx install gcovr==8.8
+./scripts/coverage.sh
+```
+
+The report is `build-coverage/coverage/index.html`, with `summary.md` and `summary.json` next to it. With Clang, set `GCOV="llvm-cov gcov"`.
+
+The script builds with 2 jobs because the C++ files use a lot of memory, and a bare `--parallel` with Make starts an unlimited number of jobs. Set `COVERAGE_JOBS` to change the limit.
 
 ## Running
 
@@ -175,6 +191,7 @@ tests/           unit tests (ctest)
 docs/            SRS, SADS, Test Plan, decision records, deviations log
 demos/           sprint demo videos
 cmake/           dependency pins and build helpers
+scripts/         CI checks, coverage, performance and browser checks
 ```
 
 Each folder under `src/` builds a static library `bms_<name>` (alias `bms::<name>`). To add a source file, list it in that folder's `CMakeLists.txt`. Include headers relative to `src/`, for example `#include "common/version.hpp"`.
