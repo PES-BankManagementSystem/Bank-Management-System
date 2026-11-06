@@ -5,8 +5,16 @@
 | **Backlog item** | S-43 (#119) |
 | **Execution date** | 2026-11-06 |
 | **Execution baseline** | Latest merged `main`, `b66f97c` |
-| **Proposed test target** | Test Plan v1.2 in [S-41 PR #124](https://github.com/PES-BankManagementSystem/Bank-Management-System/pull/124); the PR is open and conflicting, so the plan is not yet merged |
+| **Proposed test target** | Test Plan v1.2 in [S-41 PR #124](https://github.com/PES-BankManagementSystem/Bank-Management-System/pull/124); the PR is open and mergeable, so the plan is not yet merged |
 | **Result** | **Incomplete — exit criteria are not met** |
+
+## Prerequisite review - 2026-11-06
+
+Fresh `git fetch origin` confirmed main at `b66f97c0179f2e91ad8c36f020d403c426ca880d`. The validation branch remains at `e74a8fcf08ecc05747ae53dc5c8675645925901e`. Existing uncommitted root `CMakeLists.txt` and deleted `db/.gitkeep` were left untouched. S-41 [PR #124](https://github.com/PES-BankManagementSystem/Bank-Management-System/pull/124) is **OPEN, MERGEABLE**, at `aff2a7bd71d175b740e1e78415cb3f083d6c61f2`. Its merge is the required gate for final-plan execution; no merge/rebase or new application test execution was performed in this review, and there is **no new validated build SHA**. S-25 is MERGED via PR #113, merged 2026-11-03 at commit `42e174ce28a270e782873a1c7177df9194e0e730`; issue #57 is closed. Open PRs are #124 (Test Plan), #129 (SADS/final demo documentation), and #130 (this validation report); no open application-code PR was listed. The open-issue listing and bug-label query returned no open bug issues.
+
+Chrome is installed at `C:/Program Files/Google/Chrome/Application/chrome.exe`. Firefox was not found in standard system/per-user installation paths or Windows App Paths registration. Neither browser was exercised in this review; TC-22 remains **PARTIAL**, with Firefox unavailable in the checked locations. See [prerequisite evidence](./reports/system-validation/prerequisite-review/2026-11-06.json).
+
+Waiting for #124: integrate main without force-pushing; record the resulting build SHA; build and run TC-03 with the merged 204 expectation, old-token 401 and browser sign-in redirect; independently fresh-seed TC-01, TC-02, TC-02B, TC-03, TC-04, TC-04B, TC-05, TC-06, TC-07, TC-08, TC-09, TC-09B, TC-10, TC-10B, TC-11, TC-12, TC-13, TC-14, TC-16, TC-17, TC-18, TC-19 and TC-20; and run TC-22 core/responsive flows in available browsers. TC-21 remains NOT RUN: requires three genuine first-time participants; none arranged in the validation window. Historical results below are retained as observations, not final fresh-seed acceptance.
 
 ## 1. Scope and method
 
@@ -20,10 +28,13 @@ The browser UI was used for TC-08 and TC-18. TC-21 was **NOT RUN** because it re
 
 | Result | Cases |
 |---|---|
-| Pass | 23 |
+| Historical pass (fresh-seed acceptance outstanding except TC-15) | 23 |
 | Partial | 2 (TC-03, TC-22) |
 | Not run | 1 (TC-21) |
-| Total | 26 |
+| Failed | 0 |
+| Historically executed (includes partial) | 25 |
+| Total planned | 26 |
+| Confirmed independent fresh-seed passes | 1 (TC-15) |
 
 The all-state issue search found no existing bug issue for the TC-03 logout-status mismatch (the logout search found only the closed S-08 issue [#38](https://github.com/PES-BankManagementSystem/Bank-Management-System/issues/38); searching `204` found none). No new bug issue is raised: the observed 204 is the current endpoint behavior, and the 200 expectation needs reconciliation in S-41 [PR #124](https://github.com/PES-BankManagementSystem/Bank-Management-System/pull/124), rather than presuming which side is defective. The open-issue review found no open bug issue or critical defect. TC-03 remains partial. Execution limitations and deviations are recorded in [DEVIATIONS.md](./DEVIATIONS.md).
 
@@ -34,7 +45,9 @@ The all-state issue search found no existing bug issue for the TC-03 logout-stat
 - GitHub Actions run [42039320517](https://github.com/PES-BankManagementSystem/Bank-Management-System/actions/runs/42039320517): Ubuntu and Windows build-and-test jobs passed.
 - `git diff --check` passed; all 16 evidence JSON files parsed, the 37 local report links resolved, and the added report/evidence files had no trailing whitespace.
 
-## 4. Test-case execution
+## 4. Historical test-case execution
+
+The PASS labels below describe historical observations only; all cases other than TC-15 still lack the required independent fresh-seed acceptance. No case was newly executed in this prerequisite review.
 
 The initial API evidence is in [api-results.json](./reports/system-validation/evidence/api-results.json); credentials, bearer tokens, and temporary passwords are redacted. Focused v1.2 evidence is linked per case.
 
@@ -69,35 +82,35 @@ The initial API evidence is in [api-results.json](./reports/system-validation/ev
 
 ## 5. Requirement validation
 
-“Validated” means the requirement's mapped behavior passed in the cited evidence. “Partial” and “Not validated” identify incomplete evidence; they are not inferred passes.
+A requirement is validated only when all linked cases pass the final fresh-seed criterion. Historical observations remain in the evidence/gap column; they do not establish final acceptance. NFR-8 retains its existing build/CTest validation, which is independent of database state.
 
 | Requirement | Test case IDs | Status | Evidence or gap |
 |---|---|---|---|
-| FR-1 | TC-01, TC-15 | Validated | Authentication and TLS login passed. |
-| FR-2 | TC-02, TC-02B, TC-03 | Partial | Lockout/unlock and session invalidation passed; TC-03 returned 204 instead of the plan's 200. |
-| FR-3 | TC-04, TC-04B | Validated | Registration validation and Administrator-only deactivation passed. |
-| FR-4 | TC-05 | Validated | Below-minimum rejection, exact minimum, and zero-minimum opening passed. |
-| FR-5 | TC-07 | Validated | Freeze/unfreeze/close, blocked transactions, and retained history passed. |
-| FR-6 | TC-08 | Validated | UI confirmation and persisted deposit passed; seed balance differed from the plan precondition. |
-| FR-7 | TC-09 | Validated | Daily-limit and UTC-boundary behavior passed; TC-06 additionally covered minimum-balance rules. |
-| FR-8 | TC-10 | Validated | Atomic transfer passed; TC-10B additionally covered invalid-transfer rejection. |
-| FR-9 | TC-11 | Validated | Account balance ownership checks passed. |
-| FR-10 | TC-11, TC-17 | Validated | Ownership, date filtering/order, and pagination passed. |
-| FR-11 | TC-09B | Validated | Interest credited once; duplicate run rejected. |
-| FR-12 | TC-18 | Validated | Statement and generated CSV content passed; native browser save event was not captured. |
-| FR-13 | TC-02B, TC-12, TC-13 | Validated | Administrative unlock and staff/customer lifecycle behavior passed. |
-| FR-14 | TC-14 | Validated | Role-specific dashboards returned the expected role data. |
-| NFR-1 | TC-20 | Validated | 30 measured transactions per operation; maximum was 45.378 ms against 2 seconds. |
-| NFR-2 | TC-14, TC-19 | Validated | Role dashboards and account-list/history reads were below 3 seconds. |
-| NFR-3 | TC-10; CTest | Validated | Atomic transfer behavior and 31/31 CTest targets passed. |
-| NFR-4 | TC-01; CTest | Validated | Authentication evidence and the automated test suite passed. |
-| NFR-5 | TC-16 | Validated | Financial audit entries were present; mutation attempts returned 405. |
+| FR-1 | TC-01, TC-15 | Not validated | Authentication and TLS login passed. |
+| FR-2 | TC-02, TC-02B, TC-03 | Not validated | Lockout/unlock and session invalidation passed; TC-03 returned 204 instead of the plan's 200. |
+| FR-3 | TC-04, TC-04B | Not validated | Registration validation and Administrator-only deactivation passed. |
+| FR-4 | TC-05 | Not validated | Below-minimum rejection, exact minimum, and zero-minimum opening passed. |
+| FR-5 | TC-07 | Not validated | Freeze/unfreeze/close, blocked transactions, and retained history passed. |
+| FR-6 | TC-08 | Not validated | UI confirmation and persisted deposit passed; seed balance differed from the plan precondition. |
+| FR-7 | TC-09 | Not validated | Daily-limit and UTC-boundary behavior passed; TC-06 additionally covered minimum-balance rules. |
+| FR-8 | TC-10 | Not validated | Atomic transfer passed; TC-10B additionally covered invalid-transfer rejection. |
+| FR-9 | TC-11 | Not validated | Account balance ownership checks passed. |
+| FR-10 | TC-11, TC-17 | Not validated | Ownership, date filtering/order, and pagination passed. |
+| FR-11 | TC-09B | Not validated | Interest credited once; duplicate run rejected. |
+| FR-12 | TC-18 | Not validated | Statement and generated CSV content passed; native browser save event was not captured. |
+| FR-13 | TC-02B, TC-12, TC-13 | Not validated | Administrative unlock and staff/customer lifecycle behavior passed. |
+| FR-14 | TC-14 | Not validated | Role-specific dashboards returned the expected role data. |
+| NFR-1 | TC-20 | Not validated | 30 measured transactions per operation; maximum was 45.378 ms against 2 seconds. |
+| NFR-2 | TC-14, TC-19 | Not validated | Role dashboards and account-list/history reads were below 3 seconds. |
+| NFR-3 | TC-10; CTest | Not validated | Atomic transfer behavior and 31/31 CTest targets passed. |
+| NFR-4 | TC-01; CTest | Not validated | Authentication evidence and the automated test suite passed. |
+| NFR-5 | TC-16 | Not validated | Financial audit entries were present; mutation attempts returned 405. |
 | NFR-6 | TC-21 | Not validated | Three-person first-time participant study was not run. |
-| NFR-7 | TC-02, TC-09, TC-10B, TC-11 | Validated | Structured rejection paths and unchanged-state checks passed. |
+| NFR-7 | TC-02, TC-09, TC-10B, TC-11 | Not validated | Structured rejection paths and unchanged-state checks passed. |
 | NFR-8 | CMake build; CTest | Validated | Latest-main build succeeded; 31/31 CTest targets passed. |
-| NFR-9 | TC-22 | Partial | Ubuntu/Windows CI passed; fresh Chrome and Firefox UI checks, responsive checks in both, and cross-browser rendering comparison are missing. |
-| SEC-1 | TC-03, TC-11, TC-13 | Validated | Logout/deactivation invalidation and ownership checks passed. |
-| SEC-2 | TC-01, TC-15 | Validated | Credential handling and TLS 1.3 checks passed. |
+| NFR-9 | TC-22 | Not validated | Ubuntu/Windows CI passed; fresh Chrome and Firefox UI checks, responsive checks in both, and cross-browser rendering comparison are missing. |
+| SEC-1 | TC-03, TC-11, TC-13 | Not validated | Logout/deactivation invalidation and ownership checks passed. |
+| SEC-2 | TC-01, TC-15 | Not validated | Credential handling and TLS 1.3 checks passed. |
 
 ## 6. Story manual-test notes
 
@@ -121,4 +134,4 @@ The manual notes are referenced here; related automated/API checks do not substi
 - **Overall Test Plan exit decision:** **Not met.**
 - **S-43 definition of done:** A reviewed/merged PR that closes #119, green CI for that PR, and repo-owner approval remain outstanding.
 
-**Overall exit-criteria verdict: NOT MET.** The proposed S-41 v1.2 plan must be merged before it can be treated as the final approved baseline. TC-21 remains **NOT RUN** for the exact reason above. Remaining work is to run the listed cases on individually fresh-seeded databases; verify TC-03's logout UI redirect and reconcile the expected HTTP 200 with the observed HTTP 204 in S-41 [PR #124](https://github.com/PES-BankManagementSystem/Bank-Management-System/pull/124); and complete the Chrome/Firefox responsive and visual comparison for TC-22. No session time is proposed or booked.
+**Overall exit-criteria verdict: NOT MET.** The proposed S-41 v1.2 plan must be merged before it can be treated as the final approved baseline. TC-21 remains **NOT RUN** for the exact reason above. Remaining work is to run the listed cases on individually fresh-seeded databases; verify TC-03 against the merged expectation (the open S-41 revision specifies HTTP 204), including its logout UI redirect, in S-41 [PR #124](https://github.com/PES-BankManagementSystem/Bank-Management-System/pull/124); and complete the Chrome/Firefox responsive and visual comparison for TC-22. No session time is proposed or booked.
