@@ -1,3 +1,5 @@
+> **SUPERSEDED by SRS v1.2 (6 November 2026).** See the integrated [editable SRS](./SRS_Bank_Management_System.md) and [exported PDF](./SRS_Bank_Management_System.pdf). Retained as historical evidence; its all-user-session logout wording is corrected in v1.2. See DEVIATIONS.md row 29.
+
 # Software Requirements Specification (SRS) — v1.1 Revision & Gap Fixes
 
 - **Project:** Bank Management System (BMS)

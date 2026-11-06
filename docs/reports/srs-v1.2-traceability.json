@@ -1,0 +1,269 @@
+{
+  "revision_date": "2026-11-06",
+  "implementation_commit": "b66f97c0179f2e91ad8c36f020d403c426ca880d",
+  "validation_commit": "df491ecaa521014028477fc550f270d27ffaba27",
+  "validation_pr": 130,
+  "validation_state": "OPEN / unmerged",
+  "test_plan_commit": "aff2a7bd71d175b740e1e78415cb3f083d6c61f2",
+  "test_plan_pr": 124,
+  "test_plan_state": "OPEN / unmerged",
+  "original_srs_pdf_sha256": "5a1ee88f3839aad9a76d57f992566e8dfa60a89ae03d715e2bf58e98128bc39b",
+  "rows": [
+    {
+      "id": "FR-1",
+      "design": "Auth/API; POST /auth/login; auth/routes.cpp, rbac.cpp",
+      "test_cases": "TC-01, TC-15",
+      "status": "Not validated",
+      "note": "S-43 section 5: Authentication and TLS login passed.",
+      "source": "S-43 section 5"
+    },
+    {
+      "id": "FR-2",
+      "design": "Auth/Session; POST /auth/logout and login; auth/routes.cpp",
+      "test_cases": "TC-02, TC-02B, TC-03",
+      "status": "Not validated",
+      "note": "S-43 section 5: Lockout/unlock and session invalidation passed; TC-03 returned 204 instead of the plan's 200.",
+      "source": "S-43 section 5"
+    },
+    {
+      "id": "FR-3",
+      "design": "Customer Record Mgmt; /customers and /customers/me; records.cpp",
+      "test_cases": "TC-04, TC-04B",
+      "status": "Not validated",
+      "note": "S-43 section 5: Registration validation and Administrator-only deactivation passed.",
+      "source": "S-43 section 5"
+    },
+    {
+      "id": "FR-4",
+      "design": "Account Mgmt; POST /accounts; account_opening.cpp",
+      "test_cases": "TC-05",
+      "status": "Not validated",
+      "note": "S-43 section 5: Below-minimum rejection, exact minimum, and zero-minimum opening passed.",
+      "source": "S-43 section 5"
+    },
+    {
+      "id": "FR-5",
+      "design": "Account Mgmt; PATCH /accounts/{acc}/status; account_status.cpp",
+      "test_cases": "TC-07",
+      "status": "Not validated",
+      "note": "S-43 section 5: Freeze/unfreeze/close, blocked transactions, and retained history passed.",
+      "source": "S-43 section 5"
+    },
+    {
+      "id": "FR-6",
+      "design": "Transaction Engine; POST /transactions; deposit.cpp",
+      "test_cases": "TC-08",
+      "status": "Not validated",
+      "note": "S-43 section 5: UI confirmation and persisted deposit passed; seed balance differed from the plan precondition.",
+      "source": "S-43 section 5"
+    },
+    {
+      "id": "FR-7",
+      "design": "Transaction Engine; POST /transactions; withdraw.cpp",
+      "test_cases": "TC-09",
+      "status": "Not validated",
+      "note": "S-43 section 5: Daily-limit and UTC-boundary behavior passed; TC-06 additionally covered minimum-balance rules.",
+      "source": "S-43 section 5"
+    },
+    {
+      "id": "FR-8",
+      "design": "Transaction Engine; POST /transfers; transfer.cpp",
+      "test_cases": "TC-10",
+      "status": "Not validated",
+      "note": "S-43 section 5: Atomic transfer passed; TC-10B additionally covered invalid-transfer rejection.",
+      "source": "S-43 section 5"
+    },
+    {
+      "id": "FR-9",
+      "design": "Account/Reporting; /customers/me/accounts; /accounts/{acc}/balance",
+      "test_cases": "TC-11",
+      "status": "Not validated",
+      "note": "S-43 section 5: Account balance ownership checks passed.",
+      "source": "S-43 section 5"
+    },
+    {
+      "id": "FR-10",
+      "design": "Interest and Statements; /accounts/{acc}/transactions; history.js",
+      "test_cases": "TC-11, TC-17",
+      "status": "Not validated",
+      "note": "S-43 section 5: Ownership, date filtering/order, and pagination passed.",
+      "source": "S-43 section 5"
+    },
+    {
+      "id": "FR-11",
+      "design": "Interest and Statements; POST /interest/run; reporting/interest.cpp",
+      "test_cases": "TC-09B",
+      "status": "Not validated",
+      "note": "S-43 section 5: Interest credited once; duplicate run rejected.",
+      "source": "S-43 section 5"
+    },
+    {
+      "id": "FR-12",
+      "design": "Interest and Statements; /accounts/{acc}/statement; statement_csv.js",
+      "test_cases": "TC-18",
+      "status": "Not validated",
+      "note": "S-43 section 5: Statement and generated CSV content passed; native browser save event was not captured.",
+      "source": "S-43 section 5"
+    },
+    {
+      "id": "FR-13",
+      "design": "Staff Mgmt; POST/GET /staff; PATCH /staff/{id}; auth unlock",
+      "test_cases": "TC-02B, TC-12, TC-13",
+      "status": "Not validated",
+      "note": "S-43 section 5: Administrative unlock and staff/customer lifecycle behavior passed.",
+      "source": "S-43 section 5"
+    },
+    {
+      "id": "FR-14",
+      "design": "Staff Mgmt/Presentation; GET /dashboard; landing.js",
+      "test_cases": "TC-14",
+      "status": "Not validated",
+      "note": "S-43 section 5: Role-specific dashboards returned the expected role data.",
+      "source": "S-43 section 5"
+    },
+    {
+      "id": "FR-15",
+      "design": "Account Mgmt; GET/POST/PUT /account-types; account_types.cpp",
+      "test_cases": "No dedicated master case; TC-05/06/09 overlap",
+      "status": "Not validated",
+      "note": "New ID unassessed. S-14 notes and tests/account_type_test.cpp supplement; full CRUD/RBAC needs S-41 coverage.",
+      "source": "New ID; no independent S-43 verdict"
+    },
+    {
+      "id": "FR-16",
+      "design": "Auth/Session; GET /users/locked; PATCH /users/{id}/unlock",
+      "test_cases": "TC-02B (related)",
+      "status": "Not validated",
+      "note": "New ID unassessed. FR-2/FR-13 are Not validated. Add denied-role checks; tests/auth_lockout_test.cpp.",
+      "source": "New ID; no independent S-43 verdict"
+    },
+    {
+      "id": "FR-17",
+      "design": "Audit/Presentation; GET /audit; audit.js",
+      "test_cases": "TC-16 (partial scope)",
+      "status": "Not validated",
+      "note": "New ID unassessed. Viewer filters/pagination/read roles need coverage; tests/audit_viewer_test.cpp.",
+      "source": "New ID; no independent S-43 verdict"
+    },
+    {
+      "id": "NFR-1",
+      "design": "Transaction Engine; persisted deposit/withdraw/transfer",
+      "test_cases": "TC-20",
+      "status": "Not validated",
+      "note": "S-43 section 5: 30 measured transactions per operation; maximum was 45.378 ms against 2 seconds.",
+      "source": "S-43 section 5"
+    },
+    {
+      "id": "NFR-2",
+      "design": "Presentation/Staff/Reporting; dashboard/account-list/history",
+      "test_cases": "TC-14, TC-19",
+      "status": "Not validated",
+      "note": "S-43 section 5: Role dashboards and account-list/history reads were below 3 seconds.",
+      "source": "S-43 section 5"
+    },
+    {
+      "id": "NFR-3",
+      "design": "Transaction Engine/Data; common/db.cpp; atomic ledger/audit",
+      "test_cases": "TC-10; CTest",
+      "status": "Not validated",
+      "note": "S-43 section 5: Atomic transfer behavior and 31/31 CTest targets passed.",
+      "source": "S-43 section 5"
+    },
+    {
+      "id": "NFR-4",
+      "design": "Auth/API; password.cpp, routes.cpp, rbac.cpp",
+      "test_cases": "TC-01; CTest",
+      "status": "Not validated",
+      "note": "S-43 section 5: Authentication evidence and the automated test suite passed.",
+      "source": "S-43 section 5"
+    },
+    {
+      "id": "NFR-5",
+      "design": "Audit/Data; audit/record.cpp; schema append-only triggers",
+      "test_cases": "TC-16",
+      "status": "Not validated",
+      "note": "S-43 section 5: Financial audit entries were present; mutation attempts returned 405.",
+      "source": "S-43 section 5"
+    },
+    {
+      "id": "NFR-6",
+      "design": "Presentation; Officer deposit and Customer history flows",
+      "test_cases": "TC-21",
+      "status": "Not validated",
+      "note": "S-43 section 5: Three-person first-time participant study was not run.",
+      "source": "S-43 section 5"
+    },
+    {
+      "id": "NFR-7",
+      "design": "API/common validation and Transaction Engine",
+      "test_cases": "TC-02, TC-09, TC-10B, TC-11",
+      "status": "Not validated",
+      "note": "S-43 section 5: Structured rejection paths and unchanged-state checks passed.",
+      "source": "S-43 section 5"
+    },
+    {
+      "id": "NFR-8",
+      "design": "All backend CMake modules; functional decomposition",
+      "test_cases": "CMake build; CTest",
+      "status": "Validated",
+      "note": "S-43 section 5: Latest-main build succeeded; 31/31 CTest targets passed.",
+      "source": "S-43 section 5"
+    },
+    {
+      "id": "NFR-9",
+      "design": "Backend CI/build; Presentation in Chrome/Firefox",
+      "test_cases": "TC-22",
+      "status": "Not validated",
+      "note": "S-43 section 5: Ubuntu/Windows CI passed; fresh Chrome and Firefox UI checks, responsive checks in both, and cross-browser rendering comparison are missing.",
+      "source": "S-43 section 5"
+    },
+    {
+      "id": "SEC-1",
+      "design": "Auth/RBAC/API; protected requests and ownership",
+      "test_cases": "TC-03, TC-11, TC-13",
+      "status": "Not validated",
+      "note": "S-43 section 5: Logout/deactivation invalidation and ownership checks passed.",
+      "source": "S-43 section 5"
+    },
+    {
+      "id": "SEC-2",
+      "design": "Auth/password/TLS; provisioning exception",
+      "test_cases": "TC-01, TC-15",
+      "status": "Not validated",
+      "note": "S-43 section 5: Credential handling and TLS 1.3 checks passed.",
+      "source": "S-43 section 5"
+    },
+    {
+      "id": "SEC-3",
+      "design": "API/TLS; server HTTPS build and configuration",
+      "test_cases": "TC-15 (related)",
+      "status": "Not validated",
+      "note": "No separate S-43 verdict. TC-15 passed alone; transport configuration has broader scope.",
+      "source": "New ID; no independent S-43 verdict"
+    },
+    {
+      "id": "SEC-4",
+      "design": "Audit/Data; financial audit and Admin viewer",
+      "test_cases": "TC-16 (related)",
+      "status": "Not validated",
+      "note": "No separate verdict. NFR-5 is Not validated; viewer checks remain supplementary.",
+      "source": "New ID; no independent S-43 verdict"
+    },
+    {
+      "id": "SEC-5",
+      "design": "Auth/Session; lockout and user recovery",
+      "test_cases": "TC-02, TC-02B (related)",
+      "status": "Not validated",
+      "note": "No separate verdict. FR-2/FR-13 are Not validated.",
+      "source": "New ID; no independent S-43 verdict"
+    },
+    {
+      "id": "SEC-6",
+      "design": "Auth/Session; logout/expiry/deactivation",
+      "test_cases": "TC-03, TC-13 (related)",
+      "status": "Not validated",
+      "note": "No separate verdict. TC-03 PARTIAL; expiry/restart need auth_session_test.cpp.",
+      "source": "New ID; no independent S-43 verdict"
+    }
+  ]
+}
