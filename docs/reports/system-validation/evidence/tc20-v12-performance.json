@@ -1,0 +1,594 @@
+{
+  "testCase": "TC-20",
+  "source": "origin/main b66f97c",
+  "databaseAccounts": 3005,
+  "samplesPerOperation": 30,
+  "operations": {
+    "deposit": {
+      "warmups": 3,
+      "samples": 30,
+      "mean_ms": 14.563170000474202,
+      "median_ms": 10.085999998409534,
+      "p95_ms": 32.87199999613222,
+      "max_ms": 45.378200004051905,
+      "threshold_ms": 2000,
+      "verdict": "PASS",
+      "raw_ms": [
+        7.327,
+        7.98,
+        27.744,
+        11.094,
+        8.318,
+        10.687,
+        10.381,
+        8.549,
+        9.791,
+        12.036,
+        9.7,
+        9.183,
+        26.572,
+        23.164,
+        27.885,
+        32.872,
+        12.535,
+        11.958,
+        9.405,
+        24.142,
+        11.869,
+        45.378,
+        7.231,
+        24.495,
+        7.369,
+        7.684,
+        6.756,
+        8.716,
+        7.417,
+        8.656
+      ],
+      "responsesPersisted": 30,
+      "persistenceChecks": [
+        {
+          "account": "PF000004",
+          "responseBalancePaise": 40817736,
+          "databaseBalancePaise": 40817736
+        },
+        {
+          "account": "PF000005",
+          "responseBalancePaise": 39457789,
+          "databaseBalancePaise": 39457789
+        },
+        {
+          "account": "PF000006",
+          "responseBalancePaise": 22661668,
+          "databaseBalancePaise": 22661668
+        },
+        {
+          "account": "PF000007",
+          "responseBalancePaise": 22680375,
+          "databaseBalancePaise": 22680375
+        },
+        {
+          "account": "PF000008",
+          "responseBalancePaise": 45387217,
+          "databaseBalancePaise": 45387217
+        },
+        {
+          "account": "PF000009",
+          "responseBalancePaise": 43225612,
+          "databaseBalancePaise": 43225612
+        },
+        {
+          "account": "PF000010",
+          "responseBalancePaise": 24236807,
+          "databaseBalancePaise": 24236807
+        },
+        {
+          "account": "PF000011",
+          "responseBalancePaise": 31183231,
+          "databaseBalancePaise": 31183231
+        },
+        {
+          "account": "PF000012",
+          "responseBalancePaise": 22788057,
+          "databaseBalancePaise": 22788057
+        },
+        {
+          "account": "PF000013",
+          "responseBalancePaise": 29718708,
+          "databaseBalancePaise": 29718708
+        },
+        {
+          "account": "PF000014",
+          "responseBalancePaise": 49127441,
+          "databaseBalancePaise": 49127441
+        },
+        {
+          "account": "PF000015",
+          "responseBalancePaise": 35432915,
+          "databaseBalancePaise": 35432915
+        },
+        {
+          "account": "PF000016",
+          "responseBalancePaise": 32710685,
+          "databaseBalancePaise": 32710685
+        },
+        {
+          "account": "PF000017",
+          "responseBalancePaise": 47094628,
+          "databaseBalancePaise": 47094628
+        },
+        {
+          "account": "PF000018",
+          "responseBalancePaise": 47651139,
+          "databaseBalancePaise": 47651139
+        },
+        {
+          "account": "PF000019",
+          "responseBalancePaise": 25098902,
+          "databaseBalancePaise": 25098902
+        },
+        {
+          "account": "PF000020",
+          "responseBalancePaise": 29474558,
+          "databaseBalancePaise": 29474558
+        },
+        {
+          "account": "PF000021",
+          "responseBalancePaise": 37265386,
+          "databaseBalancePaise": 37265386
+        },
+        {
+          "account": "PF000022",
+          "responseBalancePaise": 25123493,
+          "databaseBalancePaise": 25123493
+        },
+        {
+          "account": "PF000023",
+          "responseBalancePaise": 36952610,
+          "databaseBalancePaise": 36952610
+        },
+        {
+          "account": "PF000024",
+          "responseBalancePaise": 44701283,
+          "databaseBalancePaise": 44701283
+        },
+        {
+          "account": "PF000025",
+          "responseBalancePaise": 27024861,
+          "databaseBalancePaise": 27024861
+        },
+        {
+          "account": "PF000026",
+          "responseBalancePaise": 46742254,
+          "databaseBalancePaise": 46742254
+        },
+        {
+          "account": "PF000027",
+          "responseBalancePaise": 25173875,
+          "databaseBalancePaise": 25173875
+        },
+        {
+          "account": "PF000028",
+          "responseBalancePaise": 33481123,
+          "databaseBalancePaise": 33481123
+        },
+        {
+          "account": "PF000029",
+          "responseBalancePaise": 23099490,
+          "databaseBalancePaise": 23099490
+        },
+        {
+          "account": "PF000030",
+          "responseBalancePaise": 27170707,
+          "databaseBalancePaise": 27170707
+        },
+        {
+          "account": "PF000031",
+          "responseBalancePaise": 23070720,
+          "databaseBalancePaise": 23070720
+        },
+        {
+          "account": "PF000032",
+          "responseBalancePaise": 34519218,
+          "databaseBalancePaise": 34519218
+        },
+        {
+          "account": "PF000033",
+          "responseBalancePaise": 48643777,
+          "databaseBalancePaise": 48643777
+        }
+      ]
+    },
+    "withdrawal": {
+      "warmups": 3,
+      "samples": 30,
+      "mean_ms": 16.613396666798508,
+      "median_ms": 10.256950001348741,
+      "p95_ms": 33.01690000080271,
+      "max_ms": 33.36180000042077,
+      "threshold_ms": 2000,
+      "verdict": "PASS",
+      "raw_ms": [
+        9.243,
+        20.449,
+        9.182,
+        9.238,
+        24.413,
+        29.779,
+        11.318,
+        8.859,
+        11.324,
+        10.677,
+        9.66,
+        9.396,
+        9.601,
+        31.971,
+        8.646,
+        33.017,
+        8.929,
+        9.577,
+        23.51,
+        8.919,
+        33.362,
+        32.457,
+        27.199,
+        8.857,
+        9.142,
+        26.673,
+        32.089,
+        12.368,
+        8.712,
+        9.837
+      ],
+      "responsesPersisted": 30,
+      "persistenceChecks": [
+        {
+          "account": "PF000103",
+          "responseBalancePaise": 38444944,
+          "databaseBalancePaise": 38444944
+        },
+        {
+          "account": "PF000104",
+          "responseBalancePaise": 23379523,
+          "databaseBalancePaise": 23379523
+        },
+        {
+          "account": "PF000105",
+          "responseBalancePaise": 20984258,
+          "databaseBalancePaise": 20984258
+        },
+        {
+          "account": "PF000106",
+          "responseBalancePaise": 26250325,
+          "databaseBalancePaise": 26250325
+        },
+        {
+          "account": "PF000107",
+          "responseBalancePaise": 27785614,
+          "databaseBalancePaise": 27785614
+        },
+        {
+          "account": "PF000108",
+          "responseBalancePaise": 45353493,
+          "databaseBalancePaise": 45353493
+        },
+        {
+          "account": "PF000109",
+          "responseBalancePaise": 29016419,
+          "databaseBalancePaise": 29016419
+        },
+        {
+          "account": "PF000110",
+          "responseBalancePaise": 46618358,
+          "databaseBalancePaise": 46618358
+        },
+        {
+          "account": "PF000111",
+          "responseBalancePaise": 46521769,
+          "databaseBalancePaise": 46521769
+        },
+        {
+          "account": "PF000112",
+          "responseBalancePaise": 32072477,
+          "databaseBalancePaise": 32072477
+        },
+        {
+          "account": "PF000113",
+          "responseBalancePaise": 31132499,
+          "databaseBalancePaise": 31132499
+        },
+        {
+          "account": "PF000114",
+          "responseBalancePaise": 47338613,
+          "databaseBalancePaise": 47338613
+        },
+        {
+          "account": "PF000115",
+          "responseBalancePaise": 35119929,
+          "databaseBalancePaise": 35119929
+        },
+        {
+          "account": "PF000116",
+          "responseBalancePaise": 21329731,
+          "databaseBalancePaise": 21329731
+        },
+        {
+          "account": "PF000117",
+          "responseBalancePaise": 27578993,
+          "databaseBalancePaise": 27578993
+        },
+        {
+          "account": "PF000118",
+          "responseBalancePaise": 24034392,
+          "databaseBalancePaise": 24034392
+        },
+        {
+          "account": "PF000119",
+          "responseBalancePaise": 48909034,
+          "databaseBalancePaise": 48909034
+        },
+        {
+          "account": "PF000120",
+          "responseBalancePaise": 25282956,
+          "databaseBalancePaise": 25282956
+        },
+        {
+          "account": "PF000121",
+          "responseBalancePaise": 39656560,
+          "databaseBalancePaise": 39656560
+        },
+        {
+          "account": "PF000122",
+          "responseBalancePaise": 35505159,
+          "databaseBalancePaise": 35505159
+        },
+        {
+          "account": "PF000123",
+          "responseBalancePaise": 23862042,
+          "databaseBalancePaise": 23862042
+        },
+        {
+          "account": "PF000124",
+          "responseBalancePaise": 29507816,
+          "databaseBalancePaise": 29507816
+        },
+        {
+          "account": "PF000125",
+          "responseBalancePaise": 48675422,
+          "databaseBalancePaise": 48675422
+        },
+        {
+          "account": "PF000126",
+          "responseBalancePaise": 31790413,
+          "databaseBalancePaise": 31790413
+        },
+        {
+          "account": "PF000127",
+          "responseBalancePaise": 32079397,
+          "databaseBalancePaise": 32079397
+        },
+        {
+          "account": "PF000128",
+          "responseBalancePaise": 46729535,
+          "databaseBalancePaise": 46729535
+        },
+        {
+          "account": "PF000129",
+          "responseBalancePaise": 36447344,
+          "databaseBalancePaise": 36447344
+        },
+        {
+          "account": "PF000130",
+          "responseBalancePaise": 22686504,
+          "databaseBalancePaise": 22686504
+        },
+        {
+          "account": "PF000131",
+          "responseBalancePaise": 45864624,
+          "databaseBalancePaise": 45864624
+        },
+        {
+          "account": "PF000132",
+          "responseBalancePaise": 32700777,
+          "databaseBalancePaise": 32700777
+        }
+      ]
+    },
+    "transfer": {
+      "warmups": 3,
+      "samples": 30,
+      "mean_ms": 13.939370000298368,
+      "median_ms": 10.496500002773246,
+      "p95_ms": 29.19079999992391,
+      "max_ms": 30.161700000462588,
+      "threshold_ms": 2000,
+      "verdict": "PASS",
+      "raw_ms": [
+        9.489,
+        24.134,
+        29.191,
+        10.386,
+        20.878,
+        30.162,
+        11.141,
+        20.857,
+        10.694,
+        8.276,
+        26.055,
+        9.672,
+        8.406,
+        9.623,
+        10.33,
+        8.78,
+        10.454,
+        10.68,
+        9.271,
+        6.976,
+        8.59,
+        26.382,
+        11.204,
+        11.147,
+        8.57,
+        25.783,
+        10.438,
+        8.967,
+        11.105,
+        10.539
+      ],
+      "responsesPersisted": 30,
+      "persistenceChecks": [
+        {
+          "account": "PF000203",
+          "responseBalancePaise": 45225509,
+          "databaseBalancePaise": 45225509
+        },
+        {
+          "account": "PF000204",
+          "responseBalancePaise": 41236899,
+          "databaseBalancePaise": 41236899
+        },
+        {
+          "account": "PF000205",
+          "responseBalancePaise": 47524678,
+          "databaseBalancePaise": 47524678
+        },
+        {
+          "account": "PF000206",
+          "responseBalancePaise": 22662095,
+          "databaseBalancePaise": 22662095
+        },
+        {
+          "account": "PF000207",
+          "responseBalancePaise": 26735553,
+          "databaseBalancePaise": 26735553
+        },
+        {
+          "account": "PF000208",
+          "responseBalancePaise": 45634359,
+          "databaseBalancePaise": 45634359
+        },
+        {
+          "account": "PF000209",
+          "responseBalancePaise": 21432342,
+          "databaseBalancePaise": 21432342
+        },
+        {
+          "account": "PF000210",
+          "responseBalancePaise": 48852265,
+          "databaseBalancePaise": 48852265
+        },
+        {
+          "account": "PF000211",
+          "responseBalancePaise": 36556557,
+          "databaseBalancePaise": 36556557
+        },
+        {
+          "account": "PF000212",
+          "responseBalancePaise": 36229197,
+          "databaseBalancePaise": 36229197
+        },
+        {
+          "account": "PF000213",
+          "responseBalancePaise": 26716230,
+          "databaseBalancePaise": 26716230
+        },
+        {
+          "account": "PF000214",
+          "responseBalancePaise": 25232407,
+          "databaseBalancePaise": 25232407
+        },
+        {
+          "account": "PF000215",
+          "responseBalancePaise": 45734921,
+          "databaseBalancePaise": 45734921
+        },
+        {
+          "account": "PF000216",
+          "responseBalancePaise": 32693800,
+          "databaseBalancePaise": 32693800
+        },
+        {
+          "account": "PF000217",
+          "responseBalancePaise": 23086804,
+          "databaseBalancePaise": 23086804
+        },
+        {
+          "account": "PF000218",
+          "responseBalancePaise": 30263901,
+          "databaseBalancePaise": 30263901
+        },
+        {
+          "account": "PF000219",
+          "responseBalancePaise": 33838654,
+          "databaseBalancePaise": 33838654
+        },
+        {
+          "account": "PF000220",
+          "responseBalancePaise": 30738552,
+          "databaseBalancePaise": 30738552
+        },
+        {
+          "account": "PF000221",
+          "responseBalancePaise": 20893491,
+          "databaseBalancePaise": 20893491
+        },
+        {
+          "account": "PF000222",
+          "responseBalancePaise": 42815204,
+          "databaseBalancePaise": 42815204
+        },
+        {
+          "account": "PF000223",
+          "responseBalancePaise": 44508943,
+          "databaseBalancePaise": 44508943
+        },
+        {
+          "account": "PF000224",
+          "responseBalancePaise": 21351086,
+          "databaseBalancePaise": 21351086
+        },
+        {
+          "account": "PF000225",
+          "responseBalancePaise": 39769577,
+          "databaseBalancePaise": 39769577
+        },
+        {
+          "account": "PF000226",
+          "responseBalancePaise": 36747428,
+          "databaseBalancePaise": 36747428
+        },
+        {
+          "account": "PF000227",
+          "responseBalancePaise": 38818954,
+          "databaseBalancePaise": 38818954
+        },
+        {
+          "account": "PF000228",
+          "responseBalancePaise": 49135598,
+          "databaseBalancePaise": 49135598
+        },
+        {
+          "account": "PF000229",
+          "responseBalancePaise": 48798570,
+          "databaseBalancePaise": 48798570
+        },
+        {
+          "account": "PF000230",
+          "responseBalancePaise": 38314535,
+          "databaseBalancePaise": 38314535
+        },
+        {
+          "account": "PF000231",
+          "responseBalancePaise": 42388878,
+          "databaseBalancePaise": 42388878
+        },
+        {
+          "account": "PF000232",
+          "responseBalancePaise": 46132152,
+          "databaseBalancePaise": 46132152
+        }
+      ]
+    }
+  },
+  "verdict": "PASS"
+}

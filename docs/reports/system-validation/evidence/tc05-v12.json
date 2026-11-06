@@ -1,0 +1,12 @@
+{
+  "case": "TC-05",
+  "belowMinimumHttp": 422,
+  "belowMinimumCode": "BELOW_MINIMUM_BALANCE",
+  "exactMinimumHttp": 201,
+  "exactMinimumBalance": "1000.00",
+  "zeroMinimumTypeHttp": 200,
+  "zeroDepositOpenHttp": 201,
+  "zeroDepositAccount": "ACC685170412328",
+  "zeroDepositTransactionAmount": "0.00",
+  "verdict": "PASS"
+}

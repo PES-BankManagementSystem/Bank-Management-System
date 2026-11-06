@@ -36,20 +36,20 @@ INSERT OR IGNORE INTO accounts (account_id, account_number, customer_id, type_id
 (1, 'ACC001', 1, 1, 'active', 5000000, '2026-01-15'),           -- 50,000.00 INR Savings (active)
 (2, 'ACC002', 2, 1, 'frozen', 2500000, '2026-02-20'),            -- 25,000.00 INR Savings (frozen)
 (3, 'ACC003', 3, 2, 'closed', 0, '2026-03-10'),                  -- 0 INR Current (closed - zero balance)
-(4, 'ACC004', 1, 2, 'active', 10000000, '2026-01-20'),          -- 100,000.00 INR Current (active)
+(4, 'ACC004', 1, 2, 'active', 10000000, '2026-01-16'),          -- 100,000.00 INR Current (active)
 (5, 'ACC005', 2, 1, 'active', 750000, '2026-03-01');             -- 7,500.00 INR Savings (active)
 
 -- Insert sample transactions
--- Some transactions to make balances consistent with resulting_balance
+-- Each account's latest resulting_balance equals its balance above (checked by db_test)
 INSERT OR IGNORE INTO transactions (transaction_id, account_id, operator_id, type, amount, resulting_balance, created_at, transfer_ref, interest_run_id) VALUES
-(1, 1, 2, 'deposit', 5000000, 5000000, '2026-01-16 09:30:00', NULL, NULL),                    -- Initial deposit to ACC001
-(2, 4, 2, 'deposit', 10000000, 10000000, '2026-01-21 10:15:00', NULL, NULL),                  -- Initial deposit to ACC004
+(1, 1, 2, 'deposit', 5300000, 5300000, '2026-01-16 09:30:00', NULL, NULL),                    -- Initial deposit to ACC001
+(2, 4, 2, 'deposit', 10300000, 10300000, '2026-01-17 10:15:00', NULL, NULL),                  -- Initial deposit to ACC004
 (3, 5, 2, 'deposit', 750000, 750000, '2026-03-02 11:00:00', NULL, NULL),                      -- Initial deposit to ACC005
 (4, 2, 2, 'deposit', 2500000, 2500000, '2026-02-21 14:20:00', NULL, NULL),                    -- Initial deposit to ACC002
-(5, 1, 2, 'withdrawal', 100000, 4900000, '2026-01-17 16:45:00', NULL, NULL),                  -- Withdrawal from ACC001
-(6, 4, 2, 'withdrawal', 500000, 9500000, '2026-01-22 09:00:00', NULL, NULL),                  -- Withdrawal from ACC004
-(7, 1, 2, 'transfer_debit', 200000, 4700000, '2026-01-18 11:30:00', 'TRF001', NULL),          -- Transfer out from ACC001
-(8, 4, 2, 'transfer_credit', 200000, 9700000, '2026-01-18 11:30:00', 'TRF001', NULL),          -- Transfer in to ACC004
+(5, 1, 2, 'withdrawal', 100000, 5200000, '2026-01-17 16:45:00', NULL, NULL),                  -- Withdrawal from ACC001
+(6, 4, 2, 'withdrawal', 500000, 10000000, '2026-01-22 09:00:00', NULL, NULL),                  -- Withdrawal from ACC004
+(7, 1, 2, 'transfer_debit', 200000, 5000000, '2026-01-18 11:30:00', 'TRF001', NULL),          -- Transfer out from ACC001
+(8, 4, 2, 'transfer_credit', 200000, 10500000, '2026-01-18 11:30:00', 'TRF001', NULL),          -- Transfer in to ACC004
 (9, 3, 1, 'interest', 0, 0, '2026-03-15 08:00:00', NULL, 1);                            -- Interest run on closed account (zero interest)
 
 -- Insert audit log entries (append-only)
