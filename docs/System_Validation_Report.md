@@ -18,7 +18,7 @@ Waiting for #124: integrate main without force-pushing; record the resulting bui
 
 ## PR integration review
 
-To resolve PR #130 conflicts, main at `b66f97c` was used as the application baseline and the S-43 report/evidence were carried forward in an isolated worktree. The merge retains both histories. Application, frontend, database, build configuration and tests match main; older account commits on the validation branch do not override their already-merged versions. Main's deviations and review log are preserved, with S-43 entries renumbered 28-30. The original working directory's local changes were untouched. This is a documentation integration, not a new validation run. S-41 #124 remains open; final-plan reruns and the exit decision remain pending.
+To resolve PR #130 conflicts, main at `b66f97c` was used as the application baseline and the S-43 report/evidence were carried forward in an isolated worktree. The merge retains both histories. Application, frontend, database, build configuration and tests match main; older account commits on the validation branch do not override their already-merged versions. Main's deviations and review log are preserved, with S-43 entries renumbered 28-30. The original working directory's local changes were untouched. This is a documentation integration, not a new validation run. The PR description carries `Closes #119` as required by repository automation; the PR must remain unmerged until the outstanding acceptance work is complete. S-41 #124 remains open; final-plan reruns and the exit decision remain pending.
 
 ## 1. Scope and method
 
