@@ -1,0 +1,11 @@
+{
+  "case": "TC-09",
+  "syntheticPriorUtcWithdrawal": "2026-11-05 23:59:59",
+  "priorUtcDate": "2026-11-05",
+  "requestUtcDate": "2026-11-06",
+  "postBoundaryWithdrawalHttp": 201,
+  "postBoundaryCreatedAt": "2026-11-06 06:45:45",
+  "postBoundaryBalancePaise": 4000000,
+  "withdrawalCountForCurrentUtcDate": 1,
+  "verdict": "PASS"
+}

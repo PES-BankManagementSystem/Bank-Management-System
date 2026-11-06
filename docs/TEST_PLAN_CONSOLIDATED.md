@@ -1,9 +1,11 @@
-# Test Plan & Consolidated Test Cases (v1.1)
+# Test Plan & Consolidated Test Cases (v1.2)
 
-- **Document ID:** TP-BMS-2026-v1.1
+- **Document ID:** TP-BMS-2026-v1.2
 - **Course:** `UE24CS341A` (Software Engineering and System Design)
-- **Story:** [S-35] Consolidate the Test Plan and test cases (#66)
-- **Related source documents:** `Test_Cases_Bank_Management_System.docx` and `Test_Plan_Test_Cases_BankManagementSystem.pdf` (retained for historical traceability; this document consolidates their coverage)
+- **Story:** [S-41] Update the test cases and Test Plan for sprint changes (#117)
+- **Status:** Issued for Sprint 3 execution; supersedes the standalone test-case and test-plan files
+- **Prepared by:** QA Team, Abhishek Kinagi
+- **Related source documents:** The standalone DOCX/PDF files were superseded and removed in v1.2; their coverage is consolidated here.
 - **Governing SRS Reference:** SRS v1.1 (Dated **02/09/2026**; corrected from erroneous 11/09/2026 citation)
 
 ---
@@ -14,22 +16,23 @@
 | :---: | :---: | :---: | :--- |
 | **1.0** | 15 Sep 2026 | QA Team | Initial draft with split standalone test suites. |
 | **1.1** | 1 Nov 2026 | Abhishek Kinagi & Team | **Consolidation & Gap Resolution (S-35):**<br>1. Merged standalone test suites into unified Section 14 with continuous TC IDs.<br>2. Retained the legacy source documents as supporting references.<br>3. Corrected SRS citation date from 11/09/2026 to 02/09/2026.<br>4. Added test cases for FR-12 (statements), FR-14 (dashboards), FR-7 (daily limit), admin unlock (TC-02B), NFR-2 (performance), NFR-6 (usability), and NFR-9 (portability).<br>5. Refined TC-15 wording regarding HTTPS TLS handshake.<br>6. Preserved the canonical TC-11 balance/history ownership mapping.<br>7. Built 100% complete Requirements Traceability Matrix. |
+| **1.2** | 4 Nov 2026 | Abhishek Kinagi & Team | **Sprint-change alignment (S-41):**<br>1. Rechecked every case against the merged implementation and deviations log.<br>2. Added explicit zero-opening-deposit coverage, request bodies/status codes for freeze/close and customer deactivation, and UTC daily-limit reset behavior.<br>3. Resolved the duplicate dashboard coverage by making TC-19 the account-list/history performance case.<br>4. Reissued this document as an IEEE-style PDF and superseded the standalone DOCX/PDF artifacts.<br>5. Updated the RTM and security suite classification.<br>6. Corrected TC-03's logout success expectation to HTTP 204 to match the implemented endpoint; the subsequent request with the invalidated token must still return HTTP 401. |
 
 ---
 
-## 2. Section 5.1: Test Suite Classification (Updated)
+## 2. Section 5.1: Test Suite Classification and Security Validation (Updated)
 
 | Suite ID | Suite Name | Description | Included Test Cases |
 | :---: | :--- | :--- | :--- |
 | **TS-01** | **Authentication & Lockout** | Credential checks, session creation, lockout after 3 fails, admin unlock | TC-01, TC-02, TC-02B, TC-03 |
-| **TS-02** | **Customer & Account Ops** | Customer onboarding, account opening, status management | TC-04, TC-05, TC-06, TC-07 |
+| **TS-02** | **Customer & Account Ops** | Customer onboarding, Administrator-only customer deactivation, account opening, status management | TC-04, TC-04B, TC-05, TC-06, TC-07 |
 | **TS-03** | **Financial Transactions** | Deposits, withdrawals, daily limits, atomic transfers | TC-08, TC-09, TC-09B, TC-10, TC-10B |
 | **TS-04** | **Security & Access Control** | Least privilege, role barriers, HTTPS, audit trail | TC-11, TC-14, TC-15, TC-16 |
 | **TS-05** | **Staff & Administration** | Bank Officer CRUD, deactivation session clearance | TC-12, TC-13 |
-| **TS-06** | **Reporting & Analytics** | History queries, statements export, role dashboards | TC-17, TC-18, TC-19 |
-| **TS-07** | **Non-Functional Requirements**| Performance (<3s load), usability walkthrough, cross-platform | TC-20, TC-21, TC-22 |
+| **TS-06** | **Reporting & Analytics** | History queries, statements export, role dashboards | TC-17, TC-18 |
+| **TS-07** | **Non-Functional Requirements**| Performance (<2s transactions, <3s reads), usability walkthrough, cross-platform | TC-19, TC-20, TC-21, TC-22 |
 
-*Note: **TC-11** retains the primary Test Plan mapping for customer balance/history ownership and date-filtered access.*
+*Security validation in this section covers authentication, lockout, RBAC, session invalidation, encrypted transport, and audit immutability through TS-01 and TS-04. **TC-11** remains the primary ownership and date-filter access case.*
 
 ---
 
@@ -56,17 +59,22 @@
 ### TC-03: Session Expiry and Logout (FR-2, SEC-1, S-08)
 - **Preconditions:** User is logged in with active session token.
 - **Input:** User sends `POST /auth/logout`; subsequent request sent with invalidated token.
-- **Expected Result:** Logout returns HTTP 200; the server removes the token from its in-memory session store; subsequent request receives HTTP 401 Unauthorized; UI redirects to login screen.
+- **Expected Result:** Logout returns HTTP 204 No Content; the server removes the token from its in-memory session store; subsequent request receives HTTP 401 Unauthorized; UI redirects to login screen.
 
 ### TC-04: Customer Registration Validation (FR-3)
 - **Preconditions:** Bank Officer is authenticated; customer registration form is available.
 - **Input:** Submit a customer record without a phone number, then resubmit with all mandatory fields valid.
 - **Expected Result:** The incomplete request is rejected with a field-level validation error; the corrected request creates a customer and assigns a unique customer identifier.
 
+### TC-04B: Administrator-Only Customer Deactivation (FR-3, SEC-1, S-13)
+- **Preconditions:** An active customer exists; Administrator, Bank Officer, and Customer sessions are available.
+- **Input:** Administrator sends `PUT /customers/{customerId}` with exactly `{"status":"inactive"}`; repeat with the Officer and Customer tokens.
+- **Expected Result:** Administrator receives HTTP 200 and the customer becomes inactive; Officer and Customer receive HTTP 403; repeated deactivation is idempotent; customer login and new account opening are refused, existing account and audit history remain retained, and active customer sessions are invalidated.
+
 ### TC-05: Account Opening Minimum Balance (FR-4, S-15)
-- **Preconditions:** Active customer exists; selected account type has a configured minimum balance.
-- **Input:** Attempt to open an account below the minimum, then retry with a sufficient initial deposit.
-- **Expected Result:** The first request is rejected without creating an account; the valid request creates an account with a unique number and records the opening deposit.
+- **Preconditions:** Active customer exists; one account type has a positive minimum and another has a zero minimum.
+- **Input:** `POST /accounts` with an initial deposit below the positive minimum, then with the exact minimum; repeat for the zero-minimum type using `initialDeposit = "0.00"`.
+- **Expected Result:** The below-minimum request returns HTTP 422 with `BELOW_MINIMUM_BALANCE` and creates no rows. Exact-minimum and zero-minimum requests return HTTP 201, create unique active accounts, and record the opening deposit as the first transaction; the zero opening amount is permitted only for a zero-minimum type.
 
 ### TC-06: Withdrawal Minimum Balance and Daily Limit (FR-7)
 - **Preconditions:** Active account has a balance above its configured minimum; a daily withdrawal limit is configured.
@@ -74,9 +82,9 @@
 - **Expected Result:** The first two requests are rejected with specific errors and no balance change; the valid request succeeds and records the debit.
 
 ### TC-07: Freeze and Close Account (FR-5, S-16)
-- **Preconditions:** Customer account exists with zero balance.
-- **Input:** Bank Officer requests account freeze/closure via API.
-- **Expected Result:** Account `status` changes to `frozen` or `closed`; further deposits or withdrawals are rejected with HTTP 422, while retained account data remains viewable.
+- **Preconditions:** Active account exists; Bank Officer or Administrator is authenticated. Use a zero-balance account for closure.
+- **Input:** Send `PATCH /accounts/{accountNumber}/status` with `{"action":"freeze"}`, then `{"action":"unfreeze"}`, then `{"action":"close"}`.
+- **Expected Result:** Each valid transition returns HTTP 200 and the requested status. Closing a non-zero account returns HTTP 409 with `ACCOUNT_BALANCE_NONZERO`; closing a zero-balance active or frozen account succeeds. Deposits, withdrawals, and transfers against frozen/closed accounts return HTTP 422; retained account and audit data remain viewable. Repeating the current action is idempotent.
 
 ### TC-08: Deposit Funds with Confirmation Dialog (FR-6, SRS 3.1, S-17)
 - **Preconditions:** Account `ACC001` active with balance ₹10,000.
@@ -84,9 +92,9 @@
 - **Expected Result:** UI renders modal confirmation showing account number (`ACC001`) and deposit amount (`₹5,000.00`); upon confirmation, ledger updates atomically and the post-success view shows the resulting balance (`₹15,000.00`).
 
 ### TC-09: Daily Withdrawal Limit Check (FR-7, S-18) *(NEW)*
-- **Preconditions:** Savings account with balance ₹50,000; daily withdrawal limit is ₹25,000.
-- **Input:** Attempt withdrawal of ₹30,000 in a single calendar day.
-- **Expected Result:** HTTP 422 Unprocessable Entity; error code `DAILY_LIMIT_EXCEEDED`; balance remains unchanged; message states daily limit of ₹25,000 exceeded.
+- **Preconditions:** Savings account with balance ₹50,000; daily withdrawal limit is ₹25,000; stored timestamps are UTC.
+- **Input:** Attempt withdrawal of ₹30,000 in one UTC calendar day, then repeat a valid withdrawal after the UTC date changes.
+- **Expected Result:** HTTP 422 with `DAILY_LIMIT_EXCEEDED`; balance remains unchanged; message states the ₹25,000 limit. Withdrawals before and after the UTC midnight boundary are counted in separate daily totals; local-time midnight is not used.
 
 ### TC-09B: Credit Account Interest Once per Period (FR-11, S-22)
 - **Preconditions:** Administrator is authenticated; an eligible interest-bearing account has not yet been credited for the selected period.
@@ -115,8 +123,8 @@
 
 ### TC-13: Deactivate Bank Officer & Session Invalidation (FR-13, S-24)
 - **Preconditions:** Officer has an active session token.
-- **Input:** Administrator issues `PATCH /staff/officer_new` to set the user's status to inactive.
-- **Expected Result:** HTTP 200 OK; `users.status = 'inactive'`; all active tokens for `officer_new` deleted from `sessions`; next request with officer's token returns HTTP 401; officer ID retained on historical transaction audit entries.
+- **Input:** Administrator issues `PATCH /staff/{officerUserId}` with `{"status":"inactive"}`.
+- **Expected Result:** HTTP 200 OK; `users.status = 'inactive'`; all active tokens for the officer are rejected by subsequent requests; officer ID is retained on historical transaction audit entries. The endpoint is Administrator-only.
 
 ### TC-14: Role-Specific Dashboards (FR-14, NFR-2, S-25) *(NEW)*
 - **Preconditions:** Authenticated as Administrator, Bank Officer, or Customer.
@@ -147,10 +155,10 @@
 - **Input:** `GET /accounts/{id}/statement?from=2026-09-01&to=2026-10-18`.
 - **Expected Result:** HTTP 200 OK; returns chronologically ordered statement with opening balance, closing balance, debit/credit entries, and formatted export.
 
-### TC-19: Role-Specific Dashboard Access (FR-14, NFR-2, S-25)
-- **Preconditions:** Administrator, Bank Officer, and Customer sessions are available.
-- **Input:** Each role requests the dashboard.
-- **Expected Result:** Each role receives only its permitted dashboard data; the response completes within the applicable response-time target.
+### TC-19: Account List and History Read Performance (FR-9, FR-10, NFR-2, S-25)
+- **Preconditions:** Database contains representative account and transaction data; authenticated sessions can access permitted accounts.
+- **Input:** Measure `GET /dashboard` for a Customer account list and `GET /accounts/{accountNumber}/transactions` for a permitted date-filtered history.
+- **Expected Result:** Each response returns only authorized data, preserves the documented ordering and filters, and completes in under 3 seconds. Role-specific dashboard correctness remains covered once, by TC-14.
 
 ### TC-20: Transaction Performance Target Verification (NFR-1, S-30) *(NEW)*
 - **Preconditions:** Database populated with approximately 3,000 accounts; system is under normal simulated load.
@@ -175,7 +183,7 @@
 | :---: | :--- | :---: | :--- |
 | **FR-1** | User authentication with ID & password/PIN | Automated / API | TC-01, TC-15 |
 | **FR-2** | Session management, logout & 3-fail lockout | Automated / Unit | TC-02, TC-02B, TC-03 |
-| **FR-3** | Register new customer record | API / Integration | TC-04 |
+| **FR-3** | Register and deactivate customer record | API / Integration | TC-04, TC-04B |
 | **FR-4** | Open new bank account for customer | API / Integration | TC-05 |
 | **FR-5** | Freeze and close accounts | API / Functional | TC-07 |
 | **FR-6** | Deposit funds with confirmation dialog | Functional / UI | **TC-08** (SRS 3.1) |
@@ -201,10 +209,10 @@
 
 ---
 
-## 5. Summary of Remediation Actions (S-35 Done Criteria)
+## 5. Summary of Remediation Actions (S-41 Done Criteria)
 
-1. **Documents Consolidated:** Standalone test documents are retained as supporting source references, while their coverage is consolidated into Section 14 above.
-2. **Missing Test Cases Added:** Explicit TCs written for FR-12 (TC-18), FR-14 (TC-14), FR-7 daily limit (TC-09), Admin unlock (TC-02B), NFR-2 (TC-20), NFR-6 (TC-21), and NFR-9 (TC-22).
-3. **Traceability Table:** Covers 100% of functional requirements (FR-1 to FR-14), non-functional requirements (NFR-1 to NFR-9), and security rules (SEC-1, SEC-2).
-4. **SRS Citation Corrected:** Date standardized to 02/09/2026.
-5. **TC-15 & TC-11 Refined:** HTTPS handshake criteria clarified, and TC-11 retained as the canonical balance/history ownership test.
+1. **Implementation alignment:** All cases were checked against merged source, automated tests, manual-test instructions, and `docs/DEVIATIONS.md`.
+2. **Sprint changes covered:** Explicit cases now cover zero opening deposits (TC-05), the freeze/close action body and conflict rules (TC-07), UTC daily-limit boundaries (TC-09), and Administrator-only customer deactivation (TC-04B).
+3. **Overlap removed:** TC-14 is the sole role-dashboard behavior case; TC-19 verifies account-list/history performance.
+4. **Traceability table:** Covers 100% of functional requirements (FR-1 to FR-14), non-functional requirements (NFR-1 to NFR-9), and security rules (SEC-1, SEC-2).
+5. **SRS citation corrected:** Date standardized to 02/09/2026; the v1.2 PDF is the issued copy.

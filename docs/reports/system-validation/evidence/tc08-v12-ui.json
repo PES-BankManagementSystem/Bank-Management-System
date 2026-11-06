@@ -1,0 +1,20 @@
+{
+  "testCase": "TC-08",
+  "source": "origin/main b66f97c; live web UI",
+  "role": "Bank Officer",
+  "screen": "Deposit",
+  "account": "ACC001",
+  "startingBalance": "50010.00",
+  "confirmationDialog": "Confirm deposit of ₹5000 into account ACC001?\n\nNo changes are made until you confirm.",
+  "confirmed": true,
+  "successMessage": "Deposit of ₹5000.00 into ACC001 succeeded. New balance: ₹55010.00.",
+  "databaseLedger": {
+    "type": "deposit",
+    "amount": "5000.00",
+    "resultingBalance": "55010.00",
+    "operatorId": 2
+  },
+  "expectedBalanceAfterDeposit": "55010.00",
+  "actualBalanceAfterDeposit": "55010.00",
+  "verdict": "PASS"
+}

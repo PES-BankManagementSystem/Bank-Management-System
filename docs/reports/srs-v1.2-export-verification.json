@@ -1,10 +1,10 @@
 {
   "source": "docs\\SRS_Bank_Management_System.md",
   "pdf": "docs\\SRS_Bank_Management_System.pdf",
-  "source_sha256": "39cc9a5f3cfd7869cf65fdefa22d370b78ccb81563650aa551643eec6013d489",
-  "pdf_sha256": "6e52f537d34b0cf6bfdc64aed1d61da830db6df764c0c28b5902324411804b1b",
+  "source_sha256": "df82a3b4b0fbb3bd274fbc210e3497364936ac16cfb5ceb48ffb43179ac677ab",
+  "pdf_sha256": "cf20998eb0d1da57dcce9839a2889a3576ad4aaa6a0e204c5447e686f5e75fb7",
   "page_count": 28,
-  "text_characters": 61432,
+  "text_characters": 61362,
   "headings_checked": 78,
   "missing_headings": [],
   "required_ids_checked": 45,
@@ -18,21 +18,47 @@
   "revision_v1_2_present": true,
   "schema_version": 5,
   "schema_fk_note": "transactions.interest_run_id is logical, not a declared foreign key",
-  "visual_review": "PASS: all 28 pages inspected; reference/glossary width fixes rerendered and rechecked",
+  "visual_review": "PASS: all 28 rendered pages inspected; final renumbering pages rerendered and rechecked",
+  "verification_date": "2026-11-07",
   "traceability_snapshot_rows_compared": 25,
   "traceability_snapshot_exact_match": true,
+  "traceability_comparison": {
+    "source": "docs/System_Validation_Report.md section 5",
+    "existing_rows_compared": 25,
+    "test_cases_statuses_and_notes_exact_match": true,
+    "additional_unassessed_rows": [
+      "FR-15",
+      "FR-16",
+      "FR-17",
+      "SEC-3",
+      "SEC-4",
+      "SEC-5",
+      "SEC-6"
+    ],
+    "exit_criteria": "NOT MET"
+  },
   "functional_requirement_count": 17,
   "nonfunctional_requirement_count": 9,
   "security_requirement_count": 6,
   "security_objective_count": 3,
+  "deviation_row_numbers_unique": true,
+  "deviation_row_count": 34,
+  "merged_main_deviation_rows_preserved": true,
+  "s44_deviation_rows": [
+    33,
+    34
+  ],
   "local_diagram_links": "PASS",
   "superseded_addendum_links": "PASS",
   "export_script_syntax": "PASS",
-  "sensitive_credential_scan": "PASS: no credential values or bearer tokens found; commit SHAs are source provenance",
+  "stale_s44_commit_and_row_references": "PASS",
   "reproducible_export": "PASS: second full export produced identical PDF SHA-256",
   "exporter_dependencies": {
     "reportlab": "5.1.0",
     "Markdown": "3.11.3",
     "PyMuPDF": "1.26.7"
-  }
+  },
+  "implementation_commit": "1175a652edc433377dc2c87e2728e88948a08eb7",
+  "validation_commit": "4cf8b3ca55d04a9d28bdcb0041d63d710ab619a8",
+  "test_plan_commit": "cc4b10200c531687aae83b855c5a59b246c25b37"
 }

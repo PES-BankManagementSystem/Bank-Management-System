@@ -18,13 +18,13 @@ All six SEC IDs have statements/acceptance criteria in SRS 5.3. Candidate links:
 
 ## Baselines and disagreements
 
-- Main: b66f97c0179f2e91ad8c36f020d403c426ca880d.
-- S-41 plan aff2a7bd71d175b740e1e78415cb3f083d6c61f2 is OPEN. TC-03 expects 204/old-token 401; S-43's historical row quotes 200. TC-01 must use username, not user_id. Update SRS citation to v1.2, 6 Nov 2026.
-- S-43 report df491ecaa521014028477fc550f270d27ffaba27 is OPEN. NFR-8 is Validated; all other existing FR/NFR/SEC IDs are Not validated. New IDs remain unassessed.
+- Main: 1175a652edc433377dc2c87e2728e88948a08eb7.
+- S-41 plan cc4b10200c531687aae83b855c5a59b246c25b37 is MERGED (#124). TC-03 expects 204/old-token 401; S-43's historical row quotes 200. TC-01 must use username, not user_id. Update SRS citation to v1.2, 6 Nov 2026.
+- S-43 report 4cf8b3ca55d04a9d28bdcb0041d63d710ab619a8 is MERGED (#130). NFR-8 is Validated; all other existing FR/NFR/SEC IDs are Not validated. New IDs remain unassessed.
 - S-46 #129 is OPEN. Reconcile Admin account-read permissions, absent /customers/{id}/accounts route, default HTTP/optional TLS, one-time credentials, current-token-only logout, and optional/logical schema relationships.
 - TC-08/09 numeric preconditions differ from seeds and require explicit fixtures. Legacy standalone TC numbering is not canonical Sprint 3 numbering.
 - ADR 003 interest basis remains provisional; do not invent owner approval.
-- Original pre-commit resulting-balance preview, blanket minimum-balance wording and no-record-mutation-on-rejection wording are qualified visibly in SRS 3.1, NFR-3 and NFR-7, and DEVIATIONS.md row 29. These reconciliations require owner review.
-- S-44 allocates rows 28-29 after main's row 27. Unmerged S-43 independently allocates rows 28-30. On integration preserve both stories, renumber collisions and update all SRS/handoff references.
+- Original pre-commit resulting-balance preview, blanket minimum-balance wording and no-record-mutation-on-rejection wording are qualified visibly in SRS 3.1, NFR-3 and NFR-7, and DEVIATIONS.md row 34. These reconciliations require owner review.
+- Merged main already resolves the duplicate row 28 and uses unique rows 28-32 for S-41/S-43/S-45. S-44 follows with rows 33-34; all SRS/handoff references are updated.
 
 TC-21 remains NOT RUN, TC-22 PARTIAL, fresh-seed reruns pending, overall S-43 exit NOT MET. This adds coverage obligations, not invented results.

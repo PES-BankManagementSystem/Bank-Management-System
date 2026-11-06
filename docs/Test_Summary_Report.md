@@ -1,248 +1,228 @@
-# Test Summary Report — S-29 (#60)
+# Test Summary Report — S-45 (#121)
 
-## Purpose and scope
+**Status:** Sprint 3 report for human review. The application build and measurements use the tested base commit below; these report-only corrections are layered on that commit.
 
-This report records execution of the primary Bank Management System Test Plan v1.0, Section 14 (TC-01–TC-17), and verification relevant to its Sections 6–8 and 14. The companion `Test_Cases_Bank_Management_System.docx` and `Test_Plan_Test_Cases_BankManagementSystem.pdf` contain an overlapping 11-case set with conflicting numbering and traceability. The primary `Test_Plan_BankManagementSystem.pdf`, which explicitly enumerates 17 cases, is used as the execution baseline. The discrepancy is recorded in [DEVIATIONS.md](DEVIATIONS.md), row 15.
+## 1. Scope and tested base
 
-## Tested environment and revision
+This report consolidates the S-41 Test Plan v1.2 cases, the S-43 System Validation results, the unit-test and coverage reports, and fresh local NFR measurements taken from the latest fetched `origin/main` snapshot. It covers the issue requirements for a current test summary, traceability, NFR-1/NFR-2 and open risks.
 
-- Source: refreshed `origin/main`, commit `14291f31d9c32f8f4b719c1f56194578afe2e995`.
-- Local host: macOS Darwin 24.5.0, arm64; Apple Clang 17.0.0; CMake 4.4.4; Node.js 25.1.0.
-- Database: fresh SQLite files created from `db/schema.sql` and `db/seed.sql`; performance checks added 2,000 accounts (2,005 total).
-- Automated build: `cmake --build build-arm64 --parallel 2` — succeeded.
-- Automated suite: `ctest --test-dir build-arm64 --output-on-failure` — **22/22 CTest targets passed**, total 75.55 seconds. The first sandboxed attempt could not bind local loopback sockets; the exact command was rerun with local socket access and passed. The old `build/` directory was not removed.
-- Security hygiene: `./scripts/check-secrets.sh` — `No committed secrets found.` `git diff --check` passed. The repository does not configure a separate clang-format, clang-tidy, cppcheck, or shellcheck job.
-- Live API: temporary seeded databases and servers bound to loopback/ephemeral ports. No test database or generated performance data was kept in the repository.
+- **Application base commit tested for this draft (full SHA):** `4cf8b3ca55d04a9d28bdcb0041d63d710ab619a8`. This is the current `origin/main` commit to which `feature/121-test-summary` was fast-forwarded before the report corrections; the final documentation commit will have a different SHA.
+- **Commit date:** 2026-11-06.
+- **Measurement date:** 2026-11-06.
+- **Local build:** CMake Release, AppleClang 17, ARM64, in `/tmp/bms-121-main-4cf8b3c/build-release`; the old project `build/` directory was not used. The full local CTest run passed 31/31 targets in 20.48 seconds.
+- **Build configuration:** `cmake -S . -B /tmp/bms-121-main-4cf8b3c/build-release -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES=arm64`, with the installed Command Line Tools libc++ include path supplied as `CMAKE_CXX_FLAGS` because this host otherwise could not find `<cstddef>`.
+- **Database:** two separate fresh SQLite databases under `/tmp`, each initialized from `db/schema.sql` and `db/seed.sql`, then extended with 3,000 generated accounts (3,005 total). The NFR-1 database was used only for transaction timing; the NFR-2 database was separately seeded and used for read/dashboard timing.
+- **Measurement scope:** local single-machine, serial requests. The result is not a concurrent-load or cross-platform benchmark.
 
-The full test output includes successful test targets for login/session/lockout, customer registration, account types, deposits, withdrawals, transfers, interest, statements/CSV, staff, audit, RBAC, TLS and log-secret handling. The per-case observations and commands are in [Test_Execution_Log.md](Test_Execution_Log.md).
+### Linked evidence
 
-## Test Plan results
+- [Unit Test Report](https://github.com/PES-BankManagementSystem/Bank-Management-System/blob/4cf8b3ca55d04a9d28bdcb0041d63d710ab619a8/docs/Unit_Test_Report.md)
+- [System Validation Report](https://github.com/PES-BankManagementSystem/Bank-Management-System/blob/4cf8b3ca55d04a9d28bdcb0041d63d710ab619a8/docs/System_Validation_Report.md)
+- [Code Coverage Report](https://github.com/PES-BankManagementSystem/Bank-Management-System/blob/4cf8b3ca55d04a9d28bdcb0041d63d710ab619a8/docs/Code_Coverage_Report.md)
+- [Branch Coverage Report](https://github.com/PES-BankManagementSystem/Bank-Management-System/blob/4cf8b3ca55d04a9d28bdcb0041d63d710ab619a8/docs/Branch_Coverage_Report.md)
+- [S-41 Test Plan v1.2](https://github.com/PES-BankManagementSystem/Bank-Management-System/blob/4cf8b3ca55d04a9d28bdcb0041d63d710ab619a8/docs/TEST_PLAN_CONSOLIDATED.md)
+- [SRS v1.1](SRS_v1.1_UPDATE.md) · [SADS](Software_Architecture_and_Design_Specification.docx) · [Deviations log](DEVIATIONS.md)
 
-| Total TCs | Passed | Failed | Blocked | Not executed | Pass percentage |
-|---:|---:|---:|---:|---:|---:|
-| 17 | 13 | 0 | 4 | 0 | 76.5% of all planned cases (100% of cases executable end-to-end) |
+The S-41 plan v1.2 has no separate old-to-new ID crosswalk and no standalone exit-criteria section. The mapping below is a semantic crosswalk derived from the v1.0 objectives and the v1.2 test descriptions/traceability matrix; it does not claim that S-41 published this table.
 
-The four blocked cases are TC-01 (browser dashboard walkthrough), TC-05 (account opening), TC-06 (account state changes plus complete viewing flow), and TC-11 (balance/history APIs). The endpoints for opening, status, balance, transaction history and `/dashboard` returned HTTP 404 during local probes; the homepage labels its role landing as a placeholder. Those capabilities are planned in backlog stories S-15, S-16, S-20, S-21 and S-25. Related partial checks are recorded, but none of these cases is counted as Pass.
+## 2. Test case ID crosswalk
 
-| Feature / cases | Results observed |
-|---|---|
-| Authentication and lockout — TC-01/02 | Lockout, correct-password refusal while locked, administrator unlock and session logout passed. The UI/dashboard portion of TC-01 is blocked. |
-| Customer records — TC-03/04 | Valid registration, unique identifier generation, missing mandatory field errors and successful valid registration passed. |
-| Account management — TC-05/06 | Blocked because `POST /accounts` and `PATCH /accounts/{acc}/status` are absent. Tests did confirm seeded frozen/closed accounts reject the applicable money-changing operations. |
-| Deposits and withdrawals — TC-07/08 | Live deposit returned HTTP 201 and INR 7,000 from an INR 5,000 test balance. Live INR 800 withdrawal from INR 1,500 returned HTTP 422 `BELOW_MINIMUM_BALANCE`; balance remained INR 1,500. |
-| Transfers — TC-09/10 | Live INR 1,000 transfer returned balances INR 4,000/INR 3,000 and a shared reference; same-account transfer returned HTTP 400 with balances unchanged. Automated fault-injection rollback checks passed. |
-| Balance/history — TC-11 | Blocked because the balance and transaction-history routes returned HTTP 404. Statement functionality is present and tested separately for FR-12. |
-| Interest — TC-12 | Interest run and duplicate-period refusal passed; the duplicate API call returned HTTP 409. |
-| Staff — TC-13 | Officer deactivation prevented login and preserved historical operator attribution. |
-| NFR — TC-14–17 | TC-14 performance, TC-15 credential/RBAC/TLS checks, TC-16 audit append-only checks and TC-17 invalid-input safety passed. |
-
-## Non-functional verification
-
-- **NFR-1 / TC-14, performance:** with 2,005 accounts, live authenticated requests took deposit **1.54 ms**, withdrawal **1.01 ms**, and transfer **1.24 ms** (request start to response; each returned HTTP 201). Each measured request was below 2 seconds. These are single local samples under light load and do not establish a latency distribution or peak-load result.
-- **NFR-2, page load:** a single localhost `GET /` returned HTTP 200, 21,977 bytes, in **39.10 ms** with the 2,005-account database. This is a placeholder home page, not the dashboard/account/history pages named in NFR-2; the 3-second requirement for those pages remains unverified.
-- **NFR-3, atomicity:** transfer tests force failures after partial transaction work and verify rollback; deposit, withdrawal and interest audit/database failure tests also passed.
-- **NFR-4 / TC-15, security:** automated checks confirmed salted Argon2id password hashes, no passwords/tokens in server logs, backend RBAC enforcement, and TLS server behavior. A live login over the HTTPS listener returned HTTP 200 and the Bank Officer role. No packet capture was taken; the login probe used TLS.
-- **NFR-5 / TC-16, audit:** automated checks confirmed audit fields, transactional rollback and database/API refusal of audit edits/deletes.
-- **NFR-6, usability:** no representative-user walkthrough was conducted. This requires at least three users per role and is not inferred from automated tests.
-- **NFR-7 / TC-17, reliability:** invalid amounts and unknown accounts returned structured errors; the automated tests verified unchanged balances/records on rejection.
-- **NFR-8, maintainability:** source/CMake inspection confirmed separate functional modules and static-library targets. This is a structural observation, not a maintainability study.
-- **NFR-9, portability:** the local run was macOS arm64. The repository CI workflow is configured to build and run CTest on Ubuntu and Windows, but its PR results are not available in this report yet. Chrome/Firefox compatibility was not tested; no browser walkthrough was conducted. **Updated by S-31:** CI results on Ubuntu and Windows, the business-logic check and a Chrome/Firefox walkthrough of the core flows are in [Portability verification](#portability-verification-nfr-9-s-31).
-
-## Requirements coverage
-
-| Requirement | Test Plan mapping / additional evidence | Coverage result |
+| Test Plan v1.0 ID and objective | S-41 v1.2 ID(s) | Mapping note |
 |---|---|---|
-| FR-1 | TC-01/02; login and RBAC automated tests | Login/API role checks passed; TC-01 browser dashboard portion blocked. |
-| FR-2 | TC-02 | Pass. |
-| FR-3 | TC-03/04 | Pass. |
-| FR-4 | TC-05 | Blocked; account-opening endpoint absent. |
-| FR-5 | TC-06 | Blocked; state-transition endpoint absent; seeded frozen-account rejection subchecks pass. |
-| FR-6 | TC-07 | Pass. |
-| FR-7 | TC-08 | Pass. |
-| FR-8 | TC-09/10 | Pass. |
-| FR-9 / FR-10 | TC-11 | Blocked; balance/history endpoints absent. |
-| FR-11 | TC-12 | Pass. |
-| FR-12 | No dedicated TC in primary Test Plan traceability table; `statement_test` and `statement_csv_test` | Supplementary automated statement/CSV tests passed; formal Test Plan coverage is missing. |
-| FR-13 | TC-13 | Pass for deactivation and historical attribution; broader staff create/update checks also pass. |
-| FR-14 | No TC in primary Test Plan traceability table; live `GET /dashboard` | No dashboard endpoint; HTTP 404. Not covered by an executable TC. |
-| NFR-1 | TC-14 | Pass for measured local samples; no peak-load distribution. |
-| NFR-2 | No TC in primary Test Plan traceability table; one `GET /` sample | Representative dashboard/account/history performance is unverified. |
-| NFR-3 | TC-09 and rollback tests | Pass for tested transaction failure paths. |
-| NFR-4 | TC-15 and auth/RBAC/TLS tests | Pass for stored hashes, logs, server authorization and TLS login probe. |
-| NFR-5 | TC-16 | Pass. |
-| NFR-6 | No TC in primary Test Plan traceability table | Not executed; representative users were unavailable. |
-| NFR-7 | TC-17 | Pass for tested invalid input cases. |
-| NFR-8 | No TC in primary Test Plan traceability table | Partial structural inspection only. |
-| NFR-9 | No TC in primary Test Plan traceability table; CI matrix, `scripts/check-portability.sh` and the S-31 browser walkthrough | Pass for Linux/Windows build and tests in CI, no platform-specific business logic, and 21/21 core-flow steps in Chrome and in Firefox on Linux. Browsers on Windows were not checked. See [Portability verification](#portability-verification-nfr-9-s-31). |
+| TC-01 — login and role routing | TC-01; TC-14 | Login is TC-01; role-specific dashboard behavior is now tested separately by TC-14. |
+| TC-02 — lockout after failed login and administrator unlock | TC-02; TC-02B; TC-03 | Lockout is TC-02, unlock is TC-02B, and logout/session invalidation is isolated in TC-03. |
+| TC-03 — create customer | TC-04 | Customer registration is TC-04 in v1.2. |
+| TC-04 — reject customer with missing field | TC-04 | v1.2 TC-04 covers registration validation. |
+| TC-05 — account opening minimum | TC-05 | Same primary objective; v1.2 adds exact-minimum and zero-minimum opening coverage. |
+| TC-06 — frozen-account operations | TC-07 | Freeze/unfreeze/close behavior is TC-07 in v1.2. |
+| TC-07 — deposit | TC-08 | Deposit and confirmation behavior is TC-08. |
+| TC-08 — withdrawal minimum balance | TC-06; TC-09 | Minimum balance is TC-06; daily limit is separately TC-09. |
+| TC-09 — atomic transfer | TC-10 | Atomic transfer is TC-10. |
+| TC-10 — reject same-account transfer | TC-10B | Invalid transfers are TC-10B. |
+| TC-11 — balance/history ownership | TC-11; TC-17 | Ownership/balance is TC-11; date-filtered history is TC-17. |
+| TC-12 — prevent duplicate interest credit | TC-09B | Interest idempotency is TC-09B. |
+| TC-13 — officer deactivation and historical attribution | TC-13 | Same primary objective. |
+| TC-14 — balance-changing transaction performance (NFR-1) | TC-20 | NFR-1 performance is TC-20. |
+| TC-15 — credential handling | TC-01; TC-15 | Credential/hash checks map to TC-01; TLS is separately covered by TC-15. |
+| TC-16 — append-only audit | TC-16 | Same primary objective. |
+| TC-17 — invalid input and graceful errors | TC-02; TC-09; TC-10B; TC-11 | Reliability/error checks are distributed across these v1.2 cases; v1.2 TC-17 instead covers date-filtered history. |
 
-## Defects
+Additional v1.2 cases with no equivalent standalone v1.0 case are TC-04B (administrator-only customer deactivation), TC-18 (statement/CSV), TC-19 (account-list/history performance), TC-21 (usability), and TC-22 (cross-platform/browser portability). TC-14 is also new dashboard behavior coverage; the dashboard-routing step in old TC-01 is only a partial objective match.
 
-No TC was marked Fail, so no defect issue was created. The four Blocked cases have observed reasons and are already represented by the backlog stories listed above. No severity labels were created because there were no failing cases to file as defects.
+## 3. Sprint 3 system test results
 
-## Known limitations and risks
+The S-43 report records 26 v1.2 cases: 23 historical PASS, 2 PARTIAL, 0 FAIL, and 1 NOT RUN. “Executed” includes partial runs. Only TC-15 was confirmed by S-43 as independently fresh-seeded; other historical passes are observations, not completed final fresh-seed acceptance. The S-45 NFR run adds current-base measurements for TC-14/TC-19/TC-20 but does not rerun the remaining system cases.
 
-- The account-opening, account-status, balance, transaction-history and dashboard endpoints are absent on the tested revision; this prevents completion of four planned system cases and full FR coverage.
-- The separate test-case documents conflict with the primary Test Plan's IDs/mappings. Backlog S-35 calls for consolidation; this report follows the primary PDF and records the discrepancy without silently remapping cases.
-- Usability needs a human walkthrough. Browser compatibility was checked by a scripted walkthrough in Chrome and Firefox on Linux (S-31), not by hand. NFR-2 needs representative pages and a larger/repeated timing sample; TC-14 used only a single sample per operation.
-- Local macOS tests do not demonstrate Linux/Windows portability. CI should supply that evidence after this report's PR is opened. **Updated by S-31:** CI builds and tests on ubuntu-latest and windows-latest; see [Portability verification](#portability-verification-nfr-9-s-31).
+| v1.2 case | S-43 result | S-45 evidence/status note |
+|---|---|---|
+| TC-01 — valid authentication | PASS | Historical role logins; CTest also passed. |
+| TC-02 — lockout | PASS | Historical result; fresh-seed acceptance still outstanding. |
+| TC-02B — administrative unlock | PASS | Historical result; fresh-seed acceptance still outstanding. |
+| TC-03 — logout/session invalidation | PARTIAL | Logout returned 204 and old token returned 401; UI redirect was not verified. |
+| TC-04 — registration validation | PASS | Historical result; fresh-seed acceptance still outstanding. |
+| TC-04B — customer deactivation | PASS | Historical result; fresh-seed acceptance still outstanding. |
+| TC-05 — account opening | PASS | Historical result; fresh-seed acceptance still outstanding. |
+| TC-06 — withdrawal minimum/daily limit | PASS | Historical result; fresh-seed acceptance still outstanding. |
+| TC-07 — freeze/close | PASS | Historical result; fresh-seed acceptance still outstanding. |
+| TC-08 — deposit confirmation | PASS | Historical result; seed balance differed from the plan precondition. |
+| TC-09 — daily limit/UTC boundary | PASS | Historical result; fresh-seed acceptance still outstanding. |
+| TC-09B — interest once per period | PASS | Historical result; fresh-seed acceptance still outstanding. |
+| TC-10 — atomic transfer | PASS | Historical result; fresh-seed acceptance still outstanding. |
+| TC-10B — invalid transfers | PASS | Historical result; fresh-seed acceptance still outstanding. |
+| TC-11 — customer balance/history ownership | PASS | Historical result; fresh-seed acceptance still outstanding. |
+| TC-12 — Bank Officer creation | PASS | Historical result; fresh-seed acceptance still outstanding. |
+| TC-13 — officer deactivation/session invalidation | PASS | Historical result; fresh-seed acceptance still outstanding. |
+| TC-14 — role-specific dashboards | PASS | Re-measured on current base via API and browser; see NFR-2. |
+| TC-15 — HTTPS/TLS | PASS | S-43 identifies this as the one independently fresh-seeded case. |
+| TC-16 — append-only audit | PASS | Historical result; fresh-seed acceptance still outstanding. |
+| TC-17 — date-filtered history | PASS | Historical result; fresh-seed acceptance still outstanding. |
+| TC-18 — statement/CSV | PASS | Historical Blob content verified; native browser save event was not captured. |
+| TC-19 — account-list/history performance | PASS | Re-measured on a separately fresh-seeded current-base database; see NFR-2. |
+| TC-20 — transaction performance | PASS | Re-measured on a fresh current-base database; see NFR-1. |
+| TC-21 — first-time usability | NOT RUN | Requires three genuine first-time participants; no participant results were simulated. |
+| TC-22 — cross-platform/browser portability | PARTIAL | CI/build evidence exists in S-43; fresh Chrome/Firefox responsive comparison is missing. |
 
-## Conclusion
+### Test execution totals
 
-The automated suite passes and all 13 executable Test Plan cases passed. Four cases remain blocked by unavailable UI/API behavior. Several SRS requirements (notably FR-4, FR-5, FR-9/FR-10 and FR-14) therefore lack complete system-level evidence, and usability/browser verification remains outstanding. **The available evidence is not sufficient to conclude that the product meets the full SRS.** The report records the gaps rather than treating missing features or unrun walkthroughs as passes.
+| Measure | Count | Percentage |
+|---|---:|---:|
+| Total planned v1.2 cases | 26 | 100.0% |
+| Executed, including partial | 25 | 96.2% of planned |
+| PASS | 23 | 88.5% of planned; 92.0% of executed |
+| PARTIAL | 2 | 7.7% of planned |
+| FAIL | 0 | 0.0% of planned |
+| NOT RUN | 1 | 3.8% of planned |
 
-## Performance verification (NFR-1, NFR-2, TC-14)
+Counts reconcile: 23 PASS + 2 PARTIAL + 0 FAIL + 1 NOT RUN = 26 planned; executed = 23 + 2 + 0 = 25.
+
+### Automated unit-test run
+
+The [Unit Test Report](Unit_Test_Report.md) reports 31/31 CTest targets passed. A fresh Release build and complete CTest run from the exact base commit in this draft also passed **31/31 targets**, with 0 failed, in 20.48 seconds. The first sandboxed attempt could not bind loopback sockets; the full run was repeated with local socket permission and passed. CTest targets are not the same unit as Test Plan system cases, so these totals are reported separately.
+
+## 4. Coverage summary
+
+Coverage figures below are the local macOS gcovr results in the coverage reports, after the S-42 test-only additions. They are not CI percentages. The latest successful main CI run is [run 42257808066](https://github.com/PES-BankManagementSystem/Bank-Management-System/actions/runs/42257808066), for immutable commit `4cf8b3ca55d04a9d28bdcb0041d63d710ab619a8`; it produced the [`coverage-report` artifact 13524755371](https://github.com/PES-BankManagementSystem/Bank-Management-System/actions/runs/42257808066#artifacts). Anonymous artifact download returned HTTP 401, and `gh auth status` reports an invalid token.
+
+| Module | Line coverage | Branch coverage | Line ≥80% | Branch ≥60% |
+|---|---:|---:|---|---|
+| account | 92.0% | 52.0% | Yes | No |
+| api | 88.2% | 44.0% | Yes | No |
+| audit | 100.0% | 54.3% | Yes | No |
+| auth | 93.6% | 53.6% | Yes | No |
+| common | 80.2% | 45.6% | Yes | No |
+| customer | 96.7% | 54.5% | Yes | No |
+| main | 18.2% | 9.3% | No | No |
+| reporting | 95.8% | 51.9% | Yes | No |
+| staff | 97.2% | 47.4% | Yes | No |
+| transaction | 97.4% | 51.3% | Yes | No |
+| **Overall** | **92.1%** | **50.7%** | — | — |
+
+- **Below the 80% line threshold:** `main` (18.2%).
+- **Below the 60% branch threshold:** all ten modules and overall branch coverage (50.7%).
+- **CI coverage values:** NOT AVAILABLE: authenticate with a valid GitHub account, download `coverage-report` artifact 13524755371 from [successful CI run 42257808066](https://github.com/PES-BankManagementSystem/Bank-Management-System/actions/runs/42257808066), and read `summary.json`; anonymous artifact download returned HTTP 401. Do not substitute the local coverage figures above.
+
+## 5. Requirement coverage
+
+The S-41 v1.2 RTM contains 25 requirement IDs: FR-1–FR-14, NFR-1–NFR-9, SEC-1 and SEC-2. The table below answers the requested “at least one mapped passing case” measure using S-43 case outcomes and the current-base NFR remeasurements. This measure is not the same as final requirement validation: S-43 withheld validation unless all linked cases met its independent fresh-seed acceptance condition.
+
+| Coverage measure | Requirements | Result |
+|---|---|---:|
+| At least one mapped PASS result | FR-1–FR-14; NFR-1–NFR-5; NFR-7–NFR-8; SEC-1–SEC-2 | 23/25 (92.0%) |
+| No passing mapped case | NFR-6 (TC-21 not run); NFR-9 (TC-22 partial) | 2/25 (8.0%) |
+| Strict validated status in S-43 | NFR-8 only; remaining rows are marked “Not validated” in the source report | 1/25 (4.0%) |
+
+The 23/25 measure means a mapped case has a PASS observation; it does not override partial cases or the fresh-seed limitation. S-43's stricter 1/25 measure is retained as the source report's validation decision. The NFR-1 and NFR-2 local reruns provide new threshold observations but do not independently rerun every linked system case.
+
+## 6. Defects
+
+`gh auth status` failed: the saved GitHub token for `adityamahesh728-dot` is invalid. No authentication repair or issue query was attempted.
+
+**Defect totals, severity counts, and open/closed counts: NOT AVAILABLE: needs a gh login or a pasted issue list.** The S-43 report records that its earlier issue review found no open critical defect at that review snapshot; that historical observation is not a current issue-label count and is not substituted here.
+
+| Severity/status | Open | Closed | Total |
+|---|---:|---:|---:|
+| Critical | NOT AVAILABLE | NOT AVAILABLE | NOT AVAILABLE |
+| Major | NOT AVAILABLE | NOT AVAILABLE | NOT AVAILABLE |
+| Minor | NOT AVAILABLE | NOT AVAILABLE | NOT AVAILABLE |
+| **All severities** | **NOT AVAILABLE** | **NOT AVAILABLE** | **NOT AVAILABLE** |
+
+## 7. NFR-1 and NFR-2 remeasurement
 
 ### Requirements and method
 
-- **NFR-1 / TC-14:** measure authenticated deposit, withdrawal and transfer
-  requests through the HTTP response, with 2,000–3,000 accounts; each must
-  complete in under 2 seconds including persistence.
-- **NFR-2:** dashboard, account-list and transaction-history views must each
-  load in under 3 seconds. Measurements are full server-side HTTP response
-  times; this run does not include browser rendering.
-- Each available operation uses 30 samples after 3 warmups by default. The
-  report includes min, mean, median, nearest-rank p95/p99, max, threshold and
-  verdict. One transaction response balance is checked against a read-only
-  SQLite query after the response returns.
+- **NFR-1 threshold:** each deposit, withdrawal, or transfer, including database persistence, under 2,000 ms; source: SRS v1.1 §5.1 and Test Plan v1.2 TC-20.
+- **NFR-2 threshold:** dashboards, account lists, and transaction history under 3,000 ms; source: SRS v1.1 §5.1 and Test Plan v1.2 TC-14/TC-19.
+- **Dataset:** 3,005 total accounts (3,000 generated); each database started from schema and seed SQL. Five generated accounts have 300 historical transactions each; other generated accounts have 12.
+- **Repetitions:** 3 warmups, then 30 measured requests per API operation/view/role. The SRS and Test Plan do not prescribe the run count or an acceptance percentile; 3/30 follows the existing S-43/helper measurement protocol. Mean, median, p95, p99 and maximum are descriptive; no percentile is claimed as the acceptance rule.
+- **Load:** one serial local client, no concurrent user load. The documents say “normal usage” / “normal simulated load” without defining concurrency or workload. Therefore these are local threshold observations, not proof under an agreed normal-load profile.
+- **Machine/build:** MacBook Air (MacBookAir10,1), Apple M1, 8 cores (4 performance and 4 efficiency), 8 GB RAM; macOS 15.5 (24F74), ARM64; AppleClang 17.0.0.17000013; CMake 4.4.4; Release. CMake was configured with `CMAKE_OSX_ARCHITECTURES=arm64` and the installed Command Line Tools libc++ include directory so this host's compiler could find `<cstddef>`; no source or optimization flags were changed for that workaround.
+- **Scope:** local, single-machine measurements. Another OS, machine, CI runner, or production workload may differ.
 
-The seed uses the real schema and seed SQL, adds 2,500 generated accounts and
-customers (2,505 total), and creates deterministic ledger histories. Five
-generated accounts have 300 transactions each; the other generated accounts
-have 12. Generated customers do not need login credentials because the seeded
-Bank Officer authenticates and performs the measurements.
+### NFR-1 transaction timing
 
-### Results
+Fresh database: [`/tmp/bms-perf-121.sqlite`](reports/nfr-measurements-api-2026-11-06.json). Each request was authenticated. The helper verified the response balance for a measured transaction against its persisted SQLite balance.
 
-Environment: macOS Darwin 24.5.0 arm64 (Apple T8103), memory amount unavailable
-to the local process; Apple Clang 17.0.0, CMake 4.4.4, Python 3.13.1, bundled
-SQLite 3.53.0 in the app (Python seed/readback SQLite 3.45.3), app version
-0.1.0, source commit `f626c3a9d3fba92564ebb629b9a7f19771a825d2`. The database
-contained 2,505 accounts (2,500 generated), each with a customer and history;
-five generated accounts had 300 transactions and the other generated accounts
-had 12. Measurements ran on loopback over HTTP with one serial client. The
-initial configure needed the pinned FetchContent downloads; the sandbox blocked
-network access, so configure was rerun with network permission. The first
-CTest attempt was also blocked from binding loopback; the full suite passed
-when rerun with local socket access.
+| Operation | Samples | Mean | Median | p95 | Maximum | Threshold | Sample result |
+|---|---:|---:|---:|---:|---:|---:|---|
+| Deposit | 30 | 0.787 ms | 0.765 ms | 0.911 ms | 1.041 ms | <2,000 ms | Below threshold |
+| Withdrawal | 30 | 0.801 ms | 0.770 ms | 1.049 ms | 1.057 ms | <2,000 ms | Below threshold |
+| Transfer | 30 | 0.944 ms | 0.936 ms | 1.060 ms | 1.083 ms | <2,000 ms | Below threshold |
 
-| Operation | Samples | Mean | Median | p95 | p99 | Max | Threshold | Verdict |
-|---|---:|---:|---:|---:|---:|---:|---:|---|
-| Deposit | 30 | 1.009 ms | 0.980 ms | 1.209 ms | 1.237 ms | 1.237 ms | 2,000 ms | Pass |
-| Withdrawal | 30 | 1.026 ms | 1.001 ms | 1.197 ms | 1.390 ms | 1.390 ms | 2,000 ms | Pass |
-| Transfer | 30 | 1.257 ms | 1.211 ms | 1.563 ms | 1.728 ms | 1.728 ms | 2,000 ms | Pass |
-| Dashboard (`GET /dashboard`) | 30 diagnostics, HTTP 404 | — | — | — | — | — | 3,000 ms | Blocked (route absent) |
-| Account list (`GET /accounts`) | 30 diagnostics, HTTP 404 | — | — | — | — | — | 3,000 ms | Blocked (route absent) |
-| Transaction history (`GET /accounts/{acc}/transactions`) | 30 diagnostics, HTTP 404 | — | — | — | — | — | 3,000 ms | Blocked (route absent) |
+All measured transaction responses succeeded and the sampled persistence check matched. The sample maxima meet the numeric limit for this serial local run. Formal performance under “normal simulated load” is NOT AVAILABLE: the SRS/Test Plan do not specify the load profile needed to reproduce that condition.
 
-All 90 timed transaction requests returned HTTP 201. The script compared a
-returned transaction balance with its persisted SQLite account balance after
-the response. Additional available-resource measurements: the static shell
-(`GET /`, 30 samples) mean 0.595 ms, median 0.431 ms, p95 1.224 ms, max
-4.339 ms; the statement API (30 samples) mean 5.282 ms, median 5.265 ms, p95
-5.397 ms, max 5.519 ms. The statement API and shell are not substitutes for
-the required dashboard/account-list/history views. The full CTest suite passed
-23/23 in 75.34 seconds, including the new performance-helper tests.
+### NFR-2 API and S-25 page timing
 
-Raw successful and blocked-probe measurements are recorded in
-[`docs/perf/results.json`](perf/results.json). No operation exceeded a
-threshold, so no defect issue was opened. The three blocked views are existing
-feature gaps, not measured slow operations.
+Fresh independent database: [`/tmp/bms-perf-121-nfr2.sqlite`](reports/nfr2-measurements-2026-11-06.json). API timings include 3 warmups and 30 measured requests per view. The dashboard page timing uses headless Chrome 156.0.8078.80; each sample navigated to `/`, waited for document load, dispatched the authenticated role session, and timed until the S-25 dashboard's `/dashboard` request completed and its DOM rendered. Raw browser timings are in [`nfr2-dashboard-page-2026-11-06.json`](reports/nfr2-dashboard-page-2026-11-06.json).
 
-### Environment, limitations and reproduction
+| View | Samples | Mean | p95 | Maximum | Threshold | Sample result |
+|---|---:|---:|---:|---:|---:|---|
+| `GET /dashboard` — Administrator | 30 | 5.879 ms | 12.999 ms | 25.236 ms | <3,000 ms | Below threshold |
+| `GET /dashboard` — Bank Officer | 30 | 4.960 ms | 5.275 ms | 5.414 ms | <3,000 ms | Below threshold |
+| `GET /dashboard` — Customer | 30 | 0.484 ms | 0.636 ms | 0.771 ms | <3,000 ms | Below threshold |
+| `GET /customers/me/accounts` — Customer account list | 30 | 0.348 ms | 0.425 ms | 0.429 ms | <3,000 ms | Below threshold |
+| `GET /accounts/PF000001/transactions?from=2023-01-01&to=2026-12-31` — history | 30 | 1.365 ms | 6.522 ms | 16.298 ms | <3,000 ms | Below threshold |
+| S-25 page — Administrator (navigation + API + render) | 30 | 29.656 ms | 39.082 ms | 53.545 ms | <3,000 ms | Below threshold |
+| S-25 page — Bank Officer (navigation + API + render) | 30 | 27.505 ms | 30.385 ms | 30.614 ms | <3,000 ms | Below threshold |
+| S-25 page — Customer (navigation + API + render) | 30 | 17.762 ms | 29.827 ms | 31.195 ms | <3,000 ms | Below threshold |
 
-Measurements are local, serial HTTP API response times; they are not
-browser-render timings or concurrent-load benchmarks. The app has a statement
-endpoint and static frontend shell, but the three NFR-2 views are not
-implemented in this revision.
+All requests returned HTTP 200 and the dashboard responses had the expected role. These maxima meet the numeric threshold in the measured serial run. Formal NFR-2 performance under “normal simulated load” is NOT AVAILABLE: the SRS/Test Plan do not define a concurrency or workload profile. This does not claim CI, Windows, or production performance.
 
-```sh
-python3 scripts/perf/seed.py --db "$(python3 -c 'import tempfile; print(tempfile.gettempdir() + "/bms-perf-s30.sqlite")')"
-cmake -S . -B build
-cmake --build build --parallel
-./build/bin/bms_server --db "$(python3 -c 'import tempfile; print(tempfile.gettempdir() + "/bms-perf-s30.sqlite")')" --port 8080
-# In another terminal:
-python3 scripts/perf/measure.py --base-url http://127.0.0.1:8080 \
-  --db "$(python3 -c 'import tempfile; print(tempfile.gettempdir() + "/bms-perf-s30.sqlite")')" --samples 30 --warmup 3
-ctest --test-dir build --output-on-failure
-```
+## 8. Test Plan pass/fail and exit-criteria verdicts
 
-To repeat with the same path, add `--reset` to `seed.py`. The guard allows only
-paths in the OS temporary directory named `bms-perf-*.sqlite`; it refuses
-ordinary project and production-looking paths. On Windows, replace `python3`
-with `py -3`, use `build/bin/Debug/bms_server.exe`, and set the DB path with
-PowerShell: `$db = Join-Path ([IO.Path]::GetTempPath()) 'bms-perf-s30.sqlite'`.
+S-41 Test Plan v1.2 does not define a separate numbered exit-criteria list. Its §6 says a feature passes only when all associated cases pass; §8 lists the test summary report as a deliverable. S-43's system validation review makes its release checks explicit. The verdicts below separate those sources.
 
-## Portability verification (NFR-9, S-31)
+| Criterion | Verdict | Evidence |
+|---|---|---|
+| Test Plan §6 — all associated cases for a feature pass | **NOT MET overall** | TC-03 and TC-22 are partial and TC-21 is not run; see the [S-43 case table](https://github.com/PES-BankManagementSystem/Bank-Management-System/blob/4cf8b3ca55d04a9d28bdcb0041d63d710ab619a8/docs/System_Validation_Report.md) and this report's §3. |
+| Test Plan §8 — prepare a Test Summary Report | **MET as a draft deliverable** | This report consolidates the linked reports and evidence. Human review remains outstanding. |
+| S-43 release check — all planned cases executed | **NOT MET** | 25/26 cases were executed; TC-21 was not run and TC-22 is partial. |
+| S-43 release check — independent fresh-seed acceptance per case | **NOT MET** | S-43 confirms TC-15 only; its other historical passes did not have independently confirmed fresh seeds. S-45 adds fresh seeded performance datasets, not a rerun of every case. |
+| S-43 release check — no critical defect open | **NOT AVAILABLE** | Current severity/status issue data require `gh` authentication or a pasted issue list; see §6. |
+| NFR-1 numeric timing in this local sample | **Below threshold in the measured run** | 90 measured persisted transaction requests; maximum 1.083 ms against 2,000 ms. This does not establish the unspecified normal-load condition. |
+| NFR-2 numeric timing in this local sample | **Below threshold in the measured run** | API and rendered S-25 role dashboard maxima were below 3,000 ms; see §7 and raw reports. This does not establish the unspecified normal-load condition. |
+| Overall S-43 exit decision | **NOT MET** | All-cases-executed and independent-seed checks are not met; current critical-defect status is unavailable. |
 
-NFR-9 asks for the back-end core to build and run on at least two platforms without platform-specific code paths in the business logic, and for the front end to work in at least two major browsers. Test Plan 5.3 and 9 name Chrome and Firefox for the browser checks.
+## 9. Open risks and known gaps
 
-### Build and test on Linux and Windows
+- The feature branch was fast-forwarded to tested application base `4cf8b3ca55d04a9d28bdcb0041d63d710ab619a8` before these report-only edits. The final documentation commit will be newer than the application commit that was built and measured.
+- Defect totals and current severity/open/closed labels are unavailable because `gh auth status` reports an invalid token.
+- The SRS/Test Plan do not define what “normal usage” or “normal simulated load” means, nor a concurrency, run count, or acceptance percentile. Current local measurements used one serial client; a team-approved load profile is needed for a conclusive performance verdict.
+- TC-21 still needs three genuine first-time participants. TC-22 still needs fresh Chrome and Firefox responsive-flow checks and a rendering comparison.
+- S-43's historical passes remain short of independent fresh-seed acceptance for all but TC-15. The current performance reruns do not replace that system-validation work.
+- Only `main` (18.2%) is below the 80% local line-coverage threshold; every module is below the 60% local branch-coverage threshold. The required CI coverage percentages remain unavailable from the coverage artifact.
+- The merged S-43 report preserves some prerequisite-state text written before S-41/S-43 merged. Its case evidence is retained as historical; this summary links to it at the current main commit and flags the stale snapshot in [DEVIATIONS.md](DEVIATIONS.md).
+- Windows was not run locally. The S-43 report links prior Ubuntu/Windows CI evidence, but this draft does not claim a fresh Windows run at the current SHA.
 
-The `CI` workflow builds the back end and runs the full CTest suite on `ubuntu-latest` and `windows-latest` (MSVC) for every pull request and every push to `main`. On `main` at `4975424` (run [41321653023](https://github.com/PES-BankManagementSystem/Bank-Management-System/actions/runs/41321653023)), both `Build & test` jobs passed. The S-31 pull request runs the same matrix on its own changes.
+## 10. Historical Sprint 2 results — S-29, v1.0 IDs
 
-Locally, the S-31 branch was built and tested on Arch Linux x86_64 (GCC 16.2.1, CMake 4.4.5, Debug), and all 29 CTest targets passed. The new `calendar_test` was one of them.
+The S-29 report used the original v1.0 TC-01–TC-17 numbering and a then-tested source commit `14291f31d9c32f8f4b719c1f56194578afe2e995`. Its recorded system-test summary was 17 total cases: 13 PASS, 0 FAIL, 4 BLOCKED, 0 not executed; 76.5% passed out of all planned cases and 100% of executable cases passed. The four blocked cases were the old TC-01 dashboard walkthrough, TC-05 account opening, TC-06 account-state/viewing flow, and TC-11 balance/history APIs.
 
-### No platform-specific code paths in business logic
+Historical one-sample NFR-1 timings were deposit 1.54 ms, withdrawal 1.01 ms and transfer 1.24 ms, each below 2 seconds for that run. The old NFR-2 `GET /` shell measurement was 39.10 ms but was explicitly not a dashboard, account-list or history measurement. These S-29 values are preserved as history only and are superseded by the S-45 measurements above. See the earlier [Test Execution Log](Test_Execution_Log.md) and [S-30 raw performance results](perf/results.json).
 
-Before S-31, `src/customer/validation.cpp` (customer date-of-birth validation) chose between `localtime_s` and `localtime_r` with `#ifdef _WIN32`. That choice now lives in one shared helper, `src/common/calendar.{hpp,cpp}`, which `common/log.cpp` also uses. The business modules (`account`, `audit`, `auth`, `customer`, `reporting`, `staff`, `transaction`) contain no platform conditionals or OS headers.
+## 11. Assumptions and source limitations
 
-`scripts/check-portability.sh` searches those modules for platform macros (`_WIN32`, `_MSC_VER`, `__linux__`, `__APPLE__` and similar) and OS headers (`<windows.h>`, `<unistd.h>`, `<sys/...>`). It fails on the old code and passes now, and CI runs it as the `No platform-specific business logic` job. Platform-specific code remains only where it belongs: `src/common/calendar.cpp` (time conversion), `src/api/server.cpp` (socket options) and the build files.
-
-### Core flows in Chrome and Firefox
-
-`scripts/browser-check/walkthrough.js` drives the real browsers through puppeteer-core 24.43.1. Each browser ran against its own server (`bms_server --port 8120`) on a fresh database built from `db/schema.sql` and `db/seed.sql`. The run was on 2026-11-01 from the S-31 branch.
-
-- **Browsers:** Google Chrome 156.0.8078.79 and Mozilla Firefox 159.0, both headless at 1280×900, on Arch Linux x86_64.
-- **What the script does:** it types into the forms, clicks the buttons, and accepts the browser's confirmation dialogs. It then checks the text and visibility of what the page shows, and saves a screenshot after every step.
-- **What was not done:** nobody carried out a hands-on manual pass. Browsers on Windows or macOS were not checked.
-
-| # | Step | Chrome 156 | Firefox 159 |
-|---|---|---|---|
-| 1 | Sign-in page loads (HTTP 200) | Pass | Pass |
-| 2 | Wrong password shows "Invalid username or password." | Pass | Pass |
-| 3 | Bank Officer signs in and lands on the Bank Officer home with officer navigation | Pass | Pass |
-| 4 | Officer deposits INR 500.00 into ACC001 (balance 50,500.00) | Pass | Pass |
-| 5 | Officer withdraws INR 200.00 from ACC001 (balance 50,300.00) | Pass | Pass |
-| 6 | Officer transfers INR 100.00 from ACC001 to ACC004; the reference and both balances are shown | Pass | Pass |
-| 7 | Deposit to frozen ACC002 is refused with an error message and no change | Pass | Pass |
-| 8 | Officer registers a customer; customer ID and one-time password are shown | Pass | Pass |
-| 9 | Officer views ACC001 transaction history | Pass | Pass |
-| 10 | Bank Officer signs out and returns to sign-in | Pass | Pass |
-| 11 | Customer signs in and sees only customer navigation (My profile, Accounts, Statements, History) | Pass | Pass |
-| 12 | Customer sees own accounts ACC001 and ACC004 with balances, and not ACC002 | Pass | Pass |
-| 13 | Customer filters ACC001 history to today; the deposit, withdrawal and transfer are shown newest first | Pass | Pass |
-| 14 | Customer views the ACC001 statement (opening INR 0.00, closing INR 50,200.00) | Pass | Pass |
-| 15 | Deposit, withdraw and transfer screens are hidden from the Customer | Pass | Pass |
-| 16 | Customer signs out | Pass | Pass |
-| 17 | Administrator signs in and lands on the Administrator home with administrator navigation | Pass | Pass |
-| 18 | Administrator views the audit trail; today's deposit is listed | Pass | Pass |
-| 19 | Administrator views the staff list (officer1, officer2) | Pass | Pass |
-| 20 | Administrator views account types (Savings, Current) | Pass | Pass |
-| 21 | Administrator signs out | Pass | Pass |
-
-Neither browser raised a JavaScript error. The server access logs for the two runs match: 49 requests each. Only three requests failed, and the walkthrough caused all three on purpose:
-
-- `GET /favicon.ico` returned 404 because the app has no favicon.
-- The wrong-password login (step 2) returned 401.
-- The frozen-account deposit (step 7) returned 422.
-
-### Not covered
-
-- Browsers on Windows or macOS, and any browser other than Chrome and Firefox.
-- Visual layout, which was spot-checked from a few screenshots only.
-- Printing a statement and downloading a statement CSV, which open browser dialogs or downloads.
-- The role dashboards, which don't exist yet (S-25, #57). The role home pages are still placeholders.
-
-### Reproduce
-
-```sh
-cmake -S . -B build && cmake --build build --parallel
-sqlite3 /tmp/bms-browser.db < db/schema.sql && sqlite3 /tmp/bms-browser.db < db/seed.sql
-./build/bin/bms_server --db /tmp/bms-browser.db          # http://127.0.0.1:8080
-# In another terminal:
-./scripts/check-portability.sh
-cd scripts/browser-check && npm install
-npm run chrome      # or: npm run firefox (use a fresh database for each run)
-```
-
-Set `CHROME_PATH` or `FIREFOX_PATH` if the browser is not at `/usr/bin/google-chrome-stable` or `/usr/bin/firefox`.
+- The v1.0-to-v1.2 crosswalk is based on test objectives and the v1.2 RTM; S-41 does not provide a formal crosswalk table.
+- The “23/25 requirements covered” calculation means at least one associated test has a PASS observation. It is distinct from the S-43 “validated” status, which is stricter and requires its independent fresh-seed criterion.
+- The 3-warmup/30-measurement protocol follows the existing S-43/helper procedure; it is not specified as a required run count by the SRS or S-41 plan. Percentiles are included as descriptive statistics only.
+- `gh auth status` is invalid, so no current GitHub defect labels were read. No severity or issue count has been inferred from the absence of local test failures.
+- The NFR measurements apply to the application base SHA above, not a separate build of the final documentation commit. No application source changed after the measurements.

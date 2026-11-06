@@ -1,12 +1,12 @@
 {
-  "revision_date": "2026-11-06",
-  "implementation_commit": "b66f97c0179f2e91ad8c36f020d403c426ca880d",
-  "validation_commit": "df491ecaa521014028477fc550f270d27ffaba27",
+  "revision_date": "2026-11-07",
+  "implementation_commit": "1175a652edc433377dc2c87e2728e88948a08eb7",
+  "validation_commit": "4cf8b3ca55d04a9d28bdcb0041d63d710ab619a8",
   "validation_pr": 130,
-  "validation_state": "OPEN / unmerged",
-  "test_plan_commit": "aff2a7bd71d175b740e1e78415cb3f083d6c61f2",
+  "validation_state": "MERGED",
+  "test_plan_commit": "cc4b10200c531687aae83b855c5a59b246c25b37",
   "test_plan_pr": 124,
-  "test_plan_state": "OPEN / unmerged",
+  "test_plan_state": "MERGED",
   "original_srs_pdf_sha256": "5a1ee88f3839aad9a76d57f992566e8dfa60a89ae03d715e2bf58e98128bc39b",
   "rows": [
     {
@@ -265,5 +265,20 @@
       "note": "No separate verdict. TC-03 PARTIAL; expiry/restart need auth_session_test.cpp.",
       "source": "New ID; no independent S-43 verdict"
     }
-  ]
+  ],
+  "validation_comparison": {
+    "source": "docs/System_Validation_Report.md section 5",
+    "existing_rows_compared": 25,
+    "test_cases_statuses_and_notes_exact_match": true,
+    "additional_unassessed_rows": [
+      "FR-15",
+      "FR-16",
+      "FR-17",
+      "SEC-3",
+      "SEC-4",
+      "SEC-5",
+      "SEC-6"
+    ],
+    "exit_criteria": "NOT MET"
+  }
 }

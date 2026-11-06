@@ -1,0 +1,28 @@
+{
+  "case": "TC-04B",
+  "customerCode": "CUS-00000002",
+  "roleDenials": {
+    "bankOfficer": 403,
+    "customer": 403
+  },
+  "administratorDeactivationHttp": 200,
+  "repeatDeactivationHttp": 200,
+  "customerUserState": [
+    "inactive",
+    "inactive"
+  ],
+  "oldSessionHttp": 401,
+  "freshLoginHttp": 401,
+  "openingNewAccountHttp": 409,
+  "newAccountErrorCode": "CUSTOMER_INACTIVE",
+  "existingAccountCountBeforeAfter": [
+    3,
+    3
+  ],
+  "existingTransactionCountBeforeAfter": [
+    5,
+    5
+  ],
+  "deactivationAuditRowsAdded": 1,
+  "verdict": "PASS"
+}

@@ -12,7 +12,7 @@ Revision authors: [Team to complete]. Review and approval: [Team to complete].
 
 This specification defines the single-branch academic banking system and the requirements used to assess it. Version 1.2 consolidates the original IEEE 830-style SRS, the S-34 amendment and documented implementation decisions. It preserves FR-1 through FR-14 and NFR-1 through NFR-9, and adds FR-15 through FR-17 for administrative features already built.
 
-The implementation baseline is main commit `b66f97c0179f2e91ad8c36f020d403c426ca880d`. The validation snapshot is the unmerged S-43 report at `df491ecaa521014028477fc550f270d27ffaba27`. The final validation exit criteria are NOT MET. This revision documents the system; it does not certify that every requirement has passed acceptance testing.
+The implementation baseline is main commit `1175a652edc433377dc2c87e2728e88948a08eb7`. The validation snapshot is the merged S-43 report at `4cf8b3ca55d04a9d28bdcb0041d63d710ab619a8`. The final validation exit criteria are NOT MET. This revision documents the system; it does not certify that every requirement has passed acceptance testing.
 
 <!-- pagebreak -->
 
@@ -22,7 +22,7 @@ The implementation baseline is main commit `b66f97c0179f2e91ad8c36f020d403c426ca
 |---|---|---|---|
 | 1.0 | 2 Sep 2026 | Original project team | Initial IEEE-style SRS, 14 FRs and 9 NFRs. |
 | 1.1 | 1 Nov 2026 | Abhishek Kinagi and team | S-34 addendum: three security objectives, use case model, corrected course references and ER model reference. Merged through PR #104. |
-| 1.2 | 6 Nov 2026 | [Team to complete] | Rebuilt an editable source from the original PDF with user authorization. Integrated S-34 into the specification and rendered both models. Reconciled requirement text with deviations rows 3-4, 7, 9-14, 17-24. Retained the provisional interest basis (row 6). Added FR-15 to FR-17, BR-1 to BR-10 and SEC-1 to SEC-6. Corrected S-34's logout scope and recorded remaining gaps in rows 28-29. Added traceability to the explicitly unmerged S-41/S-43 baselines. |
+| 1.2 | 6 Nov 2026 | [Team to complete] | Rebuilt an editable source from the original PDF with user authorization. Integrated S-34 into the specification and rendered both models. Reconciled requirement text with deviations rows 3-4, 7, 9-14, 17-24. Retained the provisional interest basis (row 6). Added FR-15 to FR-17, BR-1 to BR-10 and SEC-1 to SEC-6. Corrected S-34's logout scope and recorded remaining gaps in rows 33-34. Added traceability to the merged S-41/S-43 baselines. |
 
 ## Contents
 
@@ -71,9 +71,9 @@ Loan/EMI management, fixed or recurring deposits, cheque clearing, cards, ATM in
 | R-4 | OWASP API Security Top 10, 2023 edition; background reference added by S-34, not a security certification. |
 | R-5 | `docs/Software_Architecture_and_Design_Specification.docx`, merged main baseline, sections 2.2-2.4 and 3.2-3.4; design components, API and data design. S-46 PR #129 is unmerged and is not the approved design baseline. |
 | R-6 | `docs/decisions/001-tech-stack.md`, `002-account-types-and-withdrawal-limit.md` and `003-interest-calculation-basis.md`; accepted stack/type decisions and provisional interest basis. |
-| R-7 | `docs/DEVIATIONS.md`, main baseline plus S-44 rows 28-29; accepted differences and unresolved disagreements. |
-| R-8 | S-41 PR #124, `docs/TEST_PLAN_CONSOLIDATED.md`, commit `aff2a7bd71d175b740e1e78415cb3f083d6c61f2`; proposed Test Plan v1.2 and TC IDs. OPEN at this revision. |
-| R-9 | S-43 PR #130, `docs/System_Validation_Report.md`, commit `df491ecaa521014028477fc550f270d27ffaba27`; latest pushed validation statuses. OPEN at this revision. |
+| R-7 | `docs/DEVIATIONS.md`, main baseline plus S-44 rows 33-34; accepted differences and unresolved disagreements. |
+| R-8 | S-41 PR #124, `docs/TEST_PLAN_CONSOLIDATED.md`, commit `cc4b10200c531687aae83b855c5a59b246c25b37`; merged Test Plan v1.2 and TC IDs. MERGED in #124. |
+| R-9 | S-43 PR #130, `docs/System_Validation_Report.md`, commit `4cf8b3ca55d04a9d28bdcb0041d63d710ab619a8`; merged validation statuses. MERGED in #130. |
 | R-10 | `db/schema.sql` schema version 5, `db/migrations/`, `db/seed.sql`, `src/` routes and `frontend/`; implementation facts checked for this revision. |
 | R-11 | `docs/S-13-MANUAL-TEST.md`, `S-14-MANUAL-TEST.md`, `S-15-MANUAL-TEST.md`, `S-16-MANUAL-TEST.md`, `S-21-MANUAL-TEST.md`; supplementary procedures, not proof of execution. |
 
@@ -115,7 +115,7 @@ There is no public self-registration. Authorized staff provision users; a seeded
 
 ### 3.1 User Interfaces
 
-The system shall provide consistent browser navigation, sign-in, role dashboards, forms, detail views and paginated tables. Password fields shall be masked. Staff banking actions shall require confirmation identifying account(s) and amount before submission, followed by a clear success or failure result and the resulting balance on success. Account opening has a review/back/confirm flow. The original v1.0 wording also required a resulting balance before every commit; current withdrawal/transfer dialogs do not provide that preview. This narrower documented behavior is an explicit unresolved reconciliation, not a silent claim of compliance; see DEVIATIONS.md row 29 and Appendix F.
+The system shall provide consistent browser navigation, sign-in, role dashboards, forms, detail views and paginated tables. Password fields shall be masked. Staff banking actions shall require confirmation identifying account(s) and amount before submission, followed by a clear success or failure result and the resulting balance on success. Account opening has a review/back/confirm flow. The original v1.0 wording also required a resulting balance before every commit; current withdrawal/transfer dialogs do not provide that preview. This narrower documented behavior is an explicit unresolved reconciliation, not a silent claim of compliance; see DEVIATIONS.md row 34 and Appendix F.
 
 Customers shall receive only their own banking data. Hidden controls alone shall not be considered authorization. Date-range, empty, loading and failure states shall remain understandable, and rejected forms should retain values where supported. NFR-6 and NFR-9 define the usability and browser acceptance targets.
 
@@ -152,7 +152,7 @@ High. Authenticate each role, authorize requests in the backend, enforce the thr
 
 **FR-1 — Authentication and authorization.** The system shall authenticate active registered Administrators, Bank Officers and Customers using a username and password and shall direct them to the appropriate role view. The C++ backend shall enforce role and ownership restrictions on protected operations independently of visible controls. The current credential interface is password-based; there is no separate PIN workflow. Priority: High. Acceptance: TC-01 role-correct login plus direct forbidden-route/ownership requests; TC-15 covers the TLS login configuration.
 
-**FR-2 — Session lifecycle and lockout.** The system shall permit logout of the current session, return HTTP 204 and reject replay with HTTP 401. Sessions shall use random 64-character bearer tokens with a fixed 30-minute lifetime from sign-in. The third consecutive failed sign-in for an active user shall lock that user; successful sign-in resets the counter. Only an Administrator may unlock a locked user. All protected requests shall reject inactive/locked users. Priority: High. Acceptance: TC-02, TC-02B and TC-03; expiry additionally needs the session-expiry automated checks. See DEVIATIONS.md rows 3, 23 and 29 for the correction to S-34's all-sessions-on-logout wording.
+**FR-2 — Session lifecycle and lockout.** The system shall permit logout of the current session, return HTTP 204 and reject replay with HTTP 401. Sessions shall use random 64-character bearer tokens with a fixed 30-minute lifetime from sign-in. The third consecutive failed sign-in for an active user shall lock that user; successful sign-in resets the counter. Only an Administrator may unlock a locked user. All protected requests shall reject inactive/locked users. Priority: High. Acceptance: TC-02, TC-02B and TC-03; expiry additionally needs the session-expiry automated checks. See DEVIATIONS.md rows 3, 23 and 34 for the correction to S-34's all-sessions-on-logout wording.
 
 ### 4.2 Customer Record Management
 
@@ -205,7 +205,7 @@ High. Staff process positive INR amounts on active accounts with confirmation, b
 
 #### 4.4.3 Functional Requirements
 
-**FR-6 — Deposit.** A Bank Officer or Administrator shall be able to deposit a positive amount into an active account. The operation shall update balance and record amount, type, timestamp, resulting balance and authenticated operator, together with its audit entry, in one transaction. Priority: High. Acceptance: TC-08 confirmation and ledger verification. See DEVIATIONS.md row 23 for Administrator access and row 29 for the pre-commit balance-preview gap.
+**FR-6 — Deposit.** A Bank Officer or Administrator shall be able to deposit a positive amount into an active account. The operation shall update balance and record amount, type, timestamp, resulting balance and authenticated operator, together with its audit entry, in one transaction. Priority: High. Acceptance: TC-08 confirmation and ledger verification. See DEVIATIONS.md row 23 for Administrator access and row 34 for the pre-commit balance-preview gap.
 
 **FR-7 — Withdrawal.** A Bank Officer or Administrator shall be able to withdraw a positive amount from an active account only if the resulting balance is at least the current type minimum and that account's cumulative withdrawals in the UTC calendar day remain within its current type's daily limit. Zero daily limit permits no withdrawals. Rejected withdrawals shall identify the rule and leave financial state unchanged. Outgoing transfers do not consume this withdrawal total, but must respect the source minimum. Priority: High. Acceptance: TC-06 and TC-09, including rejection state and the UTC boundary. See DEVIATIONS.md rows 12, 21 and 23.
 
@@ -306,7 +306,7 @@ Medium. Administrators manage Bank Officers. Each authenticated role receives a 
 
 The system controls no physical or safety-critical equipment. Its safety concern is financial data integrity.
 
-**NFR-3 — Financial atomicity.** Every balance change shall commit together with its transaction/audit records or roll back completely. No financial operation shall produce a negative balance; account opening, withdrawal and outgoing transfer shall enforce the applicable minimum. A zero-balance account may be closed even where its type minimum is positive. A type-configuration increase shall not rewrite existing balances or historic entries; subsequent debits/openings use the new rule. Thus the original “never below minimum through any operation” wording is scoped explicitly to avoid contradicting zero closure and non-retroactive type updates. Acceptance: TC-10/TC-10B plus rollback and accounting tests. See DEVIATIONS.md rows 1, 12-13 and 22 and reconciliation row 29.
+**NFR-3 — Financial atomicity.** Every balance change shall commit together with its transaction/audit records or roll back completely. No financial operation shall produce a negative balance; account opening, withdrawal and outgoing transfer shall enforce the applicable minimum. A zero-balance account may be closed even where its type minimum is positive. A type-configuration increase shall not rewrite existing balances or historic entries; subsequent debits/openings use the new rule. Thus the original “never below minimum through any operation” wording is scoped explicitly to avoid contradicting zero closure and non-retroactive type updates. Acceptance: TC-10/TC-10B plus rollback and accounting tests. See DEVIATIONS.md rows 1, 12-13 and 22 and reconciliation row 34.
 
 ### 5.3 Security Requirements
 
@@ -316,7 +316,7 @@ The system controls no physical or safety-critical equipment. Its safety concern
 
 **SO-2 — Resilient authentication.** Salted Argon2id hashes and a third-failure lockout shall protect stored credentials and limit repeated online guessing; only an Administrator may restore a locked account.
 
-**SO-3 — Session integrity.** Random short-lived tokens shall be rejected after logout, expiry, restart or inactive/locked user detection. Logout invalidates the current token only. S-34's broader all-sessions wording is corrected and explicitly recorded in DEVIATIONS.md row 29.
+**SO-3 — Session integrity.** Random short-lived tokens shall be rejected after logout, expiry, restart or inactive/locked user detection. Logout invalidates the current token only. S-34's broader all-sessions wording is corrected and explicitly recorded in DEVIATIONS.md row 34.
 
 #### 5.3.2 Nonfunctional Security Requirements
 
@@ -341,7 +341,7 @@ SEC-1 to SEC-4 retain the design specification's meanings. S-41 combines hashing
 
 **NFR-6 — Usability.** At least three genuine first-time representative participants shall complete core tasks unaided on their first attempt. TC-21 specifies both the Bank Officer deposit and Customer history lookup, with 100% task completion without verbal prompts and recorded findings. No genuine participants were arranged in the S-43 window, so this remains NOT RUN and not validated.
 
-**NFR-7 — Reliability and input handling.** The system shall reject empty mandatory fields, malformed/unknown account identifiers and invalid or nonpositive ordinary transaction amounts with clear errors, without crashing or applying the rejected financial operation. Intentional security bookkeeping, such as failure counters, lockout and refused-request audit entries, may change on a rejected request; this qualifies the original blanket “no record” statement rather than contradicting FR-2/NFR-5. Zero opening deposits follow FR-4 only. Acceptance: TC-02, TC-06, TC-09, TC-10B and TC-11. Account identifiers are bounded to 1-32 ASCII letters/digits/hyphens/underscores and customer-search input to 100 UTF-8 bytes; see DEVIATIONS.md row 17 and reconciliation row 29.
+**NFR-7 — Reliability and input handling.** The system shall reject empty mandatory fields, malformed/unknown account identifiers and invalid or nonpositive ordinary transaction amounts with clear errors, without crashing or applying the rejected financial operation. Intentional security bookkeeping, such as failure counters, lockout and refused-request audit entries, may change on a rejected request; this qualifies the original blanket “no record” statement rather than contradicting FR-2/NFR-5. Zero opening deposits follow FR-4 only. Acceptance: TC-02, TC-06, TC-09, TC-10B and TC-11. Account identifiers are bounded to 1-32 ASCII letters/digits/hyphens/underscores and customer-search input to 100 UTF-8 bytes; see DEVIATIONS.md row 17 and reconciliation row 34.
 
 **NFR-8 — Maintainability.** The C++ backend shall be modular by function, including authentication, customers, accounts, transactions, reporting, staff, auditing and common data/API support. Acceptance: CMake/module inspection and CTest; S-43 currently records this requirement as Validated.
 
@@ -356,7 +356,7 @@ The original eight unnumbered business rules are identified as BR-1 to BR-8 for 
 | BR-1 | Only Administrators may create/modify/deactivate/reactivate Bank Officers or write account-type parameters. Only Administrators may unlock users, deactivate customers, run interest or read the audit viewer. See rows 11-12 and 23. |
 | BR-2 | Only Bank Officers or Administrators may register customers, open/manage accounts or process deposits/withdrawals/transfers. Customers shall not initiate balance-changing banking operations. |
 | BR-3 | Customers may view only their own profile, accounts, transactions and statements; staff view any account through permitted staff routes. See rows 9 and 18-19. |
-| BR-4 | Opening deposits shall meet the current minimum; withdrawals and outgoing transfers shall not reduce the source below its current type minimum. Configuration changes do not retroactively rewrite balances. See rows 12, 20-21 and reconciliation row 29. |
+| BR-4 | Opening deposits shall meet the current minimum; withdrawals and outgoing transfers shall not reduce the source below its current type minimum. Configuration changes do not retroactively rewrite balances. See rows 12, 20-21 and reconciliation row 34. |
 | BR-5 | An active or frozen account may close only at zero balance; nonzero closure is refused. Frozen/closed accounts remain readable and reject financial transactions. See row 13. |
 | BR-6 | Customer, account, staff and audit/transaction history shall be retained; status changes replace permanent deletion. Customer status is independent of login status, and inactive customers cannot open new accounts. See rows 10-11. |
 | BR-7 | Each successful balance change produces one ledger row, except a transfer produces exactly two linked debit/credit rows with one reference. Zero opening deposits are recorded; financial audit is atomic with the operation. See rows 20 and 22. |
@@ -368,7 +368,7 @@ The original eight unnumbered business rules are identified as BR-1 to BR-8 for 
 
 The system shall use an RDBMS with referential integrity and transactional balance updates, implement its banking core in C/C++, and maintain source/documentation in Git/GitHub. It shall retain traceability between requirements, design components and verification cases. No internationalization, localization or external banking-regulatory compliance is claimed for this academic prototype.
 
-The course request for at least 15 functional requirements is satisfied by 17 separately numbered FRs. The unavailable course-template/FAQ text cannot be independently checked; R-2 records this source limitation. The new-ID handoff is `docs/reports/srs-new-fr-ids.md` for S-41 and S-46. Neither unmerged dependency is edited or represented as complete by this SRS story.
+The course request for at least 15 functional requirements is satisfied by 17 separately numbered FRs. The unavailable course-template/FAQ text cannot be independently checked; R-2 records this source limitation. The new-ID handoff is `docs/reports/srs-new-fr-ids.md` for S-41 and S-46. S-41 #124 is merged; new-ID coverage remains a follow-up. S-46 #129 remains open.
 
 ## Appendix A. Glossary
 
@@ -415,7 +415,7 @@ The model is generated from `db/schema.sql` version 5. Seven tables exist: users
 | transfer entry pair | Logical debit/credit pairing through transfer_ref, not a self-referencing FK. A unique reference/type index limits duplicates; service atomicity creates the pair. |
 | audit entity to account | Polymorphic entity/entity_id detail, not a declared account FK. Do not assume every audit row describes an account. |
 
-The existing `design/er-diagram.mmd` overstates the optional customer-login link and the interest-run FK. This revision's schema-derived diagram corrects both and records the disagreement in DEVIATIONS.md row 29 for S-46; it does not change application schema.
+The existing `design/er-diagram.mmd` overstates the optional customer-login link and the interest-run FK. This revision's schema-derived diagram corrects both and records the disagreement in DEVIATIONS.md row 34 for S-46; it does not change application schema.
 
 ## Appendix C. To Be Determined List
 
@@ -436,7 +436,7 @@ The following remain excluded: loans/EMIs; fixed/recurring deposits; cheque clea
 
 ### E.1 Sources and Interpretation
 
-Test IDs follow the unmerged S-41 v1.2 plan at `aff2a7bd71d175b740e1e78415cb3f083d6c61f2` (PR #124). Final-status entries reproduce section 5 of the latest pushed, unmerged S-43 report at `df491ecaa521014028477fc550f270d27ffaba27` (PR #130), not older per-case historical PASS labels. That report requires all linked cases to pass independent fresh-seed acceptance and currently validates NFR-8 only. A source status of Not validated remains Not validated here, even where an individual historical case passed or was partial.
+Test IDs follow the merged S-41 v1.2 plan at `cc4b10200c531687aae83b855c5a59b246c25b37` (PR #124). Final-status entries reproduce section 5 of the merged S-43 report at `4cf8b3ca55d04a9d28bdcb0041d63d710ab619a8` (PR #130), not older per-case historical PASS labels. That report requires all linked cases to pass independent fresh-seed acceptance and currently validates NFR-8 only. A source status of Not validated remains Not validated here, even where an individual historical case passed or was partial.
 
 For new FR/SEC IDs not yet present in the report, the status is Not validated (unassessed); related cases are mapped as candidate coverage, not retroactive certification. New IDs require S-41/S-46 handoff and later S-43 assessment. No missing master case is invented. Supplementary test files below identify existing verification code, not execution by this story.
 
@@ -491,14 +491,14 @@ TC-21 stays NOT RUN: requires three genuine first-time participants; none arrang
 | Original FR-3/SADS allow Officer deactivation; S-13 and S-41 require Admin-only. | FR-3 and BR-1 use Admin-only deactivation, cross-referencing row 11. |
 | Original FR-4/FR-6/FR-7 mention Officer while SRS business rules/SADS/RBAC also allow Admin. | Include Admin explicitly, following rows 20 and 23. |
 | Original NFR-4 and SADS SEC-2 forbid all plaintext transmission/display; provisioning returns an initial password once. | State the accepted scoped exception in FR-3, FR-13, NFR-4 and SEC-2, rows 3 and 7. Do not claim passwords are never supplied to a client. |
-| S-34 says logout terminates all sessions belonging to a user; code erases only the submitted token. | Correct FR-2/SO-3/SEC-6 to current-token logout; inactive users are denied on subsequent requests. Record row 29 and request S-46 alignment. |
-| Earlier Test Plan/report expects logout 200; open PR #124 expects 204. | Specify implemented 204 in FR-2; preserve S-43's Not validated status and historical mismatch rather than rewriting evidence. |
-| Legacy standalone cases disagree on TC-04/TC-05/TC-06 and TC-11; consolidated plan has the canonical Sprint 3 IDs. | Use PR #124 TC IDs explicitly as proposed, not merged. Do not edit the legacy source documents. |
+| S-34 says logout terminates all sessions belonging to a user; code erases only the submitted token. | Correct FR-2/SO-3/SEC-6 to current-token logout; inactive users are denied on subsequent requests. Record row 34 and request S-46 alignment. |
+| Earlier Test Plan/report expects logout 200; merged PR #124 expects 204. | Specify implemented 204 in FR-2; preserve S-43's Not validated status and historical mismatch rather than rewriting evidence. |
+| Legacy standalone cases disagree on TC-04/TC-05/TC-06 and TC-11; consolidated plan has the canonical Sprint 3 IDs. | Use the merged PR #124 TC IDs explicitly. Do not edit the legacy source documents. |
 | S-41 TC-01 uses user_id input; code requires username. It cites SRS v1.1 with the v1.0 date. | Specify username here and record the citation/input mismatch for S-41 handoff. New SRS revision is dated 6 Nov 2026. |
 | S-41 TC-08 starts ACC001 at INR 10,000; seed uses INR 50,000. TC-09 uses a configured INR 25,000 limit versus seed Savings INR 50,000. | Treat these as explicit case fixtures; require documented setup rather than changing expected numbers silently. No fixture rerun is claimed here. |
 | SADS omits Admin on some account read rows and specifies an absent /customers/{id}/accounts route. | Reflect implemented staff permissions and route shape, rows 14, 18-19 and 24; hand off to S-46. |
-| Existing ER marks interest_run_id as FK and makes customer login mandatory; actual schema does neither. | Embed the schema-derived version 5 diagram with a dashed logical interest link and optional login; preserve the schema unchanged. Row 29. |
-| Original UI requires resulting-balance preview before commit, NFR-3 forbids all below-minimum states, and NFR-7 forbids any record mutation on rejection. | State current confirmation behavior, per-operation minimum scope and intentional security bookkeeping. These wording reconciliations are explicit in row 29 and remain subject to owner review; they are not defect fixes or validation passes. |
+| Existing ER marks interest_run_id as FK and makes customer login mandatory; actual schema does neither. | Embed the schema-derived version 5 diagram with a dashed logical interest link and optional login; preserve the schema unchanged. Row 34. |
+| Original UI requires resulting-balance preview before commit, NFR-3 forbids all below-minimum states, and NFR-7 forbids any record mutation on rejection. | State current confirmation behavior, per-operation minimum scope and intentional security bookkeeping. These wording reconciliations are explicit in row 34 and remain subject to owner review; they are not defect fixes or validation passes. |
 | ADR 003 interest basis is provisional. | Keep TBD-5/FR-11 provisional; do not invent owner approval. |
 | NFR-2 requires page loads; S-43 timing evidence is primarily API responses. | Preserve the browser-page target and record the measurement limitation, row 16. |
 | SADS security IDs and S-41 SEC-2 transport mapping overlap. | Retain SEC-1 to SEC-4 design meanings, document TC-15 under SEC-2/SEC-3, and append SEC-5/SEC-6 with explicit handoff. |

@@ -1,6 +1,6 @@
 # SRS v1.2 source and reconciliation audit
 
-S-44 (#120), 6 November 2026. The user authorized Markdown reconstruction after Step 0 confirmed only a PDF and amendment exist. Isolated branch docs/120-S-44-final-srs starts from b66f97c0179f2e91ad8c36f020d403c426ca880d; original root CMakeLists.txt/db/.gitkeep changes are excluded.
+S-44 (#120), 6 November 2026; integration refresh 7 November 2026. The user authorized Markdown reconstruction after Step 0 confirmed only a PDF and amendment exist. Isolated branch docs/120-S-44-final-srs is updated against merged main at 1175a652edc433377dc2c87e2728e88948a08eb7; original root CMakeLists.txt/db/.gitkeep changes are excluded.
 
 ## Sources examined
 
@@ -8,7 +8,7 @@ The original 19-page PDF was fully extracted before export; its hash is in srs-v
 
 ## Dependencies
 
-S-34 (#65/#104), S-09 (#39/#88), S-14 (#51/#97) and S-27 (#58/#92) are merged. S-41 (#117/#124), S-43 (#119/#130) and S-46 (#122/#129) are OPEN/unmerged. Test IDs follow aff2a7b; requirement statuses follow df491ec; SADS from merged main remains the design baseline.
+S-34 (#65/#104), S-09 (#39/#88), S-14 (#51/#97) and S-27 (#58/#92) are merged. S-41 (#117/#124) and S-43 (#119/#130) are merged; S-46 (#122/#129) remains OPEN/unmerged. Test IDs follow merged cc4b10200c531687aae83b855c5a59b246c25b37; requirement statuses follow merged 4cf8b3ca55d04a9d28bdcb0041d63d710ab619a8; SADS from merged main remains the design baseline.
 
 ## Original ID inventory
 
@@ -89,12 +89,12 @@ Rows 2 and 15-16 are resolved/historical implementation/execution notes, except 
 
 ## Disagreements and approval limits
 
-Appendix F lists role, status-code, payload, seed-fixture, legacy-TC, model and security-ID disagreements. New row 29 explicitly records three wording reconciliations requiring owner review: resulting-balance preview timing, blanket minimum-balance scope and rejected-request security bookkeeping. These are not assertions of owner approval or passed tests. S-34's global logout claim is corrected to the code's single-token behavior; inactive users are denied on subsequent requests.
+Appendix F lists role, status-code, payload, seed-fixture, legacy-TC, model and security-ID disagreements. New row 34 explicitly records three wording reconciliations requiring owner review: resulting-balance preview timing, blanket minimum-balance scope and rejected-request security bookkeeping. These are not assertions of owner approval or passed tests. S-34's global logout claim is corrected to the code's single-token behavior; inactive users are denied on subsequent requests.
 
 The schema-derived model includes all seven v5 tables. Customer-login is optional at both ends. transactions.interest_run_id has no FK; transfer pairing and audit entity_id are logical associations. The old design/er-diagram.mmd is preserved for S-46 to reconcile.
 
 ## Validation and integration
 
-All existing FR/NFR/SEC verdicts are copied from the pinned S-43 requirement table; only Not validated/unassessed rows are added for new IDs. Of 17 FRs and 9 NFRs, NFR-8 alone is Validated and 25 are Not validated. TC-21 remains NOT RUN, TC-22 PARTIAL, exit NOT MET. No system tests were simulated or rerun by this writing task.
+All 25 existing FR/NFR/SEC rows were compared against merged S-43 section 5: test cases, statuses and notes match exactly in the SRS and JSON snapshot; only Not validated/unassessed rows are added for new IDs. Of 17 FRs and 9 NFRs, NFR-8 alone is Validated and 25 are Not validated. TC-21 remains NOT RUN, TC-22 PARTIAL, exit NOT MET. No system tests were simulated or rerun by this writing task.
 
-See srs-new-fr-ids.md for consumer actions and row collisions: S-44 allocates rows 28-29 from main while unmerged S-43 independently uses 28-30. Preserve both and update cross-references on integration. No PR is opened or merge performed by this task.
+See srs-new-fr-ids.md for consumer actions. Main already resolves the duplicate row 28 and uses rows 28-32 for S-41/S-43/S-45. The main merge preserves those rows and appends S-44 rows 33-34 with updated cross-references. PR #131 remains unmerged pending owner review.
