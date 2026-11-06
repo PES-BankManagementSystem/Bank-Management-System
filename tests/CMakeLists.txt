@@ -13,6 +13,10 @@ add_test(NAME server_reports_version COMMAND bms_server --version)
 set_tests_properties(server_reports_version PROPERTIES
     PASS_REGULAR_EXPRESSION "${PROJECT_VERSION}")
 
+add_test(NAME server_shows_help COMMAND bms_server --help)
+set_tests_properties(server_shows_help PROPERTIES
+    PASS_REGULAR_EXPRESSION "Usage: bms_server")
+
 add_executable(config_test config_test.cpp)
 target_link_libraries(config_test PRIVATE bms::common bms_options)
 add_test(NAME config_test COMMAND config_test)
@@ -196,3 +200,12 @@ set_tests_properties(validation_test PROPERTIES TIMEOUT 60)
 add_executable(calendar_test calendar_test.cpp)
 target_link_libraries(calendar_test PRIVATE bms::common GTest::gtest_main bms_options)
 add_test(NAME calendar_test COMMAND calendar_test)
+
+# Focused error-path checks for coverage gaps in the common, account and
+# transaction modules (invalid account generator, refused permission, overflow).
+add_executable(coverage_error_paths_test coverage_error_paths_test.cpp
+    support/check.hpp support/seeded_db.hpp)
+target_link_libraries(coverage_error_paths_test PRIVATE
+    bms::account bms::audit bms::auth bms::common bms::transaction bms_options)
+target_compile_definitions(coverage_error_paths_test PRIVATE BMS_DB_DIR="${PROJECT_SOURCE_DIR}/db")
+add_test(NAME coverage_error_paths_test COMMAND coverage_error_paths_test)

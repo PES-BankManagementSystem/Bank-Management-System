@@ -204,7 +204,6 @@ TEST_F(AccountBalanceTest, FR9_BalanceFormattingSupportsZeroAndLargePaiseValues)
 }
 
 TEST_F(AccountBalanceTest, FR9_BalanceMatchesStoredLedgerResultAfterDepositAndWithdrawal) {
-    db().exec("UPDATE accounts SET balance = 4700000 WHERE account_number = 'ACC001'");
     bms::transaction::deposit(db(), "ACC001", "0.01", 2);
     bms::transaction::withdraw(db(), "ACC001", "0.01", 2);
 

@@ -1,0 +1,552 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="(empty)"
+	tests="31"
+	failures="0"
+	disabled="0"
+	skipped="0"
+	hostname=""
+	time="97"
+	timestamp="2026-11-05T17:56:45"
+	>
+	<testcase name="server_reports_version" classname="server_reports_version" time="0.0201115" status="run">
+		<properties/>
+		<system-out>Bank Management System mini-project 0.1.0
+</system-out>
+	</testcase>
+	<testcase name="server_shows_help" classname="server_shows_help" time="0.0120807" status="run">
+		<properties/>
+		<system-out>Usage: bms_server [options]
+
+Options (environment variable in brackets; options override it):
+  --host &lt;address&gt;   address to listen on   [BMS_HOST]  default 127.0.0.1
+  --port &lt;number&gt;    port to listen on      [BMS_PORT]  default 8080
+  --db &lt;path&gt;        SQLite database file   [BMS_DB_PATH]  default bms.db
+  --frontend &lt;dir&gt;   folder served at /     [BMS_FRONTEND_DIR]
+                     default: the frontend/ folder of the repository
+  --tls-cert &lt;file&gt;  PEM certificate for HTTPS  [BMS_TLS_CERT]
+  --tls-key &lt;file&gt;   PEM private key for HTTPS  [BMS_TLS_KEY]
+                     give both to serve HTTPS; without them the server speaks
+                     plain HTTP, which is for local development only
+  --version          print the version and exit
+  --help             print this help and exit
+</system-out>
+	</testcase>
+	<testcase name="config_test" classname="config_test" time="0.00334088" status="run">
+		<properties/>
+		<system-out>[PASS] defaults listen on localhost:8080
+[PASS] environment variables override defaults
+[PASS] command-line options override environment variables
+[PASS] TLS certificate and key come from environment or options
+[PASS] a certificate without a key (or the reverse) is rejected
+[PASS] port 0 is accepted (OS picks a free port)
+[PASS] invalid ports are rejected
+[PASS] missing option values and unknown options are rejected
+</system-out>
+	</testcase>
+	<testcase name="api_server_test" classname="api_server_test" time="0.543572" status="run">
+		<properties/>
+		<system-out>[PASS] error kinds map to HTTP status codes
+[PASS] error body has code and message, and field only when set
+[PASS] access log line never contains the body or query string
+[PASS] a second server cannot bind a port that is already in use
+[PASS] GET /health reports ok and the version
+[PASS] static front end is served at /
+[PASS] unknown routes return a JSON 404
+[PASS] validation errors return 400 with the field
+[PASS] business-rule errors return 422 with their own code
+[PASS] unexpected exceptions return a generic 500 without internal details
+[PASS] non-standard exceptions return a generic 500
+[PASS] handlers can choose the status, and read path and query parameters
+[PASS] request bodies must be JSON objects
+[PASS] oversized request bodies are rejected with a JSON 413
+[PASS] login requests are logged without the password
+[PASS] internal error details go to the server log
+</system-out>
+	</testcase>
+	<testcase name="db_test" classname="db_test" time="0.0515678" status="run">
+		<properties/>
+		<system-out>[PASS] schema and seed loading
+[PASS] seed counts
+[PASS] foreign key violation
+[PASS] check constraints
+[PASS] duplicate constraints
+[PASS] append-only tables
+[PASS] transaction guard
+[PASS] concurrent transaction serialization
+[PASS] prepared statement binding
+[PASS] actual schema file
+[PASS] actual seed file
+[PASS] account-type rules migration
+[PASS] zero opening deposit migration
+</system-out>
+	</testcase>
+	<testcase name="auth_login_test" classname="auth_login_test" time="5.17092" status="run">
+		<properties/>
+		<system-out>Running main() from /Users/mahesh/Downloads/Bank-Management-System/build/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 5 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 5 tests from LoginTest
+[ RUN      ] LoginTest.ValidLoginReturnsSessionTokenAndRoleForEveryRole
+[       OK ] LoginTest.ValidLoginReturnsSessionTokenAndRoleForEveryRole (1869 ms)
+[ RUN      ] LoginTest.WrongPasswordUnknownUserAndInactiveUserGetTheSameGenericError
+[       OK ] LoginTest.WrongPasswordUnknownUserAndInactiveUserGetTheSameGenericError (487 ms)
+[ RUN      ] LoginTest.MissingOrMalformedCredentialsAreRejectedGenerically
+[       OK ] LoginTest.MissingOrMalformedCredentialsAreRejectedGenerically (23 ms)
+[ RUN      ] LoginTest.StoredPasswordsAreSaltedArgon2idHashes
+[       OK ] LoginTest.StoredPasswordsAreSaltedArgon2idHashes (1827 ms)
+[ RUN      ] LoginTest.PasswordsNeverAppearInServerLogs
+[       OK ] LoginTest.PasswordsNeverAppearInServerLogs (936 ms)
+[----------] 5 tests from ...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="transaction_test" classname="transaction_test" time="0.54575" status="run">
+		<properties/>
+		<system-out>[PASS] deposit updates balance, transaction and audit records
+[PASS] invalid deposit amounts are rejected
+[PASS] frozen and closed accounts are rejected
+[PASS] unknown account is not found
+2026-11-05T12:26:51Z WARN Front-end folder '' not found; only the API is served. Use --frontend to set it.
+2026-11-05T12:26:52Z INFO 127.0.0.1 "POST /auth/login" 200
+2026-11-05T12:26:52Z INFO 127.0.0.1 "POST /transactions" 201
+2026-11-05T12:26:52Z INFO 127.0.0.1 "POST /transactions" 422
+2026-11-05T12:26:52Z INFO 127.0.0.1 "POST /transactions" 404
+[PASS] deposit route returns JSON success and account errors
+[PASS] audit failure rolls back all deposit changes
+</system-out>
+	</testcase>
+	<testcase name="auth_session_test" classname="auth_session_test" time="3.38145" status="run">
+		<properties/>
+		<system-out>Running main() from /Users/mahesh/Downloads/Bank-Management-System/build/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 6 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 6 tests from SessionTest
+[ RUN      ] SessionTest.ValidTokenExposesTheCurrentUserIdAndRole
+[       OK ] SessionTest.ValidTokenExposesTheCurrentUserIdAndRole (948 ms)
+[ RUN      ] SessionTest.MissingMalformedAndUnknownTokensGet401
+[       OK ] SessionTest.MissingMalformedAndUnknownTokensGet401 (27 ms)
+[ RUN      ] SessionTest.LogoutInvalidatesTheTokenOnly
+[       OK ] SessionTest.LogoutInvalidatesTheTokenOnly (940 ms)
+[ RUN      ] SessionTest.ExpiredTokensGet401
+[       OK ] SessionTest.ExpiredTokensGet401 (480 ms)
+[ RUN      ] SessionTest.SessionOfAUserWhoIsNoLongerActiveGets401
+[       OK ] SessionTest.SessionOfAUserWhoIsNoLongerActiveGets401 (481 ms)
+[ RUN      ] SessionTest.AuthenticateCanBeCalledDirectlyByModuleHandlers
+[       OK ] SessionTest.AuthenticateCanBeCalledDirectlyByMod...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="withdraw_test" classname="withdraw_test" time="0.667008" status="run">
+		<properties/>
+		<system-out>[PASS] withdrawal records balance, transaction and audit
+[PASS] minimum balance boundary is enforced
+[PASS] daily limit boundary and remaining amount are enforced
+[PASS] only today's withdrawals count
+[PASS] invalid input and account states are rejected
+[PASS] audit failure rolls back withdrawal
+2026-11-05T12:26:55Z WARN Front-end folder '' not found; only the API is served. Use --frontend to set it.
+2026-11-05T12:26:56Z INFO 127.0.0.1 "POST /auth/login" 200
+2026-11-05T12:26:56Z INFO 127.0.0.1 "POST /transactions" 201
+2026-11-05T12:26:56Z INFO 127.0.0.1 "POST /transactions" 422
+2026-11-05T12:26:56Z INFO 127.0.0.1 "POST /transactions" 422
+[PASS] withdrawal API returns success and business rule errors
+</system-out>
+	</testcase>
+	<testcase name="auth_lockout_test" classname="auth_lockout_test" time="11.5968" status="run">
+		<properties/>
+		<system-out>Running main() from /Users/mahesh/Downloads/Bank-Management-System/build/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 6 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 6 tests from LockoutTest
+[ RUN      ] LockoutTest.ThirdConsecutiveFailureLocksTheAccount
+[       OK ] LockoutTest.ThirdConsecutiveFailureLocksTheAccount (1388 ms)
+[ RUN      ] LockoutTest.SuccessfulLoginResetsTheCounter
+[       OK ] LockoutTest.SuccessfulLoginResetsTheCounter (2306 ms)
+[ RUN      ] LockoutTest.LockedAccountIsBlockedEvenWithTheCorrectPassword
+[       OK ] LockoutTest.LockedAccountIsBlockedEvenWithTheCorrectPassword (1399 ms)
+[ RUN      ] LockoutTest.AdministratorUnlocksLockedCustomerAndStaff
+[       OK ] LockoutTest.AdministratorUnlocksLockedCustomerAndStaff (4143 ms)
+[ RUN      ] LockoutTest.OnlyAdministratorsCanListOrUnlock
+[       OK ] LockoutTest.OnlyAdministratorsCanListOrUnlock (1850 ms)
+[ RUN      ] LockoutTest.UnlockRejectsUnknownAndNotLockedUsers
+[       OK ] ...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="module_tests" classname="module_tests" time="0.558889" status="run">
+		<properties/>
+		<system-out>Running main() from /Users/mahesh/Downloads/Bank-Management-System/build/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 10 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 10 tests from ModuleTest
+[ RUN      ] ModuleTest.CommonLoadsSeededAdministrator
+[       OK ] ModuleTest.CommonLoadsSeededAdministrator (9 ms)
+[ RUN      ] ModuleTest.SeededDemoPasswordMatchesItsDocumentedCredential
+[       OK ] ModuleTest.SeededDemoPasswordMatchesItsDocumentedCredential (467 ms)
+[ RUN      ] ModuleTest.ApiMapsValidationErrorsToBadRequest
+[       OK ] ModuleTest.ApiMapsValidationErrorsToBadRequest (8 ms)
+[ RUN      ] ModuleTest.AccountRouteRegistrationIsCallable
+[       OK ] ModuleTest.AccountRouteRegistrationIsCallable (7 ms)
+[ RUN      ] ModuleTest.AuditRouteRegistrationIsCallable
+[       OK ] ModuleTest.AuditRouteRegistrationIsCallable (6 ms)
+[ RUN      ] ModuleTest.AuthRouteRegistrationIsCallable
+[       OK ] ModuleTest.AuthRouteRegistrationIsCallable (7 ms)
+[ RUN...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="account_type_test" classname="account_type_test" time="2.05475" status="run">
+		<properties/>
+		<system-out>Running main() from /Users/mahesh/Downloads/Bank-Management-System/build/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 6 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 6 tests from AccountTypeTest
+[ RUN      ] AccountTypeTest.S14_ListCreateAndUpdateTypes
+[       OK ] AccountTypeTest.S14_ListCreateAndUpdateTypes (481 ms)
+[ RUN      ] AccountTypeTest.S14_ValidationRejectsInvalidFieldsTogether
+[       OK ] AccountTypeTest.S14_ValidationRejectsInvalidFieldsTogether (536 ms)
+[ RUN      ] AccountTypeTest.S14_NamesAreUniqueIgnoringCaseAndMayKeepTheirOwnName
+[       OK ] AccountTypeTest.S14_NamesAreUniqueIgnoringCaseAndMayKeepTheirOwnName (513 ms)
+[ RUN      ] AccountTypeTest.S14_AuditFailureRollsBackCreateAndUpdate
+[       OK ] AccountTypeTest.S14_AuditFailureRollsBackCreateAndUpdate (9 ms)
+[ RUN      ] AccountTypeTest.S14_UpdatesAffectLaterWithdrawalsWithoutChangingPastRows
+[       OK ] AccountTypeTest.S14_UpdatesAffectLaterWithdrawalsWithoutChangingPastR...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="account_status_test" classname="account_status_test" time="2.54133" status="run">
+		<properties/>
+		<system-out>Running main() from /Users/mahesh/Downloads/Bank-Management-System/build/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 7 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 1 test from AccountStatusStateMachine
+[ RUN      ] AccountStatusStateMachine.FR5_TransitionsAreTableDriven
+[       OK ] AccountStatusStateMachine.FR5_TransitionsAreTableDriven (0 ms)
+[----------] 1 test from AccountStatusStateMachine (0 ms total)
+
+[----------] 6 tests from AccountStatusTest
+[ RUN      ] AccountStatusTest.FR5_StatusEndpointEnforcesRolesAndValidatesRequests
+[       OK ] AccountStatusTest.FR5_StatusEndpointEnforcesRolesAndValidatesRequests (1852 ms)
+[ RUN      ] AccountStatusTest.SRS55_CloseRequiresExactZeroMinorUnitBalance
+[       OK ] AccountStatusTest.SRS55_CloseRequiresExactZeroMinorUnitBalance (482 ms)
+[ RUN      ] AccountStatusTest.FR5_ZeroBalanceFrozenAccountCanBeClosed
+[       OK ] AccountStatusTest.FR5_ZeroBalanceFrozenAccountCanBeClosed (10 ms)
+[ RUN      ] Ac...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="account_opening_test" classname="account_opening_test" time="3.97724" status="run">
+		<properties/>
+		<system-out>Running main() from /Users/mahesh/Downloads/Bank-Management-System/build/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 11 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 1 test from TC05_AccountNumberGenerator
+[ RUN      ] TC05_AccountNumberGenerator.UsesRandomFormattedUniqueNumbers
+[       OK ] TC05_AccountNumberGenerator.UsesRandomFormattedUniqueNumbers (6 ms)
+[----------] 1 test from TC05_AccountNumberGenerator (6 ms total)
+
+[----------] 10 tests from AccountOpeningTest
+[ RUN      ] AccountOpeningTest.TC05_ForcedNumberCollisionRetriesAndExhaustionRollsBack
+[       OK ] AccountOpeningTest.TC05_ForcedNumberCollisionRetriesAndExhaustionRollsBack (18 ms)
+[ RUN      ] AccountOpeningTest.TC05_OfficerAndAdministratorCreateAtomicOpeningDeposit
+[       OK ] AccountOpeningTest.TC05_OfficerAndAdministratorCreateAtomicOpeningDeposit (1411 ms)
+[ RUN      ] AccountOpeningTest.TC05_BelowMinimumReturnsRequiredMinimumAndChangesNoRows
+[       OK ] AccountOpeningTe...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="customer_test" classname="customer_test" time="26.1456" status="run">
+		<properties/>
+		<system-out>Running main() from /Users/mahesh/Downloads/Bank-Management-System/build/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 24 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 24 tests from CustomerTest
+[ RUN      ] CustomerTest.ValidationNormalizesPhoneAndReportsMultipleFields
+[       OK ] CustomerTest.ValidationNormalizesPhoneAndReportsMultipleFields (473 ms)
+[ RUN      ] CustomerTest.ValidationEnforcesLengthPhoneAndDateBoundaries
+[       OK ] CustomerTest.ValidationEnforcesLengthPhoneAndDateBoundaries (469 ms)
+[ RUN      ] CustomerTest.EachRequiredFieldRejectsWhitespaceAndEmptyValues
+[       OK ] CustomerTest.EachRequiredFieldRejectsWhitespaceAndEmptyValues (467 ms)
+[ RUN      ] CustomerTest.RegistrationCreatesHashedLoginAndRequiresPasswordChange
+[       OK ] CustomerTest.RegistrationCreatesHashedLoginAndRequiresPasswordChange (1385 ms)
+[ RUN      ] CustomerTest.SeparateRegistrationsReceiveDifferentCustomerIdentifiers
+[       OK ] CustomerTest.SeparateR...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="transfer_test" classname="transfer_test" time="0.555505" status="run">
+		<properties/>
+		<system-out>[PASS] transfer updates both accounts, linked transactions and audit
+[PASS] same-account transfers and invalid amounts are rejected
+[PASS] account status and missing-account errors are handled
+[PASS] source minimum balance boundary is enforced
+[PASS] transfer references are unique
+[PASS] failure before credit rolls back transfer
+[PASS] failure before audit rolls back transfer
+2026-11-05T12:27:43Z WARN Front-end folder '' not found; only the API is served. Use --frontend to set it.
+2026-11-05T12:27:43Z INFO 127.0.0.1 "POST /auth/login" 200
+2026-11-05T12:27:43Z INFO 127.0.0.1 "POST /transfers" 201
+2026-11-05T12:27:43Z INFO 127.0.0.1 "POST /transfers" 400
+2026-11-05T12:27:43Z INFO 127.0.0.1 "POST /transfers" 422
+2026-11-05T12:27:43Z INFO 127.0.0.1 "POST /transfers" 404
+[PASS] transfer API returns success and validation errors
+</system-out>
+	</testcase>
+	<testcase name="interest_test" classname="interest_test" time="0.549215" status="run">
+		<properties/>
+		<system-out>[PASS] interest calculator uses actual days and half-up rounding
+[PASS] interest period parser validates months and leap years
+[PASS] interest runs require a completed UTC month
+[PASS] interest run credits eligible accounts and records audit
+[PASS] historical opening balance is inferred and later accounts are skipped
+[PASS] zero-rounded interest has no transaction
+[PASS] duplicate period is rejected while another period can run
+[PASS] second-account failure rolls back the whole run
+2026-11-05T12:27:43Z WARN Front-end folder '' not found; only the API is served. Use --frontend to set it.
+2026-11-05T12:27:44Z INFO 127.0.0.1 "POST /auth/login" 200
+2026-11-05T12:27:44Z INFO 127.0.0.1 "POST /interest/run" 201
+2026-11-05T12:27:44Z INFO 127.0.0.1 "POST /interest/run" 409
+2026-11-05T12:27:44Z INFO 127.0.0.1 "POST /interest/run" 400
+[PASS] interest API returns success, duplicate and validation errors
+</system-out>
+	</testcase>
+	<testcase name="statement_test" classname="statement_test" time="2.42198" status="run">
+		<properties/>
+		<system-out>Running main() from /Users/mahesh/Downloads/Bank-Management-System/build/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 6 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 6 tests from StatementTest
+[ RUN      ] StatementTest.ReturnsOpeningTransactionsAndClosingBalanceForInclusiveDates
+[       OK ] StatementTest.ReturnsOpeningTransactionsAndClosingBalanceForInclusiveDates (475 ms)
+[ RUN      ] StatementTest.EmptyPeriodReturnsUnchangedBalanceAndNoEntries
+[       OK ] StatementTest.EmptyPeriodReturnsUnchangedBalanceAndNoEntries (8 ms)
+[ RUN      ] StatementTest.CustomerCanReadOwnAccountButNotAnotherCustomersAccount
+[       OK ] StatementTest.CustomerCanReadOwnAccountButNotAnotherCustomersAccount (1406 ms)
+[ RUN      ] StatementTest.EndpointRequiresBothValidDateParameters
+[       OK ] StatementTest.EndpointRequiresBothValidDateParameters (492 ms)
+[ RUN      ] StatementTest.ValidatesDatesAndReconstructsOpeningBalanceWithoutPriorRows
+[       OK ] StatementTe...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="account_history_test" classname="account_history_test" time="4.36987" status="run">
+		<properties/>
+		<system-out>Running main() from /Users/mahesh/Downloads/Bank-Management-System/build/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 9 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 9 tests from AccountHistoryTest
+[ RUN      ] AccountHistoryTest.TC11_CustomerCanReadOwnedTransactionsButNotAnotherAccount
+[       OK ] AccountHistoryTest.TC11_CustomerCanReadOwnedTransactionsButNotAnotherAccount (937 ms)
+[ RUN      ] AccountHistoryTest.TC11_DeniedHistoryIsAuditedEvenWhenAuditInsertFails
+2026-11-05T12:27:47Z ERROR Unable to record denied transaction-history access.
+[       OK ] AccountHistoryTest.TC11_DeniedHistoryIsAuditedEvenWhenAuditInsertFails (476 ms)
+[ RUN      ] AccountHistoryTest.NewestFirstUsesTransactionIdTieBreakerAndUtcDateTime
+[       OK ] AccountHistoryTest.NewestFirstUsesTransactionIdTieBreakerAndUtcDateTime (9 ms)
+[ RUN      ] AccountHistoryTest.DateFiltersAreInclusiveAndPagingHasStableTotal
+[       OK ] AccountHistoryTest.DateFiltersAreInclusiveAndPagi...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="statement_csv_test" classname="statement_csv_test" time="0.111901" status="run">
+		<properties/>
+		<system-out>Statement CSV escaping and formula neutralization passed.
+</system-out>
+	</testcase>
+	<testcase name="account_balance_test" classname="account_balance_test" time="5.29841" status="run">
+		<properties/>
+		<system-out>Running main() from /Users/mahesh/Downloads/Bank-Management-System/build/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 6 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 6 tests from AccountBalanceTest
+[ RUN      ] AccountBalanceTest.TC11_FR9_CustomerSeesOnlyTheirSortedAccountsAndStatusTypes
+[       OK ] AccountBalanceTest.TC11_FR9_CustomerSeesOnlyTheirSortedAccountsAndStatusTypes (1935 ms)
+[ RUN      ] AccountBalanceTest.FR9_EmptyAccountListAndMissingCustomerProfileAreDistinct
+[       OK ] AccountBalanceTest.FR9_EmptyAccountListAndMissingCustomerProfileAreDistinct (481 ms)
+[ RUN      ] AccountBalanceTest.TC11_FR9_OwnBalanceWorksAndOtherOrMissingAccountsAreIdentical403
+[       OK ] AccountBalanceTest.TC11_FR9_OwnBalanceWorksAndOtherOrMissingAccountsAreIdentical403 (2341 ms)
+[ RUN      ] AccountBalanceTest.FR9_BalanceFormattingSupportsZeroAndLargePaiseValues
+[       OK ] AccountBalanceTest.FR9_BalanceFormattingSupportsZeroAndLargePaiseValues (483 ms)
+[...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="perf_helpers_test" classname="perf_helpers_test" time="0.110457" status="run">
+		<properties/>
+		<system-out>...
+----------------------------------------------------------------------
+Ran 3 tests in 0.002s
+
+OK
+</system-out>
+	</testcase>
+	<testcase name="staff_test" classname="staff_test" time="9.53653" status="run">
+		<properties/>
+		<system-out>Running main() from /Users/mahesh/Downloads/Bank-Management-System/build/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 11 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 11 tests from StaffTest
+[ RUN      ] StaffTest.AdministratorCreatesOfficerWithOneTimeInitialCredentials
+[       OK ] StaffTest.AdministratorCreatesOfficerWithOneTimeInitialCredentials (1865 ms)
+[ RUN      ] StaffTest.ListShowsOnlyBankOfficers
+[       OK ] StaffTest.ListShowsOnlyBankOfficers (480 ms)
+[ RUN      ] StaffTest.StaffRoutesAreAdministratorOnly
+[       OK ] StaffTest.StaffRoutesAreAdministratorOnly (946 ms)
+[ RUN      ] StaffTest.InvalidOrDuplicateUsernamesAreRejected
+[       OK ] StaffTest.InvalidOrDuplicateUsernamesAreRejected (945 ms)
+[ RUN      ] StaffTest.DeactivatedOfficerCannotLogInAndLosesTheirSession
+[       OK ] StaffTest.DeactivatedOfficerCannotLogInAndLosesTheirSession (937 ms)
+[ RUN      ] StaffTest.DeactivatedOfficerIdStaysOnPastTransactionsAndAuditEntries
+[   ...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="audit_test" classname="audit_test" time="0.0594144" status="run">
+		<properties/>
+		<system-out>Running main() from /Users/mahesh/Downloads/Bank-Management-System/build/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 6 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 6 tests from AuditTest
+[ RUN      ] AuditTest.RecordStoresOperatorActionAccountAndAmount
+[       OK ] AuditTest.RecordStoresOperatorActionAccountAndAmount (10 ms)
+[ RUN      ] AuditTest.RecordOutsideATransactionIsRefused
+[       OK ] AuditTest.RecordOutsideATransactionIsRefused (6 ms)
+[ RUN      ] AuditTest.EntryIsDiscardedWhenTheTransactionRollsBack
+[       OK ] AuditTest.EntryIsDiscardedWhenTheTransactionRollsBack (6 ms)
+[ RUN      ] AuditTest.EntriesCannotBeUpdatedOrDeleted
+[       OK ] AuditTest.EntriesCannotBeUpdatedOrDeleted (6 ms)
+[ RUN      ] AuditTest.DepositAndWithdrawalWriteAnEntryWithTheOperator
+[       OK ] AuditTest.DepositAndWithdrawalWriteAnEntryWithTheOperator (7 ms)
+[ RUN      ] AuditTest.FailedAuditWriteRollsBackTheBalanceChange
+[       OK ] AuditTest.FailedAuditWri...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="audit_viewer_test" classname="audit_viewer_test" time="9.24059" status="run">
+		<properties/>
+		<system-out>Running main() from /Users/mahesh/Downloads/Bank-Management-System/build/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 7 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 7 tests from AuditViewerTest
+[ RUN      ] AuditViewerTest.AdministratorSeesEntriesNewestFirstWithOperatorAndAccount
+[       OK ] AuditViewerTest.AdministratorSeesEntriesNewestFirstWithOperatorAndAccount (482 ms)
+[ RUN      ] AuditViewerTest.NonAdministratorsAndAnonymousCallersAreRefused
+[       OK ] AuditViewerTest.NonAdministratorsAndAnonymousCallersAreRefused (931 ms)
+[ RUN      ] AuditViewerTest.FiltersByAccountNumber
+[       OK ] AuditViewerTest.FiltersByAccountNumber (950 ms)
+[ RUN      ] AuditViewerTest.FiltersByInclusiveDateRange
+[       OK ] AuditViewerTest.FiltersByInclusiveDateRange (2273 ms)
+[ RUN      ] AuditViewerTest.PagesWithLimitAndOffset
+[       OK ] AuditViewerTest.PagesWithLimitAndOffset (475 ms)
+[ RUN      ] AuditViewerTest.RejectsBadFilters
+[       OK ] AuditViewe...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="rbac_test" classname="rbac_test" time="2.5321" status="run">
+		<properties/>
+		<system-out>Running main() from /Users/mahesh/Downloads/Bank-Management-System/build/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 9 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 1 test from PermissionTable
+[ RUN      ] PermissionTable.MatchesTheBusinessRules
+[       OK ] PermissionTable.MatchesTheBusinessRules (0 ms)
+[----------] 1 test from PermissionTable (0 ms total)
+
+[----------] 8 tests from RbacTest
+[ RUN      ] RbacTest.CoreRefusesACustomerBeforeAnythingChanges
+[       OK ] RbacTest.CoreRefusesACustomerBeforeAnythingChanges (12 ms)
+[ RUN      ] RbacTest.CoreRefusesAnOfficerTheAdministratorInterestRun
+[       OK ] RbacTest.CoreRefusesAnOfficerTheAdministratorInterestRun (6 ms)
+[ RUN      ] RbacTest.CoreRefusesAnUnknownUserAndAllowsStaff
+[       OK ] RbacTest.CoreRefusesAnUnknownUserAndAllowsStaff (8 ms)
+[ RUN      ] RbacTest.ForbiddenRequestsToTheApiGet403AndAreRecorded
+[       OK ] RbacTest.ForbiddenRequestsToTheApiGet403AndAreRecorded (1001 ms)
+[ RUN...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="tls_test" classname="tls_test" time="0.151952" status="run">
+		<properties/>
+		<system-out>Running main() from /Users/mahesh/Downloads/Bank-Management-System/build/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 3 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 3 tests from Tls
+[ RUN      ] Tls.ServesHttpsWhenACertificateAndKeyAreConfigured
+2026-11-05T12:28:17Z WARN Front-end folder '' not found; only the API is served. Use --frontend to set it.
+2026-11-05T12:28:17Z INFO 127.0.0.1 "GET /health" 200
+[       OK ] Tls.ServesHttpsWhenACertificateAndKeyAreConfigured (68 ms)
+[ RUN      ] Tls.RefusesToStartWithAnUnreadableCertificateOrKey
+[       OK ] Tls.RefusesToStartWithAnUnreadableCertificateOrKey (61 ms)
+[ RUN      ] Tls.WithoutACertificateTheServerSpeaksPlainHttp
+2026-11-05T12:28:17Z WARN Front-end folder '' not found; only the API is served. Use --frontend to set it.
+2026-11-05T12:28:17Z INFO 127.0.0.1 "GET /health" 200
+[       OK ] Tls.WithoutACertificateTheServerSpeaksPlainHttp (1 ms)
+[----------] 3 tests from Tls (131 ms total)
+
+[--------...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="log_secrets_test" classname="log_secrets_test" time="2.74655" status="run">
+		<properties/>
+		<system-out>Running main() from /Users/mahesh/Downloads/Bank-Management-System/build/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from LogSecretsTest
+[ RUN      ] LogSecretsTest.PasswordsAndTokensNeverReachTheLog
+[       OK ] LogSecretsTest.PasswordsAndTokensNeverReachTheLog (2724 ms)
+[----------] 1 test from LogSecretsTest (2724 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (2724 ms total)
+[  PASSED  ] 1 test.
+</system-out>
+	</testcase>
+	<testcase name="validation_test" classname="validation_test" time="2.10235" status="run">
+		<properties/>
+		<system-out>Running main() from /Users/mahesh/Downloads/Bank-Management-System/build/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 3 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 3 tests from TransactionValidationTest
+[ RUN      ] TransactionValidationTest.CoreRejectsBadInputsWithoutChangingState
+2026-11-05T12:28:20Z WARN Front-end folder '' not found; only the API is served. Use --frontend to set it.
+2026-11-05T12:28:21Z INFO 127.0.0.1 "POST /auth/login" 200
+[       OK ] TransactionValidationTest.CoreRejectsBadInputsWithoutChangingState (474 ms)
+[ RUN      ] TransactionValidationTest.CustomerSearchLimitsAreCheckedAtBothBoundaries
+2026-11-05T12:28:21Z WARN Front-end folder '' not found; only the API is served. Use --frontend to set it.
+2026-11-05T12:28:21Z INFO 127.0.0.1 "POST /auth/login" 200
+2026-11-05T12:28:21Z INFO 127.0.0.1 "GET /customers" 400
+[       OK ] TransactionValidationTest.CustomerSearchLimitsAreCheckedAtBothBoundaries (468 ms)
+[ RUN      ] Tran...
+[This part of the test output was removed since it exceeds the threshold of 1024 bytes.]
+</system-out>
+	</testcase>
+	<testcase name="calendar_test" classname="calendar_test" time="0.0181192" status="run">
+		<properties/>
+		<system-out>Running main() from /Users/mahesh/Downloads/Bank-Management-System/build/_deps/googletest-src/googletest/src/gtest_main.cc
+[==========] Running 3 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 3 tests from Calendar
+[ RUN      ] Calendar.EpochIsFirstOfJanuary1970Utc
+[       OK ] Calendar.EpochIsFirstOfJanuary1970Utc (0 ms)
+[ RUN      ] Calendar.LeapDayIsBrokenDownInUtc
+[       OK ] Calendar.LeapDayIsBrokenDownInUtc (0 ms)
+[ RUN      ] Calendar.LocalTimeRoundTripsThroughMktime
+[       OK ] Calendar.LocalTimeRoundTripsThroughMktime (0 ms)
+[----------] 3 tests from Calendar (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 3 tests from 1 test suite ran. (0 ms total)
+[  PASSED  ] 3 tests.
+</system-out>
+	</testcase>
+	<testcase name="coverage_error_paths_test" classname="coverage_error_paths_test" time="0.385431" status="run">
+		<properties/>
+		<system-out>[PASS] closed databases reject operations with DbError
+[PASS] invalid account-number generator fails before creating rows
+[PASS] customer permission refusal leaves deposit state unchanged
+[PASS] deposit balance overflow is rejected without a transaction
+[PASS] transfer destination overflow rolls back before any ledger write
+</system-out>
+	</testcase>
+</testsuite>

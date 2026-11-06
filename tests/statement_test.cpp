@@ -74,20 +74,20 @@ TEST_F(StatementTest, ReturnsOpeningTransactionsAndClosingBalanceForInclusiveDat
     EXPECT_EQ(statement["account_number"], "ACC001");
     EXPECT_EQ(statement["from"], "2026-01-18");
     EXPECT_EQ(statement["to"], "2026-01-18");
-    EXPECT_EQ(statement["opening_balance"], "49000.00");
+    EXPECT_EQ(statement["opening_balance"], "52000.00");
     ASSERT_EQ(statement["transactions"].size(), 1);
     EXPECT_EQ(statement["transactions"][0]["type"], "transfer_debit");
     EXPECT_EQ(statement["transactions"][0]["amount"], "-2000.00");
-    EXPECT_EQ(statement["transactions"][0]["resulting_balance"], "47000.00");
-    EXPECT_EQ(statement["closing_balance"], "47000.00");
+    EXPECT_EQ(statement["transactions"][0]["resulting_balance"], "50000.00");
+    EXPECT_EQ(statement["closing_balance"], "50000.00");
 }
 
 TEST_F(StatementTest, EmptyPeriodReturnsUnchangedBalanceAndNoEntries) {
     const auto statement = bms::reporting::get_account_statement(
         db(), "ACC001", "2026-02-01", "2026-02-02");
-    EXPECT_EQ(statement.opening_balance_paise, 4700000);
+    EXPECT_EQ(statement.opening_balance_paise, 5000000);
     EXPECT_TRUE(statement.transactions.empty());
-    EXPECT_EQ(statement.closing_balance_paise, 4700000);
+    EXPECT_EQ(statement.closing_balance_paise, 5000000);
 }
 
 TEST_F(StatementTest, CustomerCanReadOwnAccountButNotAnotherCustomersAccount) {

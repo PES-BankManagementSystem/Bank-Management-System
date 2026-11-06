@@ -65,6 +65,9 @@ void register_test_routes(bms::api::Router& router) {
     router.get("/test/crash", [](const Request&) -> Response {
         throw std::runtime_error(kInternalDetail);
     });
+    router.get("/test/unknown-crash", [](const Request&) -> Response {
+        throw 42;
+    });
     router.get("/test/items/:id", [](const Request& req) {
         return Response::ok({{"id", req.param("id")}, {"q", req.query("q").value_or("")}});
     });
@@ -200,6 +203,14 @@ int main() {
         CHECK_EQ(res->status, 500);
         CHECK_EQ(body_of(res)["code"], json("INTERNAL_ERROR"));
         CHECK(res->body.find("secret_internal_table") == std::string::npos);
+    });
+
+    run("non-standard exceptions return a generic 500", [&] {
+        auto res = client.Get("/test/unknown-crash");
+        CHECK(res);
+        CHECK_EQ(res->status, 500);
+        CHECK_EQ(body_of(res)["code"], json("INTERNAL_ERROR"));
+        CHECK(body_of(res).contains("message"));
     });
 
     run("handlers can choose the status, and read path and query parameters", [&] {
