@@ -1,0 +1,22 @@
+{
+  "testCase": "TC-15",
+  "build": "MinGW/OpenSSL TLS-enabled build from origin/main b66f97c",
+  "listener": "127.0.0.1:18750",
+  "database": "Fresh disposable schema and seed",
+  "certificate": "Ephemeral self-signed localhost test certificate",
+  "client": {
+    "minimumTlsVersion": "TLSv1.3",
+    "maximumTlsVersion": "TLSv1.3"
+  },
+  "tlsVersionNegotiated": "TLSv1.3",
+  "httpsLogin": {
+    "httpStatus": 200,
+    "role": "administrator",
+    "tokenRecorded": false
+  },
+  "plainHttpProbe": {
+    "result": "Connection reset/closed without HTTP response",
+    "statusLine": null
+  },
+  "verdict": "PASS"
+}

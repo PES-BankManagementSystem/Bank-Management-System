@@ -1,0 +1,41 @@
+{
+  "testCase": "TC-14",
+  "source": "origin/main b66f97c; live API",
+  "database": "Disposable TC-04B/TC-05/TC-07/TC-09 validation database",
+  "results": [
+    {
+      "role": "administrator",
+      "httpStatus": 200,
+      "elapsedMs": 10.77,
+      "dashboardRole": "administrator",
+      "requiredFieldsPresent": [
+        "counts.customers",
+        "counts.accounts",
+        "counts.staff",
+        "transactionsToday.count",
+        "transactionsToday.totalAmount"
+      ]
+    },
+    {
+      "role": "bank_officer",
+      "httpStatus": 200,
+      "elapsedMs": 2.83,
+      "dashboardRole": "bank_officer",
+      "requiredFieldsPresent": [
+        "transactionsToday.count",
+        "transactionsToday.totalAmount",
+        "transactionsToday.items"
+      ]
+    },
+    {
+      "role": "customer",
+      "httpStatus": 200,
+      "elapsedMs": 3.835,
+      "dashboardRole": "customer",
+      "returnedAccountCount": 6,
+      "returnedAccountsMatchedToCustomerDatabaseOwnership": true
+    }
+  ],
+  "thresholdMs": 3000,
+  "verdict": "PASS"
+}

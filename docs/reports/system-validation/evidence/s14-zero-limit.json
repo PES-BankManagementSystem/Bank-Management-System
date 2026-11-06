@@ -1,0 +1,31 @@
+{
+  "scenario": "S-14 zero daily withdrawal limit",
+  "role": "Bank Officer",
+  "account_type": "S43 Rules Test",
+  "starting_balance_minor_units": 120000,
+  "deposit": {
+    "amount": "10.00",
+    "http_status": 201,
+    "result": {
+      "balance": "1210.00",
+      "transaction": {
+        "account_id": 9,
+        "account_number": "ACC262620646425",
+        "amount": "10.00",
+        "created_at": "2026-11-04 17:06:20",
+        "operator_id": 2,
+        "resulting_balance": "1210.00",
+        "transaction_id": 27,
+        "type": "deposit"
+      }
+    }
+  },
+  "withdrawal": {
+    "amount": "1.00",
+    "http_status": 422,
+    "result": {
+      "code": "DAILY_LIMIT_EXCEEDED",
+      "message": "The remaining withdrawal limit for today is ₹0.00."
+    }
+  }
+}
