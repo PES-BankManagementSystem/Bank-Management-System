@@ -1,0 +1,38 @@
+{
+  "source": "docs\\SRS_Bank_Management_System.md",
+  "pdf": "docs\\SRS_Bank_Management_System.pdf",
+  "source_sha256": "39cc9a5f3cfd7869cf65fdefa22d370b78ccb81563650aa551643eec6013d489",
+  "pdf_sha256": "6e52f537d34b0cf6bfdc64aed1d61da830db6df764c0c28b5902324411804b1b",
+  "page_count": 28,
+  "text_characters": 61432,
+  "headings_checked": 78,
+  "missing_headings": [],
+  "required_ids_checked": 45,
+  "missing_ids": [],
+  "diagram_sources": [
+    "docs\\diagrams\\srs-v1.2-use-cases.svg",
+    "docs\\diagrams\\srs-v1.2-er.svg"
+  ],
+  "embedded_image_count": 2,
+  "text_blocks_outside_page_content_bounds": [],
+  "revision_v1_2_present": true,
+  "schema_version": 5,
+  "schema_fk_note": "transactions.interest_run_id is logical, not a declared foreign key",
+  "visual_review": "PASS: all 28 pages inspected; reference/glossary width fixes rerendered and rechecked",
+  "traceability_snapshot_rows_compared": 25,
+  "traceability_snapshot_exact_match": true,
+  "functional_requirement_count": 17,
+  "nonfunctional_requirement_count": 9,
+  "security_requirement_count": 6,
+  "security_objective_count": 3,
+  "local_diagram_links": "PASS",
+  "superseded_addendum_links": "PASS",
+  "export_script_syntax": "PASS",
+  "sensitive_credential_scan": "PASS: no credential values or bearer tokens found; commit SHAs are source provenance",
+  "reproducible_export": "PASS: second full export produced identical PDF SHA-256",
+  "exporter_dependencies": {
+    "reportlab": "5.1.0",
+    "Markdown": "3.11.3",
+    "PyMuPDF": "1.26.7"
+  }
+}
