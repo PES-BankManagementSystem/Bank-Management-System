@@ -82,7 +82,7 @@ The full list, with reasons, is in [DEVIATIONS.md](DEVIATIONS.md).
 | 22 | A failed transfer rolls back with no reversal entry | One database transaction gives "both or neither" directly |
 | 23 | Some API routes differ from SADS v1.0 | Unlock applies to all users, and later stories needed more routes; the SADS now matches |
 | 25, 26, 27 | The demo videos are late, and their length differs from the stories | Sprint 1 was recorded late from end-of-sprint code, S-38 waited for the dashboards, and Sprint 2 was recorded at a human pace |
-| 29, 30 | System validation is incomplete: TC-21 was not run, TC-22 is partial, and most cases lack an independent fresh-seed run | The results are reported as they stand in the [System Validation Report](System_Validation_Report.md), and nothing was simulated |
+| 30, 31 | System validation is incomplete: TC-21 was not run, TC-22 is partial, and most cases lack an independent fresh-seed run | The results are reported as they stand in the [System Validation Report](System_Validation_Report.md), and nothing was simulated |
 
 ## What each member delivered
 
@@ -135,7 +135,7 @@ Points and stories come from `.github/backlog/backlog.yml`. A dash means no merg
 | S-14 | Manage account types | 3 | #51 | #97 | closed |
 | S-16 | Freeze, unfreeze and close accounts | 3 | #52 | #102 | closed |
 | S-21 | View transaction history with a date filter | 3 | #53 | #107 | closed |
-| S-43 | Execute system validation and write the System Validation Report | 5 | #119 | #130 | closed |
+| S-43 | Execute system validation and write the System Validation Report | 5 | #119 | #130 | open |
 | S-44 | Finalize the SRS as v1.2 in IEEE format | 2 | #120 | - | open |
 
 ### Aditya M (PES1UG24CS027): 37 points
@@ -152,4 +152,4 @@ Points and stories come from `.github/backlog/backlog.yml`. A dash means no merg
 | S-30 | Verify performance targets | 2 | #61 | #100 | closed |
 | S-33 | Harden input validation and error handling | 2 | #64 | #101 | closed |
 | S-42 | Write the Unit Test, Code Coverage and Branch Coverage reports | 5 | #118 | #126 | closed |
-| S-45 | Update the Test Summary Report with the Sprint 3 results | 2 | #121 | - | open |
+| S-45 | Update the Test Summary Report with the Sprint 3 results | 2 | #121 | #132 | closed |
