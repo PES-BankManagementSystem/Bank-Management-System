@@ -1,0 +1,48 @@
+{
+  "build": "origin/main 42e174c",
+  "freshDataset": "2505 accounts; generated performance seed",
+  "results": [
+    {
+      "path": "/dashboard",
+      "role": "officer1",
+      "status_codes": [
+        200
+      ],
+      "samples": 30,
+      "mean_ms": 59.676,
+      "median_ms": 59.361,
+      "p95_ms": 70.615,
+      "max_ms": 77.389,
+      "threshold_ms": 3000,
+      "verdict": "PASS"
+    },
+    {
+      "path": "/customers/me/accounts",
+      "role": "customer1",
+      "status_codes": [
+        200
+      ],
+      "samples": 30,
+      "mean_ms": 10.26,
+      "median_ms": 5.67,
+      "p95_ms": 23.681,
+      "max_ms": 27.876,
+      "threshold_ms": 3000,
+      "verdict": "PASS"
+    },
+    {
+      "path": "/accounts/PF000001/transactions?from=2023-01-01&to=2026-12-31",
+      "role": "officer1",
+      "status_codes": [
+        200
+      ],
+      "samples": 30,
+      "mean_ms": 17.743,
+      "median_ms": 19.765,
+      "p95_ms": 32.897,
+      "max_ms": 32.918,
+      "threshold_ms": 3000,
+      "verdict": "PASS"
+    }
+  ]
+}

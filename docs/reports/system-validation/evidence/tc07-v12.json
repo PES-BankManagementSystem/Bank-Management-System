@@ -1,0 +1,19 @@
+{
+  "case": "TC-07",
+  "nonzeroCloseHttp": 409,
+  "nonzeroCloseCode": "ACCOUNT_BALANCE_NONZERO",
+  "freezeHttp": 200,
+  "repeatFreezeHttp": 200,
+  "frozenDepositHttp": 422,
+  "frozenWithdrawalHttp": 422,
+  "frozenTransferHttp": 422,
+  "closeFrozenZeroHttp": 200,
+  "repeatCloseHttp": 200,
+  "finalState": [
+    "closed",
+    0
+  ],
+  "retainedOpeningTransactionCount": 1,
+  "repeatActionAuditDelta": 1,
+  "verdict": "PASS"
+}

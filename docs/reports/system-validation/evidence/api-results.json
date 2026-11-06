@@ -1,0 +1,4000 @@
+{
+  "testedBuild": "origin/main 42e174c",
+  "database": "fresh schema.sql + seed.sql; disposable temp path",
+  "server": "Windows 11; localhost HTTP; credentials/tokens redacted",
+  "results": [
+    {
+      "id": "TC-01",
+      "status": "PASS",
+      "expected": "200; 64-character token; correct role; no password returned; failure counter reset.",
+      "actual": {
+        "roles": [
+          "administrator",
+          "bank_officer",
+          "customer"
+        ],
+        "tokenLength": 64,
+        "credentialsInEvidence": false
+      },
+      "evidence": [
+        {
+          "method": "POST",
+          "path": "/auth/login",
+          "status": 200,
+          "elapsed_ms": 777.925,
+          "response": {
+            "accessToken": "[redacted]",
+            "expiresIn": 1800,
+            "mustChangePassword": "[redacted]",
+            "role": "administrator",
+            "tokenType": "[redacted]"
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/auth/login",
+          "status": 200,
+          "elapsed_ms": 661.449,
+          "response": {
+            "accessToken": "[redacted]",
+            "expiresIn": 1800,
+            "mustChangePassword": "[redacted]",
+            "role": "bank_officer",
+            "tokenType": "[redacted]"
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/auth/login",
+          "status": 200,
+          "elapsed_ms": 675.851,
+          "response": {
+            "accessToken": "[redacted]",
+            "expiresIn": 1800,
+            "mustChangePassword": "[redacted]",
+            "role": "customer",
+            "tokenType": "[redacted]"
+          }
+        }
+      ]
+    },
+    {
+      "id": "TC-02",
+      "status": "PASS",
+      "expected": "First two generic 401s; third ACCOUNT_LOCKED; DB locked with 3 attempts.",
+      "actual": {
+        "threeFailures": [
+          401,
+          401,
+          401
+        ],
+        "lockedUserState": [
+          "locked",
+          3
+        ]
+      },
+      "evidence": [
+        {
+          "method": "POST",
+          "path": "/auth/login",
+          "status": 401,
+          "elapsed_ms": 678.024,
+          "response": {
+            "code": "UNAUTHENTICATED",
+            "message": "Invalid username or password."
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/auth/login",
+          "status": 401,
+          "elapsed_ms": 652.122,
+          "response": {
+            "code": "UNAUTHENTICATED",
+            "message": "Invalid username or password."
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/auth/login",
+          "status": 401,
+          "elapsed_ms": 652.044,
+          "response": {
+            "code": "ACCOUNT_LOCKED",
+            "message": "This account is locked after three failed sign-in attempts. Contact an Administrator to unlock it."
+          }
+        }
+      ]
+    },
+    {
+      "id": "TC-02B",
+      "status": "PASS",
+      "expected": "Administrator unlock gives HTTP 200; state becomes active with zero failures; user can sign in.",
+      "actual": "Retest PASS: PATCH 200; DB active/0; Customer2 login 200.",
+      "evidence": [
+        {
+          "method": "POST",
+          "path": "/auth/login",
+          "status": 200,
+          "elapsed_ms": 682.368,
+          "response": {
+            "accessToken": "[redacted]",
+            "expiresIn": 1800,
+            "mustChangePassword": "[redacted]",
+            "role": "administrator",
+            "tokenType": "[redacted]"
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/auth/login",
+          "status": 401,
+          "elapsed_ms": 606.855,
+          "response": {
+            "code": "UNAUTHENTICATED",
+            "message": "Invalid username or password."
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/auth/login",
+          "status": 401,
+          "elapsed_ms": 646.369,
+          "response": {
+            "code": "UNAUTHENTICATED",
+            "message": "Invalid username or password."
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/auth/login",
+          "status": 401,
+          "elapsed_ms": 619.451,
+          "response": {
+            "code": "ACCOUNT_LOCKED",
+            "message": "This account is locked after three failed sign-in attempts. Contact an Administrator to unlock it."
+          }
+        },
+        {
+          "method": "PATCH",
+          "path": "/users/5/unlock",
+          "status": 200,
+          "elapsed_ms": 32.832,
+          "response": {
+            "role": "customer",
+            "status": "active",
+            "userId": 5,
+            "username": "customer2"
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/auth/login",
+          "status": 200,
+          "elapsed_ms": 645.542,
+          "response": {
+            "accessToken": "[redacted]",
+            "expiresIn": 1800,
+            "mustChangePassword": "[redacted]",
+            "role": "customer",
+            "tokenType": "[redacted]"
+          }
+        }
+      ]
+    },
+    {
+      "id": "TC-03",
+      "status": "PASS",
+      "expected": "Logout succeeds; invalidated session gets HTTP 401 on a protected route.",
+      "actual": "Retest PASS: POST /auth/logout 204 No Content; protected GET /dashboard 401.",
+      "evidence": [
+        {
+          "method": "POST",
+          "path": "/auth/login",
+          "status": 200,
+          "elapsed_ms": 619.045,
+          "response": {
+            "accessToken": "[redacted]",
+            "expiresIn": 1800,
+            "mustChangePassword": "[redacted]",
+            "role": "bank_officer",
+            "tokenType": "[redacted]"
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/auth/logout",
+          "status": 204,
+          "elapsed_ms": 3.143,
+          "response": {
+            "text": ""
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/dashboard",
+          "status": 401,
+          "elapsed_ms": 3.541,
+          "response": {
+            "code": "UNAUTHENTICATED",
+            "message": "The session is invalid or has expired."
+          }
+        }
+      ]
+    },
+    {
+      "id": "TC-04",
+      "status": "PASS",
+      "expected": "Officer receives phone-specific error for incomplete request; valid records return 201 with distinct IDs.",
+      "actual": "Retest PASS: missing phone HTTP 400; valid submissions HTTP 201 and distinct customer codes.",
+      "evidence": [
+        {
+          "method": "POST",
+          "path": "/auth/login",
+          "status": 200,
+          "elapsed_ms": 646.479,
+          "response": {
+            "accessToken": "[redacted]",
+            "expiresIn": 1800,
+            "mustChangePassword": "[redacted]",
+            "role": "bank_officer",
+            "tokenType": "[redacted]"
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/customers",
+          "status": 400,
+          "elapsed_ms": 6.445,
+          "response": {
+            "code": "VALIDATION_ERROR",
+            "fields": [
+              {
+                "field": "phone",
+                "message": "This field is required."
+              }
+            ],
+            "message": "One or more fields are invalid."
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/customers",
+          "status": 201,
+          "elapsed_ms": 648.451,
+          "response": {
+            "address": "1 Validation Street",
+            "createdAt": "2026-11-04 16:53:47",
+            "customerId": "CUS-KM7JMNX6",
+            "dateOfBirth": "1991-04-03",
+            "email": "s43.validation.20261104d@example.com",
+            "identificationReference": "S43-ID-TEST-07",
+            "login": {
+              "temporaryPassword": "[redacted]",
+              "username": "CUS-KM7JMNX6"
+            },
+            "name": "Validation Customer",
+            "phone": "+15550190200"
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/customers",
+          "status": 201,
+          "elapsed_ms": 619.83,
+          "response": {
+            "address": "1 Validation Street",
+            "createdAt": "2026-11-04 16:53:47",
+            "customerId": "CUS-T6SXWVJP",
+            "dateOfBirth": "1991-04-03",
+            "email": "s43.validation.20261104e@example.com",
+            "identificationReference": "S43-ID-TEST-08",
+            "login": {
+              "temporaryPassword": "[redacted]",
+              "username": "CUS-T6SXWVJP"
+            },
+            "name": "Validation Customer",
+            "phone": "+15550190201"
+          }
+        }
+      ]
+    },
+    {
+      "id": "TC-05",
+      "status": "PASS",
+      "expected": "Below minimum is rejected without account; sufficient initial deposit creates Active account and opening transaction.",
+      "actual": {
+        "belowMinimumHttp": 422,
+        "belowMinimumAccountCountUnchanged": true,
+        "validAccount": {
+          "accountNumber": "ACC349364725050",
+          "balance": "1000.00",
+          "status": "active",
+          "type": "Savings"
+        },
+        "withdrawalTestAccount": "ACC295555431631"
+      },
+      "evidence": [
+        {
+          "method": "POST",
+          "path": "/accounts",
+          "status": 422,
+          "elapsed_ms": 33.095,
+          "response": {
+            "code": "BELOW_MINIMUM_BALANCE",
+            "message": "The initial deposit is below the required minimum balance of INR 1000.00.",
+            "minimumBalance": "1000.00"
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/accounts",
+          "status": 201,
+          "elapsed_ms": 37.092,
+          "response": {
+            "account": {
+              "accountNumber": "ACC349364725050",
+              "balance": "1000.00",
+              "status": "active",
+              "type": "Savings"
+            },
+            "transaction": {
+              "amount": "1000.00",
+              "createdAt": "2026-11-04 16:51:32",
+              "id": 10,
+              "operatorId": 2,
+              "referenceNumber": "TXN-000000000010",
+              "resultingBalance": "1000.00",
+              "type": "deposit"
+            }
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/accounts",
+          "status": 201,
+          "elapsed_ms": 29.889,
+          "response": {
+            "account": {
+              "accountNumber": "ACC295555431631",
+              "balance": "100000.00",
+              "status": "active",
+              "type": "Savings"
+            },
+            "transaction": {
+              "amount": "100000.00",
+              "createdAt": "2026-11-04 16:51:32",
+              "id": 11,
+              "operatorId": 2,
+              "referenceNumber": "TXN-000000000011",
+              "resultingBalance": "100000.00",
+              "type": "deposit"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "TC-06",
+      "status": "PASS",
+      "expected": "Two 422 rejections preserve balance; valid withdrawal succeeds and is recorded.",
+      "actual": {
+        "startingBalancePaise": 10000000,
+        "minimumViolation": {
+          "code": "BELOW_MINIMUM_BALANCE",
+          "message": "The minimum balance is ₹1000.00; the maximum amount that could be withdrawn is ₹99000.00."
+        },
+        "dailyLimitViolation": {
+          "code": "DAILY_LIMIT_EXCEEDED",
+          "message": "The remaining withdrawal limit for today is ₹50000.00."
+        },
+        "validWithdrawalHttp": 201,
+        "endingBalancePaise": 7000000
+      },
+      "evidence": [
+        {
+          "method": "POST",
+          "path": "/transactions",
+          "status": 422,
+          "elapsed_ms": 18.427,
+          "response": {
+            "code": "BELOW_MINIMUM_BALANCE",
+            "message": "The minimum balance is ₹1000.00; the maximum amount that could be withdrawn is ₹99000.00."
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/transactions",
+          "status": 422,
+          "elapsed_ms": 6.507,
+          "response": {
+            "code": "DAILY_LIMIT_EXCEEDED",
+            "message": "The remaining withdrawal limit for today is ₹50000.00."
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/transactions",
+          "status": 201,
+          "elapsed_ms": 24.531,
+          "response": {
+            "balance": "70000.00",
+            "transaction": {
+              "account_id": 7,
+              "account_number": "ACC295555431631",
+              "amount": "30000.00",
+              "created_at": "2026-11-04 16:51:32",
+              "operator_id": 2,
+              "resulting_balance": "70000.00",
+              "transaction_id": 12,
+              "type": "withdrawal"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "TC-07",
+      "status": "PASS",
+      "expected": "State transitions and 422 blocked transaction; account and history remain available.",
+      "actual": {
+        "statusTransitions": [
+          "frozen",
+          "active",
+          "frozen",
+          "closed"
+        ],
+        "frozenDepositHttp": 422,
+        "retainedAccount": [
+          "closed",
+          0
+        ],
+        "historyRowsBeforeAfter": [
+          1,
+          1
+        ],
+        "closedBalanceReadableHttp": 200
+      },
+      "evidence": [
+        {
+          "method": "PATCH",
+          "path": "/accounts/ACC349364725050/status",
+          "status": 200,
+          "elapsed_ms": 15.306,
+          "response": {
+            "account": {
+              "accountNumber": "ACC349364725050",
+              "balance": "0.00",
+              "status": "frozen",
+              "type": "Savings"
+            }
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/transactions",
+          "status": 422,
+          "elapsed_ms": 7.007,
+          "response": {
+            "code": "ACCOUNT_NOT_ACTIVE",
+            "message": "Account ACC349364725050 is frozen and cannot be used for this transaction."
+          }
+        },
+        {
+          "method": "PATCH",
+          "path": "/accounts/ACC349364725050/status",
+          "status": 200,
+          "elapsed_ms": 24.087,
+          "response": {
+            "account": {
+              "accountNumber": "ACC349364725050",
+              "balance": "0.00",
+              "status": "active",
+              "type": "Savings"
+            }
+          }
+        },
+        {
+          "method": "PATCH",
+          "path": "/accounts/ACC349364725050/status",
+          "status": 200,
+          "elapsed_ms": 17.01,
+          "response": {
+            "account": {
+              "accountNumber": "ACC349364725050",
+              "balance": "0.00",
+              "status": "frozen",
+              "type": "Savings"
+            }
+          }
+        },
+        {
+          "method": "PATCH",
+          "path": "/accounts/ACC349364725050/status",
+          "status": 200,
+          "elapsed_ms": 32.155,
+          "response": {
+            "account": {
+              "accountNumber": "ACC349364725050",
+              "balance": "0.00",
+              "status": "closed",
+              "type": "Savings"
+            }
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/accounts/ACC349364725050/balance",
+          "status": 200,
+          "elapsed_ms": 17.287,
+          "response": {
+            "accountNumber": "ACC349364725050",
+            "accountType": "Savings",
+            "asOf": "2026-11-04 16:51:32",
+            "balance": "0.00",
+            "currency": "INR",
+            "status": "closed"
+          }
+        }
+      ]
+    },
+    {
+      "id": "TC-08",
+      "status": "PASS",
+      "expected": "Dialog identifies account/amount; confirmed deposit updates balance and ledger.",
+      "actual": {
+        "uiRole": "Bank Officer",
+        "dialogText": "Confirm deposit of ?5000.00 into account ACC001? No changes are made until you confirm.",
+        "dialogAccepted": true,
+        "successMessage": "Deposit of ?5000.00 into ACC001 succeeded. New balance: ?55000.00.",
+        "balancePaise": 5500000,
+        "latestTransaction": [
+          "deposit",
+          500000,
+          5500000,
+          2
+        ],
+        "screenshots": [
+          "TC08-deposit-success.png"
+        ]
+      },
+      "evidence": []
+    },
+    {
+      "id": "TC-09",
+      "status": "PASS",
+      "expected": "Second request returns DAILY_LIMIT_EXCEEDED; balance remains at post-first-withdrawal value.",
+      "actual": {
+        "firstWithdrawalHttp": 201,
+        "overLimitHttp": 422,
+        "errorCode": "DAILY_LIMIT_EXCEEDED",
+        "balanceAfterRejectedRequestPaise": 7000000
+      },
+      "evidence": [
+        {
+          "method": "POST",
+          "path": "/accounts",
+          "status": 201,
+          "elapsed_ms": 40.271,
+          "response": {
+            "account": {
+              "accountNumber": "ACC054525759826",
+              "balance": "100000.00",
+              "status": "active",
+              "type": "Savings"
+            },
+            "transaction": {
+              "amount": "100000.00",
+              "createdAt": "2026-11-04 16:51:32",
+              "id": 13,
+              "operatorId": 2,
+              "referenceNumber": "TXN-000000000013",
+              "resultingBalance": "100000.00",
+              "type": "deposit"
+            }
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/transactions",
+          "status": 201,
+          "elapsed_ms": 38.504,
+          "response": {
+            "balance": "70000.00",
+            "transaction": {
+              "account_id": 8,
+              "account_number": "ACC054525759826",
+              "amount": "30000.00",
+              "created_at": "2026-11-04 16:51:32",
+              "operator_id": 2,
+              "resulting_balance": "70000.00",
+              "transaction_id": 14,
+              "type": "withdrawal"
+            }
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/transactions",
+          "status": 422,
+          "elapsed_ms": 23.551,
+          "response": {
+            "code": "DAILY_LIMIT_EXCEEDED",
+            "message": "The remaining withdrawal limit for today is ₹20000.00."
+          }
+        }
+      ]
+    },
+    {
+      "id": "TC-09B",
+      "status": "PASS",
+      "expected": "First run credits once; duplicate rejected without further balance change.",
+      "actual": {
+        "firstRunHttp": 201,
+        "firstAccountsCredited": 1,
+        "duplicateHttp": 409,
+        "duplicateError": {
+          "code": "INTEREST_ALREADY_RUN",
+          "message": "Interest has already been run for period 2026-02."
+        }
+      },
+      "evidence": [
+        {
+          "method": "POST",
+          "path": "/interest/run",
+          "status": 201,
+          "elapsed_ms": 17.036,
+          "response": {
+            "accounts": [
+              {
+                "account_number": "ACC001",
+                "balance_basis": "47000.00",
+                "interest": "144.22",
+                "resulting_balance": "55144.22"
+              }
+            ],
+            "accounts_credited": 1,
+            "period": "2026-02",
+            "total_interest": "144.22"
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/interest/run",
+          "status": 409,
+          "elapsed_ms": 24.513,
+          "response": {
+            "code": "INTEREST_ALREADY_RUN",
+            "message": "Interest has already been run for period 2026-02."
+          }
+        }
+      ]
+    },
+    {
+      "id": "TC-10",
+      "status": "PASS",
+      "expected": "Source/destination balances update atomically; debit and credit share transfer reference.",
+      "actual": {
+        "http": 201,
+        "balancesBeforePaise": [
+          5514422,
+          10000000
+        ],
+        "balancesAfterPaise": [
+          5214422,
+          10300000
+        ],
+        "sharedReference": "TRF-20261104165132Z-16"
+      },
+      "evidence": [
+        {
+          "method": "POST",
+          "path": "/transfers",
+          "status": 201,
+          "elapsed_ms": 38.62,
+          "response": {
+            "from_balance": "52144.22",
+            "to_balance": "103000.00",
+            "transactions": {
+              "credit": {
+                "account_id": 4,
+                "account_number": "ACC004",
+                "amount": "3000.00",
+                "created_at": "2026-11-04 16:51:32",
+                "operator_id": 2,
+                "resulting_balance": "103000.00",
+                "transaction_id": 17,
+                "transfer_ref": "TRF-20261104165132Z-16",
+                "type": "transfer_credit"
+              },
+              "debit": {
+                "account_id": 1,
+                "account_number": "ACC001",
+                "amount": "3000.00",
+                "created_at": "2026-11-04 16:51:32",
+                "operator_id": 2,
+                "resulting_balance": "52144.22",
+                "transaction_id": 16,
+                "transfer_ref": "TRF-20261104165132Z-16",
+                "type": "transfer_debit"
+              }
+            },
+            "transfer_reference": "TRF-20261104165132Z-16"
+          }
+        }
+      ]
+    },
+    {
+      "id": "TC-10B",
+      "status": "PASS",
+      "expected": "Requests rejected; balances and transaction ledger unchanged.",
+      "actual": {
+        "sameAccountHttp": 400,
+        "insufficientFundsHttp": 422,
+        "balanceUnchangedPaise": 5214422
+      },
+      "evidence": [
+        {
+          "method": "POST",
+          "path": "/transfers",
+          "status": 400,
+          "elapsed_ms": 5.306,
+          "response": {
+            "code": "VALIDATION_ERROR",
+            "field": "to_account_number",
+            "message": "Source and destination accounts must be different."
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/transfers",
+          "status": 422,
+          "elapsed_ms": 17.145,
+          "response": {
+            "code": "BELOW_MINIMUM_BALANCE",
+            "message": "The source account minimum balance is ₹1000.00; the maximum amount that could be transferred is ₹51144.22."
+          }
+        }
+      ]
+    },
+    {
+      "id": "TC-11",
+      "status": "PASS",
+      "expected": "Own views succeed; both unauthorized requests return identical 403 and denied access is audited.",
+      "actual": {
+        "ownBalanceHttp": 200,
+        "ownHistoryHttp": 200,
+        "otherAccountHttp": 403,
+        "unknownAccountHttp": 403,
+        "sameDenialBody": true,
+        "denialAuditRows": 1
+      },
+      "evidence": [
+        {
+          "method": "GET",
+          "path": "/accounts/ACC001/balance",
+          "status": 200,
+          "elapsed_ms": 28.818,
+          "response": {
+            "accountNumber": "ACC001",
+            "accountType": "Savings",
+            "asOf": "2026-11-04 16:51:32",
+            "balance": "52144.22",
+            "currency": "INR",
+            "status": "active"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/accounts/ACC001/transactions?from=2026-01-01&to=2026-12-31",
+          "status": 200,
+          "elapsed_ms": 6.549,
+          "response": {
+            "accountNumber": "ACC001",
+            "limit": 20,
+            "offset": 0,
+            "snapshot": 16,
+            "total": 6,
+            "transactions": [
+              {
+                "amount": "-3000.00",
+                "balanceAfter": "52144.22",
+                "counterpartAccount": "ACC004",
+                "dateTime": "2026-11-04T16:51:32Z",
+                "transactionId": 16,
+                "type": "transfer_debit"
+              },
+              {
+                "amount": "144.22",
+                "balanceAfter": "55144.22",
+                "counterpartAccount": null,
+                "dateTime": "2026-11-04T16:51:32Z",
+                "transactionId": 15,
+                "type": "interest"
+              },
+              {
+                "amount": "5000.00",
+                "balanceAfter": "55000.00",
+                "counterpartAccount": null,
+                "dateTime": "2026-11-04T16:48:52Z",
+                "transactionId": 9,
+                "type": "deposit"
+              },
+              {
+                "amount": "-2000.00",
+                "balanceAfter": "47000.00",
+                "counterpartAccount": "ACC004",
+                "dateTime": "2026-01-18T11:30:00Z",
+                "transactionId": 7,
+                "type": "transfer_debit"
+              },
+              {
+                "amount": "-1000.00",
+                "balanceAfter": "49000.00",
+                "counterpartAccount": null,
+                "dateTime": "2026-01-17T16:45:00Z",
+                "transactionId": 5,
+                "type": "withdrawal"
+              },
+              {
+                "amount": "50000.00",
+                "balanceAfter": "50000.00",
+                "counterpartAccount": null,
+                "dateTime": "2026-01-16T09:30:00Z",
+                "transactionId": 1,
+                "type": "deposit"
+              }
+            ]
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/accounts/ACC002/transactions",
+          "status": 403,
+          "elapsed_ms": 34.197,
+          "response": {
+            "code": "FORBIDDEN",
+            "message": "You are not allowed to perform this action."
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/accounts/ACC999/transactions",
+          "status": 403,
+          "elapsed_ms": 29.942,
+          "response": {
+            "code": "FORBIDDEN",
+            "message": "You are not allowed to perform this action."
+          }
+        }
+      ]
+    },
+    {
+      "id": "TC-12",
+      "status": "PASS",
+      "expected": "201 created; Argon2-backed user authenticates; first-login password change accepted.",
+      "actual": {
+        "createHttp": 201,
+        "loginHttp": 200,
+        "role": "bank_officer",
+        "mustChangePassword": true,
+        "userId": 7,
+        "temporaryPassword": "[redacted]",
+        "passwordChangeHttp": 200
+      },
+      "evidence": [
+        {
+          "method": "POST",
+          "path": "/staff",
+          "status": 201,
+          "elapsed_ms": 662.943,
+          "response": {
+            "createdAt": "2026-11-04 16:51:33",
+            "login": {
+              "temporaryPassword": "[redacted]",
+              "username": "officer_s43"
+            },
+            "role": "bank_officer",
+            "status": "active",
+            "updatedAt": "2026-11-04 16:51:33",
+            "userId": 7,
+            "username": "officer_s43"
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/auth/login",
+          "status": 200,
+          "elapsed_ms": 655.041,
+          "response": {
+            "accessToken": "[redacted]",
+            "expiresIn": 1800,
+            "mustChangePassword": "[redacted]",
+            "role": "bank_officer",
+            "tokenType": "[redacted]"
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/auth/change-password",
+          "status": 200,
+          "elapsed_ms": 682.795,
+          "response": {
+            "message": "Password changed."
+          }
+        }
+      ]
+    },
+    {
+      "id": "TC-13",
+      "status": "PASS",
+      "expected": "User is inactive, every session is invalidated, prior records remain attributable.",
+      "actual": {
+        "patchHttp": 200,
+        "databaseStatus": "inactive",
+        "existingSessionDashboardHttp": 401,
+        "transactionOperatorId": 13,
+        "operatorAttributionRetained": true
+      },
+      "evidence": [
+        {
+          "method": "PATCH",
+          "path": "/staff/7",
+          "status": 200,
+          "elapsed_ms": 14.572,
+          "response": {
+            "createdAt": "2026-11-04 16:51:33",
+            "role": "bank_officer",
+            "status": "inactive",
+            "updatedAt": "2026-11-04 16:51:34",
+            "userId": 7,
+            "username": "officer_s43"
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/dashboard",
+          "status": 401,
+          "elapsed_ms": 5.42,
+          "response": {
+            "code": "UNAUTHENTICATED",
+            "message": "The session is invalid or has expired."
+          }
+        },
+        {
+          "method": "Retest",
+          "path": "/transactions then PATCH /staff/13",
+          "status": 200,
+          "result": "Transaction 30 retained operator_id 13 after deactivation; old session returned 401; see tc13-staff-session-attribution.json."
+        }
+      ]
+    },
+    {
+      "id": "TC-14",
+      "status": "PASS",
+      "expected": "Each role receives its required dashboard payload; each request completes under 3 seconds.",
+      "actual": {
+        "admin": {
+          "http": 200,
+          "role": "administrator",
+          "elapsed_ms": 27.718,
+          "keys": [
+            "counts",
+            "quickLinks",
+            "role",
+            "transactionsToday"
+          ]
+        },
+        "officer1": {
+          "http": 200,
+          "role": "bank_officer",
+          "elapsed_ms": 17.589,
+          "keys": [
+            "quickLinks",
+            "role",
+            "transactionsToday"
+          ]
+        },
+        "customer1": {
+          "http": 200,
+          "role": "customer",
+          "elapsed_ms": 16.903,
+          "keys": [
+            "accounts",
+            "quickLinks",
+            "role"
+          ]
+        }
+      },
+      "evidence": [
+        {
+          "method": "GET",
+          "path": "/dashboard",
+          "status": 200,
+          "elapsed_ms": 27.718,
+          "response": {
+            "counts": {
+              "accounts": 8,
+              "customers": 3,
+              "staff": 2
+            },
+            "quickLinks": [
+              {
+                "href": "#customer-management-card",
+                "label": "Manage customers"
+              },
+              {
+                "href": "#staff-card",
+                "label": "Manage staff"
+              },
+              {
+                "href": "#audit-card",
+                "label": "Review audit log"
+              }
+            ],
+            "role": "administrator",
+            "transactionsToday": {
+              "count": 8,
+              "totalAmount": "269144.22"
+            }
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/dashboard",
+          "status": 200,
+          "elapsed_ms": 17.589,
+          "response": {
+            "quickLinks": [
+              {
+                "href": "#deposit-form",
+                "label": "Deposit"
+              },
+              {
+                "href": "#withdraw-form",
+                "label": "Withdraw"
+              },
+              {
+                "href": "#transfer-form",
+                "label": "Transfer"
+              },
+              {
+                "href": "#customer-management-card",
+                "label": "Customers"
+              }
+            ],
+            "role": "bank_officer",
+            "transactionsToday": {
+              "count": 7,
+              "items": [
+                {
+                  "accountNumber": "ACC001",
+                  "amount": "3000.00",
+                  "createdAt": "2026-11-04 16:51:32",
+                  "transactionId": 16,
+                  "type": "transfer_debit"
+                },
+                {
+                  "accountNumber": "ACC054525759826",
+                  "amount": "30000.00",
+                  "createdAt": "2026-11-04 16:51:32",
+                  "transactionId": 14,
+                  "type": "withdrawal"
+                },
+                {
+                  "accountNumber": "ACC054525759826",
+                  "amount": "100000.00",
+                  "createdAt": "2026-11-04 16:51:32",
+                  "transactionId": 13,
+                  "type": "deposit"
+                },
+                {
+                  "accountNumber": "ACC295555431631",
+                  "amount": "30000.00",
+                  "createdAt": "2026-11-04 16:51:32",
+                  "transactionId": 12,
+                  "type": "withdrawal"
+                },
+                {
+                  "accountNumber": "ACC295555431631",
+                  "amount": "100000.00",
+                  "createdAt": "2026-11-04 16:51:32",
+                  "transactionId": 11,
+                  "type": "deposit"
+                },
+                {
+                  "accountNumber": "ACC349364725050",
+                  "amount": "1000.00",
+                  "createdAt": "2026-11-04 16:51:32",
+                  "transactionId": 10,
+                  "type": "deposit"
+                },
+                {
+                  "accountNumber": "ACC001",
+                  "amount": "5000.00",
+                  "createdAt": "2026-11-04 16:48:52",
+                  "transactionId": 9,
+                  "type": "deposit"
+                }
+              ],
+              "totalAmount": "269000.00"
+            }
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/dashboard",
+          "status": 200,
+          "elapsed_ms": 16.903,
+          "response": {
+            "accounts": [
+              {
+                "accountNumber": "ACC001",
+                "balance": "52144.22",
+                "links": [
+                  {
+                    "href": "#history-card",
+                    "label": "History"
+                  },
+                  {
+                    "href": "#statement-card",
+                    "label": "Statement"
+                  }
+                ],
+                "status": "active",
+                "type": "Savings"
+              },
+              {
+                "accountNumber": "ACC004",
+                "balance": "103000.00",
+                "links": [
+                  {
+                    "href": "#history-card",
+                    "label": "History"
+                  },
+                  {
+                    "href": "#statement-card",
+                    "label": "Statement"
+                  }
+                ],
+                "status": "active",
+                "type": "Current"
+              },
+              {
+                "accountNumber": "ACC054525759826",
+                "balance": "70000.00",
+                "links": [
+                  {
+                    "href": "#history-card",
+                    "label": "History"
+                  },
+                  {
+                    "href": "#statement-card",
+                    "label": "Statement"
+                  }
+                ],
+                "status": "active",
+                "type": "Savings"
+              },
+              {
+                "accountNumber": "ACC295555431631",
+                "balance": "70000.00",
+                "links": [
+                  {
+                    "href": "#history-card",
+                    "label": "History"
+                  },
+                  {
+                    "href": "#statement-card",
+                    "label": "Statement"
+                  }
+                ],
+                "status": "active",
+                "type": "Savings"
+              },
+              {
+                "accountNumber": "ACC349364725050",
+                "balance": "0.00",
+                "links": [
+                  {
+                    "href": "#history-card",
+                    "label": "History"
+                  },
+                  {
+                    "href": "#statement-card",
+                    "label": "Statement"
+                  }
+                ],
+                "status": "closed",
+                "type": "Savings"
+              }
+            ],
+            "quickLinks": [
+              {
+                "href": "#history-card",
+                "label": "Transaction history"
+              },
+              {
+                "href": "#statement-card",
+                "label": "Statements"
+              }
+            ],
+            "role": "customer"
+          }
+        }
+      ]
+    },
+    {
+      "id": "TC-15",
+      "status": "PASS",
+      "expected": "TLS 1.3 handshake succeeds; HTTPS login works; plain HTTP is refused on TLS port.",
+      "actual": "TLS 1.3 handshake succeeded; HTTPS login returned HTTP 200 as Administrator; plain HTTP connection reset without an HTTP response.",
+      "evidence": [
+        {
+          "method": "HTTPS TLS 1.3",
+          "path": "/auth/login",
+          "status": 200,
+          "response": {
+            "role": "administrator"
+          }
+        },
+        {
+          "method": "HTTP on TLS listener",
+          "path": "/",
+          "status": "connection reset; no HTTP response"
+        }
+      ]
+    },
+    {
+      "id": "TC-16",
+      "status": "PASS",
+      "expected": "Balance-changing events are present; editing/deleting returns 405.",
+      "actual": {
+        "auditReadHttp": 200,
+        "observedActions": [
+          "ACCOUNT_OPENED",
+          "DEPOSIT",
+          "WITHDRAWAL"
+        ],
+        "putHttp": 405,
+        "deleteHttp": 405,
+        "readOnlyError": {
+          "code": "METHOD_NOT_ALLOWED",
+          "message": "The audit trail is read-only; entries cannot be changed or removed."
+        }
+      },
+      "evidence": [
+        {
+          "method": "GET",
+          "path": "/audit?limit=100",
+          "status": 200,
+          "elapsed_ms": 11.434,
+          "response": {
+            "entries": [
+              {
+                "accountNumber": null,
+                "action": "STAFF_DEACTIVATED",
+                "details": "status active -> inactive",
+                "entity": "users",
+                "entityId": 7,
+                "logId": 27,
+                "operator": "admin",
+                "operatorId": 1,
+                "timestamp": "2026-11-04 16:51:34"
+              },
+              {
+                "accountNumber": null,
+                "action": "STAFF_CREATED",
+                "details": "Created Bank Officer officer_s43",
+                "entity": "users",
+                "entityId": 7,
+                "logId": 26,
+                "operator": "admin",
+                "operatorId": 1,
+                "timestamp": "2026-11-04 16:51:33"
+              },
+              {
+                "accountNumber": null,
+                "action": "VIEW_TRANSACTIONS_DENIED",
+                "details": "Customer attempted transaction history for account ACC999.",
+                "entity": "accounts",
+                "entityId": 0,
+                "logId": 25,
+                "operator": "customer1",
+                "operatorId": 4,
+                "timestamp": "2026-11-04 16:51:32"
+              },
+              {
+                "accountNumber": "ACC002",
+                "action": "VIEW_TRANSACTIONS_DENIED",
+                "details": "Customer attempted transaction history for account ACC002.",
+                "entity": "accounts",
+                "entityId": 2,
+                "logId": 24,
+                "operator": "customer1",
+                "operatorId": 4,
+                "timestamp": "2026-11-04 16:51:32"
+              },
+              {
+                "accountNumber": "ACC004",
+                "action": "TRANSFER_IN",
+                "details": "Transfer TRF-20261104165132Z-16 of 3000.00; resulting balance 103000.00.",
+                "entity": "accounts",
+                "entityId": 4,
+                "logId": 23,
+                "operator": "officer1",
+                "operatorId": 2,
+                "timestamp": "2026-11-04 16:51:32"
+              },
+              {
+                "accountNumber": "ACC001",
+                "action": "TRANSFER_OUT",
+                "details": "Transfer TRF-20261104165132Z-16 of 3000.00; resulting balance 52144.22.",
+                "entity": "accounts",
+                "entityId": 1,
+                "logId": 22,
+                "operator": "officer1",
+                "operatorId": 2,
+                "timestamp": "2026-11-04 16:51:32"
+              },
+              {
+                "accountNumber": "ACC001",
+                "action": "INTEREST_CREDIT",
+                "details": "Credited 144.22 interest for period 2026-02.",
+                "entity": "accounts",
+                "entityId": 1,
+                "logId": 21,
+                "operator": "admin",
+                "operatorId": 1,
+                "timestamp": "2026-11-04 16:51:32"
+              },
+              {
+                "accountNumber": "ACC054525759826",
+                "action": "WITHDRAWAL",
+                "details": "Withdrew 3000000 paise; resulting balance 7000000 paise.",
+                "entity": "accounts",
+                "entityId": 8,
+                "logId": 20,
+                "operator": "officer1",
+                "operatorId": 2,
+                "timestamp": "2026-11-04 16:51:32"
+              },
+              {
+                "accountNumber": "ACC054525759826",
+                "action": "ACCOUNT_OPENED",
+                "details": "accountNumber=ACC054525759826;customerId=CUS-00000001;accountType=Savings;amountPaise=10000000",
+                "entity": "accounts",
+                "entityId": 8,
+                "logId": 19,
+                "operator": "officer1",
+                "operatorId": 2,
+                "timestamp": "2026-11-04 16:51:32"
+              },
+              {
+                "accountNumber": "ACC349364725050",
+                "action": "ACCOUNT_STATUS_CHANGED",
+                "details": "accountNumber=ACC349364725050;oldStatus=frozen;newStatus=closed",
+                "entity": "accounts",
+                "entityId": 6,
+                "logId": 18,
+                "operator": "admin",
+                "operatorId": 1,
+                "timestamp": "2026-11-04 16:51:32"
+              },
+              {
+                "accountNumber": "ACC349364725050",
+                "action": "ACCOUNT_STATUS_CHANGED",
+                "details": "accountNumber=ACC349364725050;oldStatus=active;newStatus=frozen",
+                "entity": "accounts",
+                "entityId": 6,
+                "logId": 17,
+                "operator": "admin",
+                "operatorId": 1,
+                "timestamp": "2026-11-04 16:51:32"
+              },
+              {
+                "accountNumber": "ACC349364725050",
+                "action": "ACCOUNT_STATUS_CHANGED",
+                "details": "accountNumber=ACC349364725050;oldStatus=frozen;newStatus=active",
+                "entity": "accounts",
+                "entityId": 6,
+                "logId": 16,
+                "operator": "admin",
+                "operatorId": 1,
+                "timestamp": "2026-11-04 16:51:32"
+              },
+              {
+                "accountNumber": "ACC349364725050",
+                "action": "ACCOUNT_STATUS_CHANGED",
+                "details": "accountNumber=ACC349364725050;oldStatus=active;newStatus=frozen",
+                "entity": "accounts",
+                "entityId": 6,
+                "logId": 15,
+                "operator": "admin",
+                "operatorId": 1,
+                "timestamp": "2026-11-04 16:51:32"
+              },
+              {
+                "accountNumber": "ACC295555431631",
+                "action": "WITHDRAWAL",
+                "details": "Withdrew 3000000 paise; resulting balance 7000000 paise.",
+                "entity": "accounts",
+                "entityId": 7,
+                "logId": 14,
+                "operator": "officer1",
+                "operatorId": 2,
+                "timestamp": "2026-11-04 16:51:32"
+              },
+              {
+                "accountNumber": "ACC295555431631",
+                "action": "ACCOUNT_OPENED",
+                "details": "accountNumber=ACC295555431631;customerId=CUS-00000001;accountType=Savings;amountPaise=10000000",
+                "entity": "accounts",
+                "entityId": 7,
+                "logId": 13,
+                "operator": "officer1",
+                "operatorId": 2,
+                "timestamp": "2026-11-04 16:51:32"
+              },
+              {
+                "accountNumber": "ACC349364725050",
+                "action": "ACCOUNT_OPENED",
+                "details": "accountNumber=ACC349364725050;customerId=CUS-00000001;accountType=Savings;amountPaise=100000",
+                "entity": "accounts",
+                "entityId": 6,
+                "logId": 12,
+                "operator": "officer1",
+                "operatorId": 2,
+                "timestamp": "2026-11-04 16:51:32"
+              },
+              {
+                "accountNumber": null,
+                "action": "USER_UNLOCKED",
+                "details": "Unlocked by Administrator",
+                "entity": "users",
+                "entityId": 5,
+                "logId": 11,
+                "operator": "admin",
+                "operatorId": 1,
+                "timestamp": "2026-11-04 16:51:31"
+              },
+              {
+                "accountNumber": null,
+                "action": "ACCOUNT_LOCKED",
+                "details": "Locked after three consecutive failed sign-in attempts",
+                "entity": "users",
+                "entityId": 5,
+                "logId": 10,
+                "operator": "customer2",
+                "operatorId": 5,
+                "timestamp": "2026-11-04 16:51:31"
+              },
+              {
+                "accountNumber": "ACC001",
+                "action": "DEPOSIT",
+                "details": "Deposited 500000 paise; resulting balance 5500000 paise.",
+                "entity": "accounts",
+                "entityId": 1,
+                "logId": 9,
+                "operator": "officer1",
+                "operatorId": 2,
+                "timestamp": "2026-11-04 16:48:52"
+              },
+              {
+                "accountNumber": "ACC003",
+                "action": "CREATE_ACCOUNT",
+                "details": "Created current account for customer 3",
+                "entity": "accounts",
+                "entityId": 3,
+                "logId": 8,
+                "operator": "officer2",
+                "operatorId": 3,
+                "timestamp": "2026-03-10 11:00:00"
+              },
+              {
+                "accountNumber": "ACC002",
+                "action": "CREATE_ACCOUNT",
+                "details": "Created savings account for customer 2",
+                "entity": "accounts",
+                "entityId": 2,
+                "logId": 7,
+                "operator": "officer1",
+                "operatorId": 2,
+                "timestamp": "2026-02-20 10:00:00"
+              },
+              {
+                "accountNumber": "ACC001",
+                "action": "CREATE_ACCOUNT",
+                "details": "Created savings account for customer 1",
+                "entity": "accounts",
+                "entityId": 1,
+                "logId": 6,
+                "operator": "officer1",
+                "operatorId": 2,
+                "timestamp": "2026-01-15 09:00:00"
+              },
+              {
+                "accountNumber": null,
+                "action": "CREATE_USER",
+                "details": "Created customer account",
+                "entity": "users",
+                "entityId": 6,
+                "logId": 5,
+                "operator": "admin",
+                "operatorId": 1,
+                "timestamp": "2026-01-14 08:20:00"
+              },
+              {
+                "accountNumber": null,
+                "action": "CREATE_USER",
+                "details": "Created customer account",
+                "entity": "users",
+                "entityId": 5,
+                "logId": 4,
+                "operator": "admin",
+                "operatorId": 1,
+                "timestamp": "2026-01-14 08:15:00"
+              },
+              {
+                "accountNumber": null,
+                "action": "CREATE_USER",
+                "details": "Created customer account",
+                "entity": "users",
+                "entityId": 4,
+                "logId": 3,
+                "operator": "admin",
+                "operatorId": 1,
+                "timestamp": "2026-01-14 08:10:00"
+              },
+              {
+                "accountNumber": null,
+                "action": "CREATE_USER",
+                "details": "Created bank officer account",
+                "entity": "users",
+                "entityId": 3,
+                "logId": 2,
+                "operator": "admin",
+                "operatorId": 1,
+                "timestamp": "2026-01-14 08:05:00"
+              },
+              {
+                "accountNumber": null,
+                "action": "CREATE_USER",
+                "details": "Created bank officer account",
+                "entity": "users",
+                "entityId": 2,
+                "logId": 1,
+                "operator": "admin",
+                "operatorId": 1,
+                "timestamp": "2026-01-14 08:00:00"
+              }
+            ],
+            "limit": 100,
+            "offset": 0
+          }
+        },
+        {
+          "method": "PUT",
+          "path": "/audit/1",
+          "status": 405,
+          "elapsed_ms": 30.209,
+          "response": {
+            "code": "METHOD_NOT_ALLOWED",
+            "message": "The audit trail is read-only; entries cannot be changed or removed."
+          }
+        },
+        {
+          "method": "DELETE",
+          "path": "/audit/1",
+          "status": 405,
+          "elapsed_ms": 4.31,
+          "response": {
+            "code": "METHOD_NOT_ALLOWED",
+            "message": "The audit trail is read-only; entries cannot be changed or removed."
+          }
+        }
+      ]
+    },
+    {
+      "id": "TC-17",
+      "status": "PASS",
+      "expected": "Only in-range entries, reverse chronological order, signed values, no duplicates across pages.",
+      "actual": {
+        "httpPages": [
+          200,
+          200
+        ],
+        "dates": [
+          "2026-01-18T11:30:00Z",
+          "2026-01-17T16:45:00Z"
+        ],
+        "transactionIds": [
+          7,
+          5
+        ],
+        "noDuplicates": true,
+        "newestFirst": true,
+        "signedAmounts": [
+          "-2000.00",
+          "-1000.00"
+        ]
+      },
+      "evidence": [
+        {
+          "method": "GET",
+          "path": "/accounts/ACC001/transactions?from=2026-01-17&to=2026-01-20&limit=1&offset=0",
+          "status": 200,
+          "elapsed_ms": 5.356,
+          "response": {
+            "accountNumber": "ACC001",
+            "limit": 1,
+            "offset": 0,
+            "snapshot": 16,
+            "total": 2,
+            "transactions": [
+              {
+                "amount": "-2000.00",
+                "balanceAfter": "47000.00",
+                "counterpartAccount": "ACC004",
+                "dateTime": "2026-01-18T11:30:00Z",
+                "transactionId": 7,
+                "type": "transfer_debit"
+              }
+            ]
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/accounts/ACC001/transactions?from=2026-01-17&to=2026-01-20&limit=1&offset=1&snapshot=16",
+          "status": 200,
+          "elapsed_ms": 5.339,
+          "response": {
+            "accountNumber": "ACC001",
+            "limit": 1,
+            "offset": 1,
+            "snapshot": 16,
+            "total": 2,
+            "transactions": [
+              {
+                "amount": "-1000.00",
+                "balanceAfter": "49000.00",
+                "counterpartAccount": null,
+                "dateTime": "2026-01-17T16:45:00Z",
+                "transactionId": 5,
+                "type": "withdrawal"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "TC-18",
+      "status": "PARTIAL",
+      "expected": "200 statement with chronological rows, balances and export UI available.",
+      "actual": {
+        "http": 200,
+        "transactionCount": 14,
+        "openingBalance": "0.00",
+        "closingBalance": "52152.22",
+        "chronological": true,
+        "csvDownloadUi": "button was visible; download event timed out; export unverified"
+      },
+      "evidence": [
+        {
+          "method": "POST",
+          "path": "/transactions",
+          "status": 201,
+          "elapsed_ms": 15.279,
+          "response": {
+            "balance": "52145.22",
+            "transaction": {
+              "account_id": 1,
+              "account_number": "ACC001",
+              "amount": "1.00",
+              "created_at": "2026-11-04 16:51:35",
+              "operator_id": 2,
+              "resulting_balance": "52145.22",
+              "transaction_id": 18,
+              "type": "deposit"
+            }
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/transactions",
+          "status": 201,
+          "elapsed_ms": 13.489,
+          "response": {
+            "balance": "52146.22",
+            "transaction": {
+              "account_id": 1,
+              "account_number": "ACC001",
+              "amount": "1.00",
+              "created_at": "2026-11-04 16:51:35",
+              "operator_id": 2,
+              "resulting_balance": "52146.22",
+              "transaction_id": 19,
+              "type": "deposit"
+            }
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/transactions",
+          "status": 201,
+          "elapsed_ms": 13.377,
+          "response": {
+            "balance": "52147.22",
+            "transaction": {
+              "account_id": 1,
+              "account_number": "ACC001",
+              "amount": "1.00",
+              "created_at": "2026-11-04 16:51:35",
+              "operator_id": 2,
+              "resulting_balance": "52147.22",
+              "transaction_id": 20,
+              "type": "deposit"
+            }
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/transactions",
+          "status": 201,
+          "elapsed_ms": 14.109,
+          "response": {
+            "balance": "52148.22",
+            "transaction": {
+              "account_id": 1,
+              "account_number": "ACC001",
+              "amount": "1.00",
+              "created_at": "2026-11-04 16:51:35",
+              "operator_id": 2,
+              "resulting_balance": "52148.22",
+              "transaction_id": 21,
+              "type": "deposit"
+            }
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/transactions",
+          "status": 201,
+          "elapsed_ms": 12.199,
+          "response": {
+            "balance": "52149.22",
+            "transaction": {
+              "account_id": 1,
+              "account_number": "ACC001",
+              "amount": "1.00",
+              "created_at": "2026-11-04 16:51:35",
+              "operator_id": 2,
+              "resulting_balance": "52149.22",
+              "transaction_id": 22,
+              "type": "deposit"
+            }
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/transactions",
+          "status": 201,
+          "elapsed_ms": 25.759,
+          "response": {
+            "balance": "52150.22",
+            "transaction": {
+              "account_id": 1,
+              "account_number": "ACC001",
+              "amount": "1.00",
+              "created_at": "2026-11-04 16:51:35",
+              "operator_id": 2,
+              "resulting_balance": "52150.22",
+              "transaction_id": 23,
+              "type": "deposit"
+            }
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/transactions",
+          "status": 201,
+          "elapsed_ms": 31.715,
+          "response": {
+            "balance": "52151.22",
+            "transaction": {
+              "account_id": 1,
+              "account_number": "ACC001",
+              "amount": "1.00",
+              "created_at": "2026-11-04 16:51:35",
+              "operator_id": 2,
+              "resulting_balance": "52151.22",
+              "transaction_id": 24,
+              "type": "deposit"
+            }
+          }
+        },
+        {
+          "method": "POST",
+          "path": "/transactions",
+          "status": 201,
+          "elapsed_ms": 14.355,
+          "response": {
+            "balance": "52152.22",
+            "transaction": {
+              "account_id": 1,
+              "account_number": "ACC001",
+              "amount": "1.00",
+              "created_at": "2026-11-04 16:51:35",
+              "operator_id": 2,
+              "resulting_balance": "52152.22",
+              "transaction_id": 25,
+              "type": "deposit"
+            }
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/accounts/ACC001/statement?from=2026-01-01&to=2026-12-31",
+          "status": 200,
+          "elapsed_ms": 27.185,
+          "response": {
+            "account_number": "ACC001",
+            "closing_balance": "52152.22",
+            "from": "2026-01-01",
+            "opening_balance": "0.00",
+            "to": "2026-12-31",
+            "transactions": [
+              {
+                "amount": "50000.00",
+                "created_at": "2026-01-16 09:30:00",
+                "resulting_balance": "50000.00",
+                "transaction_id": 1,
+                "type": "deposit"
+              },
+              {
+                "amount": "-1000.00",
+                "created_at": "2026-01-17 16:45:00",
+                "resulting_balance": "49000.00",
+                "transaction_id": 5,
+                "type": "withdrawal"
+              },
+              {
+                "amount": "-2000.00",
+                "created_at": "2026-01-18 11:30:00",
+                "resulting_balance": "47000.00",
+                "transaction_id": 7,
+                "type": "transfer_debit"
+              },
+              {
+                "amount": "5000.00",
+                "created_at": "2026-11-04 16:48:52",
+                "resulting_balance": "55000.00",
+                "transaction_id": 9,
+                "type": "deposit"
+              },
+              {
+                "amount": "144.22",
+                "created_at": "2026-11-04 16:51:32",
+                "resulting_balance": "55144.22",
+                "transaction_id": 15,
+                "type": "interest"
+              },
+              {
+                "amount": "-3000.00",
+                "created_at": "2026-11-04 16:51:32",
+                "resulting_balance": "52144.22",
+                "transaction_id": 16,
+                "type": "transfer_debit"
+              },
+              {
+                "amount": "1.00",
+                "created_at": "2026-11-04 16:51:35",
+                "resulting_balance": "52145.22",
+                "transaction_id": 18,
+                "type": "deposit"
+              },
+              {
+                "amount": "1.00",
+                "created_at": "2026-11-04 16:51:35",
+                "resulting_balance": "52146.22",
+                "transaction_id": 19,
+                "type": "deposit"
+              },
+              {
+                "amount": "1.00",
+                "created_at": "2026-11-04 16:51:35",
+                "resulting_balance": "52147.22",
+                "transaction_id": 20,
+                "type": "deposit"
+              },
+              {
+                "amount": "1.00",
+                "created_at": "2026-11-04 16:51:35",
+                "resulting_balance": "52148.22",
+                "transaction_id": 21,
+                "type": "deposit"
+              },
+              {
+                "amount": "1.00",
+                "created_at": "2026-11-04 16:51:35",
+                "resulting_balance": "52149.22",
+                "transaction_id": 22,
+                "type": "deposit"
+              },
+              {
+                "amount": "1.00",
+                "created_at": "2026-11-04 16:51:35",
+                "resulting_balance": "52150.22",
+                "transaction_id": 23,
+                "type": "deposit"
+              },
+              {
+                "amount": "1.00",
+                "created_at": "2026-11-04 16:51:35",
+                "resulting_balance": "52151.22",
+                "transaction_id": 24,
+                "type": "deposit"
+              },
+              {
+                "amount": "1.00",
+                "created_at": "2026-11-04 16:51:35",
+                "resulting_balance": "52152.22",
+                "transaction_id": 25,
+                "type": "deposit"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "TC-19",
+      "status": "PASS",
+      "expected": "No role receives another role?s dashboard data.",
+      "actual": {
+        "rolePayloadKeys": {
+          "admin": [
+            "counts",
+            "quickLinks",
+            "role",
+            "transactionsToday"
+          ],
+          "officer1": [
+            "quickLinks",
+            "role",
+            "transactionsToday"
+          ],
+          "customer1": [
+            "accounts",
+            "quickLinks",
+            "role"
+          ]
+        },
+        "noCrossRoleDataObserved": true
+      },
+      "evidence": [
+        {
+          "method": "GET",
+          "path": "/dashboard",
+          "status": 200,
+          "elapsed_ms": 4.802,
+          "response": {
+            "counts": {
+              "accounts": 8,
+              "customers": 3,
+              "staff": 2
+            },
+            "quickLinks": [
+              {
+                "href": "#customer-management-card",
+                "label": "Manage customers"
+              },
+              {
+                "href": "#staff-card",
+                "label": "Manage staff"
+              },
+              {
+                "href": "#audit-card",
+                "label": "Review audit log"
+              }
+            ],
+            "role": "administrator",
+            "transactionsToday": {
+              "count": 16,
+              "totalAmount": "269152.22"
+            }
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/dashboard",
+          "status": 200,
+          "elapsed_ms": 6.322,
+          "response": {
+            "quickLinks": [
+              {
+                "href": "#deposit-form",
+                "label": "Deposit"
+              },
+              {
+                "href": "#withdraw-form",
+                "label": "Withdraw"
+              },
+              {
+                "href": "#transfer-form",
+                "label": "Transfer"
+              },
+              {
+                "href": "#customer-management-card",
+                "label": "Customers"
+              }
+            ],
+            "role": "bank_officer",
+            "transactionsToday": {
+              "count": 15,
+              "items": [
+                {
+                  "accountNumber": "ACC001",
+                  "amount": "1.00",
+                  "createdAt": "2026-11-04 16:51:35",
+                  "transactionId": 25,
+                  "type": "deposit"
+                },
+                {
+                  "accountNumber": "ACC001",
+                  "amount": "1.00",
+                  "createdAt": "2026-11-04 16:51:35",
+                  "transactionId": 24,
+                  "type": "deposit"
+                },
+                {
+                  "accountNumber": "ACC001",
+                  "amount": "1.00",
+                  "createdAt": "2026-11-04 16:51:35",
+                  "transactionId": 23,
+                  "type": "deposit"
+                },
+                {
+                  "accountNumber": "ACC001",
+                  "amount": "1.00",
+                  "createdAt": "2026-11-04 16:51:35",
+                  "transactionId": 22,
+                  "type": "deposit"
+                },
+                {
+                  "accountNumber": "ACC001",
+                  "amount": "1.00",
+                  "createdAt": "2026-11-04 16:51:35",
+                  "transactionId": 21,
+                  "type": "deposit"
+                },
+                {
+                  "accountNumber": "ACC001",
+                  "amount": "1.00",
+                  "createdAt": "2026-11-04 16:51:35",
+                  "transactionId": 20,
+                  "type": "deposit"
+                },
+                {
+                  "accountNumber": "ACC001",
+                  "amount": "1.00",
+                  "createdAt": "2026-11-04 16:51:35",
+                  "transactionId": 19,
+                  "type": "deposit"
+                },
+                {
+                  "accountNumber": "ACC001",
+                  "amount": "1.00",
+                  "createdAt": "2026-11-04 16:51:35",
+                  "transactionId": 18,
+                  "type": "deposit"
+                },
+                {
+                  "accountNumber": "ACC001",
+                  "amount": "3000.00",
+                  "createdAt": "2026-11-04 16:51:32",
+                  "transactionId": 16,
+                  "type": "transfer_debit"
+                },
+                {
+                  "accountNumber": "ACC054525759826",
+                  "amount": "30000.00",
+                  "createdAt": "2026-11-04 16:51:32",
+                  "transactionId": 14,
+                  "type": "withdrawal"
+                },
+                {
+                  "accountNumber": "ACC054525759826",
+                  "amount": "100000.00",
+                  "createdAt": "2026-11-04 16:51:32",
+                  "transactionId": 13,
+                  "type": "deposit"
+                },
+                {
+                  "accountNumber": "ACC295555431631",
+                  "amount": "30000.00",
+                  "createdAt": "2026-11-04 16:51:32",
+                  "transactionId": 12,
+                  "type": "withdrawal"
+                },
+                {
+                  "accountNumber": "ACC295555431631",
+                  "amount": "100000.00",
+                  "createdAt": "2026-11-04 16:51:32",
+                  "transactionId": 11,
+                  "type": "deposit"
+                },
+                {
+                  "accountNumber": "ACC349364725050",
+                  "amount": "1000.00",
+                  "createdAt": "2026-11-04 16:51:32",
+                  "transactionId": 10,
+                  "type": "deposit"
+                },
+                {
+                  "accountNumber": "ACC001",
+                  "amount": "5000.00",
+                  "createdAt": "2026-11-04 16:48:52",
+                  "transactionId": 9,
+                  "type": "deposit"
+                }
+              ],
+              "totalAmount": "269008.00"
+            }
+          }
+        },
+        {
+          "method": "GET",
+          "path": "/dashboard",
+          "status": 200,
+          "elapsed_ms": 16.378,
+          "response": {
+            "accounts": [
+              {
+                "accountNumber": "ACC001",
+                "balance": "52152.22",
+                "links": [
+                  {
+                    "href": "#history-card",
+                    "label": "History"
+                  },
+                  {
+                    "href": "#statement-card",
+                    "label": "Statement"
+                  }
+                ],
+                "status": "active",
+                "type": "Savings"
+              },
+              {
+                "accountNumber": "ACC004",
+                "balance": "103000.00",
+                "links": [
+                  {
+                    "href": "#history-card",
+                    "label": "History"
+                  },
+                  {
+                    "href": "#statement-card",
+                    "label": "Statement"
+                  }
+                ],
+                "status": "active",
+                "type": "Current"
+              },
+              {
+                "accountNumber": "ACC054525759826",
+                "balance": "70000.00",
+                "links": [
+                  {
+                    "href": "#history-card",
+                    "label": "History"
+                  },
+                  {
+                    "href": "#statement-card",
+                    "label": "Statement"
+                  }
+                ],
+                "status": "active",
+                "type": "Savings"
+              },
+              {
+                "accountNumber": "ACC295555431631",
+                "balance": "70000.00",
+                "links": [
+                  {
+                    "href": "#history-card",
+                    "label": "History"
+                  },
+                  {
+                    "href": "#statement-card",
+                    "label": "Statement"
+                  }
+                ],
+                "status": "active",
+                "type": "Savings"
+              },
+              {
+                "accountNumber": "ACC349364725050",
+                "balance": "0.00",
+                "links": [
+                  {
+                    "href": "#history-card",
+                    "label": "History"
+                  },
+                  {
+                    "href": "#statement-card",
+                    "label": "Statement"
+                  }
+                ],
+                "status": "closed",
+                "type": "Savings"
+              }
+            ],
+            "quickLinks": [
+              {
+                "href": "#history-card",
+                "label": "Transaction history"
+              },
+              {
+                "href": "#statement-card",
+                "label": "Statements"
+              }
+            ],
+            "role": "customer"
+          }
+        }
+      ]
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 200,
+      "elapsed_ms": 777.925,
+      "response": {
+        "accessToken": "[redacted]",
+        "expiresIn": 1800,
+        "mustChangePassword": "[redacted]",
+        "role": "administrator",
+        "tokenType": "[redacted]"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 200,
+      "elapsed_ms": 661.449,
+      "response": {
+        "accessToken": "[redacted]",
+        "expiresIn": 1800,
+        "mustChangePassword": "[redacted]",
+        "role": "bank_officer",
+        "tokenType": "[redacted]"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 200,
+      "elapsed_ms": 675.851,
+      "response": {
+        "accessToken": "[redacted]",
+        "expiresIn": 1800,
+        "mustChangePassword": "[redacted]",
+        "role": "customer",
+        "tokenType": "[redacted]"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 401,
+      "elapsed_ms": 678.024,
+      "response": {
+        "code": "UNAUTHENTICATED",
+        "message": "Invalid username or password."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 401,
+      "elapsed_ms": 652.122,
+      "response": {
+        "code": "UNAUTHENTICATED",
+        "message": "Invalid username or password."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 401,
+      "elapsed_ms": 652.044,
+      "response": {
+        "code": "ACCOUNT_LOCKED",
+        "message": "This account is locked after three failed sign-in attempts. Contact an Administrator to unlock it."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/users/5/unlock",
+      "status": 200,
+      "elapsed_ms": 15.799,
+      "response": {
+        "role": "customer",
+        "status": "active",
+        "userId": 5,
+        "username": "customer2"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 200,
+      "elapsed_ms": 697.911,
+      "response": {
+        "accessToken": "[redacted]",
+        "expiresIn": 1800,
+        "mustChangePassword": "[redacted]",
+        "role": "bank_officer",
+        "tokenType": "[redacted]"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/auth/logout",
+      "status": 204,
+      "elapsed_ms": 12.738,
+      "response": {
+        "text": ""
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers",
+      "status": 400,
+      "elapsed_ms": 8.522,
+      "response": {
+        "code": "VALIDATION_ERROR",
+        "fields": [
+          {
+            "field": "phone",
+            "message": "This field is required."
+          },
+          {
+            "field": "name",
+            "message": "Name must be 1-100 characters and contain a letter."
+          }
+        ],
+        "message": "One or more fields are invalid."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/customers",
+      "status": 400,
+      "elapsed_ms": 19.264,
+      "response": {
+        "code": "VALIDATION_ERROR",
+        "fields": [
+          {
+            "field": "name",
+            "message": "Name must be 1-100 characters and contain a letter."
+          },
+          {
+            "field": "phone",
+            "message": "Phone must contain 10-15 digits, optionally starting with +."
+          }
+        ],
+        "message": "One or more fields are invalid."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/accounts",
+      "status": 422,
+      "elapsed_ms": 33.095,
+      "response": {
+        "code": "BELOW_MINIMUM_BALANCE",
+        "message": "The initial deposit is below the required minimum balance of INR 1000.00.",
+        "minimumBalance": "1000.00"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/accounts",
+      "status": 201,
+      "elapsed_ms": 37.092,
+      "response": {
+        "account": {
+          "accountNumber": "ACC349364725050",
+          "balance": "1000.00",
+          "status": "active",
+          "type": "Savings"
+        },
+        "transaction": {
+          "amount": "1000.00",
+          "createdAt": "2026-11-04 16:51:32",
+          "id": 10,
+          "operatorId": 2,
+          "referenceNumber": "TXN-000000000010",
+          "resultingBalance": "1000.00",
+          "type": "deposit"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/accounts",
+      "status": 201,
+      "elapsed_ms": 29.889,
+      "response": {
+        "account": {
+          "accountNumber": "ACC295555431631",
+          "balance": "100000.00",
+          "status": "active",
+          "type": "Savings"
+        },
+        "transaction": {
+          "amount": "100000.00",
+          "createdAt": "2026-11-04 16:51:32",
+          "id": 11,
+          "operatorId": 2,
+          "referenceNumber": "TXN-000000000011",
+          "resultingBalance": "100000.00",
+          "type": "deposit"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transactions",
+      "status": 422,
+      "elapsed_ms": 18.427,
+      "response": {
+        "code": "BELOW_MINIMUM_BALANCE",
+        "message": "The minimum balance is ₹1000.00; the maximum amount that could be withdrawn is ₹99000.00."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transactions",
+      "status": 422,
+      "elapsed_ms": 6.507,
+      "response": {
+        "code": "DAILY_LIMIT_EXCEEDED",
+        "message": "The remaining withdrawal limit for today is ₹50000.00."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transactions",
+      "status": 201,
+      "elapsed_ms": 24.531,
+      "response": {
+        "balance": "70000.00",
+        "transaction": {
+          "account_id": 7,
+          "account_number": "ACC295555431631",
+          "amount": "30000.00",
+          "created_at": "2026-11-04 16:51:32",
+          "operator_id": 2,
+          "resulting_balance": "70000.00",
+          "transaction_id": 12,
+          "type": "withdrawal"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/accounts/ACC349364725050/status",
+      "status": 200,
+      "elapsed_ms": 15.306,
+      "response": {
+        "account": {
+          "accountNumber": "ACC349364725050",
+          "balance": "0.00",
+          "status": "frozen",
+          "type": "Savings"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transactions",
+      "status": 422,
+      "elapsed_ms": 7.007,
+      "response": {
+        "code": "ACCOUNT_NOT_ACTIVE",
+        "message": "Account ACC349364725050 is frozen and cannot be used for this transaction."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/accounts/ACC349364725050/status",
+      "status": 200,
+      "elapsed_ms": 24.087,
+      "response": {
+        "account": {
+          "accountNumber": "ACC349364725050",
+          "balance": "0.00",
+          "status": "active",
+          "type": "Savings"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/accounts/ACC349364725050/status",
+      "status": 200,
+      "elapsed_ms": 17.01,
+      "response": {
+        "account": {
+          "accountNumber": "ACC349364725050",
+          "balance": "0.00",
+          "status": "frozen",
+          "type": "Savings"
+        }
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/accounts/ACC349364725050/status",
+      "status": 200,
+      "elapsed_ms": 32.155,
+      "response": {
+        "account": {
+          "accountNumber": "ACC349364725050",
+          "balance": "0.00",
+          "status": "closed",
+          "type": "Savings"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/ACC349364725050/balance",
+      "status": 200,
+      "elapsed_ms": 17.287,
+      "response": {
+        "accountNumber": "ACC349364725050",
+        "accountType": "Savings",
+        "asOf": "2026-11-04 16:51:32",
+        "balance": "0.00",
+        "currency": "INR",
+        "status": "closed"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/accounts",
+      "status": 201,
+      "elapsed_ms": 40.271,
+      "response": {
+        "account": {
+          "accountNumber": "ACC054525759826",
+          "balance": "100000.00",
+          "status": "active",
+          "type": "Savings"
+        },
+        "transaction": {
+          "amount": "100000.00",
+          "createdAt": "2026-11-04 16:51:32",
+          "id": 13,
+          "operatorId": 2,
+          "referenceNumber": "TXN-000000000013",
+          "resultingBalance": "100000.00",
+          "type": "deposit"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transactions",
+      "status": 201,
+      "elapsed_ms": 38.504,
+      "response": {
+        "balance": "70000.00",
+        "transaction": {
+          "account_id": 8,
+          "account_number": "ACC054525759826",
+          "amount": "30000.00",
+          "created_at": "2026-11-04 16:51:32",
+          "operator_id": 2,
+          "resulting_balance": "70000.00",
+          "transaction_id": 14,
+          "type": "withdrawal"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transactions",
+      "status": 422,
+      "elapsed_ms": 23.551,
+      "response": {
+        "code": "DAILY_LIMIT_EXCEEDED",
+        "message": "The remaining withdrawal limit for today is ₹20000.00."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/interest/run",
+      "status": 201,
+      "elapsed_ms": 17.036,
+      "response": {
+        "accounts": [
+          {
+            "account_number": "ACC001",
+            "balance_basis": "47000.00",
+            "interest": "144.22",
+            "resulting_balance": "55144.22"
+          }
+        ],
+        "accounts_credited": 1,
+        "period": "2026-02",
+        "total_interest": "144.22"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/interest/run",
+      "status": 409,
+      "elapsed_ms": 24.513,
+      "response": {
+        "code": "INTEREST_ALREADY_RUN",
+        "message": "Interest has already been run for period 2026-02."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transfers",
+      "status": 201,
+      "elapsed_ms": 38.62,
+      "response": {
+        "from_balance": "52144.22",
+        "to_balance": "103000.00",
+        "transactions": {
+          "credit": {
+            "account_id": 4,
+            "account_number": "ACC004",
+            "amount": "3000.00",
+            "created_at": "2026-11-04 16:51:32",
+            "operator_id": 2,
+            "resulting_balance": "103000.00",
+            "transaction_id": 17,
+            "transfer_ref": "TRF-20261104165132Z-16",
+            "type": "transfer_credit"
+          },
+          "debit": {
+            "account_id": 1,
+            "account_number": "ACC001",
+            "amount": "3000.00",
+            "created_at": "2026-11-04 16:51:32",
+            "operator_id": 2,
+            "resulting_balance": "52144.22",
+            "transaction_id": 16,
+            "transfer_ref": "TRF-20261104165132Z-16",
+            "type": "transfer_debit"
+          }
+        },
+        "transfer_reference": "TRF-20261104165132Z-16"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transfers",
+      "status": 400,
+      "elapsed_ms": 5.306,
+      "response": {
+        "code": "VALIDATION_ERROR",
+        "field": "to_account_number",
+        "message": "Source and destination accounts must be different."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transfers",
+      "status": 422,
+      "elapsed_ms": 17.145,
+      "response": {
+        "code": "BELOW_MINIMUM_BALANCE",
+        "message": "The source account minimum balance is ₹1000.00; the maximum amount that could be transferred is ₹51144.22."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/ACC001/balance",
+      "status": 200,
+      "elapsed_ms": 28.818,
+      "response": {
+        "accountNumber": "ACC001",
+        "accountType": "Savings",
+        "asOf": "2026-11-04 16:51:32",
+        "balance": "52144.22",
+        "currency": "INR",
+        "status": "active"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/ACC001/transactions?from=2026-01-01&to=2026-12-31",
+      "status": 200,
+      "elapsed_ms": 6.549,
+      "response": {
+        "accountNumber": "ACC001",
+        "limit": 20,
+        "offset": 0,
+        "snapshot": 16,
+        "total": 6,
+        "transactions": [
+          {
+            "amount": "-3000.00",
+            "balanceAfter": "52144.22",
+            "counterpartAccount": "ACC004",
+            "dateTime": "2026-11-04T16:51:32Z",
+            "transactionId": 16,
+            "type": "transfer_debit"
+          },
+          {
+            "amount": "144.22",
+            "balanceAfter": "55144.22",
+            "counterpartAccount": null,
+            "dateTime": "2026-11-04T16:51:32Z",
+            "transactionId": 15,
+            "type": "interest"
+          },
+          {
+            "amount": "5000.00",
+            "balanceAfter": "55000.00",
+            "counterpartAccount": null,
+            "dateTime": "2026-11-04T16:48:52Z",
+            "transactionId": 9,
+            "type": "deposit"
+          },
+          {
+            "amount": "-2000.00",
+            "balanceAfter": "47000.00",
+            "counterpartAccount": "ACC004",
+            "dateTime": "2026-01-18T11:30:00Z",
+            "transactionId": 7,
+            "type": "transfer_debit"
+          },
+          {
+            "amount": "-1000.00",
+            "balanceAfter": "49000.00",
+            "counterpartAccount": null,
+            "dateTime": "2026-01-17T16:45:00Z",
+            "transactionId": 5,
+            "type": "withdrawal"
+          },
+          {
+            "amount": "50000.00",
+            "balanceAfter": "50000.00",
+            "counterpartAccount": null,
+            "dateTime": "2026-01-16T09:30:00Z",
+            "transactionId": 1,
+            "type": "deposit"
+          }
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/ACC002/transactions",
+      "status": 403,
+      "elapsed_ms": 34.197,
+      "response": {
+        "code": "FORBIDDEN",
+        "message": "You are not allowed to perform this action."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/ACC999/transactions",
+      "status": 403,
+      "elapsed_ms": 29.942,
+      "response": {
+        "code": "FORBIDDEN",
+        "message": "You are not allowed to perform this action."
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/staff",
+      "status": 201,
+      "elapsed_ms": 662.943,
+      "response": {
+        "createdAt": "2026-11-04 16:51:33",
+        "login": {
+          "temporaryPassword": "[redacted]",
+          "username": "officer_s43"
+        },
+        "role": "bank_officer",
+        "status": "active",
+        "updatedAt": "2026-11-04 16:51:33",
+        "userId": 7,
+        "username": "officer_s43"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 200,
+      "elapsed_ms": 655.041,
+      "response": {
+        "accessToken": "[redacted]",
+        "expiresIn": 1800,
+        "mustChangePassword": "[redacted]",
+        "role": "bank_officer",
+        "tokenType": "[redacted]"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/auth/change-password",
+      "status": 200,
+      "elapsed_ms": 682.795,
+      "response": {
+        "message": "Password changed."
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/staff/7",
+      "status": 200,
+      "elapsed_ms": 14.572,
+      "response": {
+        "createdAt": "2026-11-04 16:51:33",
+        "role": "bank_officer",
+        "status": "inactive",
+        "updatedAt": "2026-11-04 16:51:34",
+        "userId": 7,
+        "username": "officer_s43"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 401,
+      "elapsed_ms": 5.42,
+      "response": {
+        "code": "UNAUTHENTICATED",
+        "message": "The session is invalid or has expired."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 200,
+      "elapsed_ms": 27.718,
+      "response": {
+        "counts": {
+          "accounts": 8,
+          "customers": 3,
+          "staff": 2
+        },
+        "quickLinks": [
+          {
+            "href": "#customer-management-card",
+            "label": "Manage customers"
+          },
+          {
+            "href": "#staff-card",
+            "label": "Manage staff"
+          },
+          {
+            "href": "#audit-card",
+            "label": "Review audit log"
+          }
+        ],
+        "role": "administrator",
+        "transactionsToday": {
+          "count": 8,
+          "totalAmount": "269144.22"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 200,
+      "elapsed_ms": 17.589,
+      "response": {
+        "quickLinks": [
+          {
+            "href": "#deposit-form",
+            "label": "Deposit"
+          },
+          {
+            "href": "#withdraw-form",
+            "label": "Withdraw"
+          },
+          {
+            "href": "#transfer-form",
+            "label": "Transfer"
+          },
+          {
+            "href": "#customer-management-card",
+            "label": "Customers"
+          }
+        ],
+        "role": "bank_officer",
+        "transactionsToday": {
+          "count": 7,
+          "items": [
+            {
+              "accountNumber": "ACC001",
+              "amount": "3000.00",
+              "createdAt": "2026-11-04 16:51:32",
+              "transactionId": 16,
+              "type": "transfer_debit"
+            },
+            {
+              "accountNumber": "ACC054525759826",
+              "amount": "30000.00",
+              "createdAt": "2026-11-04 16:51:32",
+              "transactionId": 14,
+              "type": "withdrawal"
+            },
+            {
+              "accountNumber": "ACC054525759826",
+              "amount": "100000.00",
+              "createdAt": "2026-11-04 16:51:32",
+              "transactionId": 13,
+              "type": "deposit"
+            },
+            {
+              "accountNumber": "ACC295555431631",
+              "amount": "30000.00",
+              "createdAt": "2026-11-04 16:51:32",
+              "transactionId": 12,
+              "type": "withdrawal"
+            },
+            {
+              "accountNumber": "ACC295555431631",
+              "amount": "100000.00",
+              "createdAt": "2026-11-04 16:51:32",
+              "transactionId": 11,
+              "type": "deposit"
+            },
+            {
+              "accountNumber": "ACC349364725050",
+              "amount": "1000.00",
+              "createdAt": "2026-11-04 16:51:32",
+              "transactionId": 10,
+              "type": "deposit"
+            },
+            {
+              "accountNumber": "ACC001",
+              "amount": "5000.00",
+              "createdAt": "2026-11-04 16:48:52",
+              "transactionId": 9,
+              "type": "deposit"
+            }
+          ],
+          "totalAmount": "269000.00"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 200,
+      "elapsed_ms": 16.903,
+      "response": {
+        "accounts": [
+          {
+            "accountNumber": "ACC001",
+            "balance": "52144.22",
+            "links": [
+              {
+                "href": "#history-card",
+                "label": "History"
+              },
+              {
+                "href": "#statement-card",
+                "label": "Statement"
+              }
+            ],
+            "status": "active",
+            "type": "Savings"
+          },
+          {
+            "accountNumber": "ACC004",
+            "balance": "103000.00",
+            "links": [
+              {
+                "href": "#history-card",
+                "label": "History"
+              },
+              {
+                "href": "#statement-card",
+                "label": "Statement"
+              }
+            ],
+            "status": "active",
+            "type": "Current"
+          },
+          {
+            "accountNumber": "ACC054525759826",
+            "balance": "70000.00",
+            "links": [
+              {
+                "href": "#history-card",
+                "label": "History"
+              },
+              {
+                "href": "#statement-card",
+                "label": "Statement"
+              }
+            ],
+            "status": "active",
+            "type": "Savings"
+          },
+          {
+            "accountNumber": "ACC295555431631",
+            "balance": "70000.00",
+            "links": [
+              {
+                "href": "#history-card",
+                "label": "History"
+              },
+              {
+                "href": "#statement-card",
+                "label": "Statement"
+              }
+            ],
+            "status": "active",
+            "type": "Savings"
+          },
+          {
+            "accountNumber": "ACC349364725050",
+            "balance": "0.00",
+            "links": [
+              {
+                "href": "#history-card",
+                "label": "History"
+              },
+              {
+                "href": "#statement-card",
+                "label": "Statement"
+              }
+            ],
+            "status": "closed",
+            "type": "Savings"
+          }
+        ],
+        "quickLinks": [
+          {
+            "href": "#history-card",
+            "label": "Transaction history"
+          },
+          {
+            "href": "#statement-card",
+            "label": "Statements"
+          }
+        ],
+        "role": "customer"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/audit?limit=100",
+      "status": 200,
+      "elapsed_ms": 11.434,
+      "response": {
+        "entries": [
+          {
+            "accountNumber": null,
+            "action": "STAFF_DEACTIVATED",
+            "details": "status active -> inactive",
+            "entity": "users",
+            "entityId": 7,
+            "logId": 27,
+            "operator": "admin",
+            "operatorId": 1,
+            "timestamp": "2026-11-04 16:51:34"
+          },
+          {
+            "accountNumber": null,
+            "action": "STAFF_CREATED",
+            "details": "Created Bank Officer officer_s43",
+            "entity": "users",
+            "entityId": 7,
+            "logId": 26,
+            "operator": "admin",
+            "operatorId": 1,
+            "timestamp": "2026-11-04 16:51:33"
+          },
+          {
+            "accountNumber": null,
+            "action": "VIEW_TRANSACTIONS_DENIED",
+            "details": "Customer attempted transaction history for account ACC999.",
+            "entity": "accounts",
+            "entityId": 0,
+            "logId": 25,
+            "operator": "customer1",
+            "operatorId": 4,
+            "timestamp": "2026-11-04 16:51:32"
+          },
+          {
+            "accountNumber": "ACC002",
+            "action": "VIEW_TRANSACTIONS_DENIED",
+            "details": "Customer attempted transaction history for account ACC002.",
+            "entity": "accounts",
+            "entityId": 2,
+            "logId": 24,
+            "operator": "customer1",
+            "operatorId": 4,
+            "timestamp": "2026-11-04 16:51:32"
+          },
+          {
+            "accountNumber": "ACC004",
+            "action": "TRANSFER_IN",
+            "details": "Transfer TRF-20261104165132Z-16 of 3000.00; resulting balance 103000.00.",
+            "entity": "accounts",
+            "entityId": 4,
+            "logId": 23,
+            "operator": "officer1",
+            "operatorId": 2,
+            "timestamp": "2026-11-04 16:51:32"
+          },
+          {
+            "accountNumber": "ACC001",
+            "action": "TRANSFER_OUT",
+            "details": "Transfer TRF-20261104165132Z-16 of 3000.00; resulting balance 52144.22.",
+            "entity": "accounts",
+            "entityId": 1,
+            "logId": 22,
+            "operator": "officer1",
+            "operatorId": 2,
+            "timestamp": "2026-11-04 16:51:32"
+          },
+          {
+            "accountNumber": "ACC001",
+            "action": "INTEREST_CREDIT",
+            "details": "Credited 144.22 interest for period 2026-02.",
+            "entity": "accounts",
+            "entityId": 1,
+            "logId": 21,
+            "operator": "admin",
+            "operatorId": 1,
+            "timestamp": "2026-11-04 16:51:32"
+          },
+          {
+            "accountNumber": "ACC054525759826",
+            "action": "WITHDRAWAL",
+            "details": "Withdrew 3000000 paise; resulting balance 7000000 paise.",
+            "entity": "accounts",
+            "entityId": 8,
+            "logId": 20,
+            "operator": "officer1",
+            "operatorId": 2,
+            "timestamp": "2026-11-04 16:51:32"
+          },
+          {
+            "accountNumber": "ACC054525759826",
+            "action": "ACCOUNT_OPENED",
+            "details": "accountNumber=ACC054525759826;customerId=CUS-00000001;accountType=Savings;amountPaise=10000000",
+            "entity": "accounts",
+            "entityId": 8,
+            "logId": 19,
+            "operator": "officer1",
+            "operatorId": 2,
+            "timestamp": "2026-11-04 16:51:32"
+          },
+          {
+            "accountNumber": "ACC349364725050",
+            "action": "ACCOUNT_STATUS_CHANGED",
+            "details": "accountNumber=ACC349364725050;oldStatus=frozen;newStatus=closed",
+            "entity": "accounts",
+            "entityId": 6,
+            "logId": 18,
+            "operator": "admin",
+            "operatorId": 1,
+            "timestamp": "2026-11-04 16:51:32"
+          },
+          {
+            "accountNumber": "ACC349364725050",
+            "action": "ACCOUNT_STATUS_CHANGED",
+            "details": "accountNumber=ACC349364725050;oldStatus=active;newStatus=frozen",
+            "entity": "accounts",
+            "entityId": 6,
+            "logId": 17,
+            "operator": "admin",
+            "operatorId": 1,
+            "timestamp": "2026-11-04 16:51:32"
+          },
+          {
+            "accountNumber": "ACC349364725050",
+            "action": "ACCOUNT_STATUS_CHANGED",
+            "details": "accountNumber=ACC349364725050;oldStatus=frozen;newStatus=active",
+            "entity": "accounts",
+            "entityId": 6,
+            "logId": 16,
+            "operator": "admin",
+            "operatorId": 1,
+            "timestamp": "2026-11-04 16:51:32"
+          },
+          {
+            "accountNumber": "ACC349364725050",
+            "action": "ACCOUNT_STATUS_CHANGED",
+            "details": "accountNumber=ACC349364725050;oldStatus=active;newStatus=frozen",
+            "entity": "accounts",
+            "entityId": 6,
+            "logId": 15,
+            "operator": "admin",
+            "operatorId": 1,
+            "timestamp": "2026-11-04 16:51:32"
+          },
+          {
+            "accountNumber": "ACC295555431631",
+            "action": "WITHDRAWAL",
+            "details": "Withdrew 3000000 paise; resulting balance 7000000 paise.",
+            "entity": "accounts",
+            "entityId": 7,
+            "logId": 14,
+            "operator": "officer1",
+            "operatorId": 2,
+            "timestamp": "2026-11-04 16:51:32"
+          },
+          {
+            "accountNumber": "ACC295555431631",
+            "action": "ACCOUNT_OPENED",
+            "details": "accountNumber=ACC295555431631;customerId=CUS-00000001;accountType=Savings;amountPaise=10000000",
+            "entity": "accounts",
+            "entityId": 7,
+            "logId": 13,
+            "operator": "officer1",
+            "operatorId": 2,
+            "timestamp": "2026-11-04 16:51:32"
+          },
+          {
+            "accountNumber": "ACC349364725050",
+            "action": "ACCOUNT_OPENED",
+            "details": "accountNumber=ACC349364725050;customerId=CUS-00000001;accountType=Savings;amountPaise=100000",
+            "entity": "accounts",
+            "entityId": 6,
+            "logId": 12,
+            "operator": "officer1",
+            "operatorId": 2,
+            "timestamp": "2026-11-04 16:51:32"
+          },
+          {
+            "accountNumber": null,
+            "action": "USER_UNLOCKED",
+            "details": "Unlocked by Administrator",
+            "entity": "users",
+            "entityId": 5,
+            "logId": 11,
+            "operator": "admin",
+            "operatorId": 1,
+            "timestamp": "2026-11-04 16:51:31"
+          },
+          {
+            "accountNumber": null,
+            "action": "ACCOUNT_LOCKED",
+            "details": "Locked after three consecutive failed sign-in attempts",
+            "entity": "users",
+            "entityId": 5,
+            "logId": 10,
+            "operator": "customer2",
+            "operatorId": 5,
+            "timestamp": "2026-11-04 16:51:31"
+          },
+          {
+            "accountNumber": "ACC001",
+            "action": "DEPOSIT",
+            "details": "Deposited 500000 paise; resulting balance 5500000 paise.",
+            "entity": "accounts",
+            "entityId": 1,
+            "logId": 9,
+            "operator": "officer1",
+            "operatorId": 2,
+            "timestamp": "2026-11-04 16:48:52"
+          },
+          {
+            "accountNumber": "ACC003",
+            "action": "CREATE_ACCOUNT",
+            "details": "Created current account for customer 3",
+            "entity": "accounts",
+            "entityId": 3,
+            "logId": 8,
+            "operator": "officer2",
+            "operatorId": 3,
+            "timestamp": "2026-03-10 11:00:00"
+          },
+          {
+            "accountNumber": "ACC002",
+            "action": "CREATE_ACCOUNT",
+            "details": "Created savings account for customer 2",
+            "entity": "accounts",
+            "entityId": 2,
+            "logId": 7,
+            "operator": "officer1",
+            "operatorId": 2,
+            "timestamp": "2026-02-20 10:00:00"
+          },
+          {
+            "accountNumber": "ACC001",
+            "action": "CREATE_ACCOUNT",
+            "details": "Created savings account for customer 1",
+            "entity": "accounts",
+            "entityId": 1,
+            "logId": 6,
+            "operator": "officer1",
+            "operatorId": 2,
+            "timestamp": "2026-01-15 09:00:00"
+          },
+          {
+            "accountNumber": null,
+            "action": "CREATE_USER",
+            "details": "Created customer account",
+            "entity": "users",
+            "entityId": 6,
+            "logId": 5,
+            "operator": "admin",
+            "operatorId": 1,
+            "timestamp": "2026-01-14 08:20:00"
+          },
+          {
+            "accountNumber": null,
+            "action": "CREATE_USER",
+            "details": "Created customer account",
+            "entity": "users",
+            "entityId": 5,
+            "logId": 4,
+            "operator": "admin",
+            "operatorId": 1,
+            "timestamp": "2026-01-14 08:15:00"
+          },
+          {
+            "accountNumber": null,
+            "action": "CREATE_USER",
+            "details": "Created customer account",
+            "entity": "users",
+            "entityId": 4,
+            "logId": 3,
+            "operator": "admin",
+            "operatorId": 1,
+            "timestamp": "2026-01-14 08:10:00"
+          },
+          {
+            "accountNumber": null,
+            "action": "CREATE_USER",
+            "details": "Created bank officer account",
+            "entity": "users",
+            "entityId": 3,
+            "logId": 2,
+            "operator": "admin",
+            "operatorId": 1,
+            "timestamp": "2026-01-14 08:05:00"
+          },
+          {
+            "accountNumber": null,
+            "action": "CREATE_USER",
+            "details": "Created bank officer account",
+            "entity": "users",
+            "entityId": 2,
+            "logId": 1,
+            "operator": "admin",
+            "operatorId": 1,
+            "timestamp": "2026-01-14 08:00:00"
+          }
+        ],
+        "limit": 100,
+        "offset": 0
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/audit/1",
+      "status": 405,
+      "elapsed_ms": 30.209,
+      "response": {
+        "code": "METHOD_NOT_ALLOWED",
+        "message": "The audit trail is read-only; entries cannot be changed or removed."
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/audit/1",
+      "status": 405,
+      "elapsed_ms": 4.31,
+      "response": {
+        "code": "METHOD_NOT_ALLOWED",
+        "message": "The audit trail is read-only; entries cannot be changed or removed."
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/ACC001/transactions?from=2026-01-17&to=2026-01-20&limit=1&offset=0",
+      "status": 200,
+      "elapsed_ms": 5.356,
+      "response": {
+        "accountNumber": "ACC001",
+        "limit": 1,
+        "offset": 0,
+        "snapshot": 16,
+        "total": 2,
+        "transactions": [
+          {
+            "amount": "-2000.00",
+            "balanceAfter": "47000.00",
+            "counterpartAccount": "ACC004",
+            "dateTime": "2026-01-18T11:30:00Z",
+            "transactionId": 7,
+            "type": "transfer_debit"
+          }
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/ACC001/transactions?from=2026-01-17&to=2026-01-20&limit=1&offset=1&snapshot=16",
+      "status": 200,
+      "elapsed_ms": 5.339,
+      "response": {
+        "accountNumber": "ACC001",
+        "limit": 1,
+        "offset": 1,
+        "snapshot": 16,
+        "total": 2,
+        "transactions": [
+          {
+            "amount": "-1000.00",
+            "balanceAfter": "49000.00",
+            "counterpartAccount": null,
+            "dateTime": "2026-01-17T16:45:00Z",
+            "transactionId": 5,
+            "type": "withdrawal"
+          }
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transactions",
+      "status": 201,
+      "elapsed_ms": 15.279,
+      "response": {
+        "balance": "52145.22",
+        "transaction": {
+          "account_id": 1,
+          "account_number": "ACC001",
+          "amount": "1.00",
+          "created_at": "2026-11-04 16:51:35",
+          "operator_id": 2,
+          "resulting_balance": "52145.22",
+          "transaction_id": 18,
+          "type": "deposit"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transactions",
+      "status": 201,
+      "elapsed_ms": 13.489,
+      "response": {
+        "balance": "52146.22",
+        "transaction": {
+          "account_id": 1,
+          "account_number": "ACC001",
+          "amount": "1.00",
+          "created_at": "2026-11-04 16:51:35",
+          "operator_id": 2,
+          "resulting_balance": "52146.22",
+          "transaction_id": 19,
+          "type": "deposit"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transactions",
+      "status": 201,
+      "elapsed_ms": 13.377,
+      "response": {
+        "balance": "52147.22",
+        "transaction": {
+          "account_id": 1,
+          "account_number": "ACC001",
+          "amount": "1.00",
+          "created_at": "2026-11-04 16:51:35",
+          "operator_id": 2,
+          "resulting_balance": "52147.22",
+          "transaction_id": 20,
+          "type": "deposit"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transactions",
+      "status": 201,
+      "elapsed_ms": 14.109,
+      "response": {
+        "balance": "52148.22",
+        "transaction": {
+          "account_id": 1,
+          "account_number": "ACC001",
+          "amount": "1.00",
+          "created_at": "2026-11-04 16:51:35",
+          "operator_id": 2,
+          "resulting_balance": "52148.22",
+          "transaction_id": 21,
+          "type": "deposit"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transactions",
+      "status": 201,
+      "elapsed_ms": 12.199,
+      "response": {
+        "balance": "52149.22",
+        "transaction": {
+          "account_id": 1,
+          "account_number": "ACC001",
+          "amount": "1.00",
+          "created_at": "2026-11-04 16:51:35",
+          "operator_id": 2,
+          "resulting_balance": "52149.22",
+          "transaction_id": 22,
+          "type": "deposit"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transactions",
+      "status": 201,
+      "elapsed_ms": 25.759,
+      "response": {
+        "balance": "52150.22",
+        "transaction": {
+          "account_id": 1,
+          "account_number": "ACC001",
+          "amount": "1.00",
+          "created_at": "2026-11-04 16:51:35",
+          "operator_id": 2,
+          "resulting_balance": "52150.22",
+          "transaction_id": 23,
+          "type": "deposit"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transactions",
+      "status": 201,
+      "elapsed_ms": 31.715,
+      "response": {
+        "balance": "52151.22",
+        "transaction": {
+          "account_id": 1,
+          "account_number": "ACC001",
+          "amount": "1.00",
+          "created_at": "2026-11-04 16:51:35",
+          "operator_id": 2,
+          "resulting_balance": "52151.22",
+          "transaction_id": 24,
+          "type": "deposit"
+        }
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/transactions",
+      "status": 201,
+      "elapsed_ms": 14.355,
+      "response": {
+        "balance": "52152.22",
+        "transaction": {
+          "account_id": 1,
+          "account_number": "ACC001",
+          "amount": "1.00",
+          "created_at": "2026-11-04 16:51:35",
+          "operator_id": 2,
+          "resulting_balance": "52152.22",
+          "transaction_id": 25,
+          "type": "deposit"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/ACC001/statement?from=2026-01-01&to=2026-12-31",
+      "status": 200,
+      "elapsed_ms": 27.185,
+      "response": {
+        "account_number": "ACC001",
+        "closing_balance": "52152.22",
+        "from": "2026-01-01",
+        "opening_balance": "0.00",
+        "to": "2026-12-31",
+        "transactions": [
+          {
+            "amount": "50000.00",
+            "created_at": "2026-01-16 09:30:00",
+            "resulting_balance": "50000.00",
+            "transaction_id": 1,
+            "type": "deposit"
+          },
+          {
+            "amount": "-1000.00",
+            "created_at": "2026-01-17 16:45:00",
+            "resulting_balance": "49000.00",
+            "transaction_id": 5,
+            "type": "withdrawal"
+          },
+          {
+            "amount": "-2000.00",
+            "created_at": "2026-01-18 11:30:00",
+            "resulting_balance": "47000.00",
+            "transaction_id": 7,
+            "type": "transfer_debit"
+          },
+          {
+            "amount": "5000.00",
+            "created_at": "2026-11-04 16:48:52",
+            "resulting_balance": "55000.00",
+            "transaction_id": 9,
+            "type": "deposit"
+          },
+          {
+            "amount": "144.22",
+            "created_at": "2026-11-04 16:51:32",
+            "resulting_balance": "55144.22",
+            "transaction_id": 15,
+            "type": "interest"
+          },
+          {
+            "amount": "-3000.00",
+            "created_at": "2026-11-04 16:51:32",
+            "resulting_balance": "52144.22",
+            "transaction_id": 16,
+            "type": "transfer_debit"
+          },
+          {
+            "amount": "1.00",
+            "created_at": "2026-11-04 16:51:35",
+            "resulting_balance": "52145.22",
+            "transaction_id": 18,
+            "type": "deposit"
+          },
+          {
+            "amount": "1.00",
+            "created_at": "2026-11-04 16:51:35",
+            "resulting_balance": "52146.22",
+            "transaction_id": 19,
+            "type": "deposit"
+          },
+          {
+            "amount": "1.00",
+            "created_at": "2026-11-04 16:51:35",
+            "resulting_balance": "52147.22",
+            "transaction_id": 20,
+            "type": "deposit"
+          },
+          {
+            "amount": "1.00",
+            "created_at": "2026-11-04 16:51:35",
+            "resulting_balance": "52148.22",
+            "transaction_id": 21,
+            "type": "deposit"
+          },
+          {
+            "amount": "1.00",
+            "created_at": "2026-11-04 16:51:35",
+            "resulting_balance": "52149.22",
+            "transaction_id": 22,
+            "type": "deposit"
+          },
+          {
+            "amount": "1.00",
+            "created_at": "2026-11-04 16:51:35",
+            "resulting_balance": "52150.22",
+            "transaction_id": 23,
+            "type": "deposit"
+          },
+          {
+            "amount": "1.00",
+            "created_at": "2026-11-04 16:51:35",
+            "resulting_balance": "52151.22",
+            "transaction_id": 24,
+            "type": "deposit"
+          },
+          {
+            "amount": "1.00",
+            "created_at": "2026-11-04 16:51:35",
+            "resulting_balance": "52152.22",
+            "transaction_id": 25,
+            "type": "deposit"
+          }
+        ]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 200,
+      "elapsed_ms": 4.802,
+      "response": {
+        "counts": {
+          "accounts": 8,
+          "customers": 3,
+          "staff": 2
+        },
+        "quickLinks": [
+          {
+            "href": "#customer-management-card",
+            "label": "Manage customers"
+          },
+          {
+            "href": "#staff-card",
+            "label": "Manage staff"
+          },
+          {
+            "href": "#audit-card",
+            "label": "Review audit log"
+          }
+        ],
+        "role": "administrator",
+        "transactionsToday": {
+          "count": 16,
+          "totalAmount": "269152.22"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 200,
+      "elapsed_ms": 6.322,
+      "response": {
+        "quickLinks": [
+          {
+            "href": "#deposit-form",
+            "label": "Deposit"
+          },
+          {
+            "href": "#withdraw-form",
+            "label": "Withdraw"
+          },
+          {
+            "href": "#transfer-form",
+            "label": "Transfer"
+          },
+          {
+            "href": "#customer-management-card",
+            "label": "Customers"
+          }
+        ],
+        "role": "bank_officer",
+        "transactionsToday": {
+          "count": 15,
+          "items": [
+            {
+              "accountNumber": "ACC001",
+              "amount": "1.00",
+              "createdAt": "2026-11-04 16:51:35",
+              "transactionId": 25,
+              "type": "deposit"
+            },
+            {
+              "accountNumber": "ACC001",
+              "amount": "1.00",
+              "createdAt": "2026-11-04 16:51:35",
+              "transactionId": 24,
+              "type": "deposit"
+            },
+            {
+              "accountNumber": "ACC001",
+              "amount": "1.00",
+              "createdAt": "2026-11-04 16:51:35",
+              "transactionId": 23,
+              "type": "deposit"
+            },
+            {
+              "accountNumber": "ACC001",
+              "amount": "1.00",
+              "createdAt": "2026-11-04 16:51:35",
+              "transactionId": 22,
+              "type": "deposit"
+            },
+            {
+              "accountNumber": "ACC001",
+              "amount": "1.00",
+              "createdAt": "2026-11-04 16:51:35",
+              "transactionId": 21,
+              "type": "deposit"
+            },
+            {
+              "accountNumber": "ACC001",
+              "amount": "1.00",
+              "createdAt": "2026-11-04 16:51:35",
+              "transactionId": 20,
+              "type": "deposit"
+            },
+            {
+              "accountNumber": "ACC001",
+              "amount": "1.00",
+              "createdAt": "2026-11-04 16:51:35",
+              "transactionId": 19,
+              "type": "deposit"
+            },
+            {
+              "accountNumber": "ACC001",
+              "amount": "1.00",
+              "createdAt": "2026-11-04 16:51:35",
+              "transactionId": 18,
+              "type": "deposit"
+            },
+            {
+              "accountNumber": "ACC001",
+              "amount": "3000.00",
+              "createdAt": "2026-11-04 16:51:32",
+              "transactionId": 16,
+              "type": "transfer_debit"
+            },
+            {
+              "accountNumber": "ACC054525759826",
+              "amount": "30000.00",
+              "createdAt": "2026-11-04 16:51:32",
+              "transactionId": 14,
+              "type": "withdrawal"
+            },
+            {
+              "accountNumber": "ACC054525759826",
+              "amount": "100000.00",
+              "createdAt": "2026-11-04 16:51:32",
+              "transactionId": 13,
+              "type": "deposit"
+            },
+            {
+              "accountNumber": "ACC295555431631",
+              "amount": "30000.00",
+              "createdAt": "2026-11-04 16:51:32",
+              "transactionId": 12,
+              "type": "withdrawal"
+            },
+            {
+              "accountNumber": "ACC295555431631",
+              "amount": "100000.00",
+              "createdAt": "2026-11-04 16:51:32",
+              "transactionId": 11,
+              "type": "deposit"
+            },
+            {
+              "accountNumber": "ACC349364725050",
+              "amount": "1000.00",
+              "createdAt": "2026-11-04 16:51:32",
+              "transactionId": 10,
+              "type": "deposit"
+            },
+            {
+              "accountNumber": "ACC001",
+              "amount": "5000.00",
+              "createdAt": "2026-11-04 16:48:52",
+              "transactionId": 9,
+              "type": "deposit"
+            }
+          ],
+          "totalAmount": "269008.00"
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 200,
+      "elapsed_ms": 16.378,
+      "response": {
+        "accounts": [
+          {
+            "accountNumber": "ACC001",
+            "balance": "52152.22",
+            "links": [
+              {
+                "href": "#history-card",
+                "label": "History"
+              },
+              {
+                "href": "#statement-card",
+                "label": "Statement"
+              }
+            ],
+            "status": "active",
+            "type": "Savings"
+          },
+          {
+            "accountNumber": "ACC004",
+            "balance": "103000.00",
+            "links": [
+              {
+                "href": "#history-card",
+                "label": "History"
+              },
+              {
+                "href": "#statement-card",
+                "label": "Statement"
+              }
+            ],
+            "status": "active",
+            "type": "Current"
+          },
+          {
+            "accountNumber": "ACC054525759826",
+            "balance": "70000.00",
+            "links": [
+              {
+                "href": "#history-card",
+                "label": "History"
+              },
+              {
+                "href": "#statement-card",
+                "label": "Statement"
+              }
+            ],
+            "status": "active",
+            "type": "Savings"
+          },
+          {
+            "accountNumber": "ACC295555431631",
+            "balance": "70000.00",
+            "links": [
+              {
+                "href": "#history-card",
+                "label": "History"
+              },
+              {
+                "href": "#statement-card",
+                "label": "Statement"
+              }
+            ],
+            "status": "active",
+            "type": "Savings"
+          },
+          {
+            "accountNumber": "ACC349364725050",
+            "balance": "0.00",
+            "links": [
+              {
+                "href": "#history-card",
+                "label": "History"
+              },
+              {
+                "href": "#statement-card",
+                "label": "Statement"
+              }
+            ],
+            "status": "closed",
+            "type": "Savings"
+          }
+        ],
+        "quickLinks": [
+          {
+            "href": "#history-card",
+            "label": "Transaction history"
+          },
+          {
+            "href": "#statement-card",
+            "label": "Statements"
+          }
+        ],
+        "role": "customer"
+      }
+    }
+  ],
+  "retestNotes": [
+    "Initial harness mismatches were corrected: the API documents logout as 204, and registration data was adjusted to valid name/phone formats. No application defect was involved.",
+    "S-14 zero-limit retest: after a 10.00 deposit lifted the account above its minimum, a 1.00 withdrawal returned HTTP 422 DAILY_LIMIT_EXCEEDED; evidence in s14-zero-limit.json."
+  ]
+}
