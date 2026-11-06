@@ -2,7 +2,9 @@
 
 This is the script for the final evaluation. It covers the core use cases for all three roles, the deviations to explain, and what each member delivered.
 
-The whole script takes about 10 minutes. The recorded demos are [Sprint 1](../demos/sprint-1.mp4) and [Sprint 2](../demos/sprint-2.mp4).
+The whole script takes about 10 minutes. The recorded demos are [Sprint 1](../demos/sprint-1.mp4) and [Sprint 2](../demos/sprint-2.mp4). Requirement IDs follow SRS v1.2.
+
+The script was last run end to end on 6 Nov 2026, in headless Firefox on a fresh database, against `main` at `4cf8b3c`. Every step gave the result shown here, with no JavaScript errors. That run clicked the CSV download in step 12 but did not confirm the saved file, and this exact script has not been run in Chrome.
 
 ## Before the demo
 
@@ -48,7 +50,7 @@ Sign out and sign in as `customer1`.
 
 | # | Do this | Show | Requirement |
 |---|---|---|---|
-| 10 | Open the dashboard | Only ACC001 and ACC004, with balances that include steps 2-4 | FR-9, FR-14 |
+| 10 | Open the dashboard | Only ACC001 (₹50,200.00) and ACC004 (₹100,100.00), with balances that include steps 2-4 | FR-9, FR-14 |
 | 11 | Open **History**, choose ACC001 and filter by date | The filtered transactions | FR-10 |
 | 12 | Open **Statements** for ACC001 and download the CSV | Opening and closing balances, and the file | FR-12 |
 
@@ -59,13 +61,13 @@ Sign out and sign in as `admin`.
 | # | Do this | Show | Requirement |
 |---|---|---|---|
 | 13 | Open the dashboard | Bank-wide counts and today's transactions | FR-14 |
-| 14 | Add an account type | It appears in the list | FR-4 |
+| 14 | Add an account type | It appears in the list | FR-15 |
 | 15 | Create a Bank Officer | The one-time password, and the officer in the list | FR-13 |
 | 16 | Search for Bob and deactivate the customer | The record stays, with status Inactive | FR-3 |
-| 17 | Run interest for last month | Accounts credited and the total; a second run is refused | FR-11 |
-| 18 | Open **Audit trail** and choose **Show entries** | The changes made above, newest first | NFR-5 |
+| 17 | Run interest for last month | Accounts credited and the total. The form clears, so choose the month again for a second run, which is refused | FR-11 |
+| 18 | Open **Audit trail** and choose **Show entries** | The changes made above, newest first | FR-17, NFR-5, SEC-4 |
 
-To show lockout (FR-2), sign in with a wrong password three times as `officer2`, then unlock the user from **Locked users** as `admin`.
+To show lockout (FR-2, SEC-5), sign in with a wrong password three times as `officer2`, then unlock the user from **Locked users** as `admin` (FR-16).
 
 ## Deviations to explain
 
@@ -80,6 +82,7 @@ The full list, with reasons, is in [DEVIATIONS.md](DEVIATIONS.md).
 | 22 | A failed transfer rolls back with no reversal entry | One database transaction gives "both or neither" directly |
 | 23 | Some API routes differ from SADS v1.0 | Unlock applies to all users, and later stories needed more routes; the SADS now matches |
 | 25, 26, 27 | The demo videos are late, and their length differs from the stories | Sprint 1 was recorded late from end-of-sprint code, S-38 waited for the dashboards, and Sprint 2 was recorded at a human pace |
+| 29, 30 | System validation is incomplete: TC-21 was not run, TC-22 is partial, and most cases lack an independent fresh-seed run | The results are reported as they stand in the [System Validation Report](System_Validation_Report.md), and nothing was simulated |
 
 ## What each member delivered
 
@@ -117,7 +120,7 @@ Points and stories come from `.github/backlog/backlog.yml`. A dash means no merg
 | S-32 | Run a usability walkthrough | 1 | #63 | - | closed |
 | S-34 | Fix SRS gaps: use case diagram, security objectives, references | 3 | #65 | #104 | closed |
 | S-35 | Consolidate the Test Plan and test cases | 3 | #66 | #103 | closed |
-| S-41 | Update the test cases and the Test Plan for sprint changes | 3 | #117 | - | open |
+| S-41 | Update the test cases and the Test Plan for sprint changes | 3 | #117 | #124 | closed |
 
 ### Adithya Ajeeth (PES1UG24CS022): 36 points
 
@@ -132,7 +135,7 @@ Points and stories come from `.github/backlog/backlog.yml`. A dash means no merg
 | S-14 | Manage account types | 3 | #51 | #97 | closed |
 | S-16 | Freeze, unfreeze and close accounts | 3 | #52 | #102 | closed |
 | S-21 | View transaction history with a date filter | 3 | #53 | #107 | closed |
-| S-43 | Execute system validation and write the System Validation Report | 5 | #119 | - | open |
+| S-43 | Execute system validation and write the System Validation Report | 5 | #119 | #130 | closed |
 | S-44 | Finalize the SRS as v1.2 in IEEE format | 2 | #120 | - | open |
 
 ### Aditya M (PES1UG24CS027): 37 points

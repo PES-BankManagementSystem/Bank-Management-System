@@ -219,6 +219,8 @@ Each folder under `src/` builds a static library `bms_<name>` (alias `bms::<name
 - Software Architecture and Design Specification ([PDF](docs/Software_Architecture_and_Design_Specification.pdf), [Word](docs/Software_Architecture_and_Design_Specification.docx))
 - [Test Plan](docs/Test_Plan_BankManagementSystem.pdf), with its [consolidated test cases](docs/TEST_PLAN_CONSOLIDATED.md)
 - [Test Summary Report](docs/Test_Summary_Report.md)
+- [System Validation Report](docs/System_Validation_Report.md)
+- [Unit Test Report](docs/Unit_Test_Report.md), [Code Coverage Report](docs/Code_Coverage_Report.md) and [Branch Coverage Report](docs/Branch_Coverage_Report.md)
 - [Architecture decision records](docs/decisions/)
 - [Deviations log](docs/DEVIATIONS.md)
 - [Final demo script](docs/FINAL_DEMO.md)
