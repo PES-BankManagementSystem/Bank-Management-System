@@ -1,13 +1,55 @@
 %PDF-1.4
 %‚„œ”
 1 0 obj
-<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+<<
+/Type /Pages
+/Count 7
+/Kids [ 4 0 R 8 0 R 10 0 R 12 0 R 14 0 R 16 0 R 18 0 R ]
+>>
 endobj
 2 0 obj
-<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+<<
+/Producer (PyPDF2)
+>>
 endobj
 3 0 obj
-<< /Length 4768 >>
+<<
+/Type /Catalog
+/Pages 1 0 R
+>>
+endobj
+4 0 obj
+<<
+/Type /Page
+/MediaBox [ 0 0 612 792 ]
+/Resources <<
+/Font <<
+/F1 5 0 R
+/F2 6 0 R
+>>
+>>
+/Contents 7 0 R
+/Parent 1 0 R
+>>
+endobj
+5 0 obj
+<<
+/Type /Font
+/Subtype /Type1
+/BaseFont /Helvetica
+>>
+endobj
+6 0 obj
+<<
+/Type /Font
+/Subtype /Type1
+/BaseFont /Helvetica-Bold
+>>
+endobj
+7 0 obj
+<<
+/Length 4789
+>>
 stream
 BT
 /F2 18 Tf 54 770.0 Td (Test Plan & Consolidated Test Cases \(v1.2\)) Tj
@@ -39,7 +81,7 @@ BT
 /F1 8.2 Tf 54 451.0 Td (deactivation, and UTC daily-limit reset behavior.<br>3. Resolved the duplicate dashboard) Tj
 /F1 8.2 Tf 54 441.0 Td (coverage by making TC-19 the account-list/history performance case.<br>4. Reissued this) Tj
 /F1 8.2 Tf 54 431.0 Td (document as an IEEE-style PDF and superseded the standalone DOCX/PDF artifacts.<br>5. Updated) Tj
-/F1 8.2 Tf 54 421.0 Td (the RTM and security suite classification.) Tj
+/F1 8.2 Tf 54 421.0 Td (the RTM/security mapping and TC-03 response status to HTTP 204.) Tj
 0.5 w 54 403.0 m 558 403.0 l S
 /F2 13 Tf 54 386.0 Td (2. Section 5.1: Test Suite Classification and Security Validation \(Updated\)) Tj
 /F1 8.2 Tf 54 361.0 Td (Suite ID | Suite Name | Description | Included Test Cases) Tj
@@ -65,8 +107,24 @@ BT
 ET
 endstream
 endobj
-4 0 obj
-<< /Length 3880 >>
+8 0 obj
+<<
+/Type /Page
+/MediaBox [ 0 0 612 792 ]
+/Resources <<
+/Font <<
+/F1 5 0 R
+/F2 6 0 R
+>>
+>>
+/Contents 9 0 R
+/Parent 1 0 R
+>>
+endobj
+9 0 obj
+<<
+/Length 3880
+>>
 stream
 BT
 /F2 13 Tf 54 770.0 Td (3. Section 14: Consolidated Master Test Cases) Tj
@@ -91,7 +149,7 @@ BT
 /F2 10 Tf 54 508.0 Td (TC-03: Session Expiry and Logout \(FR-2, SEC-1, S-08\)) Tj
 /F1 8.2 Tf 54 487.0 Td (- Preconditions: User is logged in with active session token.) Tj
 /F1 8.2 Tf 54 477.0 Td (- Input: User sends POST /auth/logout; subsequent request sent with invalidated token.) Tj
-/F1 8.2 Tf 54 467.0 Td (- Expected Result: Logout returns HTTP 200; the server removes the token from its in-memory) Tj
+/F1 8.2 Tf 54 467.0 Td (- Expected Result: Logout returns HTTP 204; the server removes the token from its in-memory) Tj
 /F1 8.2 Tf 54 457.0 Td (session store; subsequent request receives HTTP 401 Unauthorized; UI redirects to login) Tj
 /F1 8.2 Tf 54 447.0 Td (screen.) Tj
 /F2 10 Tf 54 429.0 Td (TC-04: Customer Registration Validation \(FR-3\)) Tj
@@ -113,8 +171,24 @@ BT
 ET
 endstream
 endobj
-5 0 obj
-<< /Length 3958 >>
+10 0 obj
+<<
+/Type /Page
+/MediaBox [ 0 0 612 792 ]
+/Resources <<
+/Font <<
+/F1 5 0 R
+/F2 6 0 R
+>>
+>>
+/Contents 11 0 R
+/Parent 1 0 R
+>>
+endobj
+11 0 obj
+<<
+/Length 3958
+>>
 stream
 BT
 /F2 10 Tf 54 770.0 Td (TC-05: Account Opening Minimum Balance \(FR-4, S-15\)) Tj
@@ -161,8 +235,24 @@ BT
 ET
 endstream
 endobj
-6 0 obj
-<< /Length 3374 >>
+12 0 obj
+<<
+/Type /Page
+/MediaBox [ 0 0 612 792 ]
+/Resources <<
+/Font <<
+/F1 5 0 R
+/F2 6 0 R
+>>
+>>
+/Contents 13 0 R
+/Parent 1 0 R
+>>
+endobj
+13 0 obj
+<<
+/Length 3374
+>>
 stream
 BT
 /F2 10 Tf 54 770.0 Td (TC-09B: Credit Account Interest Once per Period \(FR-11, S-22\)) Tj
@@ -204,8 +294,24 @@ BT
 ET
 endstream
 endobj
-7 0 obj
-<< /Length 3614 >>
+14 0 obj
+<<
+/Type /Page
+/MediaBox [ 0 0 612 792 ]
+/Resources <<
+/Font <<
+/F1 5 0 R
+/F2 6 0 R
+>>
+>>
+/Contents 15 0 R
+/Parent 1 0 R
+>>
+endobj
+15 0 obj
+<<
+/Length 3614
+>>
 stream
 BT
 /F2 10 Tf 54 770.0 Td (TC-14: Role-Specific Dashboards \(FR-14, NFR-2, S-25\) \(NEW\)) Tj
@@ -249,8 +355,24 @@ BT
 ET
 endstream
 endobj
-8 0 obj
-<< /Length 4721 >>
+16 0 obj
+<<
+/Type /Page
+/MediaBox [ 0 0 612 792 ]
+/Resources <<
+/Font <<
+/F1 5 0 R
+/F2 6 0 R
+>>
+>>
+/Contents 17 0 R
+/Parent 1 0 R
+>>
+endobj
+17 0 obj
+<<
+/Length 4721
+>>
 stream
 BT
 /F2 10 Tf 54 770.0 Td (TC-20: Transaction Performance Target Verification \(NFR-1, S-30\) \(NEW\)) Tj
@@ -305,8 +427,24 @@ BT
 ET
 endstream
 endobj
-9 0 obj
-<< /Length 1182 >>
+18 0 obj
+<<
+/Type /Page
+/MediaBox [ 0 0 612 792 ]
+/Resources <<
+/Font <<
+/F1 5 0 R
+/F2 6 0 R
+>>
+>>
+/Contents 19 0 R
+/Parent 1 0 R
+>>
+endobj
+19 0 obj
+<<
+/Length 1182
+>>
 stream
 BT
 /F2 13 Tf 54 770.0 Td (5. Summary of Remediation Actions \(S-41 Done Criteria\)) Tj
@@ -324,56 +462,34 @@ BT
 ET
 endstream
 endobj
-10 0 obj
-<< /Type /Pages /Kids [11 0 R 12 0 R 13 0 R 14 0 R 15 0 R 16 0 R 17 0 R] /Count 7 >>
-endobj
-11 0 obj
-<< /Type /Page /Parent 10 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 1 0 R /F2 2 0 R >> >> /Contents 3 0 R >>
-endobj
-12 0 obj
-<< /Type /Page /Parent 10 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 1 0 R /F2 2 0 R >> >> /Contents 4 0 R >>
-endobj
-13 0 obj
-<< /Type /Page /Parent 10 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 1 0 R /F2 2 0 R >> >> /Contents 5 0 R >>
-endobj
-14 0 obj
-<< /Type /Page /Parent 10 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 1 0 R /F2 2 0 R >> >> /Contents 6 0 R >>
-endobj
-15 0 obj
-<< /Type /Page /Parent 10 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 1 0 R /F2 2 0 R >> >> /Contents 7 0 R >>
-endobj
-16 0 obj
-<< /Type /Page /Parent 10 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 1 0 R /F2 2 0 R >> >> /Contents 8 0 R >>
-endobj
-17 0 obj
-<< /Type /Page /Parent 10 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 1 0 R /F2 2 0 R >> >> /Contents 9 0 R >>
-endobj
-18 0 obj
-<< /Type /Catalog /Pages 10 0 R >>
-endobj
 xref
-0 19
+0 20
 0000000000 65535 f 
 0000000015 00000 n 
-0000000085 00000 n 
-0000000160 00000 n 
-0000004980 00000 n 
-0000008912 00000 n 
-0000012922 00000 n 
-0000016348 00000 n 
-0000020014 00000 n 
-0000024787 00000 n 
-0000026021 00000 n 
-0000026122 00000 n 
-0000026260 00000 n 
-0000026398 00000 n 
-0000026536 00000 n 
-0000026674 00000 n 
-0000026812 00000 n 
-0000026950 00000 n 
-0000027088 00000 n 
+0000000115 00000 n 
+0000000155 00000 n 
+0000000204 00000 n 
+0000000342 00000 n 
+0000000412 00000 n 
+0000000487 00000 n 
+0000005328 00000 n 
+0000005466 00000 n 
+0000009398 00000 n 
+0000009538 00000 n 
+0000013549 00000 n 
+0000013689 00000 n 
+0000017116 00000 n 
+0000017256 00000 n 
+0000020923 00000 n 
+0000021063 00000 n 
+0000025837 00000 n 
+0000025977 00000 n 
 trailer
-<< /Size 19 /Root 18 0 R >>
+<<
+/Size 20
+/Root 3 0 R
+/Info 2 0 R
+>>
 startxref
-27139
+27212
 %%EOF

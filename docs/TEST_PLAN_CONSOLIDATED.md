@@ -16,7 +16,7 @@
 | :---: | :---: | :---: | :--- |
 | **1.0** | 15 Sep 2026 | QA Team | Initial draft with split standalone test suites. |
 | **1.1** | 1 Nov 2026 | Abhishek Kinagi & Team | **Consolidation & Gap Resolution (S-35):**<br>1. Merged standalone test suites into unified Section 14 with continuous TC IDs.<br>2. Retained the legacy source documents as supporting references.<br>3. Corrected SRS citation date from 11/09/2026 to 02/09/2026.<br>4. Added test cases for FR-12 (statements), FR-14 (dashboards), FR-7 (daily limit), admin unlock (TC-02B), NFR-2 (performance), NFR-6 (usability), and NFR-9 (portability).<br>5. Refined TC-15 wording regarding HTTPS TLS handshake.<br>6. Preserved the canonical TC-11 balance/history ownership mapping.<br>7. Built 100% complete Requirements Traceability Matrix. |
-| **1.2** | 4 Nov 2026 | Abhishek Kinagi & Team | **Sprint-change alignment (S-41):**<br>1. Rechecked every case against the merged implementation and deviations log.<br>2. Added explicit zero-opening-deposit coverage, request bodies/status codes for freeze/close and customer deactivation, and UTC daily-limit reset behavior.<br>3. Resolved the duplicate dashboard coverage by making TC-19 the account-list/history performance case.<br>4. Reissued this document as an IEEE-style PDF and superseded the standalone DOCX/PDF artifacts.<br>5. Updated the RTM and security suite classification. |
+| **1.2** | 4 Nov 2026 | Abhishek Kinagi & Team | **Sprint-change alignment (S-41):**<br>1. Rechecked every case against the merged implementation and deviations log.<br>2. Added explicit zero-opening-deposit coverage, request bodies/status codes for freeze/close and customer deactivation, and UTC daily-limit reset behavior.<br>3. Resolved the duplicate dashboard coverage by making TC-19 the account-list/history performance case.<br>4. Reissued this document as an IEEE-style PDF and superseded the standalone DOCX/PDF artifacts.<br>5. Updated the RTM and security suite classification.<br>6. Corrected TC-03's logout success expectation to HTTP 204 to match the implemented endpoint; the subsequent request with the invalidated token must still return HTTP 401. |
 
 ---
 
@@ -59,7 +59,7 @@
 ### TC-03: Session Expiry and Logout (FR-2, SEC-1, S-08)
 - **Preconditions:** User is logged in with active session token.
 - **Input:** User sends `POST /auth/logout`; subsequent request sent with invalidated token.
-- **Expected Result:** Logout returns HTTP 200; the server removes the token from its in-memory session store; subsequent request receives HTTP 401 Unauthorized; UI redirects to login screen.
+- **Expected Result:** Logout returns HTTP 204 No Content; the server removes the token from its in-memory session store; subsequent request receives HTTP 401 Unauthorized; UI redirects to login screen.
 
 ### TC-04: Customer Registration Validation (FR-3)
 - **Preconditions:** Bank Officer is authenticated; customer registration form is available.
