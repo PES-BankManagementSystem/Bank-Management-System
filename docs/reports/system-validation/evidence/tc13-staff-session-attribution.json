@@ -1,0 +1,24 @@
+{
+  "testCase": "TC-13",
+  "retest": "created officer, authenticated, performed transaction, then deactivated",
+  "role": "Administrator deactivated Bank Officer",
+  "userId": 13,
+  "createHttp": 201,
+  "loginHttp": 200,
+  "passwordChangeHttp": 200,
+  "depositHttp": 201,
+  "transactionId": 30,
+  "transactionOperatorId": 13,
+  "operatorAttributionRetained": true,
+  "deactivateHttp": 200,
+  "databaseStatus": "inactive",
+  "existingSessionDashboardHttp": 401,
+  "priorHarnessOfficerChecks": [
+    {
+      "userId": 12,
+      "deactivateHttp": 200,
+      "inactive": true,
+      "transactionAttributionRetained": true
+    }
+  ]
+}

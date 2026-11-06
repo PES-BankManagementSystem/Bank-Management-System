@@ -1,0 +1,15 @@
+{
+  "case": "TC-18",
+  "role": "Customer",
+  "ui": "/statement-card; Show statement, then Download CSV clicked",
+  "filename": "statement-ACC001-2026-09-01-to-2026-11-06.csv",
+  "browserBlobFetchStatus": 200,
+  "csvBytes": 707,
+  "csvLines": 17,
+  "transactions": 10,
+  "openingBalance": "50000.00",
+  "closingBalance": "50010.00",
+  "headerValidated": true,
+  "csv": "\"Account\",\"ACC001\"\r\n\"From\",\"2026-09-01\"\r\n\"To\",\"2026-11-06\"\r\n\"Opening balance (INR)\",\"50000.00\"\r\n\r\n\"Date and time\",\"Type\",\"Amount (INR)\",\"Resulting balance (INR)\"\r\n\"2026-11-06 06:46:52\",\"deposit\",\"1.00\",\"50001.00\"\r\n\"2026-11-06 06:46:52\",\"deposit\",\"1.00\",\"50002.00\"\r\n\"2026-11-06 06:46:52\",\"deposit\",\"1.00\",\"50003.00\"\r\n\"2026-11-06 06:46:52\",\"deposit\",\"1.00\",\"50004.00\"\r\n\"2026-11-06 06:46:52\",\"deposit\",\"1.00\",\"50005.00\"\r\n\"2026-11-06 06:46:52\",\"deposit\",\"1.00\",\"50006.00\"\r\n\"2026-11-06 06:46:52\",\"deposit\",\"1.00\",\"50007.00\"\r\n\"2026-11-06 06:46:52\",\"deposit\",\"1.00\",\"50008.00\"\r\n\"2026-11-06 06:46:52\",\"deposit\",\"1.00\",\"50009.00\"\r\n\"2026-11-06 06:46:52\",\"deposit\",\"1.00\",\"50010.00\"\r\n\"Closing balance (INR)\",\"50010.00\"",
+  "verdict": "PASS"
+}
