@@ -106,7 +106,7 @@ async function main() {
   // Bank Officer
   await step("Bank Officer signs in", async () => {
     await login("officer1");
-    const heading = await waitText("#role-home-heading", /Bank Officer home/);
+    const heading = await waitText("#role-home-heading", /Bank Officer dashboard/);
     return `${heading}; nav: ${(await navLabels()).join(", ")}`;
   });
 
@@ -221,7 +221,7 @@ async function main() {
   // Administrator
   await step("Administrator signs in", async () => {
     await login("admin");
-    const heading = await waitText("#role-home-heading", /Administrator home/);
+    const heading = await waitText("#role-home-heading", /Administrator dashboard/);
     return `${heading}; nav: ${(await navLabels()).join(", ")}`;
   });
 
