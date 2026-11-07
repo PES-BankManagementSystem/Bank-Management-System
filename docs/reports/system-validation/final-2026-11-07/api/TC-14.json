@@ -1,0 +1,182 @@
+{
+  "case": "TC-14",
+  "build_sha": "b0e8ca24fdd348bf40b0deb68f769232cc650107",
+  "started_utc": "2026-11-07T06:37:29.356884+00:00",
+  "status": "PASS",
+  "assertions": [
+    "POST /auth/login: expected 200, got 200 ()",
+    "POST /auth/login: expected 200, got 200 ()",
+    "GET /dashboard: expected 200, got 200 ()",
+    "Dashboard under 3 seconds: admin",
+    "POST /auth/login: expected 200, got 200 ()",
+    "GET /dashboard: expected 200, got 200 ()",
+    "Dashboard under 3 seconds: officer1",
+    "POST /auth/login: expected 200, got 200 ()",
+    "GET /dashboard: expected 200, got 200 ()",
+    "Dashboard under 3 seconds: customer1",
+    "Distinct role dashboard payloads",
+    "Administrator counts match fresh seed",
+    "Officer receives only own current-day transactions and no system counts",
+    "Customer dashboard contains only owned accounts"
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 200,
+      "ms": 724.364,
+      "code": null
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 200,
+      "ms": 660.147,
+      "code": null
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 200,
+      "ms": 15.182,
+      "code": null
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 200,
+      "ms": 615.59,
+      "code": null
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 200,
+      "ms": 14.567,
+      "code": null
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 200,
+      "ms": 606.469,
+      "code": null
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 200,
+      "ms": 13.722,
+      "code": null
+    }
+  ],
+  "fresh_seed": true,
+  "seed_counts": {
+    "users": 6,
+    "customers": 3,
+    "accounts": 5,
+    "transactions": 8
+  },
+  "dashboards": [
+    {
+      "counts": {
+        "accounts": 5,
+        "customers": 3,
+        "staff": 2
+      },
+      "quickLinks": [
+        {
+          "href": "#customer-management-card",
+          "label": "Manage customers"
+        },
+        {
+          "href": "#staff-card",
+          "label": "Manage staff"
+        },
+        {
+          "href": "#audit-card",
+          "label": "Review audit log"
+        }
+      ],
+      "role": "administrator",
+      "transactionsToday": {
+        "count": 0,
+        "totalAmount": "0.00"
+      }
+    },
+    {
+      "quickLinks": [
+        {
+          "href": "#deposit-form",
+          "label": "Deposit"
+        },
+        {
+          "href": "#withdraw-form",
+          "label": "Withdraw"
+        },
+        {
+          "href": "#transfer-form",
+          "label": "Transfer"
+        },
+        {
+          "href": "#customer-management-card",
+          "label": "Customers"
+        }
+      ],
+      "role": "bank_officer",
+      "transactionsToday": {
+        "count": 0,
+        "items": [],
+        "totalAmount": "0.00"
+      }
+    },
+    {
+      "accounts": [
+        {
+          "accountNumber": "ACC001",
+          "balance": "50000.00",
+          "links": [
+            {
+              "href": "#history-card",
+              "label": "History"
+            },
+            {
+              "href": "#statement-card",
+              "label": "Statement"
+            }
+          ],
+          "status": "active",
+          "type": "Savings"
+        },
+        {
+          "accountNumber": "ACC004",
+          "balance": "100000.00",
+          "links": [
+            {
+              "href": "#history-card",
+              "label": "History"
+            },
+            {
+              "href": "#statement-card",
+              "label": "Statement"
+            }
+          ],
+          "status": "active",
+          "type": "Current"
+        }
+      ],
+      "quickLinks": [
+        {
+          "href": "#history-card",
+          "label": "Transaction history"
+        },
+        {
+          "href": "#statement-card",
+          "label": "Statements"
+        }
+      ],
+      "role": "customer"
+    }
+  ],
+  "database_sha256": "88227aac3cc0207a43b1c4755b988b403c46c2db52de63bf2e155135d6cdf9d1"
+}

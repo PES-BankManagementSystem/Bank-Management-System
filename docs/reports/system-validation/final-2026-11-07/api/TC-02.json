@@ -1,0 +1,46 @@
+{
+  "case": "TC-02",
+  "build_sha": "b0e8ca24fdd348bf40b0deb68f769232cc650107",
+  "started_utc": "2026-11-07T06:36:59.254751+00:00",
+  "status": "PASS",
+  "assertions": [
+    "POST /auth/login: expected 401, got 401 (UNAUTHENTICATED)",
+    "Lockout response attempt 1",
+    "POST /auth/login: expected 401, got 401 (UNAUTHENTICATED)",
+    "Lockout response attempt 2",
+    "POST /auth/login: expected 401, got 401 (ACCOUNT_LOCKED)",
+    "Lockout response attempt 3",
+    "Locked after three failures"
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 401,
+      "ms": 576.23,
+      "code": "UNAUTHENTICATED"
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 401,
+      "ms": 599.388,
+      "code": "UNAUTHENTICATED"
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 401,
+      "ms": 598.39,
+      "code": "ACCOUNT_LOCKED"
+    }
+  ],
+  "fresh_seed": true,
+  "seed_counts": {
+    "users": 6,
+    "customers": 3,
+    "accounts": 5,
+    "transactions": 8
+  },
+  "database_sha256": "20e16158dfe3af56e2d799ae538b112afc0afff6d0a3cc1786165cc27fb31ba4"
+}

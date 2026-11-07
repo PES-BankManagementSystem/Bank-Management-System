@@ -1,0 +1,56 @@
+{
+  "case": "TC-17",
+  "build_sha": "b0e8ca24fdd348bf40b0deb68f769232cc650107",
+  "started_utc": "2026-11-07T06:37:34.333311+00:00",
+  "status": "PASS",
+  "assertions": [
+    "POST /auth/login: expected 200, got 200 ()",
+    "POST /auth/login: expected 200, got 200 ()",
+    "GET /accounts/ACC001/transactions?from=2026-01-16&to=2026-01-18&limit=2&offset=0: expected 200, got 200 ()",
+    "Filtered history under 3 seconds",
+    "GET /accounts/ACC001/transactions?from=2026-01-16&to=2026-01-18&limit=2&offset=2: expected 200, got 200 ()",
+    "Filtered history under 3 seconds",
+    "Pagination has three unique in-range entries",
+    "Newest first ordering",
+    "Inclusive date bounds",
+    "Debit amounts signed negative"
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 200,
+      "ms": 677.63,
+      "code": null
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 200,
+      "ms": 597.045,
+      "code": null
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/ACC001/transactions?from=2026-01-16&to=2026-01-18&limit=2&offset=0",
+      "status": 200,
+      "ms": 3.309,
+      "code": null
+    },
+    {
+      "method": "GET",
+      "path": "/accounts/ACC001/transactions?from=2026-01-16&to=2026-01-18&limit=2&offset=2",
+      "status": 200,
+      "ms": 24.407,
+      "code": null
+    }
+  ],
+  "fresh_seed": true,
+  "seed_counts": {
+    "users": 6,
+    "customers": 3,
+    "accounts": 5,
+    "transactions": 8
+  },
+  "database_sha256": "9e88630af3ba55bf379117daeb38dec58038f7a896b2f91f6017a0a190e3f103"
+}
