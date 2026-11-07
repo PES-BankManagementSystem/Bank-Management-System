@@ -1,0 +1,101 @@
+[
+  {
+    "user": "officer1",
+    "viewport": 1280,
+    "chrome_document_width": 1280,
+    "firefox_document_width": 1280,
+    "same_heading": true,
+    "same_nav": true,
+    "same_cards_and_widths": true,
+    "chrome_overflow": false,
+    "firefox_overflow": false
+  },
+  {
+    "user": "officer1",
+    "viewport": 768,
+    "chrome_document_width": 768,
+    "firefox_document_width": 768,
+    "same_heading": true,
+    "same_nav": true,
+    "same_cards_and_widths": true,
+    "chrome_overflow": false,
+    "firefox_overflow": false
+  },
+  {
+    "user": "officer1",
+    "viewport": 390,
+    "chrome_document_width": 390,
+    "firefox_document_width": 390,
+    "same_heading": true,
+    "same_nav": true,
+    "same_cards_and_widths": true,
+    "chrome_overflow": false,
+    "firefox_overflow": false
+  },
+  {
+    "user": "customer1",
+    "viewport": 1280,
+    "chrome_document_width": 1280,
+    "firefox_document_width": 1280,
+    "same_heading": true,
+    "same_nav": true,
+    "same_cards_and_widths": true,
+    "chrome_overflow": false,
+    "firefox_overflow": false
+  },
+  {
+    "user": "customer1",
+    "viewport": 768,
+    "chrome_document_width": 768,
+    "firefox_document_width": 768,
+    "same_heading": true,
+    "same_nav": true,
+    "same_cards_and_widths": true,
+    "chrome_overflow": false,
+    "firefox_overflow": false
+  },
+  {
+    "user": "customer1",
+    "viewport": 390,
+    "chrome_document_width": 399,
+    "firefox_document_width": 399,
+    "same_heading": true,
+    "same_nav": true,
+    "same_cards_and_widths": true,
+    "chrome_overflow": true,
+    "firefox_overflow": true
+  },
+  {
+    "user": "admin",
+    "viewport": 1280,
+    "chrome_document_width": 1280,
+    "firefox_document_width": 1280,
+    "same_heading": true,
+    "same_nav": true,
+    "same_cards_and_widths": true,
+    "chrome_overflow": false,
+    "firefox_overflow": false
+  },
+  {
+    "user": "admin",
+    "viewport": 768,
+    "chrome_document_width": 768,
+    "firefox_document_width": 768,
+    "same_heading": true,
+    "same_nav": true,
+    "same_cards_and_widths": true,
+    "chrome_overflow": false,
+    "firefox_overflow": false
+  },
+  {
+    "user": "admin",
+    "viewport": 390,
+    "chrome_document_width": 465,
+    "firefox_document_width": 486,
+    "same_heading": true,
+    "same_nav": true,
+    "same_cards_and_widths": true,
+    "chrome_overflow": true,
+    "firefox_overflow": true
+  }
+]

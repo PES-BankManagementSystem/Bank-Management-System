@@ -41,7 +41,8 @@
     <p id="role-home-intro" class="intro"></p>
     <p id="dashboard-status" class="result" role="status" aria-live="polite"></p>
     <div id="dashboard-metrics" class="dashboard-metrics"></div>
-    <div id="dashboard-details"></div>
+    <div id="dashboard-details" class="table-scroll" role="region"
+      aria-label="Dashboard details" tabindex="0"></div>
     <ul id="role-home-links" class="role-home-links"></ul>
   </section>
 
@@ -368,7 +369,8 @@
       <button id="audit-submit" type="submit">Show entries</button>
     </form>
     <p id="audit-result" class="result" role="status" aria-live="polite"></p>
-    <div id="audit-list"></div>
+    <div id="audit-list" class="table-scroll" role="region"
+      aria-label="Audit trail entries" tabindex="0"></div>
     <button id="audit-more" type="button" hidden>Load more</button>
   </section>
   <section id="account-types-card" class="card customer-wide-card" aria-labelledby="account-types-heading"

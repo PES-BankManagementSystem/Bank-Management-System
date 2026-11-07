@@ -1,0 +1,105 @@
+{
+  "case": "TC-16",
+  "build_sha": "b0e8ca24fdd348bf40b0deb68f769232cc650107",
+  "started_utc": "2026-11-07T06:37:32.454496+00:00",
+  "status": "PASS",
+  "assertions": [
+    "POST /auth/login: expected 200, got 200 ()",
+    "POST /transactions: expected 201, got 201 ()",
+    "Persisted account balance matches transaction response",
+    "POST /transactions: expected 201, got 201 ()",
+    "Persisted account balance matches transaction response",
+    "POST /transfers: expected 201, got 201 ()",
+    "Persisted transfer balance matches response: ACC001",
+    "Persisted transfer balance matches response: ACC004",
+    "Financial operations have operator and timestamp in audit",
+    "POST /auth/login: expected 200, got 200 ()",
+    "PUT /audit/1: expected 405, got 405 (METHOD_NOT_ALLOWED)",
+    "DELETE /audit/1: expected 405, got 405 (METHOD_NOT_ALLOWED)"
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 200,
+      "ms": 636.719,
+      "code": null
+    },
+    {
+      "method": "POST",
+      "path": "/transactions",
+      "status": 201,
+      "ms": 25.735,
+      "code": null
+    },
+    {
+      "method": "POST",
+      "path": "/transactions",
+      "status": 201,
+      "ms": 14.328,
+      "code": null
+    },
+    {
+      "method": "POST",
+      "path": "/transfers",
+      "status": 201,
+      "ms": 31.052,
+      "code": null
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 200,
+      "ms": 674.68,
+      "code": null
+    },
+    {
+      "method": "PUT",
+      "path": "/audit/1",
+      "status": 405,
+      "ms": 1.632,
+      "code": "METHOD_NOT_ALLOWED"
+    },
+    {
+      "method": "DELETE",
+      "path": "/audit/1",
+      "status": 405,
+      "ms": 19.936,
+      "code": "METHOD_NOT_ALLOWED"
+    }
+  ],
+  "fresh_seed": true,
+  "seed_counts": {
+    "users": 6,
+    "customers": 3,
+    "accounts": 5,
+    "transactions": 8
+  },
+  "audit_rows": [
+    [
+      "DEPOSIT",
+      "Deposited 100 paise; resulting balance 5000100 paise.",
+      2,
+      "2026-11-07 06:37:33"
+    ],
+    [
+      "WITHDRAWAL",
+      "Withdrew 100 paise; resulting balance 5000000 paise.",
+      2,
+      "2026-11-07 06:37:33"
+    ],
+    [
+      "TRANSFER_OUT",
+      "Transfer TRF-20261107063733Z-11 of 1.00; resulting balance 49999.00.",
+      2,
+      "2026-11-07 06:37:33"
+    ],
+    [
+      "TRANSFER_IN",
+      "Transfer TRF-20261107063733Z-11 of 1.00; resulting balance 100001.00.",
+      2,
+      "2026-11-07 06:37:33"
+    ]
+  ],
+  "database_sha256": "a73edc6adf7bf36570ab961474e9ed97914da1f1266d8077f50a990073341b16"
+}

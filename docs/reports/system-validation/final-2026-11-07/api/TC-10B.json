@@ -1,0 +1,43 @@
+{
+  "case": "TC-10B",
+  "build_sha": "b0e8ca24fdd348bf40b0deb68f769232cc650107",
+  "started_utc": "2026-11-07T06:37:17.844912+00:00",
+  "status": "PASS",
+  "assertions": [
+    "POST /auth/login: expected 200, got 200 ()",
+    "POST /transfers: expected 400, got 400 (VALIDATION_ERROR)",
+    "POST /transfers: expected 422, got 422 (BELOW_MINIMUM_BALANCE)",
+    "Invalid transfers preserve balances and ledger"
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 200,
+      "ms": 580.762,
+      "code": null
+    },
+    {
+      "method": "POST",
+      "path": "/transfers",
+      "status": 400,
+      "ms": 2.82,
+      "code": "VALIDATION_ERROR"
+    },
+    {
+      "method": "POST",
+      "path": "/transfers",
+      "status": 422,
+      "ms": 3.494,
+      "code": "BELOW_MINIMUM_BALANCE"
+    }
+  ],
+  "fresh_seed": true,
+  "seed_counts": {
+    "users": 6,
+    "customers": 3,
+    "accounts": 5,
+    "transactions": 8
+  },
+  "database_sha256": "63781a4ad2f3e7deaee3ca9f183a9e2c3de8e9028048ae627e44fcd8b4fd02a7"
+}

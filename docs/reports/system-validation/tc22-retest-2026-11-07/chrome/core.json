@@ -1,0 +1,138 @@
+{
+  "browser": "chrome",
+  "version": "Chrome/156.0.8078.80",
+  "results": [
+    {
+      "step": "Load sign-in page",
+      "ok": true,
+      "detail": "HTTP 200, title \"Bank Management System | Staff and customer services\"",
+      "ms": 177
+    },
+    {
+      "step": "Wrong password is refused",
+      "ok": true,
+      "detail": "Invalid username or password.",
+      "ms": 760
+    },
+    {
+      "step": "Bank Officer signs in",
+      "ok": true,
+      "detail": "Bank Officer dashboard; nav: Register customer, Deposit, Withdraw, Transfer, Customers, Open account, Statements, History",
+      "ms": 871
+    },
+    {
+      "step": "Officer deposits INR 500.00 into ACC001",
+      "ok": true,
+      "detail": "Deposit of ₹500.00 into ACC001 succeeded. New balance: ₹50500.00.",
+      "ms": 238
+    },
+    {
+      "step": "Officer withdraws INR 200.00 from ACC001",
+      "ok": true,
+      "detail": "Withdrawal of ₹200.00 from ACC001 succeeded. New balance: ₹50300.00.",
+      "ms": 145
+    },
+    {
+      "step": "Officer transfers INR 100.00 ACC001 to ACC004",
+      "ok": true,
+      "detail": "Transfer succeeded. Reference: TRF-20261107073019Z-11. ACC001 balance: ₹50200.00; ACC004 balance: ₹100100.00.",
+      "ms": 172
+    },
+    {
+      "step": "Deposit to frozen ACC002 is refused",
+      "ok": true,
+      "detail": "The deposit was not completed. Account ACC002 is frozen and cannot be used for this transaction. No balance or transaction history was changed.",
+      "ms": 134
+    },
+    {
+      "step": "Officer registers a customer",
+      "ok": true,
+      "detail": "Customer registered successfully. Customer ID: CUS-MGSAD5GR Username: CUS-MGSAD5GR Temporary password [redacted] Hand th",
+      "ms": 1044
+    },
+    {
+      "step": "Officer views ACC001 history",
+      "ok": true,
+      "detail": "6 rows",
+      "ms": 146
+    },
+    {
+      "step": "Bank Officer signs out",
+      "ok": true,
+      "detail": "back at sign-in",
+      "ms": 33
+    },
+    {
+      "step": "Customer signs in",
+      "ok": true,
+      "detail": "Customer dashboard; nav: My profile, Accounts, Statements, History",
+      "ms": 809
+    },
+    {
+      "step": "Customer sees own accounts and balances",
+      "ok": true,
+      "detail": "ACC001SavingsActive50200.00 | ACC004CurrentActive100100.00",
+      "ms": 18
+    },
+    {
+      "step": "Customer views ACC001 history with today's filter",
+      "ok": true,
+      "detail": "3 rows today: 11/7/2026, 1:00:19 PMTransfer out (ACC004)Debit: -100.0050200.00 | 11/7/2026, 1:00:19 PMWithdrawalDebit: -200.0050300.00 | 11/7/2026, 1:00:19 PMDepositCredit: 500.0050500.00",
+      "ms": 102
+    },
+    {
+      "step": "Customer views ACC001 statement",
+      "ok": true,
+      "detail": "opening ₹0.00, closing ₹50200.00, 6 rows",
+      "ms": 135
+    },
+    {
+      "step": "Customer cannot see officer screens",
+      "ok": true,
+      "detail": "deposit/withdraw/transfer cards hidden",
+      "ms": 9
+    },
+    {
+      "step": "Customer signs out",
+      "ok": true,
+      "detail": "back at sign-in",
+      "ms": 27
+    },
+    {
+      "step": "Administrator signs in",
+      "ok": true,
+      "detail": "Administrator dashboard; nav: Register customer, Deposit, Withdraw, Transfer, Run interest, Locked users, Customers, Open account, Staff, Audit trail, Account types, Statements, History",
+      "ms": 741
+    },
+    {
+      "step": "Administrator views audit trail",
+      "ok": true,
+      "detail": "13 entries, includes the deposit",
+      "ms": 76
+    },
+    {
+      "step": "Administrator views staff list",
+      "ok": true,
+      "detail": "officer1 and officer2 listed",
+      "ms": 5
+    },
+    {
+      "step": "Administrator views account types",
+      "ok": true,
+      "detail": "Savings and Current listed",
+      "ms": 5
+    },
+    {
+      "step": "Administrator signs out",
+      "ok": true,
+      "detail": "back at sign-in",
+      "ms": 45
+    }
+  ],
+  "scriptErrors": [],
+  "failedRequests": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+    "Failed to load resource: the server responded with a status of 422 (Unprocessable Content)"
+  ]
+}

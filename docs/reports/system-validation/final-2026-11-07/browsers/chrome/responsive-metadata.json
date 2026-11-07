@@ -1,0 +1,9 @@
+{
+  "browser": "chrome",
+  "case": "TC-22-responsive",
+  "build_sha": "b0e8ca24fdd348bf40b0deb68f769232cc650107",
+  "fresh_seed": true,
+  "exit_code": 1,
+  "utc": "2026-11-07T06:35:32.172787+00:00",
+  "database_sha256": "ab1ae1e8396d56afb9118c49827b6168b7a3b72f157340b15b248b4165044873"
+}
