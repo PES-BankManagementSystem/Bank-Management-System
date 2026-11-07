@@ -1,6 +1,6 @@
 # TC-21 Usability Walkthrough
 
-**Status: NOT RUN - documented deviation 33.**
+**Status: NOT RUN - documented deviation 35.**
 
 This is the unused collection protocol and non-execution record for S-43 (#119), Test Plan
 v1.2 TC-21 (NFR-6). It is not a completed usability study. The general UI feedback
@@ -13,7 +13,7 @@ No historical feedback or automated browser run is counted as TC-21 completion.
 ## Disposition recorded on 2026-11-07
 
 At the user's request, TC-21 is recorded as not run under
-[deviation 33](DEVIATIONS.md#tc-21-disposition-deviation-33), rather than as a
+[deviation 35](DEVIATIONS.md#tc-21-disposition-deviation-35), rather than as a
 pending prerequisite to administrative closure of S-43. No participants were
 enrolled and no session took place. P1/P2/P3 below are proposed anonymous IDs,
 not actual participant records. The #63 session is not substituted as evidence.
@@ -84,7 +84,7 @@ the first attempt (3/3 participants complete both tasks; 6/6 task successes).
 No recorded values exist for this run, so no completion rate can be calculated.
 First-time discoverability and unaided task completion remain unmeasured.
 
-The requested S-43 closure records this omission under deviation 33; it does not
+The requested S-43 closure records this omission under deviation 35; it does not
 change the Test Plan's pass criteria or turn non-execution into a pass. If a study
 is later conducted, record its actual build, observations and evidence here and
 update TC-21/NFR-6 in the validation report. Release readiness and the other S-46
