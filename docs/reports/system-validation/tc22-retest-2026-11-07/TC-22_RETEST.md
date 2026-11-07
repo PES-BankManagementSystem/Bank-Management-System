@@ -65,5 +65,6 @@ The unchanged backend has passing Ubuntu/Windows build-and-test evidence in
 including execution through API/integration tests. These browser walkthroughs ran
 on Windows; a separate interactive Ubuntu deployment was not performed. PR CI
 must also pass before review/merge. TC-22's recorded mobile defect is resolved;
-TC-21 remains NOT RUN pending three genuine first-time participants, and S-43
-and the dependent release remain open/on hold.
+TC-21 is NOT RUN under [documented deviation 33](../../../DEVIATIONS.md#tc-21-disposition-deviation-33).
+The later user request directs administrative closure of S-43 with this gap
+recorded; no usability pass, repo-owner approval or release authorization is implied.

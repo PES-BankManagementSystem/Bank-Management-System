@@ -2,7 +2,7 @@
 
 | Field | Value |
 |---|---|
-| Story | S-43 (#119), **keep open** |
+| Story | S-43 (#119), administrative closure requested with documented deviation 33 |
 | Execution date | 2026-11-07 |
 | Initial validation build SHA | **`b0e8ca24fdd348bf40b0deb68f769232cc650107`** (merged `main`, includes #134) |
 | TC-22 frontend retest SHA | **`00ffd7c5e9fb9823e9f822b354b8d790baac652f`**; unchanged backend binary reused, see retest provenance |
@@ -11,10 +11,13 @@
 
 The #124 prerequisite is resolved. This report supersedes the
 [2026-11-06 interim report](System_Validation_Report_2026-11-06.md), retained as an
-archive without reverting any application changes. TC-21 remains NOT RUN.
+archive without reverting any application changes. TC-21 is **NOT RUN - documented deviation 33**; NFR-6 is not validated.
 TC-22 initially failed mobile responsiveness; the table-containment fix now
-**passes the fresh-seed Chrome/Firefox retest**. S-46 (#122) and the
-`v1.0.0` tag/release remain on hold.
+**passes the fresh-seed Chrome/Firefox retest**. The user requested S-43 closure
+with the TC-21 omission documented; the original plan exit criteria remain NOT
+MET. This administrative disposition does not establish usability acceptance or
+repo-owner approval, and does not create or authorize the S-46 (#122) release.
+See [deviation 33](DEVIATIONS.md#tc-21-disposition-deviation-33).
 
 ## 1. Execution method and limitations
 
@@ -64,7 +67,7 @@ also passed Ubuntu/Windows build-and-test jobs.
 | New independent fresh-seed passes | **24** - all except TC-15 and TC-21; TC-22 passed after its fix |
 | Retained prior fresh-seed pass | **1** — TC-15, earlier build |
 | Failed after retest | **0** - initial SV-01 failure retained as history |
-| Not run | **1** — TC-21 |
+| Not run / documented deviation | **1** - TC-21, deviation 33; no participant evidence |
 | Total planned | **26** |
 
 The API-only evidence marks TC-03/TC-18 PARTIAL because it cannot verify their UI
@@ -104,7 +107,7 @@ TC-22, whose fixed frontend revision and unchanged backend are recorded separate
 | TC-18 | **PASS — generated CSV** — 12 chronological entries, INR 50,000 opening/50,012 closing; UI entries and actual Download CSV content verified. | [API](reports/system-validation/final-2026-11-07/api/TC-18.json), [UI](reports/system-validation/final-2026-11-07/browsers/TC-18/result.json), [CSV](reports/system-validation/final-2026-11-07/browsers/TC-18/statement.csv) |
 | TC-19 | **PASS** — independent 3,005-account fixture; 30 authorized account-list and 60 paginated history reads preserve ownership/filter/order; max 150.273 ms (<3 s). | [API](reports/system-validation/final-2026-11-07/api/TC-19.json) |
 | TC-20 | **PASS** — independent 3,005 accounts; three warm-ups then 30 measurements per operation; persisted state matches responses; max deposit 31.857 ms, withdrawal 33.545 ms, transfer 34.615 ms (<2 s). | [API](reports/system-validation/final-2026-11-07/api/TC-20.json) |
-| TC-21 | **NOT RUN** — #63 feedback is ineligible; real first-time participants required. | [Protocol and pending record](USABILITY_WALKTHROUGH.md) |
+| TC-21 | **NOT RUN - documented deviation 33**. No participants or task results; #63 feedback remains excluded. Omission explicitly recorded for the requested S-43 administrative closure; not a pass. | [Non-execution record and unused protocol](USABILITY_WALKTHROUGH.md), [deviation 33](DEVIATIONS.md#tc-21-disposition-deviation-33) |
 | TC-22 | **PASS after fix** - 21 core steps per browser; all roles fit 1280/768/390 px; dashboard/audit columns remain reachable in labeled, focusable scroll regions; paired layouts match. | [Retest and provenance](reports/system-validation/tc22-retest-2026-11-07/TC-22_RETEST.md), [initial failure](reports/system-validation/final-2026-11-07/TC-22_COMPARISON.md) |
 
 ## 4. Requirement validation
@@ -133,7 +136,7 @@ evidence is a declared earlier-build exception, not current-build execution.
 | NFR-3 | TC-10; CTest | Validated | Injected-failure rollback and automated integrity checks. |
 | NFR-4 | TC-01, TC-12; CTest | Validated | Argon2id storage/authentication. |
 | NFR-5 | TC-16 | Validated | Financial audit/denied mutations. |
-| NFR-6 | TC-21 | **Not validated** | Six qualifying participant task attempts outstanding. |
+| NFR-6 | TC-21 | **Not validated** | Documented deviation 33: study not run; no first-time unaided-task evidence. |
 | NFR-7 | TC-02, TC-09, TC-10B, TC-11 | Validated | Error paths and unchanged-state checks. |
 | NFR-8 | CMake; CTest | Validated | Local modular build succeeded; 31/31 CTest passed. |
 | NFR-9 | TC-22 | Validated within recorded scope | Fresh Chrome/Firefox retest passes; unchanged backend Ubuntu/Windows CI evidence retained. |
@@ -149,15 +152,20 @@ evidence is a declared earlier-build exception, not current-build execution.
 - **TC-21:** #63's three-user UI feedback does not record first-time eligibility,
   unaided first attempts or task-level outcomes; required workflows were not
   available at that session's time, per the clarification supplied on #119.
-  Recruit three real participants and complete [the walkthrough](USABILITY_WALKTHROUGH.md).
-  No session is booked or claimed complete.
+  The user elected to record non-execution under [deviation 33](DEVIATIONS.md#tc-21-disposition-deviation-33)
+  and close S-43 administratively. No session is booked or claimed complete; a future
+  study must still use three real first-time participants to validate NFR-6.
 - **Fresh execution:** All machine-executable cases except the agreed TC-15
   exception were independently seeded and executed. TC-21 remains unexecuted.
 - **All planned cases pass:** **Not met** - TC-21 missing; TC-22 now passes.
 - No critical defect was observed in these checks. SV-01 is resolved by the recorded retest;
   this is not a comprehensive current issue-tracker audit.
-- Keep #119 open and hold S-46 (#122)/`v1.0.0` until these gaps, other Sprint 3
-  stories, required review/approval and green PR CI are resolved.
+- **Closure disposition:** At the user's 2026-11-07 request, PR #135 closes #119
+  with TC-21 documented as not run (deviation 33). This does not assert that the
+  original acceptance/exit criteria or NFR-6 were satisfied. Required GitHub merge
+  protections still apply; repo-owner review is not claimed. S-46 release owners
+  must acknowledge the usability gap and assess all remaining release conditions.
+  No tag or release is performed by this change.
 
 **Overall exit-criteria verdict: NOT MET.**
 

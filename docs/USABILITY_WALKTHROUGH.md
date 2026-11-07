@@ -1,8 +1,8 @@
 # TC-21 Usability Walkthrough
 
-**Status: NOT RUN — participant evidence is outstanding.**
+**Status: NOT RUN - documented deviation 33.**
 
-This is the collection protocol and pending record for S-43 (#119), Test Plan
+This is the unused collection protocol and non-execution record for S-43 (#119), Test Plan
 v1.2 TC-21 (NFR-6). It is not a completed usability study. The general UI feedback
 from three external users referenced in S-32 (#63) does not qualify: it did not
 record first-time eligibility, both required tasks, first-attempt unaided outcomes,
@@ -10,7 +10,18 @@ or task-level observations. The deposit and history workflows were also unavaila
 on `main` at that session's time, according to the clarification supplied on #119.
 No historical feedback or automated browser run is counted as TC-21 completion.
 
-## Session prerequisites
+## Disposition recorded on 2026-11-07
+
+At the user's request, TC-21 is recorded as not run under
+[deviation 33](DEVIATIONS.md#tc-21-disposition-deviation-33), rather than as a
+pending prerequisite to administrative closure of S-43. No participants were
+enrolled and no session took place. P1/P2/P3 below are proposed anonymous IDs,
+not actual participant records. The #63 session is not substituted as evidence.
+NFR-6 remains **not validated**, and the original all-cases-executed exit
+criterion remains **not met**. The protocol below is retained for any future
+qualifying study. No usability success or repo-owner approval is claimed.
+
+## Session prerequisites (future study)
 
 - Recruit three participants who have never used this application and have had no
   prior training. Use anonymous IDs P1, P2 and P3; do not commit personal data.
@@ -45,32 +56,36 @@ without declaring a new protocol/run.
 
 | Field | Value |
 |---|---|
-| Date and moderator | Pending |
-| Tested build SHA | Pending — record actual participant build, not an earlier API build |
-| OS / browser and version | Pending |
-| Schema/seed revision and fixture adjustments | Pending |
-| Task date range and expected results | Pending |
+| Date and moderator | Not recorded (session not run) |
+| Tested build SHA | Not recorded (session not run) — record actual participant build, not an earlier API build |
+| OS / browser and version | Not recorded (session not run) |
+| Schema/seed revision and fixture adjustments | Not recorded (session not run) |
+| Task date range and expected results | Not recorded (session not run) |
 
 | Participant | First-time / no training confirmed | Consent recorded | Fresh database reference |
 |---|---|---|---|
-| P1 | Pending | Pending | Pending |
-| P2 | Pending | Pending | Pending |
-| P3 | Pending | Pending | Pending |
+| P1 | Not recorded (session not run) | Not recorded (session not run) | Not recorded (session not run) |
+| P2 | Not recorded (session not run) | Not recorded (session not run) | Not recorded (session not run) |
+| P3 | Not recorded (session not run) | Not recorded (session not run) | Not recorded (session not run) |
 
 | Participant | Task | First attempt completed | Unaided / prompts or help | Time | Observations and result evidence |
 |---|---|---|---|---|---|
-| P1 | Officer deposit | Pending | Pending | Pending | Pending |
-| P1 | Customer history | Pending | Pending | Pending | Pending |
-| P2 | Officer deposit | Pending | Pending | Pending | Pending |
-| P2 | Customer history | Pending | Pending | Pending | Pending |
-| P3 | Officer deposit | Pending | Pending | Pending | Pending |
-| P3 | Customer history | Pending | Pending | Pending | Pending |
+| P1 | Officer deposit | Not recorded (session not run) | Not recorded (session not run) | Not recorded (session not run) | Not recorded (session not run) |
+| P1 | Customer history | Not recorded (session not run) | Not recorded (session not run) | Not recorded (session not run) | Not recorded (session not run) |
+| P2 | Officer deposit | Not recorded (session not run) | Not recorded (session not run) | Not recorded (session not run) | Not recorded (session not run) |
+| P2 | Customer history | Not recorded (session not run) | Not recorded (session not run) | Not recorded (session not run) | Not recorded (session not run) |
+| P3 | Officer deposit | Not recorded (session not run) | Not recorded (session not run) | Not recorded (session not run) | Not recorded (session not run) |
+| P3 | Customer history | Not recorded (session not run) | Not recorded (session not run) | Not recorded (session not run) | Not recorded (session not run) |
 
-## Acceptance and follow-up
+## Acceptance and residual risk
 
-TC-21 passes only if all six task attempts succeed unaided on the first attempt
-(3/3 participants complete both tasks; 6/6 task successes). Pending entries are
-not passes. Link anonymized observations and supporting ledger/history evidence,
-record usability findings and follow-up defects, and update TC-21 and NFR-6 in
-`System_Validation_Report.md`. Until then S-43 remains open and the dependent
-S-46 (#122) `v1.0.0` tag/release remains on hold.
+A future TC-21 pass still requires all six task attempts to succeed unaided on
+the first attempt (3/3 participants complete both tasks; 6/6 task successes).
+No recorded values exist for this run, so no completion rate can be calculated.
+First-time discoverability and unaided task completion remain unmeasured.
+
+The requested S-43 closure records this omission under deviation 33; it does not
+change the Test Plan's pass criteria or turn non-execution into a pass. If a study
+is later conducted, record its actual build, observations and evidence here and
+update TC-21/NFR-6 in the validation report. Release readiness and the other S-46
+conditions remain separate decisions; no release is performed by this change.
