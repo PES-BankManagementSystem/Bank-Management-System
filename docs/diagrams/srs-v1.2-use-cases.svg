@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="900" viewBox="0 0 1000 900"><rect width="1000" height="900" fill="white"/><g font-family="Arial, Helvetica, sans-serif">
+<rect x="252" y="28" width="732" height="850" rx="8" fill="#fafcfd" stroke="#27485d" stroke-width="2"/>
+<text x="618" y="59" font-size="23" font-weight="bold" text-anchor="middle" fill="#18252f">Bank Management System</text>
+<text x="107" y="160" font-size="20" font-weight="bold" text-anchor="middle" fill="#18252f">All roles</text>
+<path d="M138 162 L302 112" stroke="#7c8b95" fill="none" stroke-width="1.4"/>
+<ellipse cx="620" cy="112" rx="318" ry="25" fill="white" stroke="#516978" stroke-width="1.5"/>
+<text x="620" y="109" font-size="18" font-weight="normal" text-anchor="middle" fill="#18252f">Sign in and first credential change</text>
+<path d="M138 162 L302 168" stroke="#7c8b95" fill="none" stroke-width="1.4"/>
+<ellipse cx="620" cy="168" rx="318" ry="25" fill="white" stroke="#516978" stroke-width="1.5"/>
+<text x="620" y="165" font-size="18" font-weight="normal" text-anchor="middle" fill="#18252f">Sign out current session</text>
+<path d="M138 162 L302 224" stroke="#7c8b95" fill="none" stroke-width="1.4"/>
+<ellipse cx="620" cy="224" rx="318" ry="25" fill="white" stroke="#516978" stroke-width="1.5"/>
+<text x="620" y="221" font-size="18" font-weight="normal" text-anchor="middle" fill="#18252f">View role dashboard</text>
+<circle cx="107" cy="336" r="19" fill="white" stroke="#18252f" stroke-width="3"/>
+<path d="M107 355 V399 M76 372 H138 M107 399 L82 432 M107 399 L132 432" stroke="#18252f" stroke-width="3" fill="none"/>
+<text x="107" y="463" font-size="20" font-weight="bold" text-anchor="middle" fill="#18252f">Administrator</text>
+<path d="M138 372 L302 322" stroke="#7c8b95" fill="none" stroke-width="1.4"/>
+<ellipse cx="620" cy="322" rx="318" ry="25" fill="white" stroke="#516978" stroke-width="1.5"/>
+<text x="620" y="319" font-size="18" font-weight="normal" text-anchor="middle" fill="#18252f">Manage staff and unlock users</text>
+<path d="M138 372 L302 378" stroke="#7c8b95" fill="none" stroke-width="1.4"/>
+<ellipse cx="620" cy="378" rx="318" ry="25" fill="white" stroke="#516978" stroke-width="1.5"/>
+<text x="620" y="375" font-size="18" font-weight="normal" text-anchor="middle" fill="#18252f">Configure types and deactivate customers</text>
+<path d="M138 372 L302 434" stroke="#7c8b95" fill="none" stroke-width="1.4"/>
+<ellipse cx="620" cy="434" rx="318" ry="25" fill="white" stroke="#516978" stroke-width="1.5"/>
+<text x="620" y="431" font-size="18" font-weight="normal" text-anchor="middle" fill="#18252f">Run interest and browse audit trail</text>
+<circle cx="107" cy="546" r="19" fill="white" stroke="#18252f" stroke-width="3"/>
+<path d="M107 565 V609 M76 582 H138 M107 609 L82 642 M107 609 L132 642" stroke="#18252f" stroke-width="3" fill="none"/>
+<text x="107" y="673" font-size="20" font-weight="bold" text-anchor="middle" fill="#18252f">Bank Officer</text>
+<path d="M138 582 L302 532" stroke="#7c8b95" fill="none" stroke-width="1.4"/>
+<ellipse cx="620" cy="532" rx="318" ry="25" fill="white" stroke="#516978" stroke-width="1.5"/>
+<text x="620" y="529" font-size="18" font-weight="normal" text-anchor="middle" fill="#18252f">Register, search and edit customers</text>
+<path d="M138 582 L302 588" stroke="#7c8b95" fill="none" stroke-width="1.4"/>
+<ellipse cx="620" cy="588" rx="318" ry="25" fill="white" stroke="#516978" stroke-width="1.5"/>
+<text x="620" y="585" font-size="18" font-weight="normal" text-anchor="middle" fill="#18252f">Open/manage accounts; deposit/withdraw/transfer</text>
+<path d="M138 582 L302 644" stroke="#7c8b95" fill="none" stroke-width="1.4"/>
+<ellipse cx="620" cy="644" rx="318" ry="25" fill="white" stroke="#516978" stroke-width="1.5"/>
+<text x="620" y="641" font-size="18" font-weight="normal" text-anchor="middle" fill="#18252f">Read any account and statement</text>
+<circle cx="107" cy="756" r="19" fill="white" stroke="#18252f" stroke-width="3"/>
+<path d="M107 775 V819 M76 792 H138 M107 819 L82 852 M107 819 L132 852" stroke="#18252f" stroke-width="3" fill="none"/>
+<text x="107" y="883" font-size="20" font-weight="bold" text-anchor="middle" fill="#18252f">Customer</text>
+<path d="M138 792 L302 742" stroke="#7c8b95" fill="none" stroke-width="1.4"/>
+<ellipse cx="620" cy="742" rx="318" ry="25" fill="white" stroke="#516978" stroke-width="1.5"/>
+<text x="620" y="739" font-size="18" font-weight="normal" text-anchor="middle" fill="#18252f">Read own profile and accounts</text>
+<path d="M138 792 L302 798" stroke="#7c8b95" fill="none" stroke-width="1.4"/>
+<ellipse cx="620" cy="798" rx="318" ry="25" fill="white" stroke="#516978" stroke-width="1.5"/>
+<text x="620" y="795" font-size="18" font-weight="normal" text-anchor="middle" fill="#18252f">Read own balance and history</text>
+<path d="M138 792 L302 854" stroke="#7c8b95" fill="none" stroke-width="1.4"/>
+<ellipse cx="620" cy="854" rx="318" ry="25" fill="white" stroke="#516978" stroke-width="1.5"/>
+<text x="620" y="851" font-size="18" font-weight="normal" text-anchor="middle" fill="#18252f">Print/export own statements</text>
+<text x="620" y="686" font-size="16" font-weight="normal" text-anchor="middle" fill="#18252f">Shared staff cases also permit Administrator</text>
+</g></svg>
