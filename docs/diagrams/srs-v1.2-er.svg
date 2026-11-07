@@ -1,0 +1,66 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1020" height="1010" viewBox="0 0 1020 1010"><rect width="1020" height="1010" fill="white"/><g font-family="Arial, Helvetica, sans-serif">
+<path d="M455 110 H555" stroke="#526b79" stroke-width="2" fill="none"/>
+<text x="500" y="88" font-size="16" font-weight="normal" text-anchor="middle" fill="#18252f">0..1 : 0..1</text>
+<path d="M765 210 V280" stroke="#526b79" stroke-width="2" fill="none"/>
+<text x="855" y="255" font-size="16" font-weight="normal" text-anchor="middle" fill="#18252f">1 : 0..many</text>
+<path d="M455 355 H555" stroke="#526b79" stroke-width="2" fill="none"/>
+<text x="505" y="334" font-size="16" font-weight="normal" text-anchor="middle" fill="#18252f">1 : 0..many</text>
+<path d="M765 460 V530" stroke="#526b79" stroke-width="2" fill="none"/>
+<text x="855" y="506" font-size="16" font-weight="normal" text-anchor="middle" fill="#18252f">1 : 0..many</text>
+<path d="M52 210 V530" stroke="#526b79" stroke-width="2" fill="none"/>
+<text x="154" y="495" font-size="16" font-weight="normal" text-anchor="middle" fill="#18252f">user 1 : 0..many audit</text>
+<path d="M455 175 H480 V573 H555" stroke="#526b79" stroke-width="2" fill="none"/>
+<text x="495" y="478" font-size="16" font-weight="normal" text-anchor="middle" fill="#18252f">operator</text>
+<path d="M255 210 V248 H8 V855 H25" stroke="#526b79" stroke-width="2" fill="none"/>
+<text x="110" y="752" font-size="16" font-weight="normal" text-anchor="middle" fill="#18252f">user 1 : 0..many runs</text>
+<path d="M455 855 H480 M490 855 H515 M525 855 H550 M560 855 H585 M595 855 H620 M630 855 H655 M665 855 H690 M700 855 H725 M735 855 H765 V830 M765 820 V795 M765 785 V760 M765 750 V725 M765 715 V710" stroke="#526b79" stroke-width="2" fill="none" stroke-dasharray="8 5"/>
+<text x="747" y="776" font-size="16" font-weight="normal" text-anchor="middle" fill="#18252f">logical 1 : 0..many</text>
+<rect x="25" y="30" width="430" height="180" rx="5" fill="white" stroke="#27485d" stroke-width="2"/>
+<rect x="26" y="31" width="428" height="35" fill="#e8eff3"/>
+<text x="39" y="56" font-size="22" font-weight="bold" text-anchor="start" fill="#18252f">users</text>
+<text x="39" y="93" font-size="17" font-weight="normal" text-anchor="start" fill="#18252f">user_id PK</text>
+<text x="39" y="122" font-size="17" font-weight="normal" text-anchor="start" fill="#18252f">username UNIQUE; role</text>
+<text x="39" y="151" font-size="17" font-weight="normal" text-anchor="start" fill="#18252f">status; failed_attempts</text>
+<text x="39" y="180" font-size="17" font-weight="normal" text-anchor="start" fill="#18252f">password_hash; must_change_password</text>
+<rect x="555" y="30" width="430" height="180" rx="5" fill="white" stroke="#27485d" stroke-width="2"/>
+<rect x="556" y="31" width="428" height="35" fill="#e8eff3"/>
+<text x="569" y="56" font-size="22" font-weight="bold" text-anchor="start" fill="#18252f">customers</text>
+<text x="569" y="93" font-size="17" font-weight="normal" text-anchor="start" fill="#18252f">customer_id PK; customer_code UNIQUE</text>
+<text x="569" y="122" font-size="17" font-weight="normal" text-anchor="start" fill="#18252f">user_id nullable UNIQUE FK</text>
+<text x="569" y="151" font-size="17" font-weight="normal" text-anchor="start" fill="#18252f">status; name/contact/identity</text>
+<text x="569" y="180" font-size="17" font-weight="normal" text-anchor="start" fill="#18252f">date_of_birth</text>
+<rect x="25" y="280" width="430" height="180" rx="5" fill="white" stroke="#27485d" stroke-width="2"/>
+<rect x="26" y="281" width="428" height="35" fill="#e8eff3"/>
+<text x="39" y="306" font-size="22" font-weight="bold" text-anchor="start" fill="#18252f">account_types</text>
+<text x="39" y="343" font-size="17" font-weight="normal" text-anchor="start" fill="#18252f">type_id PK; type_name UNIQUE</text>
+<text x="39" y="372" font-size="17" font-weight="normal" text-anchor="start" fill="#18252f">min_balance; interest_rate</text>
+<text x="39" y="401" font-size="17" font-weight="normal" text-anchor="start" fill="#18252f">daily_withdrawal_limit</text>
+<rect x="555" y="280" width="430" height="180" rx="5" fill="white" stroke="#27485d" stroke-width="2"/>
+<rect x="556" y="281" width="428" height="35" fill="#e8eff3"/>
+<text x="569" y="306" font-size="22" font-weight="bold" text-anchor="start" fill="#18252f">accounts</text>
+<text x="569" y="343" font-size="17" font-weight="normal" text-anchor="start" fill="#18252f">account_id PK; account_number UNIQUE</text>
+<text x="569" y="372" font-size="17" font-weight="normal" text-anchor="start" fill="#18252f">customer_id FK; type_id FK</text>
+<text x="569" y="401" font-size="17" font-weight="normal" text-anchor="start" fill="#18252f">status; balance</text>
+<rect x="25" y="530" width="430" height="180" rx="5" fill="white" stroke="#27485d" stroke-width="2"/>
+<rect x="26" y="531" width="428" height="35" fill="#e8eff3"/>
+<text x="39" y="556" font-size="22" font-weight="bold" text-anchor="start" fill="#18252f">audit_log</text>
+<text x="39" y="593" font-size="17" font-weight="normal" text-anchor="start" fill="#18252f">log_id PK; user_id FK</text>
+<text x="39" y="622" font-size="17" font-weight="normal" text-anchor="start" fill="#18252f">action; entity; entity_id</text>
+<text x="39" y="651" font-size="17" font-weight="normal" text-anchor="start" fill="#18252f">details; timestamp</text>
+<text x="39" y="680" font-size="17" font-weight="normal" text-anchor="start" fill="#18252f">entity_id is polymorphic, no account FK</text>
+<rect x="555" y="530" width="430" height="180" rx="5" fill="white" stroke="#27485d" stroke-width="2"/>
+<rect x="556" y="531" width="428" height="35" fill="#e8eff3"/>
+<text x="569" y="556" font-size="22" font-weight="bold" text-anchor="start" fill="#18252f">transactions</text>
+<text x="569" y="593" font-size="17" font-weight="normal" text-anchor="start" fill="#18252f">transaction_id PK</text>
+<text x="569" y="622" font-size="17" font-weight="normal" text-anchor="start" fill="#18252f">account_id FK; operator_id FK</text>
+<text x="569" y="651" font-size="17" font-weight="normal" text-anchor="start" fill="#18252f">type; amount; resulting_balance</text>
+<text x="569" y="680" font-size="17" font-weight="normal" text-anchor="start" fill="#18252f">transfer_ref; interest_run_id (no FK)</text>
+<rect x="25" y="780" width="430" height="180" rx="5" fill="white" stroke="#27485d" stroke-width="2"/>
+<rect x="26" y="781" width="428" height="35" fill="#e8eff3"/>
+<text x="39" y="806" font-size="22" font-weight="bold" text-anchor="start" fill="#18252f">interest_runs</text>
+<text x="39" y="843" font-size="17" font-weight="normal" text-anchor="start" fill="#18252f">run_id PK; period UNIQUE</text>
+<text x="39" y="872" font-size="17" font-weight="normal" text-anchor="start" fill="#18252f">run_by FK; run_at</text>
+<text x="39" y="901" font-size="17" font-weight="normal" text-anchor="start" fill="#18252f">accounts_credited; total_interest</text>
+<text x="550" y="965" font-size="18" font-weight="normal" text-anchor="start" fill="#18252f">Solid: declared FK. Dashed: logical link only.</text>
+<text x="550" y="991" font-size="17" font-weight="normal" text-anchor="start" fill="#18252f">Amounts: paise. Rate: basis points. Schema v5.</text>
+</g></svg>
