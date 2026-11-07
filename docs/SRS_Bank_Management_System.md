@@ -8,11 +8,11 @@ PES University | Software Engineering and System Design | UE24CS341A
 
 Original team: Abhishek Hanamant Kinagi, Adithya Ajeeth, Aditya M and Aditya Vats.
 
-Revision authors: [Team to complete]. Review and approval: [Team to complete].
+Revision authors: Adithya Ajeeth (S-44), with Appendix E updated by Aditya Vats (S-46). Review and approval: approved by Aditya Vats, Abhishek Hanamant Kinagi, Adithya Ajeeth and Aditya M on 7 Nov 2026.
 
 This specification defines the single-branch academic banking system and the requirements used to assess it. Version 1.2 consolidates the original IEEE 830-style SRS, the S-34 amendment and documented implementation decisions. It preserves FR-1 through FR-14 and NFR-1 through NFR-9, and adds FR-15 through FR-17 for administrative features already built.
 
-The implementation baseline is main commit `1175a652edc433377dc2c87e2728e88948a08eb7`. The validation snapshot is the merged S-43 report at `4cf8b3ca55d04a9d28bdcb0041d63d710ab619a8`. The final validation exit criteria are NOT MET. This revision documents the system; it does not certify that every requirement has passed acceptance testing.
+The implementation baseline is main commit `547ffb5b25bc0b8429aae8978581a29620632111`. The validation snapshot is the final S-43 report merged in #135 at `547ffb5b25bc0b8429aae8978581a29620632111`. The final validation exit criteria are NOT MET, because TC-21 was not run (deviation 35). This revision documents the system; it does not certify that every requirement has passed acceptance testing.
 
 <!-- pagebreak -->
 
@@ -22,7 +22,7 @@ The implementation baseline is main commit `1175a652edc433377dc2c87e2728e88948a0
 |---|---|---|---|
 | 1.0 | 2 Sep 2026 | Original project team | Initial IEEE-style SRS, 14 FRs and 9 NFRs. |
 | 1.1 | 1 Nov 2026 | Abhishek Kinagi and team | S-34 addendum: three security objectives, use case model, corrected course references and ER model reference. Merged through PR #104. |
-| 1.2 | 6 Nov 2026 | [Team to complete] | Rebuilt an editable source from the original PDF with user authorization. Integrated S-34 into the specification and rendered both models. Reconciled requirement text with deviations rows 3-4, 7, 9-14, 17-24. Retained the provisional interest basis (row 6). Added FR-15 to FR-17, BR-1 to BR-10 and SEC-1 to SEC-6. Corrected S-34's logout scope and recorded remaining gaps in rows 33-34. Added traceability to the merged S-41/S-43 baselines. |
+| 1.2 | 6 Nov 2026 | Adithya Ajeeth; Appendix E update by Aditya Vats | Rebuilt an editable source from the original PDF with user authorization. Integrated S-34 into the specification and rendered both models. Reconciled requirement text with deviations rows 3-4, 7, 9-14, 17-24. Retained the provisional interest basis (row 6). Added FR-15 to FR-17, BR-1 to BR-10 and SEC-1 to SEC-6. Corrected S-34's logout scope and recorded remaining gaps in rows 33-34. Added traceability to the merged S-41/S-43 baselines. On 7 Nov 2026, Appendix E was updated to the final S-43 report (#135). |
 
 ## Contents
 
@@ -73,7 +73,7 @@ Loan/EMI management, fixed or recurring deposits, cheque clearing, cards, ATM in
 | R-6 | `docs/decisions/001-tech-stack.md`, `002-account-types-and-withdrawal-limit.md` and `003-interest-calculation-basis.md`; accepted stack/type decisions and provisional interest basis. |
 | R-7 | `docs/DEVIATIONS.md`, main baseline plus S-44 rows 33-34; accepted differences and unresolved disagreements. |
 | R-8 | S-41 PR #124, `docs/TEST_PLAN_CONSOLIDATED.md`, commit `cc4b10200c531687aae83b855c5a59b246c25b37`; merged Test Plan v1.2 and TC IDs. MERGED in #124. |
-| R-9 | S-43 PR #130, `docs/System_Validation_Report.md`, commit `4cf8b3ca55d04a9d28bdcb0041d63d710ab619a8`; merged validation statuses. MERGED in #130. |
+| R-9 | S-43 PRs #130 and #135, `docs/System_Validation_Report.md`; final validation statuses at commit `547ffb5b25bc0b8429aae8978581a29620632111`. MERGED in #135. |
 | R-10 | `db/schema.sql` schema version 5, `db/migrations/`, `db/seed.sql`, `src/` routes and `frontend/`; implementation facts checked for this revision. |
 | R-11 | `docs/S-13-MANUAL-TEST.md`, `S-14-MANUAL-TEST.md`, `S-15-MANUAL-TEST.md`, `S-16-MANUAL-TEST.md`, `S-21-MANUAL-TEST.md`; supplementary procedures, not proof of execution. |
 
@@ -339,13 +339,13 @@ SEC-1 to SEC-4 retain the design specification's meanings. S-41 combines hashing
 
 ### 5.4 Software Quality Attributes
 
-**NFR-6 — Usability.** At least three genuine first-time representative participants shall complete core tasks unaided on their first attempt. TC-21 specifies both the Bank Officer deposit and Customer history lookup, with 100% task completion without verbal prompts and recorded findings. No genuine participants were arranged in the S-43 window, so this remains NOT RUN and not validated.
+**NFR-6 — Usability.** At least three genuine first-time representative participants shall complete core tasks unaided on their first attempt. TC-21 specifies both the Bank Officer deposit and Customer history lookup, with 100% task completion without verbal prompts and recorded findings. TC-21 was not run and is recorded as deviation 35, so this requirement is not validated.
 
 **NFR-7 — Reliability and input handling.** The system shall reject empty mandatory fields, malformed/unknown account identifiers and invalid or nonpositive ordinary transaction amounts with clear errors, without crashing or applying the rejected financial operation. Intentional security bookkeeping, such as failure counters, lockout and refused-request audit entries, may change on a rejected request; this qualifies the original blanket “no record” statement rather than contradicting FR-2/NFR-5. Zero opening deposits follow FR-4 only. Acceptance: TC-02, TC-06, TC-09, TC-10B and TC-11. Account identifiers are bounded to 1-32 ASCII letters/digits/hyphens/underscores and customer-search input to 100 UTF-8 bytes; see DEVIATIONS.md row 17 and reconciliation row 34.
 
-**NFR-8 — Maintainability.** The C++ backend shall be modular by function, including authentication, customers, accounts, transactions, reporting, staff, auditing and common data/API support. Acceptance: CMake/module inspection and CTest; S-43 currently records this requirement as Validated.
+**NFR-8 — Maintainability.** The C++ backend shall be modular by function, including authentication, customers, accounts, transactions, reporting, staff, auditing and common data/API support. Acceptance: CMake/module inspection and CTest; the final S-43 report records this requirement as Validated.
 
-**NFR-9 — Portability.** The C++ core shall build and run on Linux and Windows without platform-specific business-logic paths. The frontend shall function correctly in current Chrome and Firefox without browser-specific modifications. Acceptance: TC-22 builds and core/responsive browser flows. Current CI history and a Chromium-based integrated browser are insufficient to establish both named-browser runs; S-43 keeps TC-22 PARTIAL.
+**NFR-9 — Portability.** The C++ core shall build and run on Linux and Windows without platform-specific business-logic paths. The frontend shall function correctly in current Chrome and Firefox without browser-specific modifications. Acceptance: TC-22 builds and core/responsive browser flows. The final S-43 report records fresh Chrome and Firefox core and responsive runs passing after the SV-01 table fix, with Ubuntu and Windows CI, and validates this requirement within that recorded scope.
 
 ### 5.5 Business Rules
 
@@ -436,52 +436,52 @@ The following remain excluded: loans/EMIs; fixed/recurring deposits; cheque clea
 
 ### E.1 Sources and Interpretation
 
-Test IDs follow the merged S-41 v1.2 plan at `cc4b10200c531687aae83b855c5a59b246c25b37` (PR #124). Final-status entries reproduce section 5 of the merged S-43 report at `4cf8b3ca55d04a9d28bdcb0041d63d710ab619a8` (PR #130), not older per-case historical PASS labels. That report requires all linked cases to pass independent fresh-seed acceptance and currently validates NFR-8 only. A source status of Not validated remains Not validated here, even where an individual historical case passed or was partial.
+Test IDs follow the merged S-41 v1.2 plan at `cc4b10200c531687aae83b855c5a59b246c25b37` (PR #124). Final-status entries reproduce section 4 of the final S-43 report at `547ffb5b25bc0b8429aae8978581a29620632111` (PR #135), not older per-case historical PASS labels. That report requires linked cases to pass independent fresh-seed acceptance, and it validates every original FR and NFR except NFR-6. A source status of Not validated remains Not validated here, even where an individual historical case passed or was partial.
 
-For new FR/SEC IDs not yet present in the report, the status is Not validated (unassessed); related cases are mapped as candidate coverage, not retroactive certification. New IDs require S-41/S-46 handoff and later S-43 assessment. No missing master case is invented. Supplementary test files below identify existing verification code, not execution by this story.
+For new FR/SEC IDs not yet present in the report, the status is Not validated (unassessed); related cases are mapped as candidate coverage, not retroactive certification. New IDs require S-41/S-46 handoff and a later validation assessment. No missing master case is invented. Supplementary test files below identify existing verification code, not execution by this story.
 
 | ID | Design component / route | Test cases | Final status | Source note or gap |
 |---|---|---|---|---|
-| FR-1 | Auth/API; POST /auth/login; auth/routes.cpp, rbac.cpp | TC-01, TC-15 | Not validated | S-43 section 5: Authentication and TLS login passed. |
-| FR-2 | Auth/Session; POST /auth/logout and login; auth/routes.cpp | TC-02, TC-02B, TC-03 | Not validated | S-43 section 5: Lockout/unlock and session invalidation passed; TC-03 returned 204 instead of the plan's 200. |
-| FR-3 | Customer Record Mgmt; /customers and /customers/me; records.cpp | TC-04, TC-04B | Not validated | S-43 section 5: Registration validation and Administrator-only deactivation passed. |
-| FR-4 | Account Mgmt; POST /accounts; account_opening.cpp | TC-05 | Not validated | S-43 section 5: Below-minimum rejection, exact minimum, and zero-minimum opening passed. |
-| FR-5 | Account Mgmt; PATCH /accounts/{acc}/status; account_status.cpp | TC-07 | Not validated | S-43 section 5: Freeze/unfreeze/close, blocked transactions, and retained history passed. |
-| FR-6 | Transaction Engine; POST /transactions; deposit.cpp | TC-08 | Not validated | S-43 section 5: UI confirmation and persisted deposit passed; seed balance differed from the plan precondition. |
-| FR-7 | Transaction Engine; POST /transactions; withdraw.cpp | TC-09 | Not validated | S-43 section 5: Daily-limit and UTC-boundary behavior passed; TC-06 additionally covered minimum-balance rules. |
-| FR-8 | Transaction Engine; POST /transfers; transfer.cpp | TC-10 | Not validated | S-43 section 5: Atomic transfer passed; TC-10B additionally covered invalid-transfer rejection. |
-| FR-9 | Account/Reporting; /customers/me/accounts; /accounts/{acc}/balance | TC-11 | Not validated | S-43 section 5: Account balance ownership checks passed. |
-| FR-10 | Interest and Statements; /accounts/{acc}/transactions; history.js | TC-11, TC-17 | Not validated | S-43 section 5: Ownership, date filtering/order, and pagination passed. |
-| FR-11 | Interest and Statements; POST /interest/run; reporting/interest.cpp | TC-09B | Not validated | S-43 section 5: Interest credited once; duplicate run rejected. |
-| FR-12 | Interest and Statements; /accounts/{acc}/statement; statement_csv.js | TC-18 | Not validated | S-43 section 5: Statement and generated CSV content passed; native browser save event was not captured. |
-| FR-13 | Staff Mgmt; POST/GET /staff; PATCH /staff/{id}; auth unlock | TC-02B, TC-12, TC-13 | Not validated | S-43 section 5: Administrative unlock and staff/customer lifecycle behavior passed. |
-| FR-14 | Staff Mgmt/Presentation; GET /dashboard; landing.js | TC-14 | Not validated | S-43 section 5: Role-specific dashboards returned the expected role data. |
+| FR-1 | Auth/API; POST /auth/login; auth/routes.cpp, rbac.cpp | TC-01, TC-15 | Validated, retained TLS | Final S-43 section 4: Fresh authentication; prior TLS exception. |
+| FR-2 | Auth/Session; POST /auth/logout and login; auth/routes.cpp | TC-02, TC-02B, TC-03 | Validated | Final S-43 section 4: Lockout/unlock and 204/401/sign-in. |
+| FR-3 | Customer Record Mgmt; /customers and /customers/me; records.cpp | TC-04, TC-04B | Validated | Final S-43 section 4: Registration/deactivation/retention. |
+| FR-4 | Account Mgmt; POST /accounts; account_opening.cpp | TC-05 | Validated | Final S-43 section 4: Minimum and zero opening. |
+| FR-5 | Account Mgmt; PATCH /accounts/{acc}/status; account_status.cpp | TC-07 | Validated | Final S-43 section 4: Status transitions and refusal paths. |
+| FR-6 | Transaction Engine; POST /transactions; deposit.cpp | TC-08 | Validated | Final S-43 section 4: Confirmation and persisted exact balance. |
+| FR-7 | Transaction Engine; POST /transactions; withdraw.cpp | TC-09; TC-06 | Validated with date-fixture limit | Final S-43 section 4: UTC date partitioning; no live rollover. |
+| FR-8 | Transaction Engine; POST /transfers; transfer.cpp | TC-10; TC-10B | Validated with fault-method limit | Final S-43 section 4: Injected failure rollback; no process kill. |
+| FR-9 | Account/Reporting; /customers/me/accounts; /accounts/{acc}/balance | TC-11 | Validated | Final S-43 section 4: Own balance and access denials. |
+| FR-10 | Interest and Statements; /accounts/{acc}/transactions; history.js | TC-11, TC-17 | Validated | Final S-43 section 4: Ownership/filter/order/pagination. |
+| FR-11 | Interest and Statements; POST /interest/run; reporting/interest.cpp | TC-09B | Validated | Final S-43 section 4: One interest credit per period. |
+| FR-12 | Interest and Statements; /accounts/{acc}/statement; statement_csv.js | TC-18 | Validated | Final S-43 section 4: Statement/generated CSV; native save not observed. |
+| FR-13 | Staff Mgmt; POST/GET /staff; PATCH /staff/{id}; auth unlock | TC-02B, TC-12, TC-13 | Validated | Final S-43 section 4: Unlock/staff lifecycle. |
+| FR-14 | Staff Mgmt/Presentation; GET /dashboard; landing.js | TC-14 | Validated | Final S-43 section 4: Role payloads/ownership. |
 | FR-15 | Account Mgmt; GET/POST/PUT /account-types; account_types.cpp | No dedicated master case; TC-05/06/09 overlap | Not validated | New ID unassessed. S-14 notes and tests/account_type_test.cpp supplement; full CRUD/RBAC needs S-41 coverage. |
-| FR-16 | Auth/Session; GET /users/locked; PATCH /users/{id}/unlock | TC-02B (related) | Not validated | New ID unassessed. FR-2/FR-13 are Not validated. Add denied-role checks; tests/auth_lockout_test.cpp. |
+| FR-16 | Auth/Session; GET /users/locked; PATCH /users/{id}/unlock | TC-02B (related) | Not validated | New ID unassessed. FR-2 and FR-13 are Validated in the final S-43 report. Add denied-role checks; tests/auth_lockout_test.cpp. |
 | FR-17 | Audit/Presentation; GET /audit; audit.js | TC-16 (partial scope) | Not validated | New ID unassessed. Viewer filters/pagination/read roles need coverage; tests/audit_viewer_test.cpp. |
-| NFR-1 | Transaction Engine; persisted deposit/withdraw/transfer | TC-20 | Not validated | S-43 section 5: 30 measured transactions per operation; maximum was 45.378 ms against 2 seconds. |
-| NFR-2 | Presentation/Staff/Reporting; dashboard/account-list/history | TC-14, TC-19 | Not validated | S-43 section 5: Role dashboards and account-list/history reads were below 3 seconds. |
-| NFR-3 | Transaction Engine/Data; common/db.cpp; atomic ledger/audit | TC-10; CTest | Not validated | S-43 section 5: Atomic transfer behavior and 31/31 CTest targets passed. |
-| NFR-4 | Auth/API; password.cpp, routes.cpp, rbac.cpp | TC-01; CTest | Not validated | S-43 section 5: Authentication evidence and the automated test suite passed. |
-| NFR-5 | Audit/Data; audit/record.cpp; schema append-only triggers | TC-16 | Not validated | S-43 section 5: Financial audit entries were present; mutation attempts returned 405. |
-| NFR-6 | Presentation; Officer deposit and Customer history flows | TC-21 | Not validated | S-43 section 5: Three-person first-time participant study was not run. |
-| NFR-7 | API/common validation and Transaction Engine | TC-02, TC-09, TC-10B, TC-11 | Not validated | S-43 section 5: Structured rejection paths and unchanged-state checks passed. |
-| NFR-8 | All backend CMake modules; functional decomposition | CMake build; CTest | Validated | S-43 section 5: Latest-main build succeeded; 31/31 CTest targets passed. |
-| NFR-9 | Backend CI/build; Presentation in Chrome/Firefox | TC-22 | Not validated | S-43 section 5: Ubuntu/Windows CI passed; fresh Chrome and Firefox UI checks, responsive checks in both, and cross-browser rendering comparison are missing. |
-| SEC-1 | Auth/RBAC/API; protected requests and ownership | TC-03, TC-11, TC-13 | Not validated | S-43 section 5: Logout/deactivation invalidation and ownership checks passed. |
-| SEC-2 | Auth/password/TLS; provisioning exception | TC-01, TC-15 | Not validated | S-43 section 5: Credential handling and TLS 1.3 checks passed. |
+| NFR-1 | Transaction Engine; persisted deposit/withdraw/transfer | TC-20 | Validated in measured load | Final S-43 section 4: Sequential persisted transactions <2 s. |
+| NFR-2 | Presentation/Staff/Reporting; dashboard/account-list/history | TC-14, TC-19 | Validated in measured load | Final S-43 section 4: Every measured read <3 s. |
+| NFR-3 | Transaction Engine/Data; common/db.cpp; atomic ledger/audit | TC-10; CTest | Validated | Final S-43 section 4: Injected-failure rollback and automated integrity checks. |
+| NFR-4 | Auth/API; password.cpp, routes.cpp, rbac.cpp | TC-01, TC-12; CTest | Validated | Final S-43 section 4: Argon2id storage/authentication. |
+| NFR-5 | Audit/Data; audit/record.cpp; schema append-only triggers | TC-16 | Validated | Final S-43 section 4: Financial audit/denied mutations. |
+| NFR-6 | Presentation; Officer deposit and Customer history flows | TC-21 | Not validated | Final S-43 section 4: Documented deviation 35: study not run; no first-time unaided-task evidence. |
+| NFR-7 | API/common validation and Transaction Engine | TC-02, TC-09, TC-10B, TC-11 | Validated | Final S-43 section 4: Error paths and unchanged-state checks. |
+| NFR-8 | All backend CMake modules; functional decomposition | CMake build; CTest | Validated | Final S-43 section 4: Local modular build succeeded; 31/31 CTest passed. |
+| NFR-9 | Backend CI/build; Presentation in Chrome/Firefox | TC-22 | Validated within recorded scope | Final S-43 section 4: Fresh Chrome/Firefox retest passes; unchanged backend Ubuntu/Windows CI evidence retained. |
+| SEC-1 | Auth/RBAC/API; protected requests and ownership | TC-03, TC-11, TC-13 | Validated | Final S-43 section 4: Invalidation/role/ownership checks. |
+| SEC-2 | Auth/password/TLS; provisioning exception | TC-01, TC-15 | Validated, retained TLS | Final S-43 section 4: Fresh hash/auth checks and prior TLS exception. |
 | SEC-3 | API/TLS; server HTTPS build and configuration | TC-15 (related) | Not validated | No separate S-43 verdict. TC-15 passed alone; transport configuration has broader scope. |
-| SEC-4 | Audit/Data; financial audit and Admin viewer | TC-16 (related) | Not validated | No separate verdict. NFR-5 is Not validated; viewer checks remain supplementary. |
-| SEC-5 | Auth/Session; lockout and user recovery | TC-02, TC-02B (related) | Not validated | No separate verdict. FR-2/FR-13 are Not validated. |
-| SEC-6 | Auth/Session; logout/expiry/deactivation | TC-03, TC-13 (related) | Not validated | No separate verdict. TC-03 PARTIAL; expiry/restart need auth_session_test.cpp. |
+| SEC-4 | Audit/Data; financial audit and Admin viewer | TC-16 (related) | Not validated | No separate verdict. NFR-5 is Validated in the final S-43 report; viewer checks remain supplementary. |
+| SEC-5 | Auth/Session; lockout and user recovery | TC-02, TC-02B (related) | Not validated | No separate verdict. FR-2 and FR-13 are Validated in the final S-43 report. |
+| SEC-6 | Auth/Session; logout/expiry/deactivation | TC-03, TC-13 (related) | Not validated | No separate verdict. TC-03 passes in the final S-43 report; expiry/restart need auth_session_test.cpp. |
 
 ### E.2 Validation Summary and Outstanding Coverage
 
-The 17 FRs and 9 NFRs total 26 requirements: **1 Validated (NFR-8), 25 Not validated, 0 Partial requirement statuses**. The original S-43 case-level totals remain 26 planned, 23 historical passes, 2 partial (TC-03 and TC-22), 1 not run (TC-21) and 0 failed; only TC-15 has confirmed independent fresh-seed evidence. These case totals are not requirement totals and do not validate the new FRs.
+The 17 FRs and 9 NFRs total 26 requirements: **22 Validated (FR-1 to FR-14 and every NFR except NFR-6), 4 Not validated (NFR-6, and the unassessed FR-15 to FR-17), 0 Partial requirement statuses**. Of the six SEC requirements, SEC-1 and SEC-2 are Validated and SEC-3 to SEC-6 are unassessed. The final S-43 case-level totals are 26 planned, 24 new independent fresh-seed passes, 1 retained fresh-seed pass from an earlier build (TC-15), 0 failed after retest and 1 not run (TC-21). These case totals are not requirement totals and do not validate the new FRs.
 
-FR-15 lacks a dedicated account-type CRUD case. FR-16 reuses TC-02B but role-denial coverage needs explicit linkage. FR-17 has only partial scope overlap with TC-16; viewer filtering, pagination and read-role restrictions need dedicated coverage. Customer search/update and staff rename/reactivation are other gaps between full requirement scope and named master cases. New SEC-3 to SEC-6 have related cases but no independent S-43 requirement verdict. S-41 and S-43 owners must assess these gaps; this document does not mark them passed.
+FR-15 lacks a dedicated account-type CRUD case. FR-16 reuses TC-02B but role-denial coverage needs explicit linkage. FR-17 has only partial scope overlap with TC-16; viewer filtering, pagination and read-role restrictions need dedicated coverage. Customer search/update and staff rename/reactivation are other gaps between full requirement scope and named master cases. New SEC-3 to SEC-6 have related cases but no independent S-43 requirement verdict. These gaps remain for a later assessment; this document does not mark them passed.
 
-TC-21 stays NOT RUN: requires three genuine first-time participants; none arranged in the validation window. TC-22 remains PARTIAL: Chrome is installed, Firefox was not found in checked locations, and fresh named-browser responsive runs are missing. TC-03 needs logout 204, old-token 401 and browser return-to-sign-in under the merged plan. Overall validation exit criteria remain NOT MET.
+TC-21 was not run and is recorded as deviation 35, so NFR-6 is not validated. TC-22 initially failed on mobile table overflow (SV-01) and passes the fresh Chrome and Firefox retest after the fix. TC-03 passes with logout 204, old-token 401 and the browser return to sign-in. Overall validation exit criteria remain NOT MET because TC-21 was not run.
 
 ## Appendix F. Reconciliation Notes
 
@@ -492,7 +492,7 @@ TC-21 stays NOT RUN: requires three genuine first-time participants; none arrang
 | Original FR-4/FR-6/FR-7 mention Officer while SRS business rules/SADS/RBAC also allow Admin. | Include Admin explicitly, following rows 20 and 23. |
 | Original NFR-4 and SADS SEC-2 forbid all plaintext transmission/display; provisioning returns an initial password once. | State the accepted scoped exception in FR-3, FR-13, NFR-4 and SEC-2, rows 3 and 7. Do not claim passwords are never supplied to a client. |
 | S-34 says logout terminates all sessions belonging to a user; code erases only the submitted token. | Correct FR-2/SO-3/SEC-6 to current-token logout; inactive users are denied on subsequent requests. Record row 34 and request S-46 alignment. |
-| Earlier Test Plan/report expects logout 200; merged PR #124 expects 204. | Specify implemented 204 in FR-2; preserve S-43's Not validated status and historical mismatch rather than rewriting evidence. |
+| Earlier Test Plan/report expects logout 200; merged PR #124 expects 204. | Specify implemented 204 in FR-2. The final S-43 report validates FR-2 with 204; the historical mismatch is preserved rather than rewriting evidence. |
 | Legacy standalone cases disagree on TC-04/TC-05/TC-06 and TC-11; consolidated plan has the canonical Sprint 3 IDs. | Use the merged PR #124 TC IDs explicitly. Do not edit the legacy source documents. |
 | S-41 TC-01 uses user_id input; code requires username. It cites SRS v1.1 with the v1.0 date. | Specify username here and record the citation/input mismatch for S-41 handoff. New SRS revision is dated 6 Nov 2026. |
 | S-41 TC-08 starts ACC001 at INR 10,000; seed uses INR 50,000. TC-09 uses a configured INR 25,000 limit versus seed Savings INR 50,000. | Treat these as explicit case fixtures; require documented setup rather than changing expected numbers silently. No fixture rerun is claimed here. |
