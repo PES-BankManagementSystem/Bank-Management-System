@@ -4,7 +4,7 @@ This is the script for the final evaluation. It covers the core use cases for al
 
 The whole script takes about 10 minutes. The recorded demos are [Sprint 1](../demos/sprint-1.mp4) and [Sprint 2](../demos/sprint-2.mp4). Requirement IDs follow SRS v1.2.
 
-The script was last run end to end on 6 Nov 2026, in headless Firefox on a fresh database, against `main` at `4cf8b3c`. Every step gave the result shown here, with no JavaScript errors. The application code has not changed since: `main` at `b0e8ca2` differs only in documents and the browser-check script. That run clicked the CSV download in step 12 but did not confirm the saved file, and this exact script has not been run in Chrome.
+The script was last run end to end on 6 Nov 2026, in headless Firefox on a fresh database, against `main` at `4cf8b3c`. Every step gave the result shown here, with no JavaScript errors. Since then, the only application change is #135, which puts the dashboard and audit tables in scrolling containers on narrow screens; the System Validation Report's fresh Chrome and Firefox runs cover that build. That run clicked the CSV download in step 12 but did not confirm the saved file, and this exact script has not been run in Chrome.
 
 ## Before the demo
 
@@ -82,7 +82,7 @@ The full list, with reasons, is in [DEVIATIONS.md](DEVIATIONS.md).
 | 22 | A failed transfer rolls back with no reversal entry | One database transaction gives "both or neither" directly |
 | 23 | Some API routes differ from SADS v1.0 | Unlock applies to all users, and later stories needed more routes; the SADS now matches |
 | 25, 26, 27 | The demo videos are late, and their length differs from the stories | Sprint 1 was recorded late from end-of-sprint code, S-38 waited for the dashboards, and Sprint 2 was recorded at a human pace |
-| 30, 31 | System validation is incomplete: TC-21 was not run, TC-22 is partial, and most cases lack an independent fresh-seed run | The results are reported as they stand in the [System Validation Report](System_Validation_Report.md), and nothing was simulated |
+| 35 | TC-21, the usability study with three first-time users, was not run, so NFR-6 is not validated | It is recorded as not run rather than simulated. Every other planned case passed, including TC-22 after the mobile table fix; see the [System Validation Report](System_Validation_Report.md) |
 
 ## What each member delivered
 
@@ -135,7 +135,7 @@ Points and stories come from `.github/backlog/backlog.yml`. A dash means no merg
 | S-14 | Manage account types | 3 | #51 | #97 | closed |
 | S-16 | Freeze, unfreeze and close accounts | 3 | #52 | #102 | closed |
 | S-21 | View transaction history with a date filter | 3 | #53 | #107 | closed |
-| S-43 | Execute system validation and write the System Validation Report | 5 | #119 | #130 | open |
+| S-43 | Execute system validation and write the System Validation Report | 5 | #119 | #130, #135 | closed |
 | S-44 | Finalize the SRS as v1.2 in IEEE format | 2 | #120 | #131 | closed |
 
 ### Aditya M (PES1UG24CS027): 37 points
