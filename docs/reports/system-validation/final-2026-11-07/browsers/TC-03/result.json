@@ -1,0 +1,25 @@
+{
+  "case": "TC-03",
+  "browser": "chrome",
+  "version": "Chrome/156.0.8078.80",
+  "checks": [
+    {
+      "ok": true,
+      "detail": "UI logout request returns 204"
+    },
+    {
+      "ok": true,
+      "detail": "Sign-in form visible after logout"
+    },
+    {
+      "ok": true,
+      "detail": "Old browser session token receives 401"
+    },
+    {
+      "ok": true,
+      "detail": "No uncaught JavaScript errors"
+    }
+  ],
+  "scriptErrors": [],
+  "status": "PASS"
+}

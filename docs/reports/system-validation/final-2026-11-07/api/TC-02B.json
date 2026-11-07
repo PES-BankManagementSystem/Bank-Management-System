@@ -1,0 +1,71 @@
+{
+  "case": "TC-02B",
+  "build_sha": "b0e8ca24fdd348bf40b0deb68f769232cc650107",
+  "started_utc": "2026-11-07T06:37:01.497763+00:00",
+  "status": "PASS",
+  "assertions": [
+    "POST /auth/login: expected 401, got 401 (UNAUTHENTICATED)",
+    "Lockout response attempt 1",
+    "POST /auth/login: expected 401, got 401 (UNAUTHENTICATED)",
+    "Lockout response attempt 2",
+    "POST /auth/login: expected 401, got 401 (ACCOUNT_LOCKED)",
+    "Lockout response attempt 3",
+    "Locked after three failures",
+    "POST /auth/login: expected 200, got 200 ()",
+    "PATCH /users/5/unlock: expected 200, got 200 ()",
+    "Unlock resets status and failures",
+    "POST /auth/login: expected 200, got 200 ()"
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 401,
+      "ms": 611.333,
+      "code": "UNAUTHENTICATED"
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 401,
+      "ms": 637.321,
+      "code": "UNAUTHENTICATED"
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 401,
+      "ms": 594.607,
+      "code": "ACCOUNT_LOCKED"
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 200,
+      "ms": 604.66,
+      "code": null
+    },
+    {
+      "method": "PATCH",
+      "path": "/users/5/unlock",
+      "status": 200,
+      "ms": 8.63,
+      "code": null
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 200,
+      "ms": 566.763,
+      "code": null
+    }
+  ],
+  "fresh_seed": true,
+  "seed_counts": {
+    "users": 6,
+    "customers": 3,
+    "accounts": 5,
+    "transactions": 8
+  },
+  "database_sha256": "76726220c379a30df7acd13598ee14041908003dcabdffd5be038d4a74620672"
+}

@@ -1,0 +1,48 @@
+{
+  "case": "TC-10",
+  "build_sha": "b0e8ca24fdd348bf40b0deb68f769232cc650107",
+  "started_utc": "2026-11-07T06:37:16.686711+00:00",
+  "status": "PASS",
+  "assertions": [
+    "POST /auth/login: expected 200, got 200 ()",
+    "POST /transfers: expected 201, got 201 ()",
+    "Persisted transfer balance matches response: ACC001",
+    "Persisted transfer balance matches response: ACC004",
+    "Expected transfer balances",
+    "Two entries share transfer reference",
+    "POST /transfers: expected 500, got 500 (INTERNAL_ERROR)",
+    "Forced failure after debit rolls back both balances and ledger"
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 200,
+      "ms": 643.812,
+      "code": null
+    },
+    {
+      "method": "POST",
+      "path": "/transfers",
+      "status": 201,
+      "ms": 25.157,
+      "code": null
+    },
+    {
+      "method": "POST",
+      "path": "/transfers",
+      "status": 500,
+      "ms": 17.412,
+      "code": "INTERNAL_ERROR"
+    }
+  ],
+  "fresh_seed": true,
+  "seed_counts": {
+    "users": 6,
+    "customers": 3,
+    "accounts": 5,
+    "transactions": 8
+  },
+  "fault_method": "SQLite credit-insert failure after debit; process termination was not used.",
+  "database_sha256": "a7e1f9477eb00f5ea749a7b56710d9a5108b5a27d4434ca091e22e240fd1ac9f"
+}

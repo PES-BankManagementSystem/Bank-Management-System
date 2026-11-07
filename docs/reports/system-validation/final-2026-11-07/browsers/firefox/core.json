@@ -1,0 +1,134 @@
+{
+  "browser": "firefox",
+  "version": "firefox/159.0.1",
+  "results": [
+    {
+      "step": "Load sign-in page",
+      "ok": true,
+      "detail": "HTTP 200, title \"Bank Management System | Staff and customer services\"",
+      "ms": 308
+    },
+    {
+      "step": "Wrong password is refused",
+      "ok": true,
+      "detail": "Invalid username or password.",
+      "ms": 871
+    },
+    {
+      "step": "Bank Officer signs in",
+      "ok": true,
+      "detail": "Bank Officer dashboard; nav: Register customer, Deposit, Withdraw, Transfer, Customers, Open account, Statements, History",
+      "ms": 1088
+    },
+    {
+      "step": "Officer deposits INR 500.00 into ACC001",
+      "ok": true,
+      "detail": "Deposit of ₹500.00 into ACC001 succeeded. New balance: ₹50500.00.",
+      "ms": 361
+    },
+    {
+      "step": "Officer withdraws INR 200.00 from ACC001",
+      "ok": true,
+      "detail": "Withdrawal of ₹200.00 from ACC001 succeeded. New balance: ₹50300.00.",
+      "ms": 220
+    },
+    {
+      "step": "Officer transfers INR 100.00 ACC001 to ACC004",
+      "ok": true,
+      "detail": "Transfer succeeded. Reference: TRF-20261107063411Z-11. ACC001 balance: ₹50200.00; ACC004 balance: ₹100100.00.",
+      "ms": 249
+    },
+    {
+      "step": "Deposit to frozen ACC002 is refused",
+      "ok": true,
+      "detail": "The deposit was not completed. Account ACC002 is frozen and cannot be used for this transaction. No balance or transaction history was changed.",
+      "ms": 184
+    },
+    {
+      "step": "Officer registers a customer",
+      "ok": true,
+      "detail": "Customer registered successfully. Customer ID: CUS-WPP84M2Q Username: CUS-WPP84M2Q Temporary password [redacted] Hand th",
+      "ms": 1013
+    },
+    {
+      "step": "Officer views ACC001 history",
+      "ok": true,
+      "detail": "6 rows",
+      "ms": 145
+    },
+    {
+      "step": "Bank Officer signs out",
+      "ok": true,
+      "detail": "back at sign-in",
+      "ms": 59
+    },
+    {
+      "step": "Customer signs in",
+      "ok": true,
+      "detail": "Customer dashboard; nav: My profile, Accounts, Statements, History",
+      "ms": 703
+    },
+    {
+      "step": "Customer sees own accounts and balances",
+      "ok": true,
+      "detail": "ACC001SavingsActive50200.00 | ACC004CurrentActive100100.00",
+      "ms": 37
+    },
+    {
+      "step": "Customer views ACC001 history with today's filter",
+      "ok": true,
+      "detail": "3 rows today: 7/11/2026, 12:04:11 pmTransfer out (ACC004)Debit: -100.0050200.00 | 7/11/2026, 12:04:11 pmWithdrawalDebit: -200.0050300.00 | 7/11/2026, 12:04:10 pmDepositCredit: 500.0050500.00",
+      "ms": 176
+    },
+    {
+      "step": "Customer views ACC001 statement",
+      "ok": true,
+      "detail": "opening ₹0.00, closing ₹50200.00, 6 rows",
+      "ms": 175
+    },
+    {
+      "step": "Customer cannot see officer screens",
+      "ok": true,
+      "detail": "deposit/withdraw/transfer cards hidden",
+      "ms": 9
+    },
+    {
+      "step": "Customer signs out",
+      "ok": true,
+      "detail": "back at sign-in",
+      "ms": 49
+    },
+    {
+      "step": "Administrator signs in",
+      "ok": true,
+      "detail": "Administrator dashboard; nav: Register customer, Deposit, Withdraw, Transfer, Run interest, Locked users, Customers, Open account, Staff, Audit trail, Account types, Statements, History",
+      "ms": 841
+    },
+    {
+      "step": "Administrator views audit trail",
+      "ok": true,
+      "detail": "13 entries, includes the deposit",
+      "ms": 106
+    },
+    {
+      "step": "Administrator views staff list",
+      "ok": true,
+      "detail": "officer1 and officer2 listed",
+      "ms": 11
+    },
+    {
+      "step": "Administrator views account types",
+      "ok": true,
+      "detail": "Savings and Current listed",
+      "ms": 9
+    },
+    {
+      "step": "Administrator signs out",
+      "ok": true,
+      "detail": "back at sign-in",
+      "ms": 48
+    }
+  ],
+  "scriptErrors": [],
+  "failedRequests": []
+}

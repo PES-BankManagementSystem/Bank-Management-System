@@ -1,0 +1,99 @@
+{
+  "case": "TC-04B",
+  "build_sha": "b0e8ca24fdd348bf40b0deb68f769232cc650107",
+  "started_utc": "2026-11-07T06:37:07.786756+00:00",
+  "status": "PASS",
+  "assertions": [
+    "POST /auth/login: expected 200, got 200 ()",
+    "POST /auth/login: expected 200, got 200 ()",
+    "POST /auth/login: expected 200, got 200 ()",
+    "PUT /customers/CUS-00000001: expected 403, got 403 (FORBIDDEN)",
+    "PUT /customers/CUS-00000001: expected 403, got 403 (FORBIDDEN)",
+    "PUT /customers/CUS-00000001: expected 200, got 200 ()",
+    "PUT /customers/CUS-00000001: expected 200, got 200 ()",
+    "GET /dashboard: expected 401, got 401 (UNAUTHENTICATED)",
+    "POST /auth/login: expected 401, got 401 (UNAUTHENTICATED)",
+    "POST /accounts: expected 409, got 409 (CUSTOMER_INACTIVE)",
+    "Account and transaction records retained"
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 200,
+      "ms": 618.01,
+      "code": null
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 200,
+      "ms": 582.582,
+      "code": null
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 200,
+      "ms": 612.271,
+      "code": null
+    },
+    {
+      "method": "PUT",
+      "path": "/customers/CUS-00000001",
+      "status": 403,
+      "ms": 21.335,
+      "code": "FORBIDDEN"
+    },
+    {
+      "method": "PUT",
+      "path": "/customers/CUS-00000001",
+      "status": 403,
+      "ms": 6.967,
+      "code": "FORBIDDEN"
+    },
+    {
+      "method": "PUT",
+      "path": "/customers/CUS-00000001",
+      "status": 200,
+      "ms": 12.142,
+      "code": null
+    },
+    {
+      "method": "PUT",
+      "path": "/customers/CUS-00000001",
+      "status": 200,
+      "ms": 13.98,
+      "code": null
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 401,
+      "ms": 17.206,
+      "code": "UNAUTHENTICATED"
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 401,
+      "ms": 14.853,
+      "code": "UNAUTHENTICATED"
+    },
+    {
+      "method": "POST",
+      "path": "/accounts",
+      "status": 409,
+      "ms": 18.657,
+      "code": "CUSTOMER_INACTIVE"
+    }
+  ],
+  "fresh_seed": true,
+  "seed_counts": {
+    "users": 6,
+    "customers": 3,
+    "accounts": 5,
+    "transactions": 8
+  },
+  "database_sha256": "347b337e928aa00e669ea1d81d58f8982b6ffefde5dd475ab20347e650c465ff"
+}

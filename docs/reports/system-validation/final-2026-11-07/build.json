@@ -1,0 +1,29 @@
+{
+  "build_sha": "b0e8ca24fdd348bf40b0deb68f769232cc650107",
+  "source": "git archive origin/main after fetch; no application source modifications",
+  "platform": "Windows 11; GCC/MinGW 14.2.0; MinGW Makefiles; Debug",
+  "cmake_cxx_flags": "-D_WIN32_WINNT=0x0A00",
+  "dependencies": "Existing build/_deps/{httplib,json,sqlite3,sodium,googletest}-src supplied via FETCHCONTENT_SOURCE_DIR_*",
+  "configure": "cmake -S output/s43-final/source -B output/s43-final/build -G \"MinGW Makefiles\" -DCMAKE_MAKE_PROGRAM=C:/msys64/ucrt64/bin/mingw32-make.exe -DCMAKE_C_COMPILER=C:/msys64/ucrt64/bin/gcc.exe -DCMAKE_CXX_COMPILER=C:/msys64/ucrt64/bin/g++.exe -DOPENSSL_ROOT_DIR=C:/msys64/ucrt64 -DCMAKE_CXX_FLAGS=-D_WIN32_WINNT=0x0A00 (plus dependency source overrides)",
+  "build_command": "cmake --build output/s43-final/build --parallel 4",
+  "build_result": "PASS; interrupted compile was resumed and its empty transaction object rebuilt; final full build succeeded",
+  "server_sha256": "51aa32ce872d7f7340e0931e21bde50424fe0e3363ce89cf8fcda0e476a1e9db",
+  "source_inputs": {
+    "schema.sql": "4b3c554397e3a6c4a30874ce0577518ed66d2712620f0093e261bcf513fbcace",
+    "seed.sql": "c06a26a7e72306c661cf359fe87a8b199cc9a7f3cb2ae41edc421c229072123c"
+  },
+  "runners_sha256": {
+    "run_system_validation.py": "2167461913aff85275cae075f64ededf79c1db53119dc7b3c4634b6276b106a3",
+    "run_system_validation_browsers.py": "fede484513aa95412231ad5687f85655e4413796cac5481487bb3bf5fa10b628",
+    "system_validation_browser.js": "315755a39a4f3b61d1d2fee6093f8a29e246f9f9df48fba25c9eab06bf430cd6"
+  },
+  "ctest": {
+    "command": "ctest --test-dir output/s43-final/build --output-on-failure",
+    "passed": 31,
+    "total": 31,
+    "seconds": 283.1
+  },
+  "TC-15": "Retained earlier-build result by explicit exception; not rerun",
+  "TC-21": "No participants recruited or session run; pending",
+  "browser_environment": "Chrome installed; Firefox 159.0.1 downloaded and extracted in isolated workspace; headless actual browsers"
+}
