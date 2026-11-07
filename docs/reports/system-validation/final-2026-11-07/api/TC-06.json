@@ -1,0 +1,52 @@
+{
+  "case": "TC-06",
+  "build_sha": "b0e8ca24fdd348bf40b0deb68f769232cc650107",
+  "started_utc": "2026-11-07T06:37:11.334317+00:00",
+  "status": "PASS",
+  "assertions": [
+    "POST /auth/login: expected 200, got 200 ()",
+    "POST /transactions: expected 422, got 422 (BELOW_MINIMUM_BALANCE)",
+    "POST /transactions: expected 422, got 422 (BELOW_MINIMUM_BALANCE)",
+    "Rejected withdrawals preserve balances and ledger",
+    "POST /transactions: expected 201, got 201 ()",
+    "Persisted account balance matches transaction response"
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 200,
+      "ms": 640.139,
+      "code": null
+    },
+    {
+      "method": "POST",
+      "path": "/transactions",
+      "status": 422,
+      "ms": 8.659,
+      "code": "BELOW_MINIMUM_BALANCE"
+    },
+    {
+      "method": "POST",
+      "path": "/transactions",
+      "status": 422,
+      "ms": 16.835,
+      "code": "BELOW_MINIMUM_BALANCE"
+    },
+    {
+      "method": "POST",
+      "path": "/transactions",
+      "status": 201,
+      "ms": 21.454,
+      "code": null
+    }
+  ],
+  "fresh_seed": true,
+  "seed_counts": {
+    "users": 6,
+    "customers": 3,
+    "accounts": 5,
+    "transactions": 8
+  },
+  "database_sha256": "72c04bbae4a7cd7c5f5acb2fd274034ef11014b530eae09ee978fea5004c1509"
+}

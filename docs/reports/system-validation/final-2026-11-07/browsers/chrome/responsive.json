@@ -1,0 +1,597 @@
+{
+  "case": "TC-22-responsive",
+  "browser": "chrome",
+  "version": "Chrome/156.0.8078.80",
+  "checks": [
+    {
+      "ok": true,
+      "detail": "officer1 at 1280px has no page horizontal overflow"
+    },
+    {
+      "ok": true,
+      "detail": "officer1 at 768px has no page horizontal overflow"
+    },
+    {
+      "ok": true,
+      "detail": "officer1 at 390px has no page horizontal overflow"
+    },
+    {
+      "ok": true,
+      "detail": "customer1 at 1280px has no page horizontal overflow"
+    },
+    {
+      "ok": true,
+      "detail": "customer1 at 768px has no page horizontal overflow"
+    },
+    {
+      "ok": false,
+      "detail": "customer1 at 390px has no page horizontal overflow"
+    },
+    {
+      "ok": true,
+      "detail": "admin at 1280px has no page horizontal overflow"
+    },
+    {
+      "ok": true,
+      "detail": "admin at 768px has no page horizontal overflow"
+    },
+    {
+      "ok": false,
+      "detail": "admin at 390px has no page horizontal overflow"
+    },
+    {
+      "ok": true,
+      "detail": "No uncaught JavaScript errors"
+    }
+  ],
+  "scriptErrors": [],
+  "layouts": [
+    {
+      "user": "officer1",
+      "width": 1280,
+      "viewport": 1280,
+      "documentWidth": 1280,
+      "heading": "Bank Officer dashboard",
+      "nav": [
+        "Register customer",
+        "Deposit",
+        "Withdraw",
+        "Transfer",
+        "Customers",
+        "Open account",
+        "Statements",
+        "History"
+      ],
+      "cards": [
+        {
+          "id": "",
+          "width": 440
+        },
+        {
+          "id": "role-home",
+          "width": 440
+        },
+        {
+          "id": "customer-registration-card",
+          "width": 440
+        },
+        {
+          "id": "customer-management-card",
+          "width": 900
+        },
+        {
+          "id": "account-opening-card",
+          "width": 900
+        },
+        {
+          "id": "deposit-card",
+          "width": 440
+        },
+        {
+          "id": "withdraw-card",
+          "width": 440
+        },
+        {
+          "id": "transfer-card",
+          "width": 440
+        },
+        {
+          "id": "statement-card",
+          "width": 900
+        },
+        {
+          "id": "history-card",
+          "width": 900
+        }
+      ]
+    },
+    {
+      "user": "officer1",
+      "width": 768,
+      "viewport": 768,
+      "documentWidth": 768,
+      "heading": "Bank Officer dashboard",
+      "nav": [
+        "Register customer",
+        "Deposit",
+        "Withdraw",
+        "Transfer",
+        "Customers",
+        "Open account",
+        "Statements",
+        "History"
+      ],
+      "cards": [
+        {
+          "id": "",
+          "width": 440
+        },
+        {
+          "id": "role-home",
+          "width": 440
+        },
+        {
+          "id": "customer-registration-card",
+          "width": 440
+        },
+        {
+          "id": "customer-management-card",
+          "width": 736
+        },
+        {
+          "id": "account-opening-card",
+          "width": 736
+        },
+        {
+          "id": "deposit-card",
+          "width": 440
+        },
+        {
+          "id": "withdraw-card",
+          "width": 440
+        },
+        {
+          "id": "transfer-card",
+          "width": 440
+        },
+        {
+          "id": "statement-card",
+          "width": 736
+        },
+        {
+          "id": "history-card",
+          "width": 736
+        }
+      ]
+    },
+    {
+      "user": "officer1",
+      "width": 390,
+      "viewport": 390,
+      "documentWidth": 390,
+      "heading": "Bank Officer dashboard",
+      "nav": [
+        "Register customer",
+        "Deposit",
+        "Withdraw",
+        "Transfer",
+        "Customers",
+        "Open account",
+        "Statements",
+        "History"
+      ],
+      "cards": [
+        {
+          "id": "",
+          "width": 358
+        },
+        {
+          "id": "role-home",
+          "width": 358
+        },
+        {
+          "id": "customer-registration-card",
+          "width": 358
+        },
+        {
+          "id": "customer-management-card",
+          "width": 358
+        },
+        {
+          "id": "account-opening-card",
+          "width": 358
+        },
+        {
+          "id": "deposit-card",
+          "width": 358
+        },
+        {
+          "id": "withdraw-card",
+          "width": 358
+        },
+        {
+          "id": "transfer-card",
+          "width": 358
+        },
+        {
+          "id": "statement-card",
+          "width": 358
+        },
+        {
+          "id": "history-card",
+          "width": 358
+        }
+      ]
+    },
+    {
+      "user": "customer1",
+      "width": 1280,
+      "viewport": 1280,
+      "documentWidth": 1280,
+      "heading": "Customer dashboard",
+      "nav": [
+        "My profile",
+        "Accounts",
+        "Statements",
+        "History"
+      ],
+      "cards": [
+        {
+          "id": "",
+          "width": 440
+        },
+        {
+          "id": "role-home",
+          "width": 440
+        },
+        {
+          "id": "customer-profile-card",
+          "width": 900
+        },
+        {
+          "id": "customer-accounts-card",
+          "width": 900
+        },
+        {
+          "id": "statement-card",
+          "width": 900
+        },
+        {
+          "id": "history-card",
+          "width": 900
+        }
+      ]
+    },
+    {
+      "user": "customer1",
+      "width": 768,
+      "viewport": 768,
+      "documentWidth": 768,
+      "heading": "Customer dashboard",
+      "nav": [
+        "My profile",
+        "Accounts",
+        "Statements",
+        "History"
+      ],
+      "cards": [
+        {
+          "id": "",
+          "width": 440
+        },
+        {
+          "id": "role-home",
+          "width": 440
+        },
+        {
+          "id": "customer-profile-card",
+          "width": 736
+        },
+        {
+          "id": "customer-accounts-card",
+          "width": 736
+        },
+        {
+          "id": "statement-card",
+          "width": 736
+        },
+        {
+          "id": "history-card",
+          "width": 736
+        }
+      ]
+    },
+    {
+      "user": "customer1",
+      "width": 390,
+      "viewport": 390,
+      "documentWidth": 399,
+      "heading": "Customer dashboard",
+      "nav": [
+        "My profile",
+        "Accounts",
+        "Statements",
+        "History"
+      ],
+      "cards": [
+        {
+          "id": "",
+          "width": 358
+        },
+        {
+          "id": "role-home",
+          "width": 358
+        },
+        {
+          "id": "customer-profile-card",
+          "width": 358
+        },
+        {
+          "id": "customer-accounts-card",
+          "width": 358
+        },
+        {
+          "id": "statement-card",
+          "width": 358
+        },
+        {
+          "id": "history-card",
+          "width": 358
+        }
+      ]
+    },
+    {
+      "user": "admin",
+      "width": 1280,
+      "viewport": 1280,
+      "documentWidth": 1280,
+      "heading": "Administrator dashboard",
+      "nav": [
+        "Register customer",
+        "Deposit",
+        "Withdraw",
+        "Transfer",
+        "Run interest",
+        "Locked users",
+        "Customers",
+        "Open account",
+        "Staff",
+        "Audit trail",
+        "Account types",
+        "Statements",
+        "History"
+      ],
+      "cards": [
+        {
+          "id": "",
+          "width": 440
+        },
+        {
+          "id": "role-home",
+          "width": 440
+        },
+        {
+          "id": "locked-users-card",
+          "width": 440
+        },
+        {
+          "id": "customer-registration-card",
+          "width": 440
+        },
+        {
+          "id": "customer-management-card",
+          "width": 900
+        },
+        {
+          "id": "account-opening-card",
+          "width": 900
+        },
+        {
+          "id": "deposit-card",
+          "width": 440
+        },
+        {
+          "id": "withdraw-card",
+          "width": 440
+        },
+        {
+          "id": "transfer-card",
+          "width": 440
+        },
+        {
+          "id": "staff-card",
+          "width": 440
+        },
+        {
+          "id": "audit-card",
+          "width": 440
+        },
+        {
+          "id": "account-types-card",
+          "width": 900
+        },
+        {
+          "id": "interest-card",
+          "width": 440
+        },
+        {
+          "id": "statement-card",
+          "width": 900
+        },
+        {
+          "id": "history-card",
+          "width": 900
+        }
+      ]
+    },
+    {
+      "user": "admin",
+      "width": 768,
+      "viewport": 768,
+      "documentWidth": 768,
+      "heading": "Administrator dashboard",
+      "nav": [
+        "Register customer",
+        "Deposit",
+        "Withdraw",
+        "Transfer",
+        "Run interest",
+        "Locked users",
+        "Customers",
+        "Open account",
+        "Staff",
+        "Audit trail",
+        "Account types",
+        "Statements",
+        "History"
+      ],
+      "cards": [
+        {
+          "id": "",
+          "width": 440
+        },
+        {
+          "id": "role-home",
+          "width": 440
+        },
+        {
+          "id": "locked-users-card",
+          "width": 440
+        },
+        {
+          "id": "customer-registration-card",
+          "width": 440
+        },
+        {
+          "id": "customer-management-card",
+          "width": 736
+        },
+        {
+          "id": "account-opening-card",
+          "width": 736
+        },
+        {
+          "id": "deposit-card",
+          "width": 440
+        },
+        {
+          "id": "withdraw-card",
+          "width": 440
+        },
+        {
+          "id": "transfer-card",
+          "width": 440
+        },
+        {
+          "id": "staff-card",
+          "width": 440
+        },
+        {
+          "id": "audit-card",
+          "width": 440
+        },
+        {
+          "id": "account-types-card",
+          "width": 736
+        },
+        {
+          "id": "interest-card",
+          "width": 440
+        },
+        {
+          "id": "statement-card",
+          "width": 736
+        },
+        {
+          "id": "history-card",
+          "width": 736
+        }
+      ]
+    },
+    {
+      "user": "admin",
+      "width": 390,
+      "viewport": 390,
+      "documentWidth": 465,
+      "heading": "Administrator dashboard",
+      "nav": [
+        "Register customer",
+        "Deposit",
+        "Withdraw",
+        "Transfer",
+        "Run interest",
+        "Locked users",
+        "Customers",
+        "Open account",
+        "Staff",
+        "Audit trail",
+        "Account types",
+        "Statements",
+        "History"
+      ],
+      "cards": [
+        {
+          "id": "",
+          "width": 358
+        },
+        {
+          "id": "role-home",
+          "width": 358
+        },
+        {
+          "id": "locked-users-card",
+          "width": 358
+        },
+        {
+          "id": "customer-registration-card",
+          "width": 358
+        },
+        {
+          "id": "customer-management-card",
+          "width": 358
+        },
+        {
+          "id": "account-opening-card",
+          "width": 358
+        },
+        {
+          "id": "deposit-card",
+          "width": 358
+        },
+        {
+          "id": "withdraw-card",
+          "width": 358
+        },
+        {
+          "id": "transfer-card",
+          "width": 358
+        },
+        {
+          "id": "staff-card",
+          "width": 358
+        },
+        {
+          "id": "audit-card",
+          "width": 358
+        },
+        {
+          "id": "account-types-card",
+          "width": 358
+        },
+        {
+          "id": "interest-card",
+          "width": 358
+        },
+        {
+          "id": "statement-card",
+          "width": 358
+        },
+        {
+          "id": "history-card",
+          "width": 358
+        }
+      ]
+    }
+  ],
+  "status": "FAIL"
+}

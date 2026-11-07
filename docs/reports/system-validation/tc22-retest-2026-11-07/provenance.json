@@ -1,0 +1,15 @@
+{
+  "tested_frontend_sha": "00ffd7c5e9fb9823e9f822b354b8d790baac652f",
+  "backend_build_sha": "b0e8ca24fdd348bf40b0deb68f769232cc650107",
+  "backend_source_equivalence": "git diff b0e8ca2 00ffd7c -- src db cmake CMakeLists.txt is empty; backend rebuilt earlier, binary reused without source changes",
+  "backend_binary_sha256": "51aa32ce872d7f7340e0931e21bde50424fe0e3363ce89cf8fcda0e476a1e9db",
+  "fresh_databases": "Four independent schema+seed databases: core and responsive in Chrome and Firefox",
+  "schema_sha256": "4b3c554397e3a6c4a30874ce0577518ed66d2712620f0093e261bcf513fbcace",
+  "seed_sha256": "c06a26a7e72306c661cf359fe87a8b199cc9a7f3cb2ae41edc421c229072123c",
+  "harness_sha256": {
+    "run_system_validation_browsers.py": "0f1920f5126d4156bdaf8a8778a396e077d0081278734d61c46b86865a70a72e",
+    "system_validation_browser.js": "6b909abb4e08cd3dc131a7a9c203c4b387c674481b72767a2865f1feb0ffe231"
+  },
+  "result": "PASS",
+  "TC-21": "NOT RUN; real first-time participants required"
+}

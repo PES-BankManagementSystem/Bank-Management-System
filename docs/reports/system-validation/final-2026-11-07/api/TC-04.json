@@ -1,0 +1,44 @@
+{
+  "case": "TC-04",
+  "build_sha": "b0e8ca24fdd348bf40b0deb68f769232cc650107",
+  "started_utc": "2026-11-07T06:37:06.118848+00:00",
+  "status": "PASS",
+  "assertions": [
+    "POST /auth/login: expected 200, got 200 ()",
+    "POST /customers: expected 400, got 400 (VALIDATION_ERROR)",
+    "Missing phone has field error",
+    "POST /customers: expected 201, got 201 ()",
+    "Unique customer code created"
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 200,
+      "ms": 605.504,
+      "code": null
+    },
+    {
+      "method": "POST",
+      "path": "/customers",
+      "status": 400,
+      "ms": 5.792,
+      "code": "VALIDATION_ERROR"
+    },
+    {
+      "method": "POST",
+      "path": "/customers",
+      "status": 201,
+      "ms": 606.05,
+      "code": null
+    }
+  ],
+  "fresh_seed": true,
+  "seed_counts": {
+    "users": 6,
+    "customers": 3,
+    "accounts": 5,
+    "transactions": 8
+  },
+  "database_sha256": "ee0166276f4208e9d551cdaecdc46861916b24e7bb5520b9597e48967dbe0b9b"
+}

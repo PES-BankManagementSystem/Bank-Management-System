@@ -1,0 +1,67 @@
+Test project C:/Users/Adithya Ajeeth/Downloads/Bank-Management-System/output/s43-final/build
+      Start  1: server_reports_version
+ 1/31 Test  #1: server_reports_version ...........   Passed    0.04 sec
+      Start  2: server_shows_help
+ 2/31 Test  #2: server_shows_help ................   Passed    0.04 sec
+      Start  3: config_test
+ 3/31 Test  #3: config_test ......................   Passed    0.79 sec
+      Start  4: api_server_test
+ 4/31 Test  #4: api_server_test ..................   Passed    4.29 sec
+      Start  5: db_test
+ 5/31 Test  #5: db_test ..........................   Passed    0.99 sec
+      Start  6: auth_login_test
+ 6/31 Test  #6: auth_login_test ..................   Passed   10.58 sec
+      Start  7: transaction_test
+ 7/31 Test  #7: transaction_test .................   Passed    5.67 sec
+      Start  8: auth_session_test
+ 8/31 Test  #8: auth_session_test ................   Passed    8.96 sec
+      Start  9: withdraw_test
+ 9/31 Test  #9: withdraw_test ....................   Passed    5.92 sec
+      Start 10: auth_lockout_test
+10/31 Test #10: auth_lockout_test ................   Passed   18.82 sec
+      Start 11: module_tests
+11/31 Test #11: module_tests .....................   Passed    6.50 sec
+      Start 12: account_type_test
+12/31 Test #12: account_type_test ................   Passed    7.76 sec
+      Start 13: account_status_test
+13/31 Test #13: account_status_test ..............   Passed    8.74 sec
+      Start 14: account_opening_test
+14/31 Test #14: account_opening_test .............   Passed   11.40 sec
+      Start 15: customer_test
+15/31 Test #15: customer_test ....................   Passed   38.69 sec
+      Start 16: transfer_test
+16/31 Test #16: transfer_test ....................   Passed    6.04 sec
+      Start 17: interest_test
+17/31 Test #17: interest_test ....................   Passed    6.01 sec
+      Start 18: statement_test
+18/31 Test #18: statement_test ...................   Passed    7.71 sec
+      Start 19: account_history_test
+19/31 Test #19: account_history_test .............   Passed   12.34 sec
+      Start 20: statement_csv_test
+20/31 Test #20: statement_csv_test ...............   Passed    0.13 sec
+      Start 21: account_balance_test
+21/31 Test #21: account_balance_test .............   Passed   37.28 sec
+      Start 22: perf_helpers_test
+22/31 Test #22: perf_helpers_test ................   Passed    2.76 sec
+      Start 23: staff_test
+23/31 Test #23: staff_test .......................   Passed   17.30 sec
+      Start 24: audit_test
+24/31 Test #24: audit_test .......................   Passed    3.70 sec
+      Start 25: audit_viewer_test
+25/31 Test #25: audit_viewer_test ................   Passed   15.89 sec
+      Start 26: rbac_test
+26/31 Test #26: rbac_test ........................   Passed    9.41 sec
+      Start 27: tls_test
+27/31 Test #27: tls_test .........................   Passed    4.81 sec
+      Start 28: log_secrets_test
+28/31 Test #28: log_secrets_test .................   Passed    8.64 sec
+      Start 29: validation_test
+29/31 Test #29: validation_test ..................   Passed   16.97 sec
+      Start 30: calendar_test
+30/31 Test #30: calendar_test ....................   Passed    1.27 sec
+      Start 31: coverage_error_paths_test
+31/31 Test #31: coverage_error_paths_test ........   Passed    3.59 sec
+
+100% tests passed out of 31
+
+Total Test time (real) = 283.10 sec

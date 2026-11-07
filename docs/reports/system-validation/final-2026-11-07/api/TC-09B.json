@@ -1,0 +1,51 @@
+{
+  "case": "TC-09B",
+  "build_sha": "b0e8ca24fdd348bf40b0deb68f769232cc650107",
+  "started_utc": "2026-11-07T06:37:14.907545+00:00",
+  "status": "PASS",
+  "assertions": [
+    "POST /auth/login: expected 200, got 200 ()",
+    "POST /auth/login: expected 200, got 200 ()",
+    "POST /interest/run: expected 201, got 201 ()",
+    "POST /interest/run: expected 409, got 409 (INTEREST_ALREADY_RUN)",
+    "Duplicate interest leaves balances and ledger unchanged"
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 200,
+      "ms": 677.684,
+      "code": null
+    },
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 200,
+      "ms": 635.829,
+      "code": null
+    },
+    {
+      "method": "POST",
+      "path": "/interest/run",
+      "status": 201,
+      "ms": 9.48,
+      "code": null
+    },
+    {
+      "method": "POST",
+      "path": "/interest/run",
+      "status": 409,
+      "ms": 3.43,
+      "code": "INTEREST_ALREADY_RUN"
+    }
+  ],
+  "fresh_seed": true,
+  "seed_counts": {
+    "users": 6,
+    "customers": 3,
+    "accounts": 5,
+    "transactions": 8
+  },
+  "database_sha256": "86ea9334fc03a07962981076243b93d770726f4364c7cb2dd72286f927c00b34"
+}

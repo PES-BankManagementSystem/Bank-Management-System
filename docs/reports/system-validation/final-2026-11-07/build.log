@@ -1,0 +1,100 @@
+[  1%] Built target sqlite3
+[  2%] Built target gtest
+[ 54%] Built target sodium
+[ 57%] Built target bms_common
+[ 58%] Built target gtest_main
+[ 59%] Built target gmock
+[ 60%] Built target config_test
+[ 60%] Built target db_test
+[ 62%] Built target bms_api
+[ 63%] Built target calendar_test
+[ 64%] Built target gmock_main
+[ 66%] Built target bms_audit
+[ 67%] Built target api_server_test
+[ 68%] Built target tls_test
+[ 69%] Built target bms_auth
+[ 72%] Built target bms_staff
+[ 72%] Built target bms_customer
+[ 72%] Built target auth_login_test
+[ 73%] Built target auth_session_test
+[ 74%] Built target auth_lockout_test
+[ 75%] Built target customer_test
+[ 78%] Built target bms_account
+[ 79%] Built target log_secrets_test
+[ 81%] Built target bms_transaction
+[ 83%] Built target bms_reporting
+[ 84%] Linking CXX executable ..\bin\transaction_test.exe
+[ 85%] Linking CXX executable ..\bin\withdraw_test.exe
+[ 85%] Linking CXX executable ..\bin\account_type_test.exe
+[ 86%] Built target account_opening_test
+[ 86%] Building CXX object tests/CMakeFiles/transfer_test.dir/transfer_test.cpp.obj
+[ 86%] Built target withdraw_test
+[ 86%] Building CXX object tests/CMakeFiles/interest_test.dir/interest_test.cpp.obj
+[ 86%] Built target transaction_test
+[ 87%] Building CXX object tests/CMakeFiles/statement_test.dir/statement_test.cpp.obj
+[ 88%] Built target account_type_test
+[ 89%] Building CXX object tests/CMakeFiles/account_history_test.dir/account_history_test.cpp.obj
+[ 90%] Linking CXX executable ..\bin\transfer_test.exe
+[ 91%] Linking CXX executable ..\bin\interest_test.exe
+[ 91%] Linking CXX executable ..\bin\statement_test.exe
+[ 91%] Built target transfer_test
+[ 91%] Building CXX object tests/CMakeFiles/account_balance_test.dir/account_balance_test.cpp.obj
+[ 91%] Built target interest_test
+[ 92%] Building CXX object tests/CMakeFiles/staff_test.dir/staff_test.cpp.obj
+[ 92%] Linking CXX executable ..\bin\account_history_test.exe
+[ 92%] Built target statement_test
+[ 92%] Building CXX object tests/CMakeFiles/audit_test.dir/audit_test.cpp.obj
+[ 93%] Linking CXX executable ..\bin\audit_test.exe
+[ 93%] Built target audit_test
+[ 93%] Building CXX object tests/CMakeFiles/audit_viewer_test.dir/audit_viewer_test.cpp.obj
+[ 93%] Built target account_history_test
+[ 93%] Building CXX object tests/CMakeFiles/rbac_test.dir/rbac_test.cpp.obj
+[ 93%] Linking CXX executable ..\bin\account_balance_test.exe
+[ 93%] Linking CXX executable ..\bin\staff_test.exe
+[ 93%] Built target account_balance_test
+[ 93%] Building CXX object tests/CMakeFiles/validation_test.dir/validation_test.cpp.obj
+[ 94%] Linking CXX executable ..\bin\audit_viewer_test.exe
+[ 94%] Built target staff_test
+[ 94%] Building CXX object tests/CMakeFiles/coverage_error_paths_test.dir/coverage_error_paths_test.cpp.obj
+cmake : C:\Users\Adithya Ajeeth\Downloads\Bank-Management-System\output\s43-final\source\tests\validation_test.cpp: In 
+member function 'virtual void 
+{anonymous}::TransactionValidationTest_CoreRejectsBadInputsWithoutChangingState_Test::TestBody()':
+At line:2 char:1
++ cmake --build output/s43-final/build --parallel 4 > output/s43-final/ ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (C:\Users\Adithy...t::TestBody()'::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+C:\Users\Adithya Ajeeth\Downloads\Bank-Management-System\output\s43-final\source\tests\validation_test.cpp:109:29: 
+warning: loop variable 'amount' of type 'const std::string&' {aka 'const std::__cxx11::basic_string<char>&'} binds to 
+a temporary constructed from type 'const char* const' [-Wrange-loop-construct]
+  109 |     for (const std::string& amount : {"", "   ", "abc", "1e3", "NaN", "Infinity",
+      |                             ^~~~~~
+C:\Users\Adithya Ajeeth\Downloads\Bank-Management-System\output\s43-final\source\tests\validation_test.cpp:109:29: 
+note: use non-reference type 'const std::string' {aka 'const std::__cxx11::basic_string<char>'} to make the copy 
+explicit or 'const char* const&' to prevent copying
+C:\Users\Adithya Ajeeth\Downloads\Bank-Management-System\output\s43-final\source\tests\validation_test.cpp: In member 
+function 'virtual void 
+{anonymous}::TransactionValidationTest_DeterministicFuzzRequestsDoNotCrashOrMutateState_Test::TestBody()':
+C:\Users\Adithya Ajeeth\Downloads\Bank-Management-System\output\s43-final\source\tests\validation_test.cpp:164:29: 
+warning: loop variable 'path' of type 'const std::string&' {aka 'const std::__cxx11::basic_string<char>&'} binds to a 
+temporary constructed from type 'const char* const' [-Wrange-loop-construct]
+  164 |     for (const std::string& path : {"/transactions", "/transfers"}) {
+      |                             ^~~~
+C:\Users\Adithya Ajeeth\Downloads\Bank-Management-System\output\s43-final\source\tests\validation_test.cpp:164:29: 
+note: use non-reference type 'const std::string' {aka 'const std::__cxx11::basic_string<char>'} to make the copy 
+explicit or 'const char* const&' to prevent copying
+[ 95%] Linking CXX executable ..\bin\coverage_error_paths_test.exe
+[ 95%] Built target coverage_error_paths_test
+[ 96%] Built target bms_server
+[ 96%] Building CXX object tests/CMakeFiles/module_tests.dir/module_tests.cpp.obj
+[ 97%] Linking CXX executable ..\bin\rbac_test.exe
+[ 97%] Built target audit_viewer_test
+[ 98%] Building CXX object tests/CMakeFiles/account_status_test.dir/account_status_test.cpp.obj
+[ 98%] Built target rbac_test
+[ 99%] Linking CXX executable ..\bin\module_tests.exe
+[ 99%] Built target module_tests
+[100%] Linking CXX executable ..\bin\validation_test.exe
+[100%] Built target validation_test
+[100%] Linking CXX executable ..\bin\account_status_test.exe
+[100%] Built target account_status_test

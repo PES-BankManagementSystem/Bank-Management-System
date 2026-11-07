@@ -1,0 +1,131 @@
+{
+  "case": "TC-07",
+  "build_sha": "b0e8ca24fdd348bf40b0deb68f769232cc650107",
+  "started_utc": "2026-11-07T06:37:12.494840+00:00",
+  "status": "PASS",
+  "assertions": [
+    "POST /auth/login: expected 200, got 200 ()",
+    "PATCH /accounts/ACC001/status: expected 409, got 409 (ACCOUNT_BALANCE_NONZERO)",
+    "PATCH /accounts/ACC001/status: expected 200, got 200 ()",
+    "PATCH /accounts/ACC001/status: expected 200, got 200 ()",
+    "POST /transactions: expected 422, got 422 (ACCOUNT_NOT_ACTIVE)",
+    "POST /transactions: expected 422, got 422 (ACCOUNT_NOT_ACTIVE)",
+    "POST /transfers: expected 422, got 422 (ACCOUNT_NOT_ACTIVE)",
+    "PATCH /accounts/ACC001/status: expected 200, got 200 ()",
+    "PATCH /accounts/ZERO001/status: expected 200, got 200 ()",
+    "PATCH /accounts/ZERO001/status: expected 200, got 200 ()",
+    "PATCH /accounts/ZERO001/status: expected 200, got 200 ()",
+    "POST /transactions: expected 422, got 422 (ACCOUNT_NOT_ACTIVE)",
+    "POST /transactions: expected 422, got 422 (ACCOUNT_NOT_ACTIVE)",
+    "POST /transfers: expected 422, got 422 (ACCOUNT_NOT_ACTIVE)",
+    "Closed account retained"
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 200,
+      "ms": 631.54,
+      "code": null
+    },
+    {
+      "method": "PATCH",
+      "path": "/accounts/ACC001/status",
+      "status": 409,
+      "ms": 3.367,
+      "code": "ACCOUNT_BALANCE_NONZERO"
+    },
+    {
+      "method": "PATCH",
+      "path": "/accounts/ACC001/status",
+      "status": 200,
+      "ms": 20.546,
+      "code": null
+    },
+    {
+      "method": "PATCH",
+      "path": "/accounts/ACC001/status",
+      "status": 200,
+      "ms": 2.904,
+      "code": null
+    },
+    {
+      "method": "POST",
+      "path": "/transactions",
+      "status": 422,
+      "ms": 2.279,
+      "code": "ACCOUNT_NOT_ACTIVE"
+    },
+    {
+      "method": "POST",
+      "path": "/transactions",
+      "status": 422,
+      "ms": 7.994,
+      "code": "ACCOUNT_NOT_ACTIVE"
+    },
+    {
+      "method": "POST",
+      "path": "/transfers",
+      "status": 422,
+      "ms": 12.889,
+      "code": "ACCOUNT_NOT_ACTIVE"
+    },
+    {
+      "method": "PATCH",
+      "path": "/accounts/ACC001/status",
+      "status": 200,
+      "ms": 8.248,
+      "code": null
+    },
+    {
+      "method": "PATCH",
+      "path": "/accounts/ZERO001/status",
+      "status": 200,
+      "ms": 28.506,
+      "code": null
+    },
+    {
+      "method": "PATCH",
+      "path": "/accounts/ZERO001/status",
+      "status": 200,
+      "ms": 9.2,
+      "code": null
+    },
+    {
+      "method": "PATCH",
+      "path": "/accounts/ZERO001/status",
+      "status": 200,
+      "ms": 2.131,
+      "code": null
+    },
+    {
+      "method": "POST",
+      "path": "/transactions",
+      "status": 422,
+      "ms": 1.588,
+      "code": "ACCOUNT_NOT_ACTIVE"
+    },
+    {
+      "method": "POST",
+      "path": "/transactions",
+      "status": 422,
+      "ms": 12.757,
+      "code": "ACCOUNT_NOT_ACTIVE"
+    },
+    {
+      "method": "POST",
+      "path": "/transfers",
+      "status": 422,
+      "ms": 16.19,
+      "code": "ACCOUNT_NOT_ACTIVE"
+    }
+  ],
+  "fresh_seed": true,
+  "seed_counts": {
+    "users": 6,
+    "customers": 3,
+    "accounts": 5,
+    "transactions": 8
+  },
+  "database_sha256": "51f2a6884f2cd9db0883f05e6cce879ab9e99340b5fadb66d93db771f4aae6c4"
+}

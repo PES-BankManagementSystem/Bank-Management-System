@@ -1,0 +1,43 @@
+{
+  "case": "TC-03",
+  "build_sha": "b0e8ca24fdd348bf40b0deb68f769232cc650107",
+  "started_utc": "2026-11-07T06:37:05.011564+00:00",
+  "status": "PARTIAL",
+  "assertions": [
+    "POST /auth/login: expected 200, got 200 ()",
+    "POST /auth/logout: expected 204, got 204 ()",
+    "GET /dashboard: expected 401, got 401 (UNAUTHENTICATED)"
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/auth/login",
+      "status": 200,
+      "ms": 612.641,
+      "code": null
+    },
+    {
+      "method": "POST",
+      "path": "/auth/logout",
+      "status": 204,
+      "ms": 1.672,
+      "code": null
+    },
+    {
+      "method": "GET",
+      "path": "/dashboard",
+      "status": 401,
+      "ms": 17.968,
+      "code": "UNAUTHENTICATED"
+    }
+  ],
+  "fresh_seed": true,
+  "seed_counts": {
+    "users": 6,
+    "customers": 3,
+    "accounts": 5,
+    "transactions": 8
+  },
+  "gap": "API 204/401 confirmed; UI redirect requires separate browser evidence.",
+  "database_sha256": "909a4eddc5ca62fcdba1dc83a58e4b4b0e2c7d61da5c868a2c201e47486f8087"
+}
