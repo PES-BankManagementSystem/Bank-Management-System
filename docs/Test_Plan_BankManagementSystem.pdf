@@ -1,495 +1,404 @@
 %PDF-1.4
-%âãÏÓ
+%“Œ‹ž ReportLab Generated PDF document (opensource)
 1 0 obj
 <<
-/Type /Pages
-/Count 7
-/Kids [ 4 0 R 8 0 R 10 0 R 12 0 R 14 0 R 16 0 R 18 0 R ]
+/F1 2 0 R /F2 3 0 R /F3 4 0 R
 >>
 endobj
 2 0 obj
 <<
-/Producer (PyPDF2)
+/BaseFont /Helvetica /Encoding /WinAnsiEncoding /Name /F1 /Subtype /Type1 /Type /Font
 >>
 endobj
 3 0 obj
 <<
-/Type /Catalog
-/Pages 1 0 R
+/BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding /Name /F2 /Subtype /Type1 /Type /Font
 >>
 endobj
 4 0 obj
 <<
-/Type /Page
-/MediaBox [ 0 0 612 792 ]
-/Resources <<
-/Font <<
-/F1 5 0 R
-/F2 6 0 R
->>
->>
-/Contents 7 0 R
-/Parent 1 0 R
+/BaseFont /Courier /Encoding /WinAnsiEncoding /Name /F3 /Subtype /Type1 /Type /Font
 >>
 endobj
 5 0 obj
 <<
-/Type /Font
-/Subtype /Type1
-/BaseFont /Helvetica
+/Contents 26 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 25 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
 >>
 endobj
 6 0 obj
 <<
-/Type /Font
-/Subtype /Type1
-/BaseFont /Helvetica-Bold
+/Contents 27 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 25 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
 >>
 endobj
 7 0 obj
 <<
-/Length 4789
+/Contents 28 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 25 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
 >>
-stream
-BT
-/F2 18 Tf 54 770.0 Td (Test Plan & Consolidated Test Cases \(v1.2\)) Tj
-/F1 8.2 Tf 54 731.0 Td (- Document ID: TP-BMS-2026-v1.2) Tj
-/F1 8.2 Tf 54 721.0 Td (- Course: UE24CS341A \(Software Engineering and System Design\)) Tj
-/F1 8.2 Tf 54 711.0 Td (- Story: [S-41] Update the test cases and Test Plan for sprint changes \(#117\)) Tj
-/F1 8.2 Tf 54 701.0 Td (- Status: Issued for Sprint 3 execution; supersedes the standalone test-case and test-plan) Tj
-/F1 8.2 Tf 54 691.0 Td (files) Tj
-/F1 8.2 Tf 54 681.0 Td (- Prepared by: QA Team, Abhishek Kinagi) Tj
-/F1 8.2 Tf 54 671.0 Td (- Related source documents: The standalone DOCX/PDF files were superseded and removed in) Tj
-/F1 8.2 Tf 54 661.0 Td (v1.2; their coverage is consolidated here.) Tj
-/F1 8.2 Tf 54 651.0 Td (- Governing SRS Reference: SRS v1.1 \(Dated 02/09/2026; corrected from erroneous 11/09/2026) Tj
-/F1 8.2 Tf 54 641.0 Td (citation\)) Tj
-0.5 w 54 623.0 m 558 623.0 l S
-/F2 13 Tf 54 606.0 Td (1. Revision History & Remediation Log) Tj
-/F1 8.2 Tf 54 581.0 Td (Version | Date | Author | Description) Tj
-/F1 8.2 Tf 54 571.0 Td (1.0 | 15 Sep 2026 | QA Team | Initial draft with split standalone test suites.) Tj
-/F1 8.2 Tf 54 561.0 Td (1.1 | 1 Nov 2026 | Abhishek Kinagi & Team | Consolidation & Gap Resolution \(S-35\):<br>1.) Tj
-/F1 8.2 Tf 54 551.0 Td (Merged standalone test suites into unified Section 14 with continuous TC IDs.<br>2. Retained) Tj
-/F1 8.2 Tf 54 541.0 Td (the legacy source documents as supporting references.<br>3. Corrected SRS citation date from) Tj
-/F1 8.2 Tf 54 531.0 Td (11/09/2026 to 02/09/2026.<br>4. Added test cases for FR-12 \(statements\), FR-14 \(dashboards\),) Tj
-/F1 8.2 Tf 54 521.0 Td (FR-7 \(daily limit\), admin unlock \(TC-02B\), NFR-2 \(performance\), NFR-6 \(usability\), and NFR-9) Tj
-/F1 8.2 Tf 54 511.0 Td (\(portability\).<br>5. Refined TC-15 wording regarding HTTPS TLS handshake.<br>6. Preserved the) Tj
-/F1 8.2 Tf 54 501.0 Td (canonical TC-11 balance/history ownership mapping.<br>7. Built 100% complete Requirements) Tj
-/F1 8.2 Tf 54 491.0 Td (Traceability Matrix.) Tj
-/F1 8.2 Tf 54 481.0 Td (1.2 | 4 Nov 2026 | Abhishek Kinagi & Team | Sprint-change alignment \(S-41\):<br>1. Rechecked) Tj
-/F1 8.2 Tf 54 471.0 Td (every case against the merged implementation and deviations log.<br>2. Added explicit) Tj
-/F1 8.2 Tf 54 461.0 Td (zero-opening-deposit coverage, request bodies/status codes for freeze/close and customer) Tj
-/F1 8.2 Tf 54 451.0 Td (deactivation, and UTC daily-limit reset behavior.<br>3. Resolved the duplicate dashboard) Tj
-/F1 8.2 Tf 54 441.0 Td (coverage by making TC-19 the account-list/history performance case.<br>4. Reissued this) Tj
-/F1 8.2 Tf 54 431.0 Td (document as an IEEE-style PDF and superseded the standalone DOCX/PDF artifacts.<br>5. Updated) Tj
-/F1 8.2 Tf 54 421.0 Td (the RTM/security mapping and TC-03 response status to HTTP 204.) Tj
-0.5 w 54 403.0 m 558 403.0 l S
-/F2 13 Tf 54 386.0 Td (2. Section 5.1: Test Suite Classification and Security Validation \(Updated\)) Tj
-/F1 8.2 Tf 54 361.0 Td (Suite ID | Suite Name | Description | Included Test Cases) Tj
-/F1 8.2 Tf 54 351.0 Td (TS-01 | Authentication & Lockout | Credential checks, session creation, lockout after 3) Tj
-/F1 8.2 Tf 54 341.0 Td (fails, admin unlock | TC-01, TC-02, TC-02B, TC-03) Tj
-/F1 8.2 Tf 54 331.0 Td (TS-02 | Customer & Account Ops | Customer onboarding, Administrator-only customer) Tj
-/F1 8.2 Tf 54 321.0 Td (deactivation, account opening, status management | TC-04, TC-04B, TC-05, TC-06, TC-07) Tj
-/F1 8.2 Tf 54 311.0 Td (TS-03 | Financial Transactions | Deposits, withdrawals, daily limits, atomic transfers |) Tj
-/F1 8.2 Tf 54 301.0 Td (TC-08, TC-09, TC-09B, TC-10, TC-10B) Tj
-/F1 8.2 Tf 54 291.0 Td (TS-04 | Security & Access Control | Least privilege, role barriers, HTTPS, audit trail |) Tj
-/F1 8.2 Tf 54 281.0 Td (TC-11, TC-14, TC-15, TC-16) Tj
-/F1 8.2 Tf 54 271.0 Td (TS-05 | Staff & Administration | Bank Officer CRUD, deactivation session clearance | TC-12,) Tj
-/F1 8.2 Tf 54 261.0 Td (TC-13) Tj
-/F1 8.2 Tf 54 251.0 Td (TS-06 | Reporting & Analytics | History queries, statements export, role dashboards | TC-17,) Tj
-/F1 8.2 Tf 54 241.0 Td (TC-18) Tj
-/F1 8.2 Tf 54 231.0 Td (TS-07 | Non-Functional Requirements | Performance \(<2s transactions, <3s reads\), usability) Tj
-/F1 8.2 Tf 54 221.0 Td (walkthrough, cross-platform | TC-19, TC-20, TC-21, TC-22) Tj
-/F1 8.2 Tf 54 203.0 Td (Security validation in this section covers authentication, lockout, RBAC, session) Tj
-/F1 8.2 Tf 54 193.0 Td (invalidation, encrypted transport, and audit immutability through TS-01 and TS-04. TC-11) Tj
-/F1 8.2 Tf 54 183.0 Td (remains the primary ownership and date-filter access case.) Tj
-0.5 w 54 165.0 m 558 165.0 l S
-/F1 7 Tf 54 35 Td (TP-BMS-2026-v1.2  |  Page 1 of 7) Tj
-ET
-endstream
 endobj
 8 0 obj
 <<
-/Type /Page
-/MediaBox [ 0 0 612 792 ]
-/Resources <<
-/Font <<
-/F1 5 0 R
-/F2 6 0 R
->>
->>
-/Contents 9 0 R
-/Parent 1 0 R
+/Contents 29 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 25 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
 >>
 endobj
 9 0 obj
 <<
-/Length 3880
+/Contents 30 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 25 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
 >>
-stream
-BT
-/F2 13 Tf 54 770.0 Td (3. Section 14: Consolidated Master Test Cases) Tj
-/F2 10 Tf 54 745.0 Td (TC-01: Valid User Authentication \(FR-1, SEC-2, S-07\)) Tj
-/F1 8.2 Tf 54 724.0 Td (- Preconditions: Registered active user exists in SQLite users table.) Tj
-/F1 8.2 Tf 54 714.0 Td (- Input: POST /auth/login with valid userid and correct password.) Tj
-/F1 8.2 Tf 54 704.0 Td (- Expected Result: HTTP 200 OK; returns 64-character session token and user role; password is) Tj
-/F1 8.2 Tf 54 694.0 Td (never returned; failed attempt counter reset to 0.) Tj
-/F2 10 Tf 54 676.0 Td (TC-02: Account Lockout after Three Consecutive Failed Logins \(FR-2, S-09\)) Tj
-/F1 8.2 Tf 54 655.0 Td (- Preconditions: Active user exists with failedattempts = 0 and status = 'active'.) Tj
-/F1 8.2 Tf 54 645.0 Td (- Input: 3 consecutive POST /auth/login requests with incorrect passwords.) Tj
-/F1 8.2 Tf 54 635.0 Td (- Expected Result:) Tj
-/F1 8.2 Tf 54 625.0 Td (- 1st & 2nd attempts: HTTP 401 with generic message "Invalid user ID or password".) Tj
-/F1 8.2 Tf 54 615.0 Td (- 3rd attempt: HTTP 401 with code ACCOUNTLOCKED and directive to contact an Administrator.) Tj
-/F1 8.2 Tf 54 605.0 Td (- In database: users.status = 'locked' and users.failedattempts = 3.) Tj
-/F2 10 Tf 54 587.0 Td (TC-02B: Administrative Account Unlock \(FR-13, S-09\) \(NEW\)) Tj
-/F1 8.2 Tf 54 566.0 Td (- Preconditions: User is locked \(status = 'locked'\). Administrator is logged in with valid) Tj
-/F1 8.2 Tf 54 556.0 Td (bearer token.) Tj
-/F1 8.2 Tf 54 546.0 Td (- Input: PATCH /users/{id}/unlock issued by Administrator.) Tj
-/F1 8.2 Tf 54 536.0 Td (- Expected Result: HTTP 200 OK; database updates users.status = 'active' and) Tj
-/F1 8.2 Tf 54 526.0 Td (users.failedattempts = 0; user can immediately log in again with correct password.) Tj
-/F2 10 Tf 54 508.0 Td (TC-03: Session Expiry and Logout \(FR-2, SEC-1, S-08\)) Tj
-/F1 8.2 Tf 54 487.0 Td (- Preconditions: User is logged in with active session token.) Tj
-/F1 8.2 Tf 54 477.0 Td (- Input: User sends POST /auth/logout; subsequent request sent with invalidated token.) Tj
-/F1 8.2 Tf 54 467.0 Td (- Expected Result: Logout returns HTTP 204; the server removes the token from its in-memory) Tj
-/F1 8.2 Tf 54 457.0 Td (session store; subsequent request receives HTTP 401 Unauthorized; UI redirects to login) Tj
-/F1 8.2 Tf 54 447.0 Td (screen.) Tj
-/F2 10 Tf 54 429.0 Td (TC-04: Customer Registration Validation \(FR-3\)) Tj
-/F1 8.2 Tf 54 408.0 Td (- Preconditions: Bank Officer is authenticated; customer registration form is available.) Tj
-/F1 8.2 Tf 54 398.0 Td (- Input: Submit a customer record without a phone number, then resubmit with all mandatory) Tj
-/F1 8.2 Tf 54 388.0 Td (fields valid.) Tj
-/F1 8.2 Tf 54 378.0 Td (- Expected Result: The incomplete request is rejected with a field-level validation error;) Tj
-/F1 8.2 Tf 54 368.0 Td (the corrected request creates a customer and assigns a unique customer identifier.) Tj
-/F2 10 Tf 54 350.0 Td (TC-04B: Administrator-Only Customer Deactivation \(FR-3, SEC-1, S-13\)) Tj
-/F1 8.2 Tf 54 329.0 Td (- Preconditions: An active customer exists; Administrator, Bank Officer, and Customer) Tj
-/F1 8.2 Tf 54 319.0 Td (sessions are available.) Tj
-/F1 8.2 Tf 54 309.0 Td (- Input: Administrator sends PUT /customers/{customerId} with exactly {"status":"inactive"};) Tj
-/F1 8.2 Tf 54 299.0 Td (repeat with the Officer and Customer tokens.) Tj
-/F1 8.2 Tf 54 289.0 Td (- Expected Result: Administrator receives HTTP 200 and the customer becomes inactive; Officer) Tj
-/F1 8.2 Tf 54 279.0 Td (and Customer receive HTTP 403; repeated deactivation is idempotent; customer login and new) Tj
-/F1 8.2 Tf 54 269.0 Td (account opening are refused, existing account and audit history remain retained, and active) Tj
-/F1 8.2 Tf 54 259.0 Td (customer sessions are invalidated.) Tj
-/F1 7 Tf 54 35 Td (TP-BMS-2026-v1.2  |  Page 2 of 7) Tj
-ET
-endstream
 endobj
 10 0 obj
 <<
-/Type /Page
-/MediaBox [ 0 0 612 792 ]
-/Resources <<
-/Font <<
-/F1 5 0 R
-/F2 6 0 R
->>
->>
-/Contents 11 0 R
-/Parent 1 0 R
+/Contents 31 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 25 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
 >>
 endobj
 11 0 obj
 <<
-/Length 3958
+/Contents 32 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 25 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
 >>
-stream
-BT
-/F2 10 Tf 54 770.0 Td (TC-05: Account Opening Minimum Balance \(FR-4, S-15\)) Tj
-/F1 8.2 Tf 54 749.0 Td (- Preconditions: Active customer exists; one account type has a positive minimum and another) Tj
-/F1 8.2 Tf 54 739.0 Td (has a zero minimum.) Tj
-/F1 8.2 Tf 54 729.0 Td (- Input: POST /accounts with an initial deposit below the positive minimum, then with the) Tj
-/F1 8.2 Tf 54 719.0 Td (exact minimum; repeat for the zero-minimum type using initialDeposit = "0.00".) Tj
-/F1 8.2 Tf 54 709.0 Td (- Expected Result: The below-minimum request returns HTTP 422 with BELOWMINIMUMBALANCE and) Tj
-/F1 8.2 Tf 54 699.0 Td (creates no rows. Exact-minimum and zero-minimum requests return HTTP 201, create unique) Tj
-/F1 8.2 Tf 54 689.0 Td (active accounts, and record the opening deposit as the first transaction; the zero opening) Tj
-/F1 8.2 Tf 54 679.0 Td (amount is permitted only for a zero-minimum type.) Tj
-/F2 10 Tf 54 661.0 Td (TC-06: Withdrawal Minimum Balance and Daily Limit \(FR-7\)) Tj
-/F1 8.2 Tf 54 640.0 Td (- Preconditions: Active account has a balance above its configured minimum; a daily) Tj
-/F1 8.2 Tf 54 630.0 Td (withdrawal limit is configured.) Tj
-/F1 8.2 Tf 54 620.0 Td (- Input: Attempt a withdrawal that breaches the minimum balance, one that exceeds the daily) Tj
-/F1 8.2 Tf 54 610.0 Td (limit, then a valid withdrawal.) Tj
-/F1 8.2 Tf 54 600.0 Td (- Expected Result: The first two requests are rejected with specific errors and no balance) Tj
-/F1 8.2 Tf 54 590.0 Td (change; the valid request succeeds and records the debit.) Tj
-/F2 10 Tf 54 572.0 Td (TC-07: Freeze and Close Account \(FR-5, S-16\)) Tj
-/F1 8.2 Tf 54 551.0 Td (- Preconditions: Active account exists; Bank Officer or Administrator is authenticated. Use a) Tj
-/F1 8.2 Tf 54 541.0 Td (zero-balance account for closure.) Tj
-/F1 8.2 Tf 54 531.0 Td (- Input: Send PATCH /accounts/{accountNumber}/status with {"action":"freeze"}, then) Tj
-/F1 8.2 Tf 54 521.0 Td ({"action":"unfreeze"}, then {"action":"close"}.) Tj
-/F1 8.2 Tf 54 511.0 Td (- Expected Result: Each valid transition returns HTTP 200 and the requested status. Closing a) Tj
-/F1 8.2 Tf 54 501.0 Td (non-zero account returns HTTP 409 with ACCOUNTBALANCENONZERO; closing a zero-balance active) Tj
-/F1 8.2 Tf 54 491.0 Td (or frozen account succeeds. Deposits, withdrawals, and transfers against frozen/closed) Tj
-/F1 8.2 Tf 54 481.0 Td (accounts return HTTP 422; retained account and audit data remain viewable. Repeating the) Tj
-/F1 8.2 Tf 54 471.0 Td (current action is idempotent.) Tj
-/F2 10 Tf 54 453.0 Td (TC-08: Deposit Funds with Confirmation Dialog \(FR-6, SRS 3.1, S-17\)) Tj
-/F1 8.2 Tf 54 432.0 Td (- Preconditions: Account ACC001 active with balance INR 10,000.) Tj
-/F1 8.2 Tf 54 422.0 Td (- Input: Bank Officer initiates INR 5,000 cash deposit.) Tj
-/F1 8.2 Tf 54 412.0 Td (- Expected Result: UI renders modal confirmation showing account number \(ACC001\) and deposit) Tj
-/F1 8.2 Tf 54 402.0 Td (amount \(INR 5,000.00\); upon confirmation, ledger updates atomically and the post-success view) Tj
-/F1 8.2 Tf 54 392.0 Td (shows the resulting balance \(INR 15,000.00\).) Tj
-/F2 10 Tf 54 374.0 Td (TC-09: Daily Withdrawal Limit Check \(FR-7, S-18\) \(NEW\)) Tj
-/F1 8.2 Tf 54 353.0 Td (- Preconditions: Savings account with balance INR 50,000; daily withdrawal limit is INR) Tj
-/F1 8.2 Tf 54 343.0 Td (25,000; stored timestamps are UTC.) Tj
-/F1 8.2 Tf 54 333.0 Td (- Input: Attempt withdrawal of INR 30,000 in one UTC calendar day, then repeat a valid) Tj
-/F1 8.2 Tf 54 323.0 Td (withdrawal after the UTC date changes.) Tj
-/F1 8.2 Tf 54 313.0 Td (- Expected Result: HTTP 422 with DAILYLIMITEXCEEDED; balance remains unchanged; message) Tj
-/F1 8.2 Tf 54 303.0 Td (states the INR 25,000 limit. Withdrawals before and after the UTC midnight boundary are) Tj
-/F1 8.2 Tf 54 293.0 Td (counted in separate daily totals; local-time midnight is not used.) Tj
-/F1 7 Tf 54 35 Td (TP-BMS-2026-v1.2  |  Page 3 of 7) Tj
-ET
-endstream
 endobj
 12 0 obj
 <<
-/Type /Page
-/MediaBox [ 0 0 612 792 ]
-/Resources <<
-/Font <<
-/F1 5 0 R
-/F2 6 0 R
->>
->>
-/Contents 13 0 R
-/Parent 1 0 R
+/Contents 33 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 25 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
 >>
 endobj
 13 0 obj
 <<
-/Length 3374
+/Contents 34 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 25 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
 >>
-stream
-BT
-/F2 10 Tf 54 770.0 Td (TC-09B: Credit Account Interest Once per Period \(FR-11, S-22\)) Tj
-/F1 8.2 Tf 54 749.0 Td (- Preconditions: Administrator is authenticated; an eligible interest-bearing account has not) Tj
-/F1 8.2 Tf 54 739.0 Td (yet been credited for the selected period.) Tj
-/F1 8.2 Tf 54 729.0 Td (- Input: Run interest crediting for the period, then repeat the same run.) Tj
-/F1 8.2 Tf 54 719.0 Td (- Expected Result: The first run credits the calculated interest and records one interest) Tj
-/F1 8.2 Tf 54 709.0 Td (transaction; the duplicate run is rejected and does not change the balance.) Tj
-/F2 10 Tf 54 691.0 Td (TC-10: Atomic Transfer Between Accounts \(FR-8, S-19\)) Tj
-/F1 8.2 Tf 54 670.0 Td (- Preconditions: Account A has INR 10,000, Account B has INR 5,000.) Tj
-/F1 8.2 Tf 54 660.0 Td (- Input: Transfer INR 3,000 from A to B within BEGIN IMMEDIATE transaction.) Tj
-/F1 8.2 Tf 54 650.0 Td (- Expected Result: Account A balance = INR 7,000, Account B balance = INR 8,000; two balanced) Tj
-/F1 8.2 Tf 54 640.0 Td (transaction entries written; if server interrupts during transfer, entire transaction rolls) Tj
-/F1 8.2 Tf 54 630.0 Td (back.) Tj
-/F2 10 Tf 54 612.0 Td (TC-10B: Invalid Transfer Requests \(FR-8, S-19\)) Tj
-/F1 8.2 Tf 54 591.0 Td (- Preconditions: Two active accounts exist; source has a known balance.) Tj
-/F1 8.2 Tf 54 581.0 Td (- Input: Attempt a transfer to the same account and a transfer exceeding the source balance.) Tj
-/F1 8.2 Tf 54 571.0 Td (- Expected Result: Both requests are rejected with no balance or ledger changes; valid) Tj
-/F1 8.2 Tf 54 561.0 Td (transfers remain atomic.) Tj
-/F2 10 Tf 54 543.0 Td (TC-11: Customer Balance and Transaction History Access \(FR-9, FR-10, S-20, S-21\)) Tj
-/F1 8.2 Tf 54 522.0 Td (- Preconditions: Customer X owns ACC001; another customer owns ACC002; both accounts have) Tj
-/F1 8.2 Tf 54 512.0 Td (dated transactions.) Tj
-/F1 8.2 Tf 54 502.0 Td (- Input: Customer X views the balance and date-filtered history for ACC001, then requests) Tj
-/F1 8.2 Tf 54 492.0 Td (ACC002.) Tj
-/F1 8.2 Tf 54 482.0 Td (- Expected Result: Own balance and reverse-chronological, date-filtered history are returned;) Tj
-/F1 8.2 Tf 54 472.0 Td (access to ACC002 is denied and the denied request is audited.) Tj
-/F2 10 Tf 54 454.0 Td (TC-12: Create Bank Officer Account \(FR-13, S-24\)) Tj
-/F1 8.2 Tf 54 433.0 Td (- Preconditions: Administrator logged in.) Tj
-/F1 8.2 Tf 54 423.0 Td (- Input: POST /staff with username = "officernew" and the required staff-creation fields.) Tj
-/F1 8.2 Tf 54 413.0 Td (- Expected Result: HTTP 201 Created; officer stored with Argon2id hash; officer can) Tj
-/F1 8.2 Tf 54 403.0 Td (immediately authenticate.) Tj
-/F2 10 Tf 54 385.0 Td (TC-13: Deactivate Bank Officer & Session Invalidation \(FR-13, S-24\)) Tj
-/F1 8.2 Tf 54 364.0 Td (- Preconditions: Officer has an active session token.) Tj
-/F1 8.2 Tf 54 354.0 Td (- Input: Administrator issues PATCH /staff/{officerUserId} with {"status":"inactive"}.) Tj
-/F1 8.2 Tf 54 344.0 Td (- Expected Result: HTTP 200 OK; users.status = 'inactive'; all active tokens for the officer) Tj
-/F1 8.2 Tf 54 334.0 Td (are rejected by subsequent requests; officer ID is retained on historical transaction audit) Tj
-/F1 8.2 Tf 54 324.0 Td (entries. The endpoint is Administrator-only.) Tj
-/F1 7 Tf 54 35 Td (TP-BMS-2026-v1.2  |  Page 4 of 7) Tj
-ET
-endstream
 endobj
 14 0 obj
 <<
-/Type /Page
-/MediaBox [ 0 0 612 792 ]
-/Resources <<
-/Font <<
-/F1 5 0 R
-/F2 6 0 R
->>
->>
-/Contents 15 0 R
-/Parent 1 0 R
+/Contents 35 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 25 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
 >>
 endobj
 15 0 obj
 <<
-/Length 3614
+/Contents 36 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 25 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
 >>
-stream
-BT
-/F2 10 Tf 54 770.0 Td (TC-14: Role-Specific Dashboards \(FR-14, NFR-2, S-25\) \(NEW\)) Tj
-/F1 8.2 Tf 54 749.0 Td (- Preconditions: Authenticated as Administrator, Bank Officer, or Customer.) Tj
-/F1 8.2 Tf 54 739.0 Td (- Input: GET /dashboard.) Tj
-/F1 8.2 Tf 54 729.0 Td (- Expected Result:) Tj
-/F1 8.2 Tf 54 719.0 Td (- Administrator receives system-wide counts \(customers, accounts, staff\) and today's volume.) Tj
-/F1 8.2 Tf 54 709.0 Td (- Bank Officer receives transactions they processed today.) Tj
-/F1 8.2 Tf 54 699.0 Td (- Customer receives list of their owned accounts and balances.) Tj
-/F1 8.2 Tf 54 689.0 Td (- Endpoint responds in < 3.0 seconds \(satisfying NFR-2\).) Tj
-/F2 10 Tf 54 671.0 Td (TC-15: Secure HTTPS / TLS Configuration \(SEC-2, S-28\)) Tj
-/F1 8.2 Tf 54 650.0 Td (- Preconditions: TLS certificate and private key configured on server.) Tj
-/F1 8.2 Tf 54 640.0 Td (- Input: Client initiates HTTPS connection with TLS 1.3 over port 8443.) Tj
-/F1 8.2 Tf 54 630.0 Td (- Expected Result: Successful TLS handshake; plain HTTP requests to secure port are rejected) Tj
-/F1 8.2 Tf 54 620.0 Td (or upgraded; all payload traffic encrypted in transit.) Tj
-/F2 10 Tf 54 602.0 Td (TC-16: Append-Only Audit Trail \(NFR-5, S-10\)) Tj
-/F1 8.2 Tf 54 581.0 Td (- Preconditions: Deposit, withdrawal, and transfer operations have been completed.) Tj
-/F1 8.2 Tf 54 571.0 Td (- Input: Inspect their audit records and attempt to update or delete an entry through the) Tj
-/F1 8.2 Tf 54 561.0 Td (application.) Tj
-/F1 8.2 Tf 54 551.0 Td (- Expected Result: Each balance-changing operation has an audit entry containing timestamp,) Tj
-/F1 8.2 Tf 54 541.0 Td (affected entity, amount, and operator; update and delete attempts are rejected.) Tj
-/F2 10 Tf 54 523.0 Td (TC-17: Date-Filtered Transaction History \(FR-10, S-21\)) Tj
-/F1 8.2 Tf 54 502.0 Td (- Preconditions: An authenticated user can view an account's transaction history.) Tj
-/F1 8.2 Tf 54 492.0 Td (- Input: Request history with inclusive from and to dates and inspect result ordering.) Tj
-/F1 8.2 Tf 54 482.0 Td (- Expected Result: Only transactions within the date range are returned, newest first, with) Tj
-/F1 8.2 Tf 54 472.0 Td (signed amounts and no duplicate records across pages.) Tj
-/F2 10 Tf 54 454.0 Td (TC-18: Account Statement Generation & Export \(FR-12, S-23\) \(NEW\)) Tj
-/F1 8.2 Tf 54 433.0 Td (- Preconditions: Customer account with 10+ transactions over past 60 days.) Tj
-/F1 8.2 Tf 54 423.0 Td (- Input: GET /accounts/{id}/statement?from=2026-09-01&to=2026-10-18.) Tj
-/F1 8.2 Tf 54 413.0 Td (- Expected Result: HTTP 200 OK; returns chronologically ordered statement with opening) Tj
-/F1 8.2 Tf 54 403.0 Td (balance, closing balance, debit/credit entries, and formatted export.) Tj
-/F2 10 Tf 54 385.0 Td (TC-19: Account List and History Read Performance \(FR-9, FR-10, NFR-2, S-25\)) Tj
-/F1 8.2 Tf 54 364.0 Td (- Preconditions: Database contains representative account and transaction data; authenticated) Tj
-/F1 8.2 Tf 54 354.0 Td (sessions can access permitted accounts.) Tj
-/F1 8.2 Tf 54 344.0 Td (- Input: Measure GET /dashboard for a Customer account list and GET) Tj
-/F1 8.2 Tf 54 334.0 Td (/accounts/{accountNumber}/transactions for a permitted date-filtered history.) Tj
-/F1 8.2 Tf 54 324.0 Td (- Expected Result: Each response returns only authorized data, preserves the documented) Tj
-/F1 8.2 Tf 54 314.0 Td (ordering and filters, and completes in under 3 seconds. Role-specific dashboard correctness) Tj
-/F1 8.2 Tf 54 304.0 Td (remains covered once, by TC-14.) Tj
-/F1 7 Tf 54 35 Td (TP-BMS-2026-v1.2  |  Page 5 of 7) Tj
-ET
-endstream
 endobj
 16 0 obj
 <<
-/Type /Page
-/MediaBox [ 0 0 612 792 ]
-/Resources <<
-/Font <<
-/F1 5 0 R
-/F2 6 0 R
->>
->>
-/Contents 17 0 R
-/Parent 1 0 R
+/Contents 37 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 25 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
 >>
 endobj
 17 0 obj
 <<
-/Length 4721
+/Contents 38 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 25 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
 >>
-stream
-BT
-/F2 10 Tf 54 770.0 Td (TC-20: Transaction Performance Target Verification \(NFR-1, S-30\) \(NEW\)) Tj
-/F1 8.2 Tf 54 749.0 Td (- Preconditions: Database populated with approximately 3,000 accounts; system is under normal) Tj
-/F1 8.2 Tf 54 739.0 Td (simulated load.) Tj
-/F1 8.2 Tf 54 729.0 Td (- Input: Execute deposit, withdrawal, and transfer operations and measure the time through) Tj
-/F1 8.2 Tf 54 719.0 Td (persisted success response.) Tj
-/F1 8.2 Tf 54 709.0 Td (- Expected Result: Each balance-affecting transaction completes within 2 seconds, including) Tj
-/F1 8.2 Tf 54 699.0 Td (database persistence.) Tj
-/F2 10 Tf 54 681.0 Td (TC-21: First-Time User Usability Walkthrough \(NFR-6, S-32\) \(NEW\)) Tj
-/F1 8.2 Tf 54 660.0 Td (- Preconditions: 3 first-time users without prior training.) Tj
-/F1 8.2 Tf 54 650.0 Td (- Input: Each participant performs Bank Officer deposit and Customer history lookup unaided.) Tj
-/F1 8.2 Tf 54 640.0 Td (- Expected Result: 100% task completion rate on first attempt without verbal prompts;) Tj
-/F1 8.2 Tf 54 630.0 Td (findings documented in Usability Walkthrough Report \(docs/USABILITYWALKTHROUGH.md\).) Tj
-/F2 10 Tf 54 612.0 Td (TC-22: Cross-Platform & Cross-Browser Portability \(NFR-9, S-31\) \(NEW\)) Tj
-/F1 8.2 Tf 54 591.0 Td (- Preconditions: Builds produced on Linux \(GCC\) and Windows \(MSVC\).) Tj
-/F1 8.2 Tf 54 581.0 Td (- Input: Run backend on Ubuntu 24.04 and Windows 11; access web frontend via Google Chrome) Tj
-/F1 8.2 Tf 54 571.0 Td (and Mozilla Firefox.) Tj
-/F1 8.2 Tf 54 561.0 Td (- Expected Result: Both OS binaries execute without platform-specific errors; UI renders) Tj
-/F1 8.2 Tf 54 551.0 Td (identically with responsive glassmorphism across Chrome and Firefox.) Tj
-0.5 w 54 533.0 m 558 533.0 l S
-/F2 13 Tf 54 516.0 Td (4. Requirements Traceability Matrix \(RTM\)) Tj
-/F1 8.2 Tf 54 491.0 Td (Requirement ID | Requirement Description | Verification Method | Associated Test Cases) Tj
-/F1 8.2 Tf 54 481.0 Td (FR-1 | User authentication with ID & password/PIN | Automated / API | TC-01, TC-15) Tj
-/F1 8.2 Tf 54 471.0 Td (FR-2 | Session management, logout & 3-fail lockout | Automated / Unit | TC-02, TC-02B, TC-03) Tj
-/F1 8.2 Tf 54 461.0 Td (FR-3 | Register and deactivate customer record | API / Integration | TC-04, TC-04B) Tj
-/F1 8.2 Tf 54 451.0 Td (FR-4 | Open new bank account for customer | API / Integration | TC-05) Tj
-/F1 8.2 Tf 54 441.0 Td (FR-5 | Freeze and close accounts | API / Functional | TC-07) Tj
-/F1 8.2 Tf 54 431.0 Td (FR-6 | Deposit funds with confirmation dialog | Functional / UI | TC-08 \(SRS 3.1\)) Tj
-/F1 8.2 Tf 54 421.0 Td (FR-7 | Withdraw funds with minimum balance & daily limit | Automated / API | TC-09) Tj
-/F1 8.2 Tf 54 411.0 Td (FR-8 | Atomic fund transfer between accounts | Unit / Integration | TC-10) Tj
-/F1 8.2 Tf 54 401.0 Td (FR-9 | View account balance | API / UI | TC-11) Tj
-/F1 8.2 Tf 54 391.0 Td (FR-10 | View transaction history with date filters | API / UI | TC-11, TC-17) Tj
-/F1 8.2 Tf 54 381.0 Td (FR-11 | Credit account interest once per period | API / Integration | TC-09B) Tj
-/F1 8.2 Tf 54 371.0 Td (FR-12 | Account statement generation & export | Automated / API | TC-18) Tj
-/F1 8.2 Tf 54 361.0 Td (FR-13 | Staff management & administrative unlock | Functional / UI | TC-02B, TC-12, TC-13) Tj
-/F1 8.2 Tf 54 351.0 Td (FR-14 | Role-specific dashboards | Functional / API | TC-14) Tj
-/F1 8.2 Tf 54 341.0 Td (NFR-1 | Balance-affecting transaction response time \(< 2 seconds\) | Performance test | TC-20) Tj
-/F1 8.2 Tf 54 331.0 Td (NFR-2 | Dashboard, account-list, and history response time \(< 3 seconds\) | Performance test |) Tj
-/F1 8.2 Tf 54 321.0 Td (TC-14, TC-19) Tj
-/F1 8.2 Tf 54 311.0 Td (NFR-3 | ACID transaction integrity | Unit test | TC-10) Tj
-/F1 8.2 Tf 54 301.0 Td (NFR-4 | Secure password hashing \(Argon2id\) | Unit / Security | TC-01) Tj
-/F1 8.2 Tf 54 291.0 Td (NFR-5 | Tamper-evident append-only audit trail | Security audit | TC-16) Tj
-/F1 8.2 Tf 54 281.0 Td (NFR-6 | Usability for first-time users | User walkthrough | TC-21) Tj
-/F1 8.2 Tf 54 271.0 Td (NFR-7 | Reliability & graceful error handling | API error test | TC-02, TC-09, TC-10B, TC-11) Tj
-/F1 8.2 Tf 54 261.0 Td (NFR-8 | Modular architecture by functional area | Static analysis | CMake build check) Tj
-/F1 8.2 Tf 54 251.0 Td (NFR-9 | Portability: Linux/Windows & Chrome/Firefox | Environment test | TC-22) Tj
-/F1 8.2 Tf 54 241.0 Td (SEC-1 | Role-based access control & token expiry | Automated / API | TC-03, TC-11, TC-13) Tj
-/F1 8.2 Tf 54 231.0 Td (SEC-2 | Encrypted transport \(HTTPS\) & Argon2 hashing | Security audit | TC-01, TC-15) Tj
-0.5 w 54 213.0 m 558 213.0 l S
-/F1 7 Tf 54 35 Td (TP-BMS-2026-v1.2  |  Page 6 of 7) Tj
-ET
-endstream
 endobj
 18 0 obj
 <<
-/Type /Page
-/MediaBox [ 0 0 612 792 ]
-/Resources <<
-/Font <<
-/F1 5 0 R
-/F2 6 0 R
->>
->>
-/Contents 19 0 R
-/Parent 1 0 R
+/Contents 39 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 25 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
 >>
 endobj
 19 0 obj
 <<
-/Length 1182
+/Contents 40 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 25 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
+>>
+endobj
+20 0 obj
+<<
+/Contents 41 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 25 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
+>>
+endobj
+21 0 obj
+<<
+/Contents 42 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 25 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
+>>
+endobj
+22 0 obj
+<<
+/Contents 43 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 25 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
+>>
+endobj
+23 0 obj
+<<
+/PageMode /UseNone /Pages 25 0 R /Type /Catalog
+>>
+endobj
+24 0 obj
+<<
+/Author (Bank Management System project team) /CreationDate (D:20000101000000+00'00') /Creator (\(unspecified\)) /Keywords () /ModDate (D:20000101000000+00'00') /Producer (ReportLab PDF Library - \(opensource\)) 
+  /Subject (\(unspecified\)) /Title (Bank Management System Software Test Plan v1.3) /Trapped /False
+>>
+endobj
+25 0 obj
+<<
+/Count 18 /Kids [ 5 0 R 6 0 R 7 0 R 8 0 R 9 0 R 10 0 R 11 0 R 12 0 R 13 0 R 14 0 R 
+  15 0 R 16 0 R 17 0 R 18 0 R 19 0 R 20 0 R 21 0 R 22 0 R ] /Type /Pages
+>>
+endobj
+26 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ] /Length 2242
 >>
 stream
-BT
-/F2 13 Tf 54 770.0 Td (5. Summary of Remediation Actions \(S-41 Done Criteria\)) Tj
-/F1 8.2 Tf 54 745.0 Td (1. Implementation alignment: All cases were checked against merged source, automated tests,) Tj
-/F1 8.2 Tf 54 735.0 Td (manual-test instructions, and docs/DEVIATIONS.md.) Tj
-/F1 8.2 Tf 54 725.0 Td (2. Sprint changes covered: Explicit cases now cover zero opening deposits \(TC-05\), the) Tj
-/F1 8.2 Tf 54 715.0 Td (freeze/close action body and conflict rules \(TC-07\), UTC daily-limit boundaries \(TC-09\), and) Tj
-/F1 8.2 Tf 54 705.0 Td (Administrator-only customer deactivation \(TC-04B\).) Tj
-/F1 8.2 Tf 54 695.0 Td (3. Overlap removed: TC-14 is the sole role-dashboard behavior case; TC-19 verifies) Tj
-/F1 8.2 Tf 54 685.0 Td (account-list/history performance.) Tj
-/F1 8.2 Tf 54 675.0 Td (4. Traceability table: Covers 100% of functional requirements \(FR-1 to FR-14\), non-functional) Tj
-/F1 8.2 Tf 54 665.0 Td (requirements \(NFR-1 to NFR-9\), and security rules \(SEC-1, SEC-2\).) Tj
-/F1 8.2 Tf 54 655.0 Td (5. SRS citation corrected: Date standardized to 02/09/2026; the v1.2 PDF is the issued copy.) Tj
-/F1 7 Tf 54 35 Td (TP-BMS-2026-v1.2  |  Page 7 of 7) Tj
-ET
-endstream
+Gb!#\968iG&AJ$ClqB')a$L+%*M4<AC"t$Ua&6s#"XYB!#p1Wf>&gH)^:W;j<$U(97u*,EZ:HTk^BM?"Ob89.DSMATi7.mXH,G1@==f#Mb_*krQn?V_4QE!.k<^$(/;iEm=5X2C`#e(R0^ea39`H?`jW9f>)/A2aJH-HG.Mj3/;XOli*Q9QF@>'[X.84'ii[_[.Kj:T^'fF2WW`nL;@.=C95JqS=(dWSccTX&7rsupC()VABXk*RS'2HJjkk<*[jg*`8UL9dq)K%<5%&ikG&&R?(<3WlBpV?0(I8ZrjAHA=3n2H$i7sV</4(Ssemdf7S4e'](?De?k(kF^[/5)2MH2t^`mh#7:$;Ugh'J/s1*rF2u%Nc(,:G1--#^4k\=g?D/;FVHQO@@mN!+)]uY6l!A3"t0!h"CI(i5_GSK5Lh[WS@a\(:_#$A"dH4&h`Y(\lu/<n.s]H9B>O0)JQ;!iA/sVqE`![(T$D>H]=B\X_6J/-WsMen7>Dq+^b.lbbom)/g1^mlO+=%XbmnecAU`.P;aMqiB"p`e4Zpf9<cbkFB\p4`Qe&*qtZII2SDWKFjGC:'*c2q&PYOrB[iZ62E%/-QS?1F"0N4)GnTJMp%&Oq$f&[L)`[FuVt4;*e@i:Y2i+ZU0<!L&AN)@`C-oTWe<NX@Pb[EI[R/Q6;7`bG"fWq0)jT-j^E\2176*1DW663L=<RJ#9kCG7MaqHGh).6oTsB&VLu2C=@&oBslC1D7)O4fgTs1\m7t"gtB%"P4`B%@p$s+,(lZH@0_0%BWq634_0(&6*'MlH$KMOAP#`P#'W_I2Bgs5E$mG%k*G?N">7l$=t#NP%+^-IPU'9R6r;9TK^cj>_$LTh1kK&FSRa_cN.D`+*96P&4=>nQO*Or3HIGedcI'Y]Y.>9%=c^_O_E!"$h:kQdJun\0V:c_ujf]o34e19ThO=<'^05%8MfY+TE@a,NO&MIWUO<["UJRW2+m11BZ^RSiLg,00+:]:Cir*1L6PGK&,<JNc3^:]q^ED+*K4BnQ!4:b.PIL[VIg`@X9E`Ri3+UZT(=Pk0<P6@5%.L64K60m8t?`_L19C+Y@/WfD!H`WUct`>NL^J(`i*H2?_EkBYW40cW"4_d%&)M\A]35B)i7oCg'J:gneK/5PI!FeNS&ZU7a3k5V-^n1!Y!$F7113ZJM4rSZWpClPT5<Ie=G>uX1T2<g!i_e;]>To)auW'Fs+TraYr+tK`iA^]3l#r8PRX;%$e<QZAV(D#Pid>L4\Y7k*7@Ketc.On[N3oZi+CR[+@`8QgC+/'YJ_e8CfG7;ZBlM=VkJ)ZLcq8H"JQ!%Pa5a?f:NN1As&'tKCXQ(BtAM#!f')T#0.@U\?#M6/[Mnp3tVQ-JjGh"Sb_7!#PiW@^MKBbLM`6Uj'D*q_N*g@@,<dR4r]l!X69?(6Xe4(cWhW^!qGapCFrq7aSh;Dh>'i1%eACeEVOB2/V)q%4%9Zhg/"No5&:)(8?p3g-h0U>HXYjdIaaJZF<^*9Bf[f-eF1Kp+O/S-tt-Y9;/-g=rp]qT>LC0%JAU,gdib@2+]9:6F8NNrXTMB+?FN9@E%9)YT88MY+Q/KlQMhj(0AeN&#qQq4(!*i>@Noe%'<Pmmp6ibQT<>Sic<0dW/u=r&!mDQmhDW+\Y0]\Qe6(W^>Z9i2T<TL#&E17`<IYu>e-.-pOc]I3tinuZ_CMQ4.D`=5_d]0O.lp?Ut7\uJ&%Pp3\-8RSMR<RGc]qDfmVS(DT:X4l'262.@pBAE@6>n;7lpK0N^cRbcNKVSET31e>rpl&lKRF0Epraa[WLW8p<Zs%SsrK#4a\*_D/mQ-PO/)k"XPe$07m+F<:b2?tqf=%I<rnP)c'(fq8S&\`Zfl@0d-E@J$s.h4P7+6XN+QV5O&B!Pp5Nm!cJ<cgipo]9)R)rmp-AeJP'&@Du_eN*+I3GkBFUn)^#/<)dQY*=hZka+1\i*C7L8)TZ@SPCd)US:,Zdf@.]!i>j^Xj-`153s&nCjUdJ>&jGPegpk=e_J2#GXY-=2FPO\*\We?7,<MUOkG6;s]t#:&5I1Dm!\R;jVCLO20Vp0],jA"MRpjZjPkd_+KkD=0sJ[d&jtW[V8[^piSlZlc`D)=ApJg#W^Nare>o0c<)L)+2kt3Fu3bBk922BgL&9gNS@lZc?H$5?"PcT_siL,JJ3;s6S;*o%c+?^Z,1@5l$9Y%/no/e1lia;AcE$kiR&=Ol5r"Gqi8AgiR"'Hh)hhOB5mPTS5lo1~>endstream
+endobj
+27 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ] /Length 2632
+>>
+stream
+GatlRBi!d1niOU\ZsP_t8rVT?pO2$,47"^29>[j'KG6:e-h6+>j0gtDpZ#U\GAJ6i!h"lV,^+=d7opE@R.t0j^JP2S4GLa0$S2MB.9MVh_"[tcj+He*91V<ud.!@i%@an'#_j@eG0%I<R-h0jar-bZQGad_Qj_p_HH/._LG(dQ1QdO,K$gp+6jE[D;),0oGq!,PA-H$`cf)\qCkVS&=ZhN,:6`Ofk'_jO2]2Qa]K7*<jr#>K]nXiJ1'#lcq_r9:&]YDU,7)-dF[gmiU!/N#"q+7T)n#2Uht15h@=k5%GfIPia9p-8,P3MhcL\%ei]=*&,%"dTR]U@Lfp^"3$G`kcf*pn"E,<^C_\R5q`luf$nWp7.\>m_@+iQ@J?Ke%s]<ZQ!c.1817]*U(LOj/AQK=il`fJIccP,"%=tHOB/gOD;!AZ,?U(;XV-jq*@qbRW&e7F;@T#V,.MmuLc9T'N5UlaXnKsr3tDL9E27^o#:gf:,OWC/uP*m:@Z6k4UaP8n-W12T]jMskdd.U!HS$P=]6,i[l9UcH"URM9QH@U=m.][_O2U/$V'/KV<#,Uk9@f1(R&;-,1r%E0%,LVk9oWYbdQ%[^r7W4mpg,2KkDKcZok,Z2[F7O:SE5Qs-?OhQ[NK"-VO'(nJN(M&tnVj_F$jQ\I\>&X/FPX7uR,pX,"4NU!-C^gTps++S1(5!#bjQLGSh&hM>f/GV,?uN]:QO&">C<'$6>\,&3X6b01m!<&*<N&^.YE%aYapk7%S)a,e<8L-(f&0Fo29+AA.ai!TU64Yt7tH2!V1Qj?nQ_a%jT:Wuf17BpRc%+9JF:>DZ4BeaX!5H[UXqWF36Bo7mq$>ooJ+<=iKFUG*g:=[Qi)uD3hr^<kAlIRkeeE:.8W(o\Pa4t?)s]ImR*.=U81ml@T42&8s__iT2+!Y/donSR*5;2_93[V0#`M/Gp2Yhj1L%+:Q+GN0c]Hu-P]47U^!=q?Id+20P+c-$[#pPCSrd$J-k!$:/P'9S0UT\C$@@2[RRa<pZT&jI%X%7)06a0gBtN^6f_l@@"bu7>SfWt'n`#t`*ajj)&g_C4W**GJlQR^)j6tgjpYbcc5<5kGg&[852K1^BncEKD6Q_"?-62UG0\b,A!APmGb6acmnPlbh^.VN5@=lN?73ssOk3d[<,U5`U=pbhK`l1\TsjDT0DW4;&W@'bNjXCP):I&`6lT_WUWg%QPF8ke8#E3-b@Vtpe.Cm3PYE_cla;HLlN=`cNSU&8Gkh\^'@nheGI1'GeZ38VTt6Z319+;lXuS+HPIidNYkRP6Z<Kgt'C&EN//.Y>dN?jOed!MOiL/Lum9u&"&+POH:ocL"C"4QaJjpM/;-H83b.q)VB3S*p3I<QYr;fi+`k4/T[MV5;bG-h]-PbK=oeNC>KhQ+S3jU^G^,>8?fVD/VK#B")fOT]'JN-FiAo=],q_GYP!HU3dIQDLF`C$AAQ]Muh:%<Kir9*ukI/`eZZn<E/)@!%kQXSY[(reE,(5KJQrPR)0etI8Hh-sO7TJLQR52^O;*NpB]eTc04Bk)H>;Nhnp'2<540m+uRka%TR0^RFM#'[&&a?urJ%j"pFLHE&f&,530msP^(gjV;)e^ZFTZ](6s/$<m6&N;_Yb3Fcep#2^^-M`=,*85'W&Lb&JZ)*NDDa;r)YP70S`cZLlT=5ZhJ)@aF\,@.fpk0<LMYrBA7["[K(g(^]T<$MT5@@nAC_OPBaK[l1Lu+r(2aMc%()#BZRj!CpZqfJlap?kf23nQ=bT[Y"JSdc6(g-LibL,FrdD]KU*0&QVr&>I1_IhB2fZbBr5,%rq-)uj$82lj$S'fXRq8N1)^QX/.0)cc=^A`HMa6-aa[_IPLr':&GM-8Sb%.dVb$W5>uUsmjH)j/n3c&aq5,MTJ`DEg#EW!p`H1>uphY(e1$6aTibWonM*q@e@n*>guH>V?5t?`nh[bORe4Y5^IH#p7n62L?=GkV7e=JJ#CX^i27CBR6H4fVB;jQ+7>V%^KAFHmIKZIdM[LYm'*Jg'-GF$c8U:$c9pgKEGlmJklgUa3G.pT,I]QNZA*`2#t'7oo%0I,&;c0?FN?WgF^8m&.@hfY;VnoaME3KJ"Y%#[T)"I*3:CA?M8UGdkI>Cq0JC_)+9!9M$f_Wg@"4uCV*OB*R:h<nFj0*ldNF?]j"Y,ok>SI?E`2>+o!QR=4bR]dGg0%ZBtuFMfu0>gsqQGg_0(><(KC6f+F?9m<P$;/MTtkW+9>J&WV+qfcjEbbd;&;I0?OJ0]bRN;`^q=[<o+FEH[:DMXA8Dm>-T.n2M1<n0t'3M_,`@'ieCG?&DTuZ0>d@,e`7R#[XBA8N8r"E%f.]N[?&_K'-5^Zjn`>c5L>U\&sX6#)ib3ro+g/G.lq`4a,eWer#o%/5dr?6<ETS?MYQ/b@o2MoTrUJN95)rC0>%lIn45pW\<d.W^Zg9N??H)L:MY7QnN#mc+c3)@tm#iO"smX8m4kcF*2qWNP6U=e?2a;:o>9p?9)BlIj!4BYjt5r&.$+PM_8!'=H]AOdC5S$c1lr9JR%juC0Ds<$G/]L2pOH2.J2?sBU],nauBa8IZ82PJ)B($lgS^Qhm>bMq#)Kl83TpaVOfV2G8L-:REbEq]YHb!P[?hKeCeWp^qp$OBa@6F~>endstream
+endobj
+28 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ] /Length 2529
+>>
+stream
+GauHM>EdgM%Y!;BJ[`4mXd,j^jCsf7Bf]t?M*:%7A0sZ:[&pEPW@4m\Sb(kP5hWI0Q#3Y@l/]-#OTIdq"RpuL^r/I'qEIRQ?I.R'SHTd]f`E_FE+&AOI[T$iFgE(pBHT.Em<c`_XqQCq#GrLs0H=]:/;/%8o<#-6`s1\C/;;JeSismX4QB(sMQDEoPH7.Zs+>%"W&D:&0GCaDq_c^Xd5#MXn_oQ,;5A81!]-8=,L!m<lmL6;dGQe+#at)Io\?2CYWHnji<hX.pjm,^5oAOKEPSg*B#at*"_bW0X771eoSus\Js(QZNe-;S(RRWd(bqdqoUh2=Hq_K@5kU7[ca(1*6Sf-E#E7%'RHrkY`Y_[Hd2-[#Xr//%G<M=d9(^Nj-PT(#G&qK7DiPEUJ]E/&ki6u.H!pg'mOMP]--;j-Kj`fK-l8GeT45-8E`#es>Z3YkJP'cb;f,gkDVTDri-o8k".[b&D]fQ='Mr\"q7B%rj-(<abVpC1/<(#:_q2:UW=YDNrb+-VW5f7\YT.a#r<s\#E_^DUN\m`K>gQeP@LUXpObe%n9(hG`T=k/O3h]ZJW"e`4KKi/_E4NG+#(3.Z3#`+;r-6LEVQ%\Eq_F5uW#FS'D(>DrjqutQr3PM&S4=)'Oi7mn(^un0=ojD(R;X?_b=.iZ#<7%L2h%^IcM*^$b:Lc$(mTU$8ZAeVQT_1iJEc5G<=CbiNs`mHXZ0Xs)ed[sO]N5NiboFZ<K_!]Qb68Q-bg8Id;mr)>k/#U$*QUn]R=G]^)>0i&O`.+hm]m\bmp^R=CpA`(hHuaH_1Sm>V'>KH7!+Ve77THN6KT]pMB2)@F>9s?C-cSNdH2:QRO!fKP9:b5@`r+\YEf<6t-^n%ro>*@$.Moi!]+N<+`gim_:`Bj=R4VY=&c4;Aekt\-ZW>L_nA\6G_[M+tkIo`pF$V3JF8\q9sCR1+JK^P./\+?O>)_PeE(9l'ZMN>X7KSWo@#A+RjO<q]KH%e>@agn.bURdB?WeMk\E;q&5/\##[i'Rts6>a3=)]Sj\9R0lP&UmdnV?q!ZssiA8[MOPfn=IN)CTn%%r`r='[PC"ZS!B.!8\L?X[0\3[olf*0*,LtA'e6@F_BFjkB8m^Ms^heoDpB*=iM"%]UV"8K5B5[MhU^o,ugf&k6X54&QumX%mGrm\he9t05b7mjF$)WmX6%Kt7t4g7:P[1Wk)9;a6='Pe0VOHB#YX7.24gnl\roTTPh+d43=>DNP&6,XMRLc*FCkeA;%5=g$k<57"*7(UHN;W[#(qA)NK5*7+7-/+kPlIIT'*L3G>>!:i_\QJCB"CFVKSh7qG=<b46:=h)TeR$n_p>Q1ON72c89$I>nkf!T@G.q;G)_11\)$'J!Go6@t+o<,:\:g5NI*Q;eW+k*XbkFLn"eVmZKFLm@:pMk7(ET]Mf?[;-SD?#[HI<MV+TAKSJ(3o`9j6/q*fC38D9bGf_E@"MQ3AXBP\aK(8@FU??0hsrHcJdBqn's;ao/p5"j%#*A@p1j_4H(/>\AkV^U&,p?Dsig;pe:TFLk"(^>Xf1e#;nKhIO]k3gkoRDu5)TSSpqa:<oh-a#^f1pg&li!rKlP/YEe'Kp;4VMN-BeFT9!tpsmC:8&iV*]&dVPm/W3^PU5chCem!Q09^2\l[5,Pe[Sn6Ps:'udei5o%Fc9o3efCsM[:\Gbfs"<ZeP*k@Eum?F21qM-K*b1ZH?*^=jqeo3uG6'Xlr,'g0-672>t]O`A3QUWO=Hh<+%Qu"<oM(68k?h,E[C:+3?-;Te:M:(I`UDBY5=Pl](*;V8eSt\=dqLdBm,+?3iUG(aG4ViZCJFe,6(.M:T5U(3"'JUj=LY2i8BmZ7[dSL36;@nQEsiad[Hd0N;+hmt7Xo>;-14D(C+jE-t?#e18H`hba'F:(1lHUL_qBPc$N`pON$cNVP-(*@KQ'(ker4pOQ0/oFHL<gT"V%Ctu7RN1mQa!'<7,]Wac=7]Ia-'9sb:P]p)hXt\1m5;1N3^cegp@aWG6.^O0+RcbY0NWD[VD+YmJP0=eqOu<QD1Z^h;fJI*_fqtku:_Xr&Fjrd+U@WL*Y/WUZ4C#&?gX"AGpCIo.XgZ$>&l8(7r<,_SKhSdQ0\jW]Ou5oU0=R]uWcdGJ7cRAFh>N,+Y$nf!d4=O7;TWK<Fp=Huf=$GS[jjY#jL47@q>'P.OZ$e7!;*pjSrK7N#/AGqpW?)"b7lC/q'\k0drhLCJga8[XuWJY]N<U=+C?L9_sLWVd%6T*`4@p8RiG^(l#4$l0-beNb2X%kk6')Y[_QUa&h+&R6o@1];.pQBZRLT2ROfCE-K3-]qWT6uib'o!QnG-5hsOq*OR?J>qisoU3M`_'[FT[UoN5AmXgiC9^+#\)P27_1EgYH6aft*,L,FheL"hHr)ETNGa16<c32"jgl=#pg!WL]Yco:6SWQpZ]h@T;4DYfPI++E69B;+,h"j\'8j$>&eh/Dh'Inap):U.[5T[V3S4UF<\6Z-isKTGLss38cq(GFX]rJJ)!?Z?RAj=jjU08sMM(GBb!J'8VZ.f~>endstream
+endobj
+29 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ] /Length 3174
+>>
+stream
+Gatm>>Beg[&q9SYR($(!M'[CJrT#q0f0,,FNR[BS?Q]]=&6"6K;HC/;J,IRl'Lb"t9m^l#@L<6p)16KIOF`>iR/WSX!T$W2QVS$W#L`j\^^4EF#CN%JI(Q=i&t0Y!;17?l]eC:Uj!Uuop:pts5P2rl/EqF\0-9oHKeQfMi'#C.i%r^T;QN;n_.6nR@L`?kM-<k??3lpUZ@]]IkO?P4+(o&m<KCTP'*WW`(VPIc=.&tTZs+52065((+!'S#+TVjPci/b_BX&3uY*1-k"S[ig%RZfi#*,#mq`aEp$=Yr?Z3qK@g:r%+J45-C`s@>ai4p_VX)0"PW"dJ"*lK%C5"FJ1PFEpN4_6,8gJ#0!&kg#K60O?nRKPe^IUEN?C"Vtr,IaU`N'5Ki(DD7^[$_aUBf?$)m)NELimf0*9]ST'*Wn1\G]=S:#k:.\/q1\!khk?e0PN]1HhB2?3(bAJ`YDtd)mLJ(%6D/`75(k2L<i$S_TH0t4NGdib$O;FAS%LIaKrqB2lt5dQZ6V7ns5PnpuRd5Qc2TJ5;/RkPtsfqGN$VmES]PIid4^PXu6`!FP8O^g;:MB0/bEg9uhaS5OlgS)UhF%e)IsYV0im4[^+74npXEl^H658b`<e:'!XmZ[Dt7"dLX_Y]5_5@V"XU501C/P.\_jPod\#'qu]+UFGjKqC^Bgf)oC[r2%Aa^%M.V*1lQaRDNC]P>im9!%j=kE[B516BTuEVkdV^&?4NZ*R2F0[,Rc5<MN^PJ1R1/^4$>udL@HaB]lWO8Y=C4^7MjBUI!oGc-M+hpa]qJDTErjW3_IL4^$BN<WAS93KilL'.X4ApU,Y@R4K[\>^<o:Xei4l7"!`?SI0\mU7M'@&#MOF>Q]\aIodW\d()'0F&\6,PQ`qlkpl?9/2E/CX'[f[?4Zo&o[KuWS^`Rco+2'G/lU!hakas5H6pHWIH)D0^UIn[S)WdNk<qCq3G_U*M/T\JZY$o=)B2=L(k$2NqUN_l:fu#c%_hb*#)5/><1@C;7<XmVjKCj'Y3@0#_YL"T;'Gan@*aMZM0$lnH(hEWe1O6WY5.Veh@#ZZD!j7@`DPpuRTfr1kg,,2O"+G#rhq*`=F3<20[/j69[#eE:$;ohZi;mH-$H%TJp,s[0NPSXpmda4k*7to-1\hdW?C$7-\i2Y.9rTD4/h7>D=r=m^*G'q&Tp3-D*S=jo]:\g%rhKr$fXD.$Dr<R*Re=a4m?+#?I'J3Ee)S7U?(s^?k*2]WJP[\O-;q!YMAPkJd]g`]c<"dqG]flu/jYh?6<e.[8Y\f4A<1,h2iXj97R4!EKj8MRSlr'^0")Ul3;(3>[*K@aT'bKcYiHb'Es+?==\"a8&pS8eeL?(%e9g@IIM@Gm\lW*X8an.IY)^eTK;n3bUnQ^'fg?n5\06im:]_SB<0CngmgMje@d9,3[0#LA']X<"'.iJb:9C0_Hf(L.)J+fd02X9"Z)42N6R4Q?3G'a$2V&]5Hl<ZM[0l'Ie8o^<NEOb*OWHNa2(#I\?t6-#9nX8$"cV5(pucaF2]3O_TG1"102'2t?,o^WKW4N'6>6_V$5aCFO-jdDhHqS$a\5`^5fJM4/4p<fE\2ComLc(.<c/uE5WF""6/.68NsaSZ]pjDU7IO%6fWf'7M?;aCiQhoirahJ!ERX4,eTLHX:oVu>]Zsi<72_WALl[gi/UF&>I%,*a^.#VrPt:dp\ZM"/rlcGebdK8_-\H2DLW[VW,LXkj/-K1R+@1Ij(XbQdM;60p>Sd-T#h'e&mSm%(g^Hsd<L3-0bdZJbn8F`@eZKn/or:i(dmEmV$aEOc&%oK\`-EM//=!p3ZB3u6s47W+`hGR6K+ljlh$JZJL%+35$X@Z&S9D&rk=@GR?uk3O@?Pj9^-X2DFH5Y7%K3:C*o9=kCVPcpHM;C.fq-(>@>`>d>>m@pVD*R>:Z8OG_Gmg(Ku7L0;k!Co%M)K[%b[;F@5AXhCn-7)'KWDj'FpV3dk.oWQJ(Mg=_l3Y4)Smpo%Og;3_TZ(5QiYY:16,VE.WX,i6UR]bE(Nm4Iu%[TB:L@e,7gF<o?F7)]/lkZ4(4gqK%]$[>+io-7aY86C+UAm]dH-e@$jg>X4!!RfY`W>!\RV%J_rMI$r@%*$1Dlg<l2$E$;OX.pW8!n*n0C+1P3D44AQQ'egXeOn.PqS#2a(lmuCNWq*k&cCtm7[O?s&H/5L7KQJNSD)FP">c(:+Y,7iWj-lC;7O^"QFJ<.M@XLO@#:UHhm@_j22%a:Oj7reZT45U]7<WpEDBCsA=Amt(r%oG2Qg&FU]`*%tF8tY@f%[9hUDZ7[Y0>>j#&u3bFFRi['##i#p!C!Z;Qg,7PcM49KqOFUa&""K92(d)dH^7.6FBae"]dOK>@9b+U:`NM-67aAL7OKf)i:4O2Gq$DV5cPnI3C3!ADDfl6f%YfZrJh&A`?Qt5^aYXeEPIKXRN":)hWKZe3E5k/7Cp'$1Y)r0NVp&UcYQ%_udQY,@/bA(1i2S;ek.:o`]*%31Sna2s7L-W-a6T+YL,D!_TEDDtIOS5mlJ!JuK`f"'OOs:u?6u'ji1^+<JoGoO5h(@sgdlU(YU=e>B(hc/JN,3?=^T@mj<*OluBa'.lNU]g/DEolj=63%@=VpE.ciEQqA&n^eb=-\XXtS^%S$VPK.rgS\hOTQ',sf15$u^`=JjmEe73rE^M/4/L*ZEEfICf2kqF6f+J44C*)m%)'+udTNal3Xd@r4")]Vqj=#MiWVKXpNBkleEM^MiqWJ-Ft#Z*k`!0hr^_TD2s<0cdK7s7[f<ankp1H-A/s3(D2U2\ojD]?#Z/MuD`DMeH[_G<\7`&qWWmE_3TR]GKW+1WAD.aqqTC_OQn6gaPSJ"Z=mjYMP^6giJbcTcP*Jl7N4*t2/62,[\S`/gUZ]01];MMEVYIGgV@Pa+TW=/bkhdlt8Ru*344Km-P[lae`#FX;!`MrkSM=6>H'i5E\g;%ri^K6o(l`7)$=<'<NZ7;s++3kYpW_7\k$PS2B2'E8*V^HX\cdWdf/k>s(6d2#(JKfM#t@9X>J:%3B:/5]!?E8JW;/ap(d1U>?MfplNilq>2\]TI#O:CP6,0<W93%7EC\?6W&08)`Q_SmoO';K)Q)hM989pN[T:ERgCen0M9$U9sFSfLBUFaD@h7g%R&!@DCFfr++?#7\/7ADUd:@tkg_1mmJ!V2@5p&~>endstream
+endobj
+30 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ] /Length 3420
+>>
+stream
+Gau`V>BAQ-&q801fLMd'(kNQd8tQa*3DCkqP=R^s`A8NjKI#%maF^4)SN/q6liJG$fp6GefQK"V6fPQLp=mPq<t&@3_p#ke%e+WFYMM!A*iq98![iNK#P`$+im/EX92#d&BAS)]HnPmDi:sSC00F1TcO[\mkUlI?mGrg/?3mSO-?$H+JmZ(J>EK:n_fB,7,)?37ZImYc>ROYjWeO:e=)cD(+'Tra=Bpc3/Mq^T2h).75@F.)XZ]c0o]FH9oB4pjT5Xf:#CShs%L1o\;<YO[,/ue#X`\J3!#@R99ep5NBpAbk/I]"7Zh"VcmNQ$i#)<AU]:`dVpc);m@<0JaaK.LTUIVU'ad#h0W-8:m;,snuONEJQp.6T;6WPI678j;;V&o;)l4c-]Ag2q$DUhF\.D/5nWFT"E?5IogW,*!(U6/BQM^tJdMa'U-e'rbD$f++qm:DFq>?Z]\e96@AE9r)!C!7)XLu$$$N1KbNb^:f;9-O1X[JI6UA2qlGS-d0d"O"B=).HQY:nkZQoG-ekb_eQ'X8:fChB1NPi&TZO]W"57Us:P*G\r\iRoJDI1hmt?"hZC?9!*EkHf-b"8QhMp"XH14OPL)>/ebVmgoQg9_MNB^Cj1'>ZHQj"XOOR90[C()AqR$#'QR!]P3SKK17c:nBN3.IhXWJ9(:rL/EWegraP+go&mO/@[Fr8De4_a1cnYWnj2eg#U,?2TiWb7&,kM8E"1jNXng-VHcPThc*;!'1Imd==6,bba'lYD`*LVl&SYSu*c(22,ieBU`GFI[Ad"kGl2H57^CL@-eVh<(u`D/Dh'-R%[71,8m),_VVBLeO9bDI5O]4tk..L0"tREH#SoY1BL"ko(28P,[g]a(;@_]:i1eFpVD0h1NJ^>83)V3X.+$R&$)GI"TE9+pl8ZW&@$*R/R>YJ<@(AV![N>gC3I]J.8OSgXUa:_\rZqu@9Za,@epbWPf`S,<boUH`$+jq%=`?JEM'bi?5MiJc/HL_r>CWR[#<0mdT`dEE"0]5O()7?>_6LYje*kWaq.:A)E8Y!Lt9bT-D\+dLY$p\i3k@!7E9<Y=OLnW`e<cps5Rq)u04`)%YY#;M>Tk@KCJ94B$Vs7%?N6J%(m+<Gr&`H-$>;&2Vr'I1WXXnnfk&hQb^TTdRq&Tc;<"=#O7@OGZjV\'-ALn<dWqW6AcjiEQHW_4,RTBY_?;[^<Rd.O?K4kId(oR<_JSfUu(GiHqPa7\4A_MIdf-5Tj],THP@MH\A@Ftm<tKb8R`LNk`J_Xgt'ZujPDFRV,U4RQ(>f>i+oH@)/\,:`KjPrpAUms=B]XaU'/82^uK,anBdahhF:P$KnE?!pLV*FojQoJA'jToC[#>M+L@It:9sCb7"CSK>9L,]1k6iaI'rm@tl\LVfDY3El$cW?CZ5A5D.7Gl&['"dVkKbGroQk0nbaoGX:\RdZ<Y[54oP\2N&en"eqm+d[a0<#&3#at1jX9*7D9ZD]#Pc4oE<Rc!TC?W-M`Hb>m2ZCXrF.F9I$s,^m(9R=r#WAb[g4b5HMM+i;Q/P?lH_fCOC8#0S]gN0I4(jJ0o"HTj#iJt>GAJ_3c,40j6GbM*ZOZe7^UM^$`i#$Up4lBLU@On=+lO-g9NH\9[<&.PLl0sH)"La8e*4iLZG$%8PXFjsQ1Ye?N7\iNK-oFIuDHZSUVS,%b-c<J3[&6:dg^E@<G+&isDju_[n@7a-+!]8(,Vn5R$]kkbblgP'P+7Q_H\RKW,34=bCtQ:K`ZI!M5/Y("&u.&Q"oZ'1bgGGj(i@NiOa)T:_k2oBGpuWT`>LSq.rIqQa#,t#ii(SPC,eBrZAtmB1\")<iFg0NV[`'(Tf.lcT`aahlU6Xq)lX;+:C&@<'BYM*RmQ:K_f.VM<(^;?W(`(l(unGaNnSm82@u@Ue`BG?Y4u14Gfia3kgI1-iT(hMMb"X'??iW$fOMjHkVD]:rr(l2'6u,sa+Ti6@S"^FKGU=8s*B6sh"7#6r/d#6f*mruS2cI;0>J`qm@g&:9-;AS05S[,IVLR&?>45BQ5V[?CZ!()UF(BURc8;=Jo=p^GU-h`pC4hqCr!N__&[uKc0*C`-2QC\d<E(AotMY)g8='_'uE)R(9L8EC(fO\]A>/6=c&<7Dotro4P?8u8,AHfIC:PdgW=J#7lq:COK)"Y<HU]EcbahEPH3BJ\:n*34!i:"U6UfT?h6sQ4d@!-3R'nf+J7@8bHXP^n.X.AQ)*Ua/O-5@hHVBH?0!?O]DSsfTkeW*Vd#aZ=Xt,-&[uGKG(,Pg2_tddng<h.N)X5Z)oL0Iria[;hrF-9\_`\4k[$OY*.b;,pm"MV'H?hY\q"%_8oAip^HgaM$lNj_gKZd)2p/]Bb#%[LEPPML88X^rh%^(HFE]U`oM&M?*4Y2u(Uk5Ee,7*m$&,=]ITc[D&`.n]n%]lElf+eY8S*U9Lbsc/>BC)-R6o/edQ,g-r=3_h#f#>TG\u/<aIk+DfEb"tBQ#YLhR_*lG0uWP\outIPe(*Ns4n`fD&\C1IFeN,J8.72)Y%T>g74KEc,XV@9Sd"'>:?/l<Eg\YJ]"FN6N'`8UsLQ.2^r]HWh=6TGrB[2/_k9KP]K=[_pNc'/A#IA:%2t5io"oqjnLh4q!Q<6%fq!$QS1r/3<G+@[jF5IA1Y<LM<ETm-.Rt*"MVCJKd)TbEl/rJlFQChcI*#%RAp]/Y0AI0pCIgN1A4s1lWi-P@nV9X%((Ln2d/t5a/hOX+DAcLXEI>2#'O7L<,J6G\b`_;Mlb%BA@]uuN@j6k`]ZS&87/u=\V4O2EG,_L<0?!\B-kT4ZE)9p$pZrj:$*,9(92[]bCRVN+.('3;uIKQA@PN+NNS(""1h%8"E3QL2s]GJd#!03KF"\fM\C\fYMnKSXW-$1ZmJ2%8m6"P`.0lm`I2%P[N!]c5>n?A'rJZ-,+QN_ZsZg4Z?%!)oUM1t*KBFf1!"4`GN_+H`N95L6mh@*2%qKcA0j/mB]V-Y=mJE#8rb;08ocp^:P4.XpE&?'3)$?P,Vs@gEH(Fu^I#,#UeTF[j=$T<g^GMGA8GoGS^%+OYcr3B*nVQ^Hk=mR3ut9JdY#p*D^nSI_!U@-=%1dMl\o/ZXo7#g\G6&Mke*2b[fcJIEi>iV;JE)J/8;E`l^DJ+`AAl\oh[ZAWjT4K"u3^"=2-X>h):L8L%;i8G%-j;lCP(jhHJLoKK<kEKKUWikr]aB0$O"5+[a(5]BHn4"dr>U`bW/^n+q+b4D.n-N;biV]gp#M2@X[rItRpWrJ^+")YOs6$5KuHr.-QiN1N?>M@udV!<dj:S`spI6]=5IPbu$o%96o=K@MKZ^u+NT%XpXH`$tHT"?c^*"%L%:MWXpM_X29Oc@\bSB;l7HY6i41CPO%n*gdu'SNgrl]4V,1PC'Z$Ms^!#K[iF4:[d%72d&4YAkIFED<g]R>m8'&rrZ@j+IW~>endstream
+endobj
+31 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ] /Length 2942
+>>
+stream
+Gau`U>Ar7Y&q05Pi1mog($jj`qW&u;)f1sd'=Wl'!Z8:4gMA-4,pao>p;cV>;R2k3p6Y-S?*n9TP8qm0baB?gB3kH*mD!Y\f_Yt:qVX.o@$<VB,;3Mi$[+FRoCG\i18KVdf<;s`_Oq^)Qkp7Ei@&)?'SO/-`:SZTqmGoAA3l8N1=gcto3:pVkBnF.OdGG2_3?-Rs(9kt?J]ZRfL2*iI8,"4<k]AZA\]qK8n9`O=jRWSDqX1VS,A96hR]BsoY"*5p7$ECiW?R%pE-VI9:`nlkB2QT+`)>!2/@ZZr.,ZGOH*+D9bQTDc4+<u[=$94mO7Z)+nPW1f,`9=_^NH+]jRr]Ik\)c\(LD(7j!?FFDDl:U*t:.$Wb,NR4jTd4mO%jN3bU;hNgg:Wl:,I,#c$$2(tfK)..?>:TRe.G("MXmUWl8+(A5a,8`#t.P?uupa]B-XZ/MOfj(AQ]#05]D]0j]5(m`CG2hdT`THC%q;qB\H@#;\MjGa9[.>@7p8N82Seq>)]R(q?=r9VUg@&=P')I.o<LPZpITD+_?00'eEE:1<@6@?<M1m/WeH.WmWb,7;<h5K('g%#&_p?WDmtnV3q[U$unu$JA`B_0b3<)f2/!`"K,1`K!nP[<7#WDQ.b>6ZINFP;13?4Q.\.6g5V/EdX2pXu@7m=gl8EpaHhN%lsrfc.*17N:EJ)?\,p_:tRhdbi6g0_AkQFKWAM3b!bOrmT)+*G9r7YAB6GcX1F3>L,JCbXE(HJLju%ADc%ZHg=<`>f1^5V6Esh,<;k'Z>DCi_h%PK;m:^]F$=HC]b1P9H'd?7d-+VcnJHs-qsqY%lb4QS`".cP)2G1[p;VgWj0!J<JWLkb;QEl,t+Q9?Yc"'<A*l@j<Pu/,tDWo^(;>Ij71QsCeCj'_rb-69]?;"QfE]PbObh(MWX!DmT"cD0:U-hc6gFA"dM]A8V*oJf7N<fJm.CCj0>l$MU(4ZSG(52,mKd@7;X_;CmM*r(-b-,g4UJ`l]hN48tN3aYgreelEtge([ql>WfTT&`,Q_-\pl>W=m<s-i^cs)[mm8NVe`EGm`Zh6ogYlfYD-!.,o#_L'JM?KQ>6rN.B-K%S4bis3X9,!j>gZN>flPfh6[Ia1?N9i[I8m/pLfmEIIl#N9oBK)PJk\-+u[@%nfE1O(;bBtiV1>o!d5:NW([l)X>e3`35mZP!'-j3a"FD$3lGuA7a"b=;&EhK*Wp?fPuIgqaqGbK;DXnB;<h9QJN&uHKW@)P.dG<4c'cW)-3:nqSo@CNn`2?4'+K.%M+mtV=W/WIlmXEhb)0/_!koKF&m2<I#7fW`q#].09e;Xd!Qot^5+r2^.AS_b,uT[<KiXH9M)9oAP.\)c?Zl@k*MpW=e'kYlkMs\[Qcn]#jg8kZr^e`.SO,t\@H4)njJt<Z'">uJ,]EdWiA>_ClC@31i=e6"BWW->Y,Ken]oeM]HUnhR;q`GEE\auD`P%).EfKCt<)$+/MIA=]DUJ+e:4?aW:F`KG/Hh$TarK#iOFp?341NQJ:eeBQ"VI-_c>d6I(pG?H2M_g<,tdf#op:[rq1e?CM8*b!:-*jmk&#J4Y[#ii#6gMV)^1#":/8fHPdd+NE-gQm&4/K;J\I37Ai#H&=<K]Do2^Q5A`@tci1V=>eg))RXWO-Em:XC:3<ub?"?e+!\g(8'$,hj3e4IFZ-jl88/?L+cQ^2(<$P$>?\2'K5!$5sNh@POk-;!DcAGuZV6GdJuCfK&ME\#V'ZArCJ%#NAW[2Wa%bf#'R.9pAj&397eF?d>8r^[i/c!e\N<)(2,JGip?otp)kiIC,m#&nct:_IWkGd<>MN4;45bR,<K/$t.2gUY9Ce1C7$];V&3*H/Hkjts`*''KZ]V+=l>%;!5XaqH%Vgl;mpkPO+T:MX:;n;BC"(3e")=\opU6A'ceo$8h'+lM".S:"hiLq)WdhnThnBlsg#2KFq(5d".PWVIK`'cds_83,P<H2I#Dqn1)WiMa69(&SXcCo.P3-"89(jXmfpHmQ2Cm6HX!f1d5/>NL6d"+3S`5hbP(-oYFu1l=bZjCM@&7XIY^h\LL38M(B?m%0(]0S$un!/sCoO<&!K;MHgA.&)!mh0YPI_:k?U995srQf_X2QQAaalCtV^.CC=I!c2R4Y^/R5R4kgTh4l+I?J8d.YBSFk<n+UG^>g,Y<-6mAXZKl>.p++lg<'U+;H$n!?Y3LU?nA3,=g&LbA)naJfrB[dE0+[!^\c2D_P-.!G>8=l*DN1j8>O'Eg7,"Tko$0P=X#ik2lPb"c.qCHH8>GF0ts0LTV;7'EIKs?S=T(_lth'Kp&9:6_<-8#T>LK9FBh&,l_jA[[WsHGO(DX[b[:)a'D.$/3qKHY2lr#_M/Ys5>kq]m:q,&aAGfSOEdFDp#G7UuEC:B)R4s(7Id.0_n*%t.?FLBPBseTo-#Y/">&FQ*I=?-eVAhg"-YOUCrXr56GrA14$LY"HJra5pVE`s(=>X;b=iO>2SJr'UVqua8@kY][s6'94D`NOWZD#N<<$Lg-rV/l>nm5fc?Z*TY,J&Ber%H=oo8UUG_e1a$Tm-CUgC64@,5pnTr;QWRI.FK*5K=RiT7"6Ho'PJ8S_8#3_H^!==JbKAj(VXBFH^Dc3K.i/E_J^M4mi54a.0`TJtg#J2=()4\9[b4``0hAIWBnRgV_3N%thPus1>d_>a6eFe"V2uV1c)!AQ=aFdd-r<mFq[=p@FgZ'7,5CO>V0>38H9_=$/U3EJS!58t0:C\MI',VqCsJTdcQt[q0cNRks_;*W(bG<t`+eo[Y17Z8Cjpb+Sbb]"jHKc8N?iHN$RE\-MoHT)Dr#F8O7cI=o&f-&DH:F[Ei[h"b0`oc%L0Kj#5"AP[SKWo>%eo'nm910<M^Y)eWDQJ(5Dr;b-l'F!?QHU$!goD+OjmUcOn^F8GYn`G6p;!;NZjcIRJl>1kEq<VggfUMm@:.$-G~>endstream
+endobj
+32 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ] /Length 2650
+>>
+stream
+Gau0ECNGud')h6*d3%b8KUDiD31gi&c9@b7@]B(PX`DtC#Y*BI#Zqr1\Ea(gHNk`H`KDPCEm&_Fk0`"_Hb.N[N,8ErqVPsPoPmRf=,[uonW]DV\MV$tbON\=-d.Xf%#!2>q;-/%kD!M-JaJ,\/=/F>&#m&po@\/*f-0S0GX85L767>"+r,<B+]D+1Vc(\ArJ*kq<'Q7,dTDg(^*Ou"#A,t5n`ai_+;Y\o&@_JnN5kTKrl)rbPMkt^'lmrkP4K+aaBtG6*>Y`Uj#aCY"CV;")q.oIKBF2K(W;i`q"$#mfK1D&%UI'UZC't2U%pol*Tk4B3aEVB;%#6P/Jju+n;EZ,E\-WV<_t7f@>[Tc&i>"1NqjB#Md.QQH$fC532H&7R5P0NGJn;[Ui``el:6p7;Iq-e)X/_P):2c'C:^_AoNs)-ZcDY1bZ]nB;jq5@/kOA7jXNu99X2fQ)Tss8Z@p.EchfN#o0c<!K\<\c8CR2-1.usNqL5QRXEDL$RDl10gn)3W5I&+>FA5L\>*Z<b`n5_Ih2Sf3onXr[8n+iEWIciK.C4>(UX'Q$LB7Q7J1CRj+O56=+97!oEBd=",b8L<O1mdA)1Z^1Gn2)rZ-Wh20st"4QN^u/FX3rF$C0q_LOb8YF^NRldPK%H4I96oU*!s&^X[ds!`6`]m@pO/$59__=ck9S:p*b@V\pKG=m98k#/C(>9j6d',,:6Nq1Z*(Ue5d[:P8p5021fI7-CiFm]I;oqF8!p*:Pkqm-Oi"I#G`_i4hn_Qkf3EnS[7eF:UVi;)mG5!+&7&/>%`3^'tLjIETV@]*Rc=hI7EuSe/D1;'d.N2!d#ZWY4hP9Utce.OGI2YDtOk[4!l'C@@&2(BuaSA>.OQ7:I.cF8<1;T9!>KIq.NRLR0s[6[Z5/s2X69O*/[^o6+[ha#7-Am?fqei[BU7Y)sos;'\cEJo=i6E`UMXR(#p9Ku%Ya(k6734?5'iR9U"*8+l!+#10JfE9+L2kY[pN9er*9+1d%V`d:/UopjTt/h&GaPbkXbNtW_QUpIImD(L8r0llP)X#)h"gU??AVR!.E'2b"Q\1LMSbJ_l"nT2$JUM^#&6<T41,Y<t0WNoO,HqL*H<`*r;jb#=f(%FL%R%7gp\Lc8tV3HnD`.<c-8ouu3Tn)fiH8(J;-nJ*<Dr!*93@J5F)fDj5NQ"_9>t,S?:k'LMj+6ONK:g:?C7>MW'1T(3M),fGVp)U57[?'-<>1'+N6:XYCc>H,=Xul?g+HO%j)`Pas,AXmSXL:@5R:5Fqqcl"OD&\$0A+SJXQJ0l[Q.AJ#R9))N]t[<F^[WmQE((2n&>Im%K!_an%O%YAVsb\e6lUH.(^g']VSFV>9V#Qj#kAO<+(*_N*=dln#KR3S^(]IDgA&&4-[2d-r2oNHPD-+M*"Yd%Z0O"M'"'#<R0ZqIKaZ.H.V\D!eF>JXmSl:3i1tHA?"NB\#5mr2GUNNW;Q@j8#EG_$H7,tW+eXuD+n-uTb`5A!3A&<nd98eTI\fZ/n[t3528f1BD^*A9^l&5Ph3d'6<!MVWf^LSZjBE+MC+;G;'^2l@TD7O<n&AGmgpB[o4:-7SV\=&+tZ6j,,d?#5\RQN3<`2^7g2"F7[c"Hbn4isi.9D3.3<sF]fYbnOE;kXWQNJZWCdV'?-qU,EjuTOrOY`F'On*a1lI+'/I1jsIIS&V]T0??AlXBpXjU)`<MWL#nOMSP<rrp0iTj)HTI4ede"6]K6U"C+Xf58N(R\-<Go=1,7b)fqF>MXFhs^>eIq&5DGluj_rT-a;@*B^;FS#;2)EbHNHLY89bTh##-W]./!A:i("XpF+!SHO']bL52a&TNR>Daf7E`o0h#4Su<5TO/M^sd#u"a=e`:TFMCrOlLOrk=*#pjPkCINENTGH?[)1]gmAX(6F*2OtH*%qeh2D.OcXCaugL^j6iF^NX<LGg"ALg<Tc.ZG_/"E1JmJI+uZt>8X$N\*\MN]aMN6ka(HU4M4.j\;(HLis-UIr+%hs3s@YdnuV5j*=<eFc<'D!#Ws95@jX]'LGMr+/MkJ<V7PF+c(:Ws9Uubnpt"<a0$HD@r$b9_V^3Gq5B^Q]DRl^tp'%V2ftCfPj]j-1Rg*ALiGGUj!Q]J^(?9h=lT_)gJ]N$^GouTJ31V8>/uVBB6`64jOLblXQ,9n5#fNc',enGu(CU,q3<o?*,k$@,dlN2S?`['^?0A7-HB:SEIKVNThkZpBG9qasP%\$!\#5ub%r]c(E(FWqnj20<O)[^'P)Vh:EaueVX,S1(R.!mcs$(6!1QAt$gNu5)iU9GLAj1/SLjWi%pRDBTaBejfp7)9K@e6J:HW2o\rmj9gR+QVRgU"=>5IXdr`Bk87bma'&dkU'dpVZn-&J")"XDuU6U]i%3W)+CX6e(MaL"&@r49V(#ooqG,2(gd>fT?'djlIcl4>_Jgk49A:)et1f&+N;*H6)%2c@gYhU8i)q<&nD'%SANlP?2tQLY^"MG!&B?'gL6H,aNHK2(N"a&bGhhlGe2ndolX-?V_VH%f=RZCGB@+liumg`cTbsq23NNQabrKJ-sbj>k=rkJ*VB5)dNX=G];!Hgo8oWic3MK0N[N3+[!2#\<sE0iNXE?X_OU31MDPqNRge][0,8TJ&Qd&Y;dL"'o*ma7cDQsCST7uIf[m"0)b~>endstream
+endobj
+33 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ] /Length 1934
+>>
+stream
+Gau`T968iG&AJ$Cm*U*G-G]B:PW3[KNpGDbg0T/X8B=+aJdMKMeP(I?(SF/POt8UBV]Cic!>`K=Ib<He9*.<V&GJ,e!'ZA#r/q&R0V/=P]b&38n7d:@ojfXGXW[5pot2*f.*TI7;Er5NGTdM?RXodllcK"m0E<$-\:W0?9R_P"R:MAkimPVUV%'WdD]%#'ZXes2Qtlf5-'PPU?@\1ADX%D/-<pTEC&A=XT4.ZOlL&ABB^B:eLc9Wt;$!K+[<Lh#c^Z9R]emu3oGIfR6(:4C*_k&[!546,`/hC?nA1ZDIS#+/('R;]#cE?%E%gi"%87OV;+i.p,F>t!qATOF9Se;-DaNT!W?6_Y"UU/4r83rr-:loX"5MgI*_i@Gc;65>21:J)fq6M-]X0h;]IZffRc'#/HA,++m8^94Oc8pU"a&YD,g(Ssj<-U718;Eoc&n3RnE@^IO'k8q^.l>RZSiS(DYPhCBU9TB&E3`4pI,e(M:BOEC3'j1D1ft8e?dOiZIFeGQjfq^.;W)3Wf9hp][l8@2NiY^6:B&s:W%^9cg)f[qQ<75$noDPMSk,1XO/$Q.Bo<W]Fm4=S/%l^#BHb1@5t=U)[S`ea4]-NM-:4lJt-PXiSg"YAqgI^jNNE`^'1:!e1A'2]cKnYdLWNh.[2jJ+V<]'qogA&F7rp3_]P."$0J7ZPe>G#VHIpl!=adA2fBhB'n<j#kB(fiNPN/(AJ`"o]m9^p_cco2&S9@)[tUD,\6?_].8*@CYDo(c&h^?DJ\nH!4nn;`%@jD<"ZSA,3\W@#$"g7\SU4TW#I2=d4%uT33NJffH)ZpB_*lBlU;WFE!M4pH0q'7u(/QY1#2`+uD$ns3[:'H3)i+'M<G34jn]Z#RCCO9L1aU`YTgBIr?2?]jX\b&J2:Mt$2)!da^"OIp&a>`Y%9M@SDS/58`A5(oish>.J9GGq?IN))H3QS%S$b;\Oi9uC0$MPU3k?Cn7%G@]QbhgOe"Y.\q8Z9\>eM4drH:!fWa`Z;drak5$EY9>'I7&&*$723]9iiW@PQh?9NT;.L':I=@e-5r+#A[i.e<n&VFt.)c<Nr41PNeCbaH/M0"qo*1_7SBaH"=0,0>QITR!Y5Wu%--=W:Eb/>P4kpLj#.Ekt@F0I2s.:t0AP2\U%]Bl)%09O1e0LH;$#4W)Lu#).^<Fe1P7-IfqI_&&gTcQIOYFU7sp*=2XKXq9EHadciue4jZ.T(4lOgN6Tfj1'ldE4@-<'S&WLY`JCbJClVZe7DS;TWD:#at(bZe)iS_l:)O_Xkm3e3EBc4DPaa!p(B'dAK`%E*^Z2'`U/-^=k$(RVQNRn3(PiZQm-2'PNO6QN/\kTP^QV9fj[2TYaoO7Ce[&CR9d+&8K:119\eaUK984E1PrHD%0\RSo3?9o<$=2b/ddO$ECcjU&H1F*h+D-i)>eApG0(@A&4*T>^'h0jQ'`M=T$MZ\j_X=8Ve8(fmmH[_r;D$&-'UePG.u)0o1]N_iX"t%3^FRJ>t7pY[1mdd_W\p2UGSh"l_V$-Z+Z`I-eqbh?^G&*f%XtqG42:Kl\f`7M6Q1.Mf@=*YT;qcE4?Kg5LktUBHmetYs5%TJ<FgklNDZdhKRFmqg..tp3TFHB$kRgH/QO93BiCa((U&t@I/@?PL>fKc,?BH"E@d:VRD_DmIS\Fb1!g.*&)"2eifA/J+:0klnV_SQNbMqo,QYnp/u*fK>Kb193f2;OOoK/3#>I3e`6q\E9Y]kL>fq#S%>Z*D!eNV%(_KJQJPjma5^4u5`%`SJrK>q3;co'55nRAs(TEh_><Z44Aa-J7KAFiE9_=Cot3>Sq&[Xo\.5?Q,T\6f8DOLpJpL!X#"8).P1kE%pT?fok,^OkI6k/ELcVJY73*SaU>Zs_l7(!(iR9-sO*a4QB0Fo_Fe84o05%c-jR=@2qj6X]Ud8(VmS;^$+4aS;Gl~>endstream
+endobj
+34 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ] /Length 3139
+>>
+stream
+GauHO>BAQ-&q9SY_">b5=:>5eRjZs)cLaek-ae*NQcs\^&sACHU6(TZFj?%4]APge--4&I4LPYMLgB@r=R7Y*8o49rl>N1)EjI$05>XZa=fr$Q/XJ#<,sO%9^0\12&.+K\\)1C"oA#.(:1u^$,F6LmO%#jL@t32BmQ-#HA=8S')kMO&s5>tFMbN1hH.Z3+aN4D&6a<XuGU^^3<&OK=nso'FjT$SLGK!<f:SK,YB)WaTr(ND@,4?*KO82hp*5CP*&K$UCeFtnh_+:(=[&l$@6C9P?/.+/EPZTI>nK"!Vmfp6#h(3B:`d[f9&aH,,(e#`UJsI=SDg<Y/$.&(N3n3^*Xu>dF+gJ!3fb&[fY!_$[E-6!HG,DXM'G#q<)T,f4?U0PH74#^2)F]HZ"G1qn`(K/9q2$Y@(H*R^Jc@DnGb1k;fZf]XFPG.*VB\t8"t&snp*9j]Q_]'Gh4uZ)gH;WMOn4g%ip0X2b)DU3'`*s)aQL.9MNVdD#p1&2@rXq^?">^Vp&9hJ,2SXN^MUr^A?,V\74R$rNo/$a.E]7#hE%ZRgO5'iXg#8iZ^PI`GBTkEI[CaNQ95qRKFcfgj5p9-5^ku=T[OU2"t7HLq*F+Bc0K3M[S"#3%SGI]%bcBAJ%u6+aRs-inc\IPo+cOrQLQbn'mTkJ,c&MHblB,!X+pjL#Z$(n/b6eb;%m7:QD!+G,SN;DTJ*Kq,H1$G^-e*:q)5nH[3,I97)lX?20L&di2Eb?[2]:`<D<T'Z!Cg-:;At&5+D3OWla3+T6fulA?irAaT>Kd^jYl#%#7&a+"qY)I2pi3Yp)F)=TBZNYf'th7ucEkT(:R.Vkt\#p+&UU_8<*\G(\^LT2Qt%kE@,PhJ6Z1SWhcHi3DlbG!,YtbRSG6kKD)DK0#N]b^tHc4#O<f)Kj7AUJ<BhNKIpC:[4?oYL*PcVmSg-rtQa`mcc$B&3ZquHk9&]ne@'r<8i\9g`Yp8P<KJ,KcckpWO$JdAL'[Q$KF&AqT.45\uriX=;6(T6+3[L&k55=N4cqKb@MbVb]7i2C/IGFP7tn=ddCEY5H&5tj0lV!O%9=!%aNirfapDC7JLi:TGk93K/9uQB9(r'>iuK_6Z>u"!rd"ORBNf%5E<K0`$iXag\SH/je!M;.1I[Bdtiks<CBA@%5=0ubjRZZ$,dCs]7r>Ir0h*u93,Vd!C2J!AL^.%lf`%5e)V?>>i-MpQj-5lP;T.p?]4[e?ipMkWWE<b<3AX%Nr_&s82r3Pcq=H^`\aAELT<uJiFp$&e',Ym2a`XNbtC'J$-'-.]uX`uL!WbGgW4Dr_6*8Q@aJ#8VgJ!A-gHW!+.S@N>%E\rL*&-uZJs-k(na+u@t:"LgAiXX^C1/.G$@8@"j(!uf!;;Kj]<SZg7U&GQq@L:oPLMlG`8Uije?$QWWB(o2b"rjJWG?j$$W.F23<LZgI,b?qbW&aas%VC[T(uX/%4G<iB"Jh6Y6g0mV,poj*)Na`>15f!cgueaHS/b/o(b"AHKDQ,rN?!3H5Tm)S;:qL-9X==kBS6X?/YY_7Je(PsYBt^e<`=oj8B/V*u[eN+u#n1hr[l<+??EN9]-ZN9Y0qeJQ'qc*ATJZ@7P111/-Ydrb<GKKu#])E'Im:s5^m12#']`""]5c`I>qDXW(*0p@d8JD5cs87pUMXk!G(Dhib39A%?aR;'3BA#_deqe_$i_r0ZV1>:8E%HIihW<CXa&jM<L$Y0tZs*UW6)CqN=C=ppp@)NAt9R)S+A:=^S(ib-`,PQJ;>cVm,J_2WZ<Y,QqHh@m!e8(a&c=c#t7*K@3*B@B4-P*+0@Se?qN'KRu@M[h\is?5:5XD#24E;C-.p,7g+QAr["s/E<r0eKG@Z91R:[qsb+bR7d>mf8:"rN<@J1,*s%iYGa*+,6G_Jp"HJ(3%'XYGS!@;:^c9P_k2YK2I%AWF)CcX>WsVqPfZQB@"+I7kMhY@VEoB'+NkdMaE$Et!Q?dDf;7"\[$B*V7+9h?\9#.Z=+:&#M639QRG>@9rcSN(hEma#o?jW=!P5`)B^([-qP%%]=Z7ros"MrB7E&kL5nFLgZpm/<4IE'?r7ZW'MHA1&^LWmoV+k8e&OQ:'b+e)A0_EL*I[gVis3$mSZ?Nk/b+\`D\)*h,,i@I"P!3eL:3\@gFu"X[k?TZr&-O4>#PG)HJdD`i)X+S$MPr2%1T]`a?d<1WNnW7lAG-jquqkWE<+=&^(nWp'IpoT*emO)UZ/W):58PP9+OTN1lP3WQ>f?NM;n&L2BM);=?H<WR%ZTV.P:57fIt53-/G('Yc/=nZLn33AbI2HUR\,`U2'oQWN3V\N:MK21T.0PB_jsf7E$2]VguZ6kl]+(D"."VopsT*8U:%?ndqB)Ke5b%.OU#,`=8@E[lo-CBpNHC[-#<f`DXN$.%MWk,@nD3D#9n?F[`l/:Ig9e5LRMOVdiQ3l,R"3\Dq;F6>sPGeS_pKZjbS`fb*mVpM@qRU\>)"6!J*/'(JCQf0Xt#a?<@&5(FW9lG95-VU/hbb,<]HYgV^#??eh']_>T2/.9bBAJr8+N!UTaPR1:2&.e%l.q%Ja)HmC7]rm$=5]GY]\e\bJW!b\J2&Imm=NU7@Kq2sA(V#?mAr+[/(baRR/GPf`9N/2[,B!aS&eQZI&D1r,rd]*RpR-'q]PQ(\_AGYD6$Km6M`Rukek6(6<#qF?'R1bFqt_s"RlNF++GHA">@DOl4,pdZ'4;Z'k:Z136"'MjS*QrBO!_UGj0')JTs\&nNNbg'bjU5[47?::0[/YmYEQ<k>(-MaI.]M%SL0bG(`D6PB*)CinNrh6!CAAML+F87s6<BH$,oT-aa<M@"89@5([8o79uGr?PkSl%U)OP&U/P&:/%p.hGm^W$[\qj,@Ed7i=-2VKDA2X=T/8M3WBQ'T.d9r;9t;Z't!G^Kp2eU8+-D"!JA,YYIe>_c$=-&jPdrWl\*K98+=ee^.;bo([=l[FjKo#nglWfg$W.40aX9h$"%?`Og*N&Jm^osAl"$PQit/eamg]'B_E_+R?4)pOmr=5&IFpiadWQsc(;kJ#mm%@$""emOg*N&Jr0!Llq-&%G\m(!B4;cqFsMJ*@mn1G:\#hF@^@GeM1jOJ8bPP=Cj)U^,":FMCcjTF+S\>a2TRdRCSTD:e.9+b5?d23>Q~>endstream
+endobj
+35 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ] /Length 1579
+>>
+stream
+Gau0E?#QJt'Re<2\<!1X_dN(I[SL`th%*4MD3NeROX_1&L'`Ei1!)i;+2?D=#jE[eXLtQ:C9HrNI*_>jN="846`RoK!oRYtTC)sr$I`'!Y3!Om$[eP+IZ1]NV@B6\Dr4b/p"U*0LY5En_/cO8d1GB.Y"uKs]+.XJV@0oDiRo4=H,ea[6=^EMRmMr8r!ekf<NWeG0GT:nLQlGU,*mkI!5@SGZ$6inW(m4$0`;L1O4nfuK1Dp&#+j`IGsDU"lqZY4*'smk7m)^7OPuk[@"idFC_s2"$)m%G'*mJ/4cBeR;!*CCLDJD]`Y@;<Gl<HSl(=i5miAE<Kg,*BJ3=+N)\@DJJSJB!DPrae&,(rmSDQ+/8M=ZgfS@-6p$Ap^Sk8Dn0Sb*q0`6RnlKQooLDnj2)JZ*LR^XfldoQ"@\:=eW<[aaZL.)seh*Kkl5ML[cGN;FnO9Kf#Ja#1Jr=[rT`KU'o-F+9aSiF@Q%"*tfb[Uk5:<LP-bKWnNPVA#L?=;,k23B+iLuP@7a!DLp,W%O.0i%.'EE*diZPXn1*E"8;/6=3\+N9_eC'Z^!+:Kg\U1j1_\INV?6Qkh?I(akFqZFnsk4$]K^EdNf2Xm/.GYM_B`[Y*s-jq2ZO*SdV0dP4PSEg:@2Ab[a_2>-^ba"!6J]ba))J#8P[u4@i'!@B["3:<4i=u0R).YrK^qMOY^Lt`q%>#Y$QG&@mV(ff:dj08Z+9B^<B>Gb:#n>PZ;H%$$ocq+c!,*U^DlVE"Les%!l*!Q%-U^4=r@oZ$eh7)G%e'#!9Xt9YUKO<ZUe3*4=Z>ODp7BS6]Tbu+?c&p?rVbfGo0.uc^b\N!3.P7D%Nf_j[MaMoVoINWA4d*RBZsmX,HMP99/9="JU=dQQSH3)U3q5kdn$_+)T"6)N7hnF_77rJPV]L9*,;@6W64%b+S/Q3Gs#GH\:i1kAXbu\R>Bu-(A/I!5mXmU%Zo^\W&)#kc.Vd-\S;+l\oX;m0'!D$SoL*nXD#-a+<4mE%@[<])O/;4H*NQg0o+BO/^J)Cf,ImB@P&=dT!>qt_kOQC'g]OS'5mm"`nV)6g*R#lFp9X;bi*Khl,0=N`FhN>F#f"X/CT!AO,HBfHirGk[r\H0nZJO*fq%+P/^BdC`WDq0q7OMLA9!cYAfG:;m:Y9?o,Mg\"^!BG(6A&<h#K+g7.']lfC:',P!VaCE`q!r-"8H:^E=GB7b.S!+3aQrg?0C%);6c6eNdiYVG7b-)TQo*.h0POJa,lLc#Z#,l0SFg/[R8^ZP4q`CVj0r3X7fodndKaJ92[D_UErlh?s_@OjK^$g>Ln$P#ia#:9>J4N[%^N"$Q^Qo7rIT#Ci#b"`>C#cXe:ZQ!Dc8%@,DG$1EAr.N[FkEnonC(H(,,ZGi5%N1ntiKM!F(/lhT78?6=2iBF?35OeFEa9j?c0[!Y9pAT[V')3M1rAm7Jlh4puZ24O'M^_=h(2A@s(RsVafD<e/eh=&#e2uKp\N8rCYh5BMh(rKE1$NJ)N_($k;df'^Yh5Ba[V*HdCEgTd$&acLchAFfQ5YCjLYUbfGP5u;44no$C0Zhg[%]3rm%D&AGoXZa++sUgSH~>endstream
+endobj
+36 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ] /Length 1961
+>>
+stream
+Gb!kt9lJcG&A@g>%!nnbYSC#BQ4rW$FVD,qg8).1;h0IcBUc+T\K[<gf\QSA6V;B0>?74Mna9iu+APUfjLfaomth0@r#to\\,^ac^sO##@R2[OiYW..kAV>%q=^U(n^YFjnB12/gN&hc(q+A:!t,OXZ<_5GfhBX<jl2:0Q4(M13\P1;(#IAlcId^p'#lFFf`M/+EB9@D1h.(N+lP2R$!\.]`fWHt9<[#X_D8>hbBj`8(C5IgHe3F[/^&,0Y#k"3M&QF<[E7klK\C_J^2*NC^rN*f^b?!'+[-a]EQs(2oGsD\>@En,)noMTkfcAHMuk5`6jKEki$FSOa"/]l(fA,f`X0*"i7`p2k;/46g3B<TU%<eIY_tVd:2)\C&GH>OWFQ(?'TfS<3R9P=U'i1.P'''nQ4.F>_(t%b`oX5$k:SP+VFe]P:D9GBP?^D70k$fBpq6Guc5EkT9,:,8<<77u-Lt7WE5oZ9*#!Tlj'8,tdF5Q?`c8g?j@cmUbX4#C'hm7:`;qhZbEEV4a%B-%;@,1?eKR>bVHd%R4B=ir2-NkcqK8#/daK@I=?\Lj7cJ_hht.gBmAr*\Q7*Od#G[k^No:Y2Gm#2mdW1`8BbJNTWhO8lMs22;qCG@jW`#fS0!i0^(sr(TbO)Rk\OMJeS:0U`/rWRr4f\tZn3?(=b$"&l4(F[jX+lDM4gX$&>nO#DH@YTY_u'M&eo\8]#o-]%L9&UeKt/DdeanM!/k^pW/Fn\Ek&#>fesPY+`;=$7"^00TRj.^I1-Ste1F]UEX)>q^A?^*YB(R=0/$ai\f`[onMSqGYc;gDXO[>S:3(.9(b%As=eG@_u7!)Qbb_E'NHQutVn`t=KO5HQS0<4Bli2]f7!c"af>uoBFbh=:a9uHdl%_^[<a/X\2[r,oD>-"U(M]7ohpPAYmLh\W-T7NCEZ$'O8A'D0HmQbr@0h/:AfN!skFN0MMoJCP%l3c?[U)EWW0%fTeWdfe<L09kIUdEk4=gZIA'jMtC-uk6[ldrtX)Sp]i#UM3Z*\aieIPR:dd;#dLqkB]t(&glQHAeV9@%Z#IT8VFiYG9qmEd`"9.97@8a'(SW2&-HMD/+;]E/?KoKSqc:S%rDDU\Ra?$D,]Sk;:([`@=:e,-\F?VI*K3NEhdhXB;Bp_HP6qJ:q4g!Z=?c:KUT?/"l9pd,M3RU3>M<Agg*7.@@5KmCH'KGWgj&>K8E+ohjX0%DSc#2W1Pq<\Vi:K963`b]W)0.h(.BWiK0Ak1X.Dr>\5*X[9&D6E2!4GJ@)fro6oDP(%K@I=/$FC5*.WOZUXDJiZe.-`g1CTY;31*f=:S?!>qL%/LKMpjOXC8WuVZ^%bHoK\sU^er-(He_<Nq*dC_%p2&p&G#\<ec'BA<g)\d`DV"hGBpUb@A4=A615YbRC<*TJS(D.a[>pP^dI?N%L?9<3[CjO8DY=USa]_>U.PH06'AOKK)6<qq)RB6eR#MiUV=G478>)IQc\0g860OWADMY-!.(kFIP$>CV@gP'M&/OJ$e-4+Gf1GN+UO1PWQ]Pfps&%nXWM+MdQrVh"@L'0G7@6ORfFLKIMi[=YcfZ+>2lA<u)]XQfB8'M;#G\t3W.KY1[,;8ad#=^kY#C&Mf)_koLC"]s]-l^[D5/Z#A[bMp2q[-Sh$.`RXjPk*p$cSZ`Gln5"^,EN4shc%ecXUNTj8D<]DBDqh:;PK<nYFiLMYLAmHBIh>S@7`XgD8hk,ecp#4@'@e$^4.lEn'nI78SWge^a^'*)99Gt2,G])&,^jj/V-9Nb-`MUi8-h`J2bZ<Zk&`b?iCCYce/M]1&XVhW%O'ccIUH1V?&r]82?>L5iGVeN#pD'E;Un61it==86)B44rg@BJ"g]_nQoSr88e.ClhnpTf?Nm2^4_L^_LU2o19]XJtOfLj=<QkLQg()>:aKh9@bB^=8^TI8%VcNGE5hU\L<3(+eHEZ?Z$UBdqL3:]:PN0f81~>endstream
+endobj
+37 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ] /Length 1939
+>>
+stream
+GauHLhfIL2&:X(TZ'1NL2rON[fZ@'UCT!_;Rp9q0e/*`@W3Ip(aWt-[rqBX=5HotfUkMQU@`FS-h:9!l[jqh[r3Q%qBaSes_Q1-]=>kggY[#)"n,p<0?[R?#Nqd?30S\\9_m)?`!5n>$-a:F+D9&sbi,^d5.Mm:LYWW7jkZp[2*INgOBMMHg8JnXb,UrX!@lBPF&LS,&+lOc)10@\6K-MW9`)\.S&.Z-_%pqZu%Dk?[hMiO<gG[iL2lu_`_%"bJ`oOn^Kn_`8Iq8>'i1na\?s%*LCOopkBYT2f%,I%+giC:88&Z^l37qW,.L%@l.MBGaC1'*c0IB+_QGK&G-08ouZ5>d03Ql!WP&4EXJ`51gCi/C:%5"J;#dnYKlt_u%YiULG\Xj\;VscZ[%%foUQ@."-f+Ae]H=qA@jbH!DHTSJ/0Re(#Y_pKj!m4[=o"D;=I,4>_G[UARdrR!1a7Kr+>93=Qos/B0gH:rt$t,=8fA;lgF&(inlcY:lDE)3BY[`f>FM?BHDpL8aA&eClnr9<qX"KII&5HkROGcXr_WGp.blR>71g<BTN?_!t%MB=!E[87ARBb@k#GH?8o5?UVZ7Mk&n6L9a%Cs:@UB1RhB-]t$iL\0q_Aa]dpN*FF/BkC\nTLAOkubisb!uRa=dE+WfQ%g2NEgD'M]7oh%kRB#N#SIs%LJ\+ptCAO@n\TFb;_Q@Wtc@YYK'2-;(`ZgOpreG,-@W?d*Re_AR)-S,HmS!Ibd#2[rW-43Kj_p6j#rf;5@J:0;A)A*dBtp3rZ\q:8\?c1Mu9-Z[9W5?_sSo8]B7sK!,a4C;Nl*LfgnY6iF6)5IQ>`Y6"J8ZE96tCDW+s7O-@i+M<2A!i+IK7j7FkG,0(#69$T=SdBWXL,Z'./kRX!YtUlg>a-dmc?#MBU?7=B'Of!a$<.AVrBZ=9-uN&1$WIIR;+8Q*p@m'l$$$ugd=E9)W*3-gm@"f<c;ZD=M>os&@eYIdcl>6-VPLY$ZGJLFT)hiNQu_a#a`p+u,akF+]6b#h3Vo2=NONFnL#eA*9__NT3<%]KP&GN-d-3sTl,+lrN1MKMp<UhQE>@1H>0!b$%TR3!4BPA.7fpdbV$M2XmM%)o;M>_,-qRmm(t!FtQ?q,HV9=N_"l(QenU?/&p2Ol0VaXkBhUf(OSSj:0OaPUbgoVF;(f/]CBGJo?RNuFY='11fJ$6A/VUJ8A-PQ6%P#A9>HP8)Ugfj`bN50JM1'1U]R[/T%_tAe_W_g8qr"auQ]:i!6@6[.OZAil*\l(]8O\nq:Z9@8/]+A=`i6c*h7.4g?aNHo.&C3d_PKN4.dm6<$,_8rikWh+?]Z^o+H+W!#*Ra%r<(3Zc6UDH=:`6-d+jVQcYlP8mOgHQTanKD2CQBAG4-GJ,T#9kRV-/r?N"<(tAA(jK^PK&VT9M.`oT.a[*$f0.c['k@rdS87C,s$r#uB3`3`t_:W$-UFKauX%VEfb#?4/eJ`A_c?(t,3JKn'&0gqXTY&S1L!f_coXgaQ>rm*,gV)]lI@GZ$Eb%_$V@4J;`6U)f,?>@!NkF\7pA1(jU8#O88JZnhZ*kbs+>l:gD?l0.F7$!UgPh6$9]m$t*i&?gO^5MsN]m:`69".gH@p<cc&c@h-e0$_bgBNCYjg#GL2&j+.@:/uW,;XGb[:8uoN:%rQ'klsm&jH8iAVlE+q>OdG<D/(Nu43VHcgNe?H\(<iY[bHdI.7q*MV-_]:C;G[agoGmSjV^tYP%:S*^^=9B[iro(-Bl1C%bohl;?RX&KPn;03sr[!n(DO/hfTlHS"lOVW3-t4</GIaE:ZE32U,,V)H8daE__J&F!q[oU(ce!Jm:/?Ej^"3eUXsO29sRaQ6'HTLo"4bAEj67BJ=Vi:qM`%M7b!91H`F^?g*(_/SAiijJXZ7TL,!o8c\:`=mS@n'p$"UP?Op(k*#L:2[M/:#M=^.`r~>endstream
+endobj
+38 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ] /Length 2094
+>>
+stream
+Gb!;egMYb*&:O"K%.`I3**%4+$222,'=:#6B+oCq/.*)u6p#4%aebe<HMR:U?6m_"luh&.h',Bp=<hk3nBB,8e,g;5/GV5n"!!$aim\%QL2[3[CUaqI_+FFgdkgqJ&.eVlYJ3"9gN37"3.^>dD(o5Lna&I/WN`l(iiWBl#N6X`7jRm9k9M3L3i>OZ=8,imkO94hdRem\3/*H+3F'd!!]QG(i0,2jdi1=i;\$6Mqp-G`!9##/n(J8CD&[B=o?2P7E!*>7Rdj_jU#o-(kSZ\5%hLQ]0J%>"[D9!Ko\Vqo^=tIB"q2.b&W\rl_$8's0b?&POm%J=qkeQ;K.'>"`&1`FKI'PVB*k%DF#YA".&&6k1d1F,L0JrQfJX;q>)kWRZ$g!HDOBXr'nB`'T%OpPJa8t%HjZE;qPdk-`]6,B4,`^Z06Z:GEo69$;>Jg!%m_.7X*:`;Pi&s_HaRd;D<;#FBo@7][;XbNp>PtEc2=q>U7A%dRC0\K_-+o`hWE?=2SIrc@F$dSLQ(_9r.1T?2f0]:VOUBK+hsm.f-EmE.:TkZ1R<69-./fM`E0qC1ZdkMBhL:FEX\)8'pR69f!^/C:OW;o"fG4d`(V.:)fZ&gH7)NV<+L88a2Fct/Bb@e8/&So3F%aV#Y;JbKbE3DV#uf)`nqKXF)<CY:r;U5o<%fdr^nAQ`791j[>:&56I+&6L:q<E?I5:C\<1)7dg<bqj'(fO?"._$X;tF=\=sffI1Qkk@RZCcUFRn;3o&Eb3Sh"=)P`3A_r-_]8NRd<=aDS9f0#BLd&$K=k^C'+Mgc_\rQsa38:$&-rB>n;BD@O?d!7m0PE`9&%@M>Oqq?@b#;7qDre*EcLZ[II_Rme.$*"h"*dR\nl%*OrS*"orUm&Coel`mnVcbatgH#b_61VSo"NTpXU]dT@_35:6L#E3F[_3hD7jhrE\*qXM%ptsD3IcN83#`9e:Y,7P"Y8Ssj>;K7"eOR_<Ob(uagPaq8+W#+d9^D</`i77>$\fk'F@-bZG;c]0,G74RE+=.WuW-""gEXe7SFXhj>eSZ7V!l(?m,EH=qI+F)U1$>:d/O&#]?*TmNnjR3i09N@'=4p%fBbBP^`[OnXs>dDR":@A<[MC9>]'51PXb)Fj>%M[d!h$XQjq:W'5mGqYbN!kIBpPmnn3?a^o4e'@1'Fq%-hug8HG?FQn]0#A/Pi+>+1p:5Y"MgY$=eRfq3$U"`j+Q-r2pSOs$EnU:QKZQ,="Y\Cp.))^>>Zr8*6Z-df!h0pk`\*lJf6umYRdn6D:QE^/d=\oWn,#qgjY\K>^<)TTPqGIKFO#1hS%9JA+&jMk*dCY4_3,@ZmDD5>YBbeq(#X<kZ11P;5a_oBbr[+W'Rf+/2+6)jtS(,dop,627FB*cRW0a@#aD`F`@1c>];m(F+C5.n%d5=LmoMD-OMMkfAlL%deW?Y_mIsp*o>W_/XQoT`hi8]gR!M"1&5HFL)4A.J6c9&JGid4HafC3>6D4OL>*bb>`?__dLs-F-Nb!)-Q,VLo!1faF:e.<so4um8<qD(cQ_UHgf;>OEL-a'iDFrhlY?T$Xf;3o*/!ciTIRUAlh/gSL\(;0g$&u:e+a;LHo#`Vi9HbX=dH8.5h$DkmbTsmHUY_d9-K\^jD\qf$'pO=p[(kfr5QM9;R?hD*fKpW0rH_F!?@0!O?g6XsF,MG63S&f'IpMK<JY$c4Sp"^hFq"@HGc#u$:C^a-3m&-5Fe0)l?Cr)mLKLs-j2-.RhQL)dFV.R4Ig<*6d8cEoSSQ[I\#-"@)`4P3eZbR()bJ@]QQDOMZL:/r[-B"ECIM8dfA4fse$.E([,E6HiQ/CFP.]"NQAR"&O1mZ[pG((LGgPYun/gr2DELp%D\bH[S72JhKQ^$.IH./mcD`k<fCK$@>h+,k3-[<&KU2/Gp<_#TeC"A`@'P=kL.Q3#\5B;dib_))>HBkMIX21"Qhb]C=a2ar6_lt+@]cW8hs.!>SepKZG9N$3qP"V]P`OiE;C\_Xo*r0C'b,P53]?]E;U9S#u\#3EE?5[%Z[b\(&<,O7D?XSf2HV$uZIZ@'%>7:"cnVeBZkZ(sZ)[sVRa^WK-1oJHaeqIc:!gHc4ec~>endstream
+endobj
+39 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ] /Length 1831
+>>
+stream
+Gb!#\gMYb*&:O"KbbMM#[A%Q)R]"(qd/[mM[FMqj!=E#)D71)=MH%4mp>^?fabl8&L5RD87=Z3j.It^AS2iqMYjmdAs%*]>&]:g@#S77#3=sO-+MNE-ps&Olbt+c<+tI>u>H["5&Qipa]9*2]kIA5>6+PA68[GqiK&]4g_r--(Dt&;b\mRN3$DncA=:YAH[$[mO/K)K#._*a%J9tb93&6)H`BDCWX9?ReJeNsT6Mubu]<d.Y30lMoKC(k3\,jJ89`>Jgkhm>4,:a1t&;.t'M]c\oJE;H?ho0O9De')K_Q^l,I,rA$"2rb1BT=n_K6TMc_maU,<e]TAhGkbbYi][,j$Lt8R8_'4!LK<g`SqK2Vndo*nlfEsFq=96`2ug(UPNXrQAt*"#SurX449apk9@3P!J:^U?LcIj/`3"foeA?X%cH/R(r4s83go"(jR2(;RQ9cpK;g?C:!]lh+W9rIYIJ%)e)T]>G'iAlRoS?fUbL2dd1"u^^@"F5>OnNLWXmm3^0'gbfs`R1-$fJHqoTK>I:"P?Z]`WnTU&OXKsXDa/g73XK;C83o)dCUIS<hDN8m8T;NT(2/b)gF-'M?+\6-P*U-K?'m1%F]%"64tDbGh(;m$Y-09a\FUo7,=c%lb$?62V^a(*jNcX5%M)THNcctul]bi/EY"=85+gNZ?ar\t3MfsXN0)*fhYS^=i^@(N[E'Ang%K8=W,7qZ,_W*+@9oTM9%OA$--RFJJOi6fS*1'OOuI[\T._TGf=MO$;k&h95b7Q&-[%<'%9.LnY'QK9^jhU"cAIsLndd%0%?a%M_G1[1NR$Ya>_l!]\PW*edR&)$?*>QZjVS!,iDW7(fr3^e.%*+lK2U*!G-e__l.='/ttWmXtP&Ul%RFtnnW3N":L\e`]67q'?:A#2m#&=%8$]>:2/GB[LG?&()+\R'$og>Hkqc0MtT$dRo@l4K+VZTuOY"V+M4PU_Di<KZm+B%a';6<6[pUkF*?f))HtWi=h3PU$3iEo`#TM`2C`2AVNe#_*uIBh?q?M)ROeRZ'<$_?i]PDC7oOE%r5"VsmQ5q6>Am4@VR*ZAjP+L&XF`JP%X7Z$scMb[cCPEiu35B85:XI#c7/o2K*7C4G@Y^LO(#![/f3H&[gb,eZ^eagQ:BWI3P-ptJ!jCgZ,Q:$B]ZhbKK)B.RmWXE]bL$_"8<$gb6^Qb@Kcd3BeVUTa/V_/#J)NkRj=m;&QQL^osblgC']1WBS4_N9Km8&dqh90A$T6,)Ib4'M%'l5=>Td(,n@C*S7>8]?;';on2^F=Oeu),E=k*u9\$mP8I:3(Go@SPZg`a])7I$1HpL(-KX:%JcFd?CkN]r:T16qSRIRjm(1^e^`d3jg-g[&)HL]-&"e:0UK6AM'A+-]5D26P0uh#LE?(hCXVJbQJC>9oK(JA:q&2GXaa?PBo+c]a]>duk>mLH'ae#%K<2lL)epP*gU@P5=A^L&Z(u_hm=rI#)t_*R(h9\a1:4^u?0e@Zs-E1H1V(AADm=I%l!A$hG\j]5`40rnn*[Psa8,bgoESpAb4i4-mC3D6p5P\_;aFdc9pVHB$A!J.khJF'?pRtam+@r@,WN4u$TLq'0"=lZ7`:,q8A5XkT8PLi19c]jpafolOM_s2V=((iQEGqP_00A/R!>8h#EEBUTouX]Y':1jiC(Meh:W\5BVf(ZSL9\IaISbW9l*2O;jR+pQP5J@3q.g)(hULmDUBFW=-Y`RW:0+o=N;;mE:tAs"igEcdZ4Dc7o3D1qG:($<#Hu=8#2\M$VDA*DO/uW'T\@*PdRj[Y,U[546n,WXTD,g[76sY8deZMVfq"$1I%-/]_N@*7K!\~>endstream
+endobj
+40 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ] /Length 2146
+>>
+stream
+Gb!#]>Ar7S'RoMS39\Q@_,a"\SR;tJQECFX1lI'^%g</,U277rj[rM-!;l:JP[q`L>';\`*EpC;.>m:M\*lBe!>GKqnn0c](khDP*<BV8QiM+7#Jr^a.X^pV<P9$DKtcNrh]'#c3di^K^pNtS(li1><ZeWPHCiV>GAOKg#\VL%;"5:'WM!`Z@m\&r0pc\\s1g$WjFUtP6C(9SSPfJ!`3=7#LR[pec0e^=Q>(V_+T)<"YNkJ>'3r^9*8gFTkM5%t5hqW[s$?uAp@s2W"@57;d(!Hp1tj*\=97,o,95&"9lC,g$+BEF%/jQ70pN96O-D"QiFS(;B5f$C)35oaW5oXZGeiBl0``(fPSQUJCBeXEjRit[0ko\'5b1R7.N[mQIW`;3U>7'pK/g$e=.b%RUJ9DY3d9pp_6_S;q,r!K$=LQP"7PZ(5o4G._sYD"Y32EErD<+Zc:FhcULrtn8,Bg;$SIk0nSlu6D9_\2j';?R]0\oKVh.\&F(ZmH)eWD>IX\&;_emCl[A\AoHTn%.qV*k:o9fOVE;tWch%)P;+'HUI8!"B6JV%.h7kp((A3&GCEWWUC&s2@FaU'St)2Jtci;`&kBE^bN9O9:f[IO__[i(*%&T\Zm?2E&"%2U^l3=KioYU$fWM*<eJMKjs^#0j_`0,mW6jH()X\B&s>+;J]1?Q0&X.ipLVqI=cV"Pt#&?XNaq]Ek^Lbs=SBH^_:`\$XAO<f_P)[19Fi'ACZ4n_qou==\2o4)3B0I\<l`4K*]`FqOX!N)u`B%Z(t#Y]aFAUZk.grUr!-8X@XUCbg]1j.YS>>-g@b?RYs1CeJR;jb-'0X.$Pr8-KT+Le9+tM:M(s2R\RNr%J\BCNu`X@;A0aYrQ#Ap'"Md%LM7G!gtZ4Z\W%\,SJ]C[$]Zj#s<tHFu7</[fd`9S2$mG*!Y.-)VCNPKWGl<[Uo))K:&7tUO*b@g-;aSc`nE5^l7Bo<$'OTI!l)o90p8@XkY<@l-^TW2CDn".&S\GA1@_Q-5>ZSNkCNd`>hV=QL8*Rdcl(,Aa+;o]pV>s><@Z\\B!26K/4@%#<Lu:PF>=$Nq0,K7C\rhP>oL#;*Q%%0t:!JEte_[1I3q3WMFRSOs7s=<s=^%&kWpN8V4.igCr-FoY'b)3;.'?&?D(^5bCFSqp'8.?<1C((>&u;/jSBr8/G`<g[-]=refi`&I-:udeCsa1&(nb_/-hT,KSW9e**n'k!;u)q"C]:LRuLC[^5E7@kee[e[TP;\eTn]2'=fD>l2%]\Y$\BMNtNZ/(ZZSV:nkRP\<T[8bjfna68.h6H,>RkHJ+<fOU,q;=1D%Z8M4ob?ogH*6'.7E*;7H[Mi@cUD45n.tm[=9,8JX@W%L@dZE:/O$&KikFm?+rPU,f7TTko*,9VtTh#J9JsM]R[C^(6+!`5sRD\EJ7E(>6[cK'IO0!0Th'MMb4l/ZO4GqWG%VH0>mA=W`EL^a8\pKiPP:EJ6oA+T'j,0:RK[j&=-Y7514dTJ[?CE4og3AX>dW0GJI*f1Vdd1>U$(+Pb9Q`e.-?@koh6tq(_b8@NNAZ-YiG&TLk"cKde?*ab0hTo3PCl5G&FJ*sdC6G\ETb@g+r1#^_P]ApYbkN_NmA'&;sB`Vdr@sJCI)1h#.jnRf?@Y'rMSDAbpA_CdLFNuWr9dX7+fZcr[$IeM1R>+3>hH@Qe`Z2:oOn,A:he`Wad.r.rBO0gMd@7maYbn\@RQrmo\j^CLNumAQiKFA8uDBYq5Y5U;TAqOtjlcj^/K],RKO9jQi:f<bkCt\22EZrB]db&Cu\hh1Mr.ICr!a\>LF%Y>M&2ZSqQ@@-;t0M:I<1Mg35F<^DI4\^D<lPp:B69,<_u>fDpC3#n"09lk(S'@/nGAD2Bc^'P!:9c8i-\'J#dod]c+8=ir^;dBLk8UeU^+)SElgCL%jhWBtJagOR[WG?9BOg@`[EVVP<SQ<l&2n%Ajg\[<X0WU'oL@Uj@R9s\/8iW<[LKukQ@\$+)kp=5DjGJ,\aVp?LXe4')?_gi+7a9qs!P@g"](WfR;Z`_o0S/A_j[)ZL<K%En2s<KZ]6V50W=mTD3?bZB&&VW4*`CHf>[;=!JBIGc,#eFl!6[SGVo%Gu])8"u5HJ$)/QD>)4Ml;"Cs?TKm*GIOFDGWC=8r?JDr^c~>endstream
+endobj
+41 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ] /Length 2392
+>>
+stream
+Gau`U>BA7_'Ro4HSDf1KM1tA`PNbGb:m`#]@^T"ECo"JP7$bcojPXbLhg<Z6'%rQk"-+6'4Qs(t^2s1cZa.Bb5F2:-RKL22iPc`D//uG4=K^ULp]k&Y:VJrjmf[`BAGGh?_m)@K"GRSWcH$4-[2mR7JXk0[<kZ$/JF,W^LQe&U]nQ23AQ(eUB`[7j.ek"_KlK""m[3&HE`Knt_GXK<L4a])n0)$*q$iZuS$r>:_Trem6@3p"n8-iuLS!DiF,_,heU@3gK[?u:(^uBH(^10`D\s6.m93oM!SZub*8_d*rYc1Y*:h,irEt7hOq5W(jGB)ie\H4Ni&,.E+Vq0;TV5[d-6be"=W52F.j_J8hPCUGLmSqPT+qI[:%Ur1gR>Wa7mM6":)+kVB2k:/R#&We^p%(i*78]_3bY:Y_T>=IV%cfh?Cg>O.A6?l-h-7C69'\h,snS[r)7k9ET!HVrG]BlagfFQZ=f0e^ioSr01E^(*Y69ne*D9C>ipHq^F@Wf]Z(TZF>DuU.7LN>oXngfCFM$MfsAbH*fG'Qe+'#DR"oe]e]h`%C!h_#D_B">$,qi<&3&8edODEN%,u!&n0ot8W%*pocDk*ooB+%d.#Nqf':a]3HUr,-P"/Xn$OTR7>(naB=Uei[aCrpKH%Q3Vm$=Q]NOCAhc*gfb>18D-K;4!Pq28Q@gU3kBZ8rGhZS$,p00HK&8f2b7B'nV5X29/a.mFh2MJs0R7>c)L$q#;t5/J/g:3@\PI42c^_H1[7Kdt_co&?:q]727^ho5V47c7#UZctB,H&AdAV0[I]<2<M^So29tL8D`?l`6`2hl2([=*CdN`oIj=&fVb:Ka(Z7kLhWpr%%W*b%NZCG,"IqrFQ#h.%FTXIg^^\-ns/M@_/ge5sR'/#V1SK^mRk!Qi!IqmJct]E>7j7=HM?rc2!Z)h9=!+cnS(tFKgr(h\%lgCD!c-15#QM`kOmYrf1l?q)-2nN\QZ$PtBBPn(rfX2(B=SY("t3HG^sReu:F)ie(Us=]9ap2V'no^>O%boLnQa9TPGi&IM8.>hOc:Pb@Z1NRpp?0<=]0=5LWf[r-Itcl3^6L^6S[Ru+5bQB&%F8AURb]/U!UcNL7+I![/AK.K`?Z]5jS#FAZ_)19X@4r@ct"<rKM9[.H1-=aI4']2'bXE%+q"9.$3VPO'Qd4Q`qVn='O;O!s.>Y[%7B5,9p/Z(Y^q`/*m[F>U1-4&0m`:8*VU/6s-V%>SBU>(a-g+F._NXCLO$A!UV&T^h9:2/HEY)jR2Z4Fu$[U::f2i%qG8"+0e2mCR&K>FT$97>Y?P$VCjIr)7K#6&VMf!nd]rH=#BDOVT7!C62/-IlGHKMCjD]'):iWl48&bcDHr.&$CAf6:DFf5K>;-S&4bY?UTC0PS$LL[Q`rl#VKnSVT9o=c&[c-c2fWDh[Et<EE$_P=GQD>ZX1Q`GCCjE02I.S82#=WH+h?g3onSFBDCI=E]ps?EmtkVRTZ6:=/^'Z>i.)k0o\e(:Cd3Y_8Gu'(+dQka7T7k=VFA@pIeD9UlEf:Cpu0.\E=$XCl0&m+1boW7O*54aqISG/j"Qmu64*Q;5B*PRj@%35_l(X=4OI^b*TN/-t\Sbf=h0@9;V2cDbF=MO]%>/[gjan9F$l!W@8!PE*+]3buT?Os><`i>q]XBjZ=$PVWE5&rFSpdrM-X3?l#XYrJuOW"sO/8j5PcX<::UecB@;mY#cpI!kMs0jh")\LBr[P=3F9,H8H.,>LPb%Q9Z*Zmm(-'!tnELP<3bH)d:&IqA3k=WJ6%T#h$8f6)83[CbT^8"j_=[/.>kZ0;$6a16u%FgJndUq@UDZtlZ6=GF-u_qBV<=A!)d8]?,C[ZbWlBn@Jn.FS*]mg"n"./JuQ`aYALq.*HpgAQBPBl+Lr[c;7hc&XcGLUEae=E8/rDE4XNME$Z:0]%bIC-n[FMUQ]=ReqQZQ;H^Ba^Q<`"&"fC`cJR^1)@@T$bJ[[dI8`V1It,#0NZn=cn4I6n?m`M(HE7.4Li7"*A6u#+%dLrG$/8`\&e./%b1[29Jl*9eEg5c4@K%hZ&K*VoWm@tK!rn`'=;ZAg::m5j4WlDleZ#o_k4iqeIbb4:a*[oRW;#:I6`I"XbF/0o^7PJ6nD'=!cFH.igiYZ3Phs\46CgC[7I&Jd7>hA?%!Vh+3@:M#E&aU$qNT[7_DtgKYn.Wc,QLjOn$fuaWE!#Wi-Bm>?*"H"=0!Vomp[/P8n^>cE$b+m6r;NZ/MI.lf[Sl!p@^2ZZDPT,gERHa.+?W^Ke0,:=UMoEa!m9@!S?*W^C0@i>R%:\CN$Er=u%3nfndC*]iU"+6\$I:FC"\g@'2*o[Pl:0h9)K`JRYPR8f[6D<u4d@8:>#b*6*^R*"s>[o@4(F">;3'rG9?20e[VD,!qR~>endstream
+endobj
+42 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ] /Length 2122
+>>
+stream
+Gb!;egN)%<%"6H'i2KR7'$[IF3n*==WKYO_EEo!^VnB+PQ,J=lFa%P$D=d3"\0Oej'Wn1:gQ"(U_Blb.=WAC][_Tg'X83iJ!&$]!H#8+D6b!->2-^FE_--Qo[jUj+:CD_.Xfi\(mC<67Nc-t0%>JX[SfN>`df!5FEn:?HK.qr*99t'^pFKrMT(-(%eOD$[_-_.]/CY+B*'u7m>bip+CWg[9AHq>:2:(DiJ8O#hB+TNDn9`m$Z\)oFL-,"(brurR!Ec\Rc+fnZ*IDDtbjbSH8#L@CYg@(8!lO`ZIL"\s\heE=j+[jMiK58n2HV;75St(GU[ZgPR[q;k9_$6j,ZS+=(dc&ZaWcua3P8(^.`>rBU0X7cJ`4$qm;2.<`g3A1KFA.Yre?8a><Wmil^7d%qQ>H?M'\*5q/9gg.\u0?[54@]rSRrf?VW0D3ReH()b3t?B[?WY'AMfa]hB./\NRToR+%Z(_p,d]p=Ek^+iVm$B.cSMLd^o=oeosU##Y%e_`T9G+6K1T>'f#f`33DkM[cU"LDWAZ(0)cATb&r]j@`m+$u<;IYJgQB-U:]n5`A!9*/qI=qJma(<9/$c(A*=%$]rIckOBh>Tp/*aN,@K6iA]s+YUD!D>Wn?ZmtYHteQV\626b]ONbaW`(p\NpgV7CEBjc&hhg$km<50:'J60Ut"/9oDLmIaW"Bus950@FN$T08MPGf3AH'FU-j/33)#CP59nQq"q]6aet1O!_:`SDI^jCAXGj%V0F1Ts$nr,X^]?8S[8XB)&DQ`CH+_.B#a=ZI;#Gk@E,-:0NM0H[0@lbi.RC[L/=2)FT;+NiC+CEu(*FDZ44<BfL.VFq%pSMp&99a8+^+HXYNY"F8P)FMeg-qG,1OD:lW6Sf3S7c_ttj[B9m-na+c&ll,&lA?EsLdWC4AX1R"pB"rP*E8&oH2]8*ctNK_'O"M9qAZ#I_5_<:eg#?l:d^Oo_5rh2*_6%mY>[XJ^ScJJH(:,P+Ki%RJ'r[?m:-J?a>OqPKu!_4(m%9jl3O(;-iTm.bW5/B:3\l<`1H-6[n+);!i$C7GD>*Y$QcC:Us+L@AHfAbMtC,PMMgt?L:j+HkkJbWQC\b3$C"$m6dH,9oA`2pi>(h1YW$4I;q.J_P<Y9+b=NX25EZf]5Sa=;$mqjJht*E<:k`5\9[#bGNpIn]n4]`EjZJb/l7?%k7Y_rHA9Fk$Y*'c_`<D1p5p!PP[.RgNBn%MXkhcND@aE#C&DeC6%,Zfu"h&1nI/*LtP!;:lc\o/4U2m(YPEj5Lo=$tm:2!$mX'i3p3E=1BL:q!5`t5)$ls=?J1<G)Ebiai2aTPt0?h's:iGr1/A!DX%VT<A?AHj%:\kWLEis948/!TM,)Q_/_HU>7'/;=NpH86+])mml`Nn_k7,F.GjQ1gRZ1DkU7a67rJDU&aDc1<,d[*f7&7i_^s5!-3;,#sZXH6"K3PT:\$8Xme8)N(o;aJ%HA7m_b/ZI1L6H6T'685MEM7ba"+Zb`kiB(irRi>\i[qm861V(nGqaT:j0/BR"Vh2V$eGIPtq#P$<s]I4LS@hZ1CUEt$[D<'?9cB:h'Blp/?=&)aO(KjYtL$%&sLqKk6n/,?r3,Ut>+%iTkF!aQ-e"'N[*Ab6p(JMbk:K&'UYNfleWS@j8K-\^X3.%=0UgK@AID%4,l>Pi3bosilF=Y(R34+f*Y%lk9U6uAV%S2<T\K1J3/D7aYA@C>JlXqcCZm+,cGLON?a\/0X/(G!5lQ>m]&T\AQ3C^GpIZ(-MH,6=Lpa[\,3,3l%MJSi(`F[6C]/e,db9H$]M)H]=,_@ocnS*Q"7chR$X<So=_.g*QCm]-kjOYEJ[I"u_)Jkn@>P$a43'kX(Ot3*bWL(Zu60k&]SI:YBpC;NDWk?eb'`8JAhR<HD@54d0?.D]E't21_k&*&A%6na,hJR$^k`5J[oAV>f?PP#LVgA"2\Sd&l++KBXg8CI$2+?KLb-[TH:j"SXTB/<6*8-cEp)LW];MVH\q5FUPZ!]Kr;d0_`&3B0DoYBjunLneZ\DuI9BBe&KP&]=Qb&X("<D<[tcpJJ2"I)Dk%81!"2/73"?d@MjY]]<Hks2Wr,5//,27);.emnYkJs`-C$.Y]4G:!GM%.N=r2isQi~>endstream
+endobj
+43 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ] /Length 1432
+>>
+stream
+Gau`SD,91O&H9tYQnKhPdl,-9RO7N<>62>shN!=Z-R#&9`+cn1ERo:?4l)16ERK"4(V2.&S>^,eEBWnUSp=p7^rAT:s,V5O;$;59"Gd.W$H085Leck^gA/1`Z38/Y>5i9mEh.atK&m3F)`hAPN]V2HO>F58X:Fu0E!?m8cl:Bl(/AR0B.R\LL<3>-QG_T6&ZNL>P!R$NL5V!+YTT6iQ6DcT"j<f;Jn$nA/js%iqUP@YGo/N$jUDIog<Tp`!"uXss,IXonI1&D'a.rqT[@-Z%,)q63<@.g+roJZgAW<62RnL&*-lLRfS0LGO^Xt#NVa4=LEeF:mRKBPE2>8J.n-?uj*D$`1qV:Z.B;)!5u`p*njCUT`:_2s@%7n>\J,]FfYh1N(d&,?,2U*Fc$SBZ(mpgZmui+"\?+@aqmC'XMlRrni9][5miT?fYW8sId6]HIp.tOfe$ZmKRWWG--@L6nYs2EX?/*[nO]FoP\L;+q2n]ZK2nL)c>Y$Im)ESEiAI5R2X[E\9bC30[c_k+f7_\*'on>u//j[g_L9s\fD,R1H'N#F"]ZcaTp]9tn;g#.6.O\(p@VnP!L7#08#`RjK&2#5d7?MQ,IoipDF3.N'5Y7g70eXt&(Yj!n(R9a'>RP4:H,5CVR%gGcatl*'fE$#C5EeEl=Cf4*28HmM(BP7$qFO)Vp9#_a8"WR@7t:G^rUJsXkgSYheaY";:];@L=-/:j'6c\!b7>\Zr0'6b-:<^-25s\&XBa0FPfmL^?-VSHF`<t?PpgA&'m\)1OToS3*kWNAGi$.L.%*b_bS<sQ[J)dXH&TV)YYlmP2jZF8=h.sZ*E"71hs%;5rsm0HBh78VBosX13EJ\S+;<bC.UR_K)d**oTQ3+k?"0YPUonmV85TI+!\+fo;\XohX\8//TtA,foZ&:F=rI>Y$?:;tU<'SB,Z@^?4#DQAp+HlVQ*)8A^mD%t=uh+JD#*2ee6=Ue7C>W_^f>N-]24*:RAuMS[@f:g$XLK$=DS_.5qmQVRD@L2YnTh'EMUu/D<ji4Q:=d-R3CNU8A4;0>Jp&fmlhYC5;sLBpDXQFUqQbH0^s\oB/hSFU7.KP<eW;_F2Ek#^<W0_/.BaiqD0d4N70'G@.OiJ:6pe7mFgk0h%KH[9L"s]7MX74VM_XeP:FQjhVbs/*KS6"]+8l:oM-c@E,drJ4)@VSn']1[kdk?tXh+:=e`c+Z`j`a@R^T82<Tjc0ca(4hX:b$)2W5,$[i.]Hq_gY<e0+23'N-BaEO.!1O+is4XI[)'i\-m7FIgDnE*&Q0V?ta"@';"6`NXY2UJ#D@cYJK2mr&b%2S%dF[I@dfE?t/rVG0cmD1<Xo=,ioWn-"d#))*Ln<6_@X*YFJDNAD*)%2D<@Sf.%VTYQ,7B%c`BI1gM$ethqAKZu9P<%_^<'2lQ=n&+bH"*XYEJF=Q]~>endstream
 endobj
 xref
-0 20
+0 44
 0000000000 65535 f 
-0000000015 00000 n 
-0000000115 00000 n 
-0000000155 00000 n 
-0000000204 00000 n 
-0000000342 00000 n 
-0000000412 00000 n 
-0000000487 00000 n 
-0000005328 00000 n 
-0000005466 00000 n 
-0000009398 00000 n 
-0000009538 00000 n 
-0000013549 00000 n 
-0000013689 00000 n 
-0000017116 00000 n 
-0000017256 00000 n 
-0000020923 00000 n 
-0000021063 00000 n 
-0000025837 00000 n 
-0000025977 00000 n 
+0000000061 00000 n 
+0000000112 00000 n 
+0000000219 00000 n 
+0000000331 00000 n 
+0000000436 00000 n 
+0000000641 00000 n 
+0000000846 00000 n 
+0000001051 00000 n 
+0000001256 00000 n 
+0000001461 00000 n 
+0000001667 00000 n 
+0000001873 00000 n 
+0000002079 00000 n 
+0000002285 00000 n 
+0000002491 00000 n 
+0000002697 00000 n 
+0000002903 00000 n 
+0000003109 00000 n 
+0000003315 00000 n 
+0000003521 00000 n 
+0000003727 00000 n 
+0000003933 00000 n 
+0000004139 00000 n 
+0000004209 00000 n 
+0000004545 00000 n 
+0000004724 00000 n 
+0000007058 00000 n 
+0000009782 00000 n 
+0000012403 00000 n 
+0000015669 00000 n 
+0000019181 00000 n 
+0000022215 00000 n 
+0000024957 00000 n 
+0000026983 00000 n 
+0000030214 00000 n 
+0000031885 00000 n 
+0000033938 00000 n 
+0000035969 00000 n 
+0000038155 00000 n 
+0000040078 00000 n 
+0000042316 00000 n 
+0000044800 00000 n 
+0000047014 00000 n 
 trailer
 <<
-/Size 20
-/Root 3 0 R
-/Info 2 0 R
+/ID 
+[<6f54ffc9e2424a62380eebd88d56b4ab><6f54ffc9e2424a62380eebd88d56b4ab>]
+% ReportLab generated PDF document -- digest (opensource)
+
+/Info 24 0 R
+/Root 23 0 R
+/Size 44
 >>
 startxref
-27212
+48538
 %%EOF
