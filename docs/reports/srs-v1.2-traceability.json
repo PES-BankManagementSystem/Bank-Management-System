@@ -1,8 +1,8 @@
 {
   "revision_date": "2026-11-07",
-  "implementation_commit": "1175a652edc433377dc2c87e2728e88948a08eb7",
-  "validation_commit": "4cf8b3ca55d04a9d28bdcb0041d63d710ab619a8",
-  "validation_pr": 130,
+  "implementation_commit": "547ffb5b25bc0b8429aae8978581a29620632111",
+  "validation_commit": "547ffb5b25bc0b8429aae8978581a29620632111",
+  "validation_pr": 135,
   "validation_state": "MERGED",
   "test_plan_commit": "cc4b10200c531687aae83b855c5a59b246c25b37",
   "test_plan_pr": 124,
@@ -13,113 +13,113 @@
       "id": "FR-1",
       "design": "Auth/API; POST /auth/login; auth/routes.cpp, rbac.cpp",
       "test_cases": "TC-01, TC-15",
-      "status": "Not validated",
-      "note": "S-43 section 5: Authentication and TLS login passed.",
-      "source": "S-43 section 5"
+      "status": "Validated, retained TLS",
+      "note": "Final S-43 section 4: Fresh authentication; prior TLS exception.",
+      "source": "Final S-43 section 4"
     },
     {
       "id": "FR-2",
       "design": "Auth/Session; POST /auth/logout and login; auth/routes.cpp",
       "test_cases": "TC-02, TC-02B, TC-03",
-      "status": "Not validated",
-      "note": "S-43 section 5: Lockout/unlock and session invalidation passed; TC-03 returned 204 instead of the plan's 200.",
-      "source": "S-43 section 5"
+      "status": "Validated",
+      "note": "Final S-43 section 4: Lockout/unlock and 204/401/sign-in.",
+      "source": "Final S-43 section 4"
     },
     {
       "id": "FR-3",
       "design": "Customer Record Mgmt; /customers and /customers/me; records.cpp",
       "test_cases": "TC-04, TC-04B",
-      "status": "Not validated",
-      "note": "S-43 section 5: Registration validation and Administrator-only deactivation passed.",
-      "source": "S-43 section 5"
+      "status": "Validated",
+      "note": "Final S-43 section 4: Registration/deactivation/retention.",
+      "source": "Final S-43 section 4"
     },
     {
       "id": "FR-4",
       "design": "Account Mgmt; POST /accounts; account_opening.cpp",
       "test_cases": "TC-05",
-      "status": "Not validated",
-      "note": "S-43 section 5: Below-minimum rejection, exact minimum, and zero-minimum opening passed.",
-      "source": "S-43 section 5"
+      "status": "Validated",
+      "note": "Final S-43 section 4: Minimum and zero opening.",
+      "source": "Final S-43 section 4"
     },
     {
       "id": "FR-5",
       "design": "Account Mgmt; PATCH /accounts/{acc}/status; account_status.cpp",
       "test_cases": "TC-07",
-      "status": "Not validated",
-      "note": "S-43 section 5: Freeze/unfreeze/close, blocked transactions, and retained history passed.",
-      "source": "S-43 section 5"
+      "status": "Validated",
+      "note": "Final S-43 section 4: Status transitions and refusal paths.",
+      "source": "Final S-43 section 4"
     },
     {
       "id": "FR-6",
       "design": "Transaction Engine; POST /transactions; deposit.cpp",
       "test_cases": "TC-08",
-      "status": "Not validated",
-      "note": "S-43 section 5: UI confirmation and persisted deposit passed; seed balance differed from the plan precondition.",
-      "source": "S-43 section 5"
+      "status": "Validated",
+      "note": "Final S-43 section 4: Confirmation and persisted exact balance.",
+      "source": "Final S-43 section 4"
     },
     {
       "id": "FR-7",
       "design": "Transaction Engine; POST /transactions; withdraw.cpp",
-      "test_cases": "TC-09",
-      "status": "Not validated",
-      "note": "S-43 section 5: Daily-limit and UTC-boundary behavior passed; TC-06 additionally covered minimum-balance rules.",
-      "source": "S-43 section 5"
+      "test_cases": "TC-09; TC-06",
+      "status": "Validated with date-fixture limit",
+      "note": "Final S-43 section 4: UTC date partitioning; no live rollover.",
+      "source": "Final S-43 section 4"
     },
     {
       "id": "FR-8",
       "design": "Transaction Engine; POST /transfers; transfer.cpp",
-      "test_cases": "TC-10",
-      "status": "Not validated",
-      "note": "S-43 section 5: Atomic transfer passed; TC-10B additionally covered invalid-transfer rejection.",
-      "source": "S-43 section 5"
+      "test_cases": "TC-10; TC-10B",
+      "status": "Validated with fault-method limit",
+      "note": "Final S-43 section 4: Injected failure rollback; no process kill.",
+      "source": "Final S-43 section 4"
     },
     {
       "id": "FR-9",
       "design": "Account/Reporting; /customers/me/accounts; /accounts/{acc}/balance",
       "test_cases": "TC-11",
-      "status": "Not validated",
-      "note": "S-43 section 5: Account balance ownership checks passed.",
-      "source": "S-43 section 5"
+      "status": "Validated",
+      "note": "Final S-43 section 4: Own balance and access denials.",
+      "source": "Final S-43 section 4"
     },
     {
       "id": "FR-10",
       "design": "Interest and Statements; /accounts/{acc}/transactions; history.js",
       "test_cases": "TC-11, TC-17",
-      "status": "Not validated",
-      "note": "S-43 section 5: Ownership, date filtering/order, and pagination passed.",
-      "source": "S-43 section 5"
+      "status": "Validated",
+      "note": "Final S-43 section 4: Ownership/filter/order/pagination.",
+      "source": "Final S-43 section 4"
     },
     {
       "id": "FR-11",
       "design": "Interest and Statements; POST /interest/run; reporting/interest.cpp",
       "test_cases": "TC-09B",
-      "status": "Not validated",
-      "note": "S-43 section 5: Interest credited once; duplicate run rejected.",
-      "source": "S-43 section 5"
+      "status": "Validated",
+      "note": "Final S-43 section 4: One interest credit per period.",
+      "source": "Final S-43 section 4"
     },
     {
       "id": "FR-12",
       "design": "Interest and Statements; /accounts/{acc}/statement; statement_csv.js",
       "test_cases": "TC-18",
-      "status": "Not validated",
-      "note": "S-43 section 5: Statement and generated CSV content passed; native browser save event was not captured.",
-      "source": "S-43 section 5"
+      "status": "Validated",
+      "note": "Final S-43 section 4: Statement/generated CSV; native save not observed.",
+      "source": "Final S-43 section 4"
     },
     {
       "id": "FR-13",
       "design": "Staff Mgmt; POST/GET /staff; PATCH /staff/{id}; auth unlock",
       "test_cases": "TC-02B, TC-12, TC-13",
-      "status": "Not validated",
-      "note": "S-43 section 5: Administrative unlock and staff/customer lifecycle behavior passed.",
-      "source": "S-43 section 5"
+      "status": "Validated",
+      "note": "Final S-43 section 4: Unlock/staff lifecycle.",
+      "source": "Final S-43 section 4"
     },
     {
       "id": "FR-14",
       "design": "Staff Mgmt/Presentation; GET /dashboard; landing.js",
       "test_cases": "TC-14",
-      "status": "Not validated",
-      "note": "S-43 section 5: Role-specific dashboards returned the expected role data.",
-      "source": "S-43 section 5"
+      "status": "Validated",
+      "note": "Final S-43 section 4: Role payloads/ownership.",
+      "source": "Final S-43 section 4"
     },
     {
       "id": "FR-15",
@@ -134,7 +134,7 @@
       "design": "Auth/Session; GET /users/locked; PATCH /users/{id}/unlock",
       "test_cases": "TC-02B (related)",
       "status": "Not validated",
-      "note": "New ID unassessed. FR-2/FR-13 are Not validated. Add denied-role checks; tests/auth_lockout_test.cpp.",
+      "note": "New ID unassessed. FR-2 and FR-13 are Validated in the final S-43 report. Add denied-role checks; tests/auth_lockout_test.cpp.",
       "source": "New ID; no independent S-43 verdict"
     },
     {
@@ -149,89 +149,89 @@
       "id": "NFR-1",
       "design": "Transaction Engine; persisted deposit/withdraw/transfer",
       "test_cases": "TC-20",
-      "status": "Not validated",
-      "note": "S-43 section 5: 30 measured transactions per operation; maximum was 45.378 ms against 2 seconds.",
-      "source": "S-43 section 5"
+      "status": "Validated in measured load",
+      "note": "Final S-43 section 4: Sequential persisted transactions <2 s.",
+      "source": "Final S-43 section 4"
     },
     {
       "id": "NFR-2",
       "design": "Presentation/Staff/Reporting; dashboard/account-list/history",
       "test_cases": "TC-14, TC-19",
-      "status": "Not validated",
-      "note": "S-43 section 5: Role dashboards and account-list/history reads were below 3 seconds.",
-      "source": "S-43 section 5"
+      "status": "Validated in measured load",
+      "note": "Final S-43 section 4: Every measured read <3 s.",
+      "source": "Final S-43 section 4"
     },
     {
       "id": "NFR-3",
       "design": "Transaction Engine/Data; common/db.cpp; atomic ledger/audit",
       "test_cases": "TC-10; CTest",
-      "status": "Not validated",
-      "note": "S-43 section 5: Atomic transfer behavior and 31/31 CTest targets passed.",
-      "source": "S-43 section 5"
+      "status": "Validated",
+      "note": "Final S-43 section 4: Injected-failure rollback and automated integrity checks.",
+      "source": "Final S-43 section 4"
     },
     {
       "id": "NFR-4",
       "design": "Auth/API; password.cpp, routes.cpp, rbac.cpp",
-      "test_cases": "TC-01; CTest",
-      "status": "Not validated",
-      "note": "S-43 section 5: Authentication evidence and the automated test suite passed.",
-      "source": "S-43 section 5"
+      "test_cases": "TC-01, TC-12; CTest",
+      "status": "Validated",
+      "note": "Final S-43 section 4: Argon2id storage/authentication.",
+      "source": "Final S-43 section 4"
     },
     {
       "id": "NFR-5",
       "design": "Audit/Data; audit/record.cpp; schema append-only triggers",
       "test_cases": "TC-16",
-      "status": "Not validated",
-      "note": "S-43 section 5: Financial audit entries were present; mutation attempts returned 405.",
-      "source": "S-43 section 5"
+      "status": "Validated",
+      "note": "Final S-43 section 4: Financial audit/denied mutations.",
+      "source": "Final S-43 section 4"
     },
     {
       "id": "NFR-6",
       "design": "Presentation; Officer deposit and Customer history flows",
       "test_cases": "TC-21",
       "status": "Not validated",
-      "note": "S-43 section 5: Three-person first-time participant study was not run.",
-      "source": "S-43 section 5"
+      "note": "Final S-43 section 4: Documented deviation 35: study not run; no first-time unaided-task evidence.",
+      "source": "Final S-43 section 4"
     },
     {
       "id": "NFR-7",
       "design": "API/common validation and Transaction Engine",
       "test_cases": "TC-02, TC-09, TC-10B, TC-11",
-      "status": "Not validated",
-      "note": "S-43 section 5: Structured rejection paths and unchanged-state checks passed.",
-      "source": "S-43 section 5"
+      "status": "Validated",
+      "note": "Final S-43 section 4: Error paths and unchanged-state checks.",
+      "source": "Final S-43 section 4"
     },
     {
       "id": "NFR-8",
       "design": "All backend CMake modules; functional decomposition",
       "test_cases": "CMake build; CTest",
       "status": "Validated",
-      "note": "S-43 section 5: Latest-main build succeeded; 31/31 CTest targets passed.",
-      "source": "S-43 section 5"
+      "note": "Final S-43 section 4: Local modular build succeeded; 31/31 CTest passed.",
+      "source": "Final S-43 section 4"
     },
     {
       "id": "NFR-9",
       "design": "Backend CI/build; Presentation in Chrome/Firefox",
       "test_cases": "TC-22",
-      "status": "Not validated",
-      "note": "S-43 section 5: Ubuntu/Windows CI passed; fresh Chrome and Firefox UI checks, responsive checks in both, and cross-browser rendering comparison are missing.",
-      "source": "S-43 section 5"
+      "status": "Validated within recorded scope",
+      "note": "Final S-43 section 4: Fresh Chrome/Firefox retest passes; unchanged backend Ubuntu/Windows CI evidence retained.",
+      "source": "Final S-43 section 4"
     },
     {
       "id": "SEC-1",
       "design": "Auth/RBAC/API; protected requests and ownership",
       "test_cases": "TC-03, TC-11, TC-13",
-      "status": "Not validated",
-      "note": "S-43 section 5: Logout/deactivation invalidation and ownership checks passed.",
-      "source": "S-43 section 5"
+      "status": "Validated",
+      "note": "Final S-43 section 4: Invalidation/role/ownership checks.",
+      "source": "Final S-43 section 4"
     },
     {
       "id": "SEC-2",
       "design": "Auth/password/TLS; provisioning exception",
       "test_cases": "TC-01, TC-15",
-      "status": "Not validated",
-      "note": "S-43 section 5: Credential handling and TLS 1.3 checks passed.",
-      "source": "S-43 section 5"
+      "status": "Validated, retained TLS",
+      "note": "Final S-43 section 4: Fresh hash/auth checks and prior TLS exception.",
+      "source": "Final S-43 section 4"
     },
     {
       "id": "SEC-3",
@@ -246,7 +246,7 @@
       "design": "Audit/Data; financial audit and Admin viewer",
       "test_cases": "TC-16 (related)",
       "status": "Not validated",
-      "note": "No separate verdict. NFR-5 is Not validated; viewer checks remain supplementary.",
+      "note": "No separate verdict. NFR-5 is Validated in the final S-43 report; viewer checks remain supplementary.",
       "source": "New ID; no independent S-43 verdict"
     },
     {
@@ -254,7 +254,7 @@
       "design": "Auth/Session; lockout and user recovery",
       "test_cases": "TC-02, TC-02B (related)",
       "status": "Not validated",
-      "note": "No separate verdict. FR-2/FR-13 are Not validated.",
+      "note": "No separate verdict. FR-2 and FR-13 are Validated in the final S-43 report.",
       "source": "New ID; no independent S-43 verdict"
     },
     {
@@ -262,12 +262,12 @@
       "design": "Auth/Session; logout/expiry/deactivation",
       "test_cases": "TC-03, TC-13 (related)",
       "status": "Not validated",
-      "note": "No separate verdict. TC-03 PARTIAL; expiry/restart need auth_session_test.cpp.",
+      "note": "No separate verdict. TC-03 passes in the final S-43 report; expiry/restart need auth_session_test.cpp.",
       "source": "New ID; no independent S-43 verdict"
     }
   ],
   "validation_comparison": {
-    "source": "docs/System_Validation_Report.md section 5",
+    "source": "docs/System_Validation_Report.md section 4 (final, #135)",
     "existing_rows_compared": 25,
     "test_cases_statuses_and_notes_exact_match": true,
     "additional_unassessed_rows": [
@@ -279,6 +279,6 @@
       "SEC-5",
       "SEC-6"
     ],
-    "exit_criteria": "NOT MET"
+    "exit_criteria": "NOT MET (TC-21 not run, deviation 35)"
   }
 }
