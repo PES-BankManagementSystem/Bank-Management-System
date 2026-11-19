@@ -36,10 +36,10 @@ ACCENT = colors.HexColor("#27485d")
 
 
 def inline(text: str) -> str:
+    text = re.sub(r"<br\s*/?>", " ", text, flags=re.IGNORECASE)
     text = html.escape(text, quote=True)
     text = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", text)
     text = re.sub(r"`(.+?)`", r'<font name="Courier">\1</font>', text)
-    text = text.replace(" [<br>", " [<br>")
     return text
 
 
@@ -131,7 +131,7 @@ def build_story():
 
             table_rows = [[Paragraph(inline(cell), table_header) for cell in headers]]
             table_rows += [
-                [Paragraph(inline(cell).replace("<br>", "<br/>"), table_body) for cell in row]
+                [Paragraph(inline(cell), table_body) for cell in row]
                 for row in rows
             ]
             table = Table(table_rows, colWidths=widths, repeatRows=1, hAlign="LEFT")
