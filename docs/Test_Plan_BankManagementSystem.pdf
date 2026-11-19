@@ -1,495 +1,181 @@
 %PDF-1.4
-%âãÏÓ
+%“Œ‹ž ReportLab Generated PDF document (opensource)
 1 0 obj
 <<
-/Type /Pages
-/Count 7
-/Kids [ 4 0 R 8 0 R 10 0 R 12 0 R 14 0 R 16 0 R 18 0 R ]
+/F1 2 0 R /F2 3 0 R /F3 4 0 R /F4 7 0 R
 >>
 endobj
 2 0 obj
 <<
-/Producer (PyPDF2)
+/BaseFont /Helvetica /Encoding /WinAnsiEncoding /Name /F1 /Subtype /Type1 /Type /Font
 >>
 endobj
 3 0 obj
 <<
-/Type /Catalog
-/Pages 1 0 R
+/BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding /Name /F2 /Subtype /Type1 /Type /Font
 >>
 endobj
 4 0 obj
 <<
-/Type /Page
-/MediaBox [ 0 0 612 792 ]
-/Resources <<
-/Font <<
-/F1 5 0 R
-/F2 6 0 R
->>
->>
-/Contents 7 0 R
-/Parent 1 0 R
+/BaseFont /Courier /Encoding /WinAnsiEncoding /Name /F3 /Subtype /Type1 /Type /Font
 >>
 endobj
 5 0 obj
 <<
-/Type /Font
-/Subtype /Type1
-/BaseFont /Helvetica
+/Contents 15 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 14 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
 >>
 endobj
 6 0 obj
 <<
-/Type /Font
-/Subtype /Type1
-/BaseFont /Helvetica-Bold
+/Contents 16 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 14 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
 >>
 endobj
 7 0 obj
 <<
-/Length 4789
+/BaseFont /ZapfDingbats /Name /F4 /Subtype /Type1 /Type /Font
 >>
-stream
-BT
-/F2 18 Tf 54 770.0 Td (Test Plan & Consolidated Test Cases \(v1.2\)) Tj
-/F1 8.2 Tf 54 731.0 Td (- Document ID: TP-BMS-2026-v1.2) Tj
-/F1 8.2 Tf 54 721.0 Td (- Course: UE24CS341A \(Software Engineering and System Design\)) Tj
-/F1 8.2 Tf 54 711.0 Td (- Story: [S-41] Update the test cases and Test Plan for sprint changes \(#117\)) Tj
-/F1 8.2 Tf 54 701.0 Td (- Status: Issued for Sprint 3 execution; supersedes the standalone test-case and test-plan) Tj
-/F1 8.2 Tf 54 691.0 Td (files) Tj
-/F1 8.2 Tf 54 681.0 Td (- Prepared by: QA Team, Abhishek Kinagi) Tj
-/F1 8.2 Tf 54 671.0 Td (- Related source documents: The standalone DOCX/PDF files were superseded and removed in) Tj
-/F1 8.2 Tf 54 661.0 Td (v1.2; their coverage is consolidated here.) Tj
-/F1 8.2 Tf 54 651.0 Td (- Governing SRS Reference: SRS v1.1 \(Dated 02/09/2026; corrected from erroneous 11/09/2026) Tj
-/F1 8.2 Tf 54 641.0 Td (citation\)) Tj
-0.5 w 54 623.0 m 558 623.0 l S
-/F2 13 Tf 54 606.0 Td (1. Revision History & Remediation Log) Tj
-/F1 8.2 Tf 54 581.0 Td (Version | Date | Author | Description) Tj
-/F1 8.2 Tf 54 571.0 Td (1.0 | 15 Sep 2026 | QA Team | Initial draft with split standalone test suites.) Tj
-/F1 8.2 Tf 54 561.0 Td (1.1 | 1 Nov 2026 | Abhishek Kinagi & Team | Consolidation & Gap Resolution \(S-35\):<br>1.) Tj
-/F1 8.2 Tf 54 551.0 Td (Merged standalone test suites into unified Section 14 with continuous TC IDs.<br>2. Retained) Tj
-/F1 8.2 Tf 54 541.0 Td (the legacy source documents as supporting references.<br>3. Corrected SRS citation date from) Tj
-/F1 8.2 Tf 54 531.0 Td (11/09/2026 to 02/09/2026.<br>4. Added test cases for FR-12 \(statements\), FR-14 \(dashboards\),) Tj
-/F1 8.2 Tf 54 521.0 Td (FR-7 \(daily limit\), admin unlock \(TC-02B\), NFR-2 \(performance\), NFR-6 \(usability\), and NFR-9) Tj
-/F1 8.2 Tf 54 511.0 Td (\(portability\).<br>5. Refined TC-15 wording regarding HTTPS TLS handshake.<br>6. Preserved the) Tj
-/F1 8.2 Tf 54 501.0 Td (canonical TC-11 balance/history ownership mapping.<br>7. Built 100% complete Requirements) Tj
-/F1 8.2 Tf 54 491.0 Td (Traceability Matrix.) Tj
-/F1 8.2 Tf 54 481.0 Td (1.2 | 4 Nov 2026 | Abhishek Kinagi & Team | Sprint-change alignment \(S-41\):<br>1. Rechecked) Tj
-/F1 8.2 Tf 54 471.0 Td (every case against the merged implementation and deviations log.<br>2. Added explicit) Tj
-/F1 8.2 Tf 54 461.0 Td (zero-opening-deposit coverage, request bodies/status codes for freeze/close and customer) Tj
-/F1 8.2 Tf 54 451.0 Td (deactivation, and UTC daily-limit reset behavior.<br>3. Resolved the duplicate dashboard) Tj
-/F1 8.2 Tf 54 441.0 Td (coverage by making TC-19 the account-list/history performance case.<br>4. Reissued this) Tj
-/F1 8.2 Tf 54 431.0 Td (document as an IEEE-style PDF and superseded the standalone DOCX/PDF artifacts.<br>5. Updated) Tj
-/F1 8.2 Tf 54 421.0 Td (the RTM/security mapping and TC-03 response status to HTTP 204.) Tj
-0.5 w 54 403.0 m 558 403.0 l S
-/F2 13 Tf 54 386.0 Td (2. Section 5.1: Test Suite Classification and Security Validation \(Updated\)) Tj
-/F1 8.2 Tf 54 361.0 Td (Suite ID | Suite Name | Description | Included Test Cases) Tj
-/F1 8.2 Tf 54 351.0 Td (TS-01 | Authentication & Lockout | Credential checks, session creation, lockout after 3) Tj
-/F1 8.2 Tf 54 341.0 Td (fails, admin unlock | TC-01, TC-02, TC-02B, TC-03) Tj
-/F1 8.2 Tf 54 331.0 Td (TS-02 | Customer & Account Ops | Customer onboarding, Administrator-only customer) Tj
-/F1 8.2 Tf 54 321.0 Td (deactivation, account opening, status management | TC-04, TC-04B, TC-05, TC-06, TC-07) Tj
-/F1 8.2 Tf 54 311.0 Td (TS-03 | Financial Transactions | Deposits, withdrawals, daily limits, atomic transfers |) Tj
-/F1 8.2 Tf 54 301.0 Td (TC-08, TC-09, TC-09B, TC-10, TC-10B) Tj
-/F1 8.2 Tf 54 291.0 Td (TS-04 | Security & Access Control | Least privilege, role barriers, HTTPS, audit trail |) Tj
-/F1 8.2 Tf 54 281.0 Td (TC-11, TC-14, TC-15, TC-16) Tj
-/F1 8.2 Tf 54 271.0 Td (TS-05 | Staff & Administration | Bank Officer CRUD, deactivation session clearance | TC-12,) Tj
-/F1 8.2 Tf 54 261.0 Td (TC-13) Tj
-/F1 8.2 Tf 54 251.0 Td (TS-06 | Reporting & Analytics | History queries, statements export, role dashboards | TC-17,) Tj
-/F1 8.2 Tf 54 241.0 Td (TC-18) Tj
-/F1 8.2 Tf 54 231.0 Td (TS-07 | Non-Functional Requirements | Performance \(<2s transactions, <3s reads\), usability) Tj
-/F1 8.2 Tf 54 221.0 Td (walkthrough, cross-platform | TC-19, TC-20, TC-21, TC-22) Tj
-/F1 8.2 Tf 54 203.0 Td (Security validation in this section covers authentication, lockout, RBAC, session) Tj
-/F1 8.2 Tf 54 193.0 Td (invalidation, encrypted transport, and audit immutability through TS-01 and TS-04. TC-11) Tj
-/F1 8.2 Tf 54 183.0 Td (remains the primary ownership and date-filter access case.) Tj
-0.5 w 54 165.0 m 558 165.0 l S
-/F1 7 Tf 54 35 Td (TP-BMS-2026-v1.2  |  Page 1 of 7) Tj
-ET
-endstream
 endobj
 8 0 obj
 <<
-/Type /Page
-/MediaBox [ 0 0 612 792 ]
-/Resources <<
-/Font <<
-/F1 5 0 R
-/F2 6 0 R
->>
->>
-/Contents 9 0 R
-/Parent 1 0 R
+/Contents 17 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 14 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
 >>
 endobj
 9 0 obj
 <<
-/Length 3880
+/Contents 18 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 14 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
 >>
-stream
-BT
-/F2 13 Tf 54 770.0 Td (3. Section 14: Consolidated Master Test Cases) Tj
-/F2 10 Tf 54 745.0 Td (TC-01: Valid User Authentication \(FR-1, SEC-2, S-07\)) Tj
-/F1 8.2 Tf 54 724.0 Td (- Preconditions: Registered active user exists in SQLite users table.) Tj
-/F1 8.2 Tf 54 714.0 Td (- Input: POST /auth/login with valid userid and correct password.) Tj
-/F1 8.2 Tf 54 704.0 Td (- Expected Result: HTTP 200 OK; returns 64-character session token and user role; password is) Tj
-/F1 8.2 Tf 54 694.0 Td (never returned; failed attempt counter reset to 0.) Tj
-/F2 10 Tf 54 676.0 Td (TC-02: Account Lockout after Three Consecutive Failed Logins \(FR-2, S-09\)) Tj
-/F1 8.2 Tf 54 655.0 Td (- Preconditions: Active user exists with failedattempts = 0 and status = 'active'.) Tj
-/F1 8.2 Tf 54 645.0 Td (- Input: 3 consecutive POST /auth/login requests with incorrect passwords.) Tj
-/F1 8.2 Tf 54 635.0 Td (- Expected Result:) Tj
-/F1 8.2 Tf 54 625.0 Td (- 1st & 2nd attempts: HTTP 401 with generic message "Invalid user ID or password".) Tj
-/F1 8.2 Tf 54 615.0 Td (- 3rd attempt: HTTP 401 with code ACCOUNTLOCKED and directive to contact an Administrator.) Tj
-/F1 8.2 Tf 54 605.0 Td (- In database: users.status = 'locked' and users.failedattempts = 3.) Tj
-/F2 10 Tf 54 587.0 Td (TC-02B: Administrative Account Unlock \(FR-13, S-09\) \(NEW\)) Tj
-/F1 8.2 Tf 54 566.0 Td (- Preconditions: User is locked \(status = 'locked'\). Administrator is logged in with valid) Tj
-/F1 8.2 Tf 54 556.0 Td (bearer token.) Tj
-/F1 8.2 Tf 54 546.0 Td (- Input: PATCH /users/{id}/unlock issued by Administrator.) Tj
-/F1 8.2 Tf 54 536.0 Td (- Expected Result: HTTP 200 OK; database updates users.status = 'active' and) Tj
-/F1 8.2 Tf 54 526.0 Td (users.failedattempts = 0; user can immediately log in again with correct password.) Tj
-/F2 10 Tf 54 508.0 Td (TC-03: Session Expiry and Logout \(FR-2, SEC-1, S-08\)) Tj
-/F1 8.2 Tf 54 487.0 Td (- Preconditions: User is logged in with active session token.) Tj
-/F1 8.2 Tf 54 477.0 Td (- Input: User sends POST /auth/logout; subsequent request sent with invalidated token.) Tj
-/F1 8.2 Tf 54 467.0 Td (- Expected Result: Logout returns HTTP 204; the server removes the token from its in-memory) Tj
-/F1 8.2 Tf 54 457.0 Td (session store; subsequent request receives HTTP 401 Unauthorized; UI redirects to login) Tj
-/F1 8.2 Tf 54 447.0 Td (screen.) Tj
-/F2 10 Tf 54 429.0 Td (TC-04: Customer Registration Validation \(FR-3\)) Tj
-/F1 8.2 Tf 54 408.0 Td (- Preconditions: Bank Officer is authenticated; customer registration form is available.) Tj
-/F1 8.2 Tf 54 398.0 Td (- Input: Submit a customer record without a phone number, then resubmit with all mandatory) Tj
-/F1 8.2 Tf 54 388.0 Td (fields valid.) Tj
-/F1 8.2 Tf 54 378.0 Td (- Expected Result: The incomplete request is rejected with a field-level validation error;) Tj
-/F1 8.2 Tf 54 368.0 Td (the corrected request creates a customer and assigns a unique customer identifier.) Tj
-/F2 10 Tf 54 350.0 Td (TC-04B: Administrator-Only Customer Deactivation \(FR-3, SEC-1, S-13\)) Tj
-/F1 8.2 Tf 54 329.0 Td (- Preconditions: An active customer exists; Administrator, Bank Officer, and Customer) Tj
-/F1 8.2 Tf 54 319.0 Td (sessions are available.) Tj
-/F1 8.2 Tf 54 309.0 Td (- Input: Administrator sends PUT /customers/{customerId} with exactly {"status":"inactive"};) Tj
-/F1 8.2 Tf 54 299.0 Td (repeat with the Officer and Customer tokens.) Tj
-/F1 8.2 Tf 54 289.0 Td (- Expected Result: Administrator receives HTTP 200 and the customer becomes inactive; Officer) Tj
-/F1 8.2 Tf 54 279.0 Td (and Customer receive HTTP 403; repeated deactivation is idempotent; customer login and new) Tj
-/F1 8.2 Tf 54 269.0 Td (account opening are refused, existing account and audit history remain retained, and active) Tj
-/F1 8.2 Tf 54 259.0 Td (customer sessions are invalidated.) Tj
-/F1 7 Tf 54 35 Td (TP-BMS-2026-v1.2  |  Page 2 of 7) Tj
-ET
-endstream
 endobj
 10 0 obj
 <<
-/Type /Page
-/MediaBox [ 0 0 612 792 ]
-/Resources <<
-/Font <<
-/F1 5 0 R
-/F2 6 0 R
->>
->>
-/Contents 11 0 R
-/Parent 1 0 R
+/Contents 19 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 14 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
 >>
 endobj
 11 0 obj
 <<
-/Length 3958
+/Contents 20 0 R /MediaBox [ 0 0 595.2756 841.8898 ] /Parent 14 0 R /Resources <<
+/Font 1 0 R /ProcSet [ /PDF /Text /ImageB /ImageC /ImageI ]
+>> /Rotate 0 /Trans <<
+
+>> 
+  /Type /Page
 >>
-stream
-BT
-/F2 10 Tf 54 770.0 Td (TC-05: Account Opening Minimum Balance \(FR-4, S-15\)) Tj
-/F1 8.2 Tf 54 749.0 Td (- Preconditions: Active customer exists; one account type has a positive minimum and another) Tj
-/F1 8.2 Tf 54 739.0 Td (has a zero minimum.) Tj
-/F1 8.2 Tf 54 729.0 Td (- Input: POST /accounts with an initial deposit below the positive minimum, then with the) Tj
-/F1 8.2 Tf 54 719.0 Td (exact minimum; repeat for the zero-minimum type using initialDeposit = "0.00".) Tj
-/F1 8.2 Tf 54 709.0 Td (- Expected Result: The below-minimum request returns HTTP 422 with BELOWMINIMUMBALANCE and) Tj
-/F1 8.2 Tf 54 699.0 Td (creates no rows. Exact-minimum and zero-minimum requests return HTTP 201, create unique) Tj
-/F1 8.2 Tf 54 689.0 Td (active accounts, and record the opening deposit as the first transaction; the zero opening) Tj
-/F1 8.2 Tf 54 679.0 Td (amount is permitted only for a zero-minimum type.) Tj
-/F2 10 Tf 54 661.0 Td (TC-06: Withdrawal Minimum Balance and Daily Limit \(FR-7\)) Tj
-/F1 8.2 Tf 54 640.0 Td (- Preconditions: Active account has a balance above its configured minimum; a daily) Tj
-/F1 8.2 Tf 54 630.0 Td (withdrawal limit is configured.) Tj
-/F1 8.2 Tf 54 620.0 Td (- Input: Attempt a withdrawal that breaches the minimum balance, one that exceeds the daily) Tj
-/F1 8.2 Tf 54 610.0 Td (limit, then a valid withdrawal.) Tj
-/F1 8.2 Tf 54 600.0 Td (- Expected Result: The first two requests are rejected with specific errors and no balance) Tj
-/F1 8.2 Tf 54 590.0 Td (change; the valid request succeeds and records the debit.) Tj
-/F2 10 Tf 54 572.0 Td (TC-07: Freeze and Close Account \(FR-5, S-16\)) Tj
-/F1 8.2 Tf 54 551.0 Td (- Preconditions: Active account exists; Bank Officer or Administrator is authenticated. Use a) Tj
-/F1 8.2 Tf 54 541.0 Td (zero-balance account for closure.) Tj
-/F1 8.2 Tf 54 531.0 Td (- Input: Send PATCH /accounts/{accountNumber}/status with {"action":"freeze"}, then) Tj
-/F1 8.2 Tf 54 521.0 Td ({"action":"unfreeze"}, then {"action":"close"}.) Tj
-/F1 8.2 Tf 54 511.0 Td (- Expected Result: Each valid transition returns HTTP 200 and the requested status. Closing a) Tj
-/F1 8.2 Tf 54 501.0 Td (non-zero account returns HTTP 409 with ACCOUNTBALANCENONZERO; closing a zero-balance active) Tj
-/F1 8.2 Tf 54 491.0 Td (or frozen account succeeds. Deposits, withdrawals, and transfers against frozen/closed) Tj
-/F1 8.2 Tf 54 481.0 Td (accounts return HTTP 422; retained account and audit data remain viewable. Repeating the) Tj
-/F1 8.2 Tf 54 471.0 Td (current action is idempotent.) Tj
-/F2 10 Tf 54 453.0 Td (TC-08: Deposit Funds with Confirmation Dialog \(FR-6, SRS 3.1, S-17\)) Tj
-/F1 8.2 Tf 54 432.0 Td (- Preconditions: Account ACC001 active with balance INR 10,000.) Tj
-/F1 8.2 Tf 54 422.0 Td (- Input: Bank Officer initiates INR 5,000 cash deposit.) Tj
-/F1 8.2 Tf 54 412.0 Td (- Expected Result: UI renders modal confirmation showing account number \(ACC001\) and deposit) Tj
-/F1 8.2 Tf 54 402.0 Td (amount \(INR 5,000.00\); upon confirmation, ledger updates atomically and the post-success view) Tj
-/F1 8.2 Tf 54 392.0 Td (shows the resulting balance \(INR 15,000.00\).) Tj
-/F2 10 Tf 54 374.0 Td (TC-09: Daily Withdrawal Limit Check \(FR-7, S-18\) \(NEW\)) Tj
-/F1 8.2 Tf 54 353.0 Td (- Preconditions: Savings account with balance INR 50,000; daily withdrawal limit is INR) Tj
-/F1 8.2 Tf 54 343.0 Td (25,000; stored timestamps are UTC.) Tj
-/F1 8.2 Tf 54 333.0 Td (- Input: Attempt withdrawal of INR 30,000 in one UTC calendar day, then repeat a valid) Tj
-/F1 8.2 Tf 54 323.0 Td (withdrawal after the UTC date changes.) Tj
-/F1 8.2 Tf 54 313.0 Td (- Expected Result: HTTP 422 with DAILYLIMITEXCEEDED; balance remains unchanged; message) Tj
-/F1 8.2 Tf 54 303.0 Td (states the INR 25,000 limit. Withdrawals before and after the UTC midnight boundary are) Tj
-/F1 8.2 Tf 54 293.0 Td (counted in separate daily totals; local-time midnight is not used.) Tj
-/F1 7 Tf 54 35 Td (TP-BMS-2026-v1.2  |  Page 3 of 7) Tj
-ET
-endstream
 endobj
 12 0 obj
 <<
-/Type /Page
-/MediaBox [ 0 0 612 792 ]
-/Resources <<
-/Font <<
-/F1 5 0 R
-/F2 6 0 R
->>
->>
-/Contents 13 0 R
-/Parent 1 0 R
+/PageMode /UseNone /Pages 14 0 R /Type /Catalog
 >>
 endobj
 13 0 obj
 <<
-/Length 3374
+/Author (Bank Management System QA Team) /CreationDate (D:20000101000000+00'00') /Creator (\(unspecified\)) /Keywords () /ModDate (D:20000101000000+00'00') /Producer (ReportLab PDF Library - \(opensource\)) 
+  /Subject (Bank Management System consolidated test plan) /Title (Test Plan & Consolidated Test Cases v1.2) /Trapped /False
 >>
-stream
-BT
-/F2 10 Tf 54 770.0 Td (TC-09B: Credit Account Interest Once per Period \(FR-11, S-22\)) Tj
-/F1 8.2 Tf 54 749.0 Td (- Preconditions: Administrator is authenticated; an eligible interest-bearing account has not) Tj
-/F1 8.2 Tf 54 739.0 Td (yet been credited for the selected period.) Tj
-/F1 8.2 Tf 54 729.0 Td (- Input: Run interest crediting for the period, then repeat the same run.) Tj
-/F1 8.2 Tf 54 719.0 Td (- Expected Result: The first run credits the calculated interest and records one interest) Tj
-/F1 8.2 Tf 54 709.0 Td (transaction; the duplicate run is rejected and does not change the balance.) Tj
-/F2 10 Tf 54 691.0 Td (TC-10: Atomic Transfer Between Accounts \(FR-8, S-19\)) Tj
-/F1 8.2 Tf 54 670.0 Td (- Preconditions: Account A has INR 10,000, Account B has INR 5,000.) Tj
-/F1 8.2 Tf 54 660.0 Td (- Input: Transfer INR 3,000 from A to B within BEGIN IMMEDIATE transaction.) Tj
-/F1 8.2 Tf 54 650.0 Td (- Expected Result: Account A balance = INR 7,000, Account B balance = INR 8,000; two balanced) Tj
-/F1 8.2 Tf 54 640.0 Td (transaction entries written; if server interrupts during transfer, entire transaction rolls) Tj
-/F1 8.2 Tf 54 630.0 Td (back.) Tj
-/F2 10 Tf 54 612.0 Td (TC-10B: Invalid Transfer Requests \(FR-8, S-19\)) Tj
-/F1 8.2 Tf 54 591.0 Td (- Preconditions: Two active accounts exist; source has a known balance.) Tj
-/F1 8.2 Tf 54 581.0 Td (- Input: Attempt a transfer to the same account and a transfer exceeding the source balance.) Tj
-/F1 8.2 Tf 54 571.0 Td (- Expected Result: Both requests are rejected with no balance or ledger changes; valid) Tj
-/F1 8.2 Tf 54 561.0 Td (transfers remain atomic.) Tj
-/F2 10 Tf 54 543.0 Td (TC-11: Customer Balance and Transaction History Access \(FR-9, FR-10, S-20, S-21\)) Tj
-/F1 8.2 Tf 54 522.0 Td (- Preconditions: Customer X owns ACC001; another customer owns ACC002; both accounts have) Tj
-/F1 8.2 Tf 54 512.0 Td (dated transactions.) Tj
-/F1 8.2 Tf 54 502.0 Td (- Input: Customer X views the balance and date-filtered history for ACC001, then requests) Tj
-/F1 8.2 Tf 54 492.0 Td (ACC002.) Tj
-/F1 8.2 Tf 54 482.0 Td (- Expected Result: Own balance and reverse-chronological, date-filtered history are returned;) Tj
-/F1 8.2 Tf 54 472.0 Td (access to ACC002 is denied and the denied request is audited.) Tj
-/F2 10 Tf 54 454.0 Td (TC-12: Create Bank Officer Account \(FR-13, S-24\)) Tj
-/F1 8.2 Tf 54 433.0 Td (- Preconditions: Administrator logged in.) Tj
-/F1 8.2 Tf 54 423.0 Td (- Input: POST /staff with username = "officernew" and the required staff-creation fields.) Tj
-/F1 8.2 Tf 54 413.0 Td (- Expected Result: HTTP 201 Created; officer stored with Argon2id hash; officer can) Tj
-/F1 8.2 Tf 54 403.0 Td (immediately authenticate.) Tj
-/F2 10 Tf 54 385.0 Td (TC-13: Deactivate Bank Officer & Session Invalidation \(FR-13, S-24\)) Tj
-/F1 8.2 Tf 54 364.0 Td (- Preconditions: Officer has an active session token.) Tj
-/F1 8.2 Tf 54 354.0 Td (- Input: Administrator issues PATCH /staff/{officerUserId} with {"status":"inactive"}.) Tj
-/F1 8.2 Tf 54 344.0 Td (- Expected Result: HTTP 200 OK; users.status = 'inactive'; all active tokens for the officer) Tj
-/F1 8.2 Tf 54 334.0 Td (are rejected by subsequent requests; officer ID is retained on historical transaction audit) Tj
-/F1 8.2 Tf 54 324.0 Td (entries. The endpoint is Administrator-only.) Tj
-/F1 7 Tf 54 35 Td (TP-BMS-2026-v1.2  |  Page 4 of 7) Tj
-ET
-endstream
 endobj
 14 0 obj
 <<
-/Type /Page
-/MediaBox [ 0 0 612 792 ]
-/Resources <<
-/Font <<
-/F1 5 0 R
-/F2 6 0 R
->>
->>
-/Contents 15 0 R
-/Parent 1 0 R
+/Count 6 /Kids [ 5 0 R 6 0 R 8 0 R 9 0 R 10 0 R 11 0 R ] /Type /Pages
 >>
 endobj
 15 0 obj
 <<
-/Length 3614
+/Filter [ /ASCII85Decode /FlateDecode ] /Length 2929
 >>
 stream
-BT
-/F2 10 Tf 54 770.0 Td (TC-14: Role-Specific Dashboards \(FR-14, NFR-2, S-25\) \(NEW\)) Tj
-/F1 8.2 Tf 54 749.0 Td (- Preconditions: Authenticated as Administrator, Bank Officer, or Customer.) Tj
-/F1 8.2 Tf 54 739.0 Td (- Input: GET /dashboard.) Tj
-/F1 8.2 Tf 54 729.0 Td (- Expected Result:) Tj
-/F1 8.2 Tf 54 719.0 Td (- Administrator receives system-wide counts \(customers, accounts, staff\) and today's volume.) Tj
-/F1 8.2 Tf 54 709.0 Td (- Bank Officer receives transactions they processed today.) Tj
-/F1 8.2 Tf 54 699.0 Td (- Customer receives list of their owned accounts and balances.) Tj
-/F1 8.2 Tf 54 689.0 Td (- Endpoint responds in < 3.0 seconds \(satisfying NFR-2\).) Tj
-/F2 10 Tf 54 671.0 Td (TC-15: Secure HTTPS / TLS Configuration \(SEC-2, S-28\)) Tj
-/F1 8.2 Tf 54 650.0 Td (- Preconditions: TLS certificate and private key configured on server.) Tj
-/F1 8.2 Tf 54 640.0 Td (- Input: Client initiates HTTPS connection with TLS 1.3 over port 8443.) Tj
-/F1 8.2 Tf 54 630.0 Td (- Expected Result: Successful TLS handshake; plain HTTP requests to secure port are rejected) Tj
-/F1 8.2 Tf 54 620.0 Td (or upgraded; all payload traffic encrypted in transit.) Tj
-/F2 10 Tf 54 602.0 Td (TC-16: Append-Only Audit Trail \(NFR-5, S-10\)) Tj
-/F1 8.2 Tf 54 581.0 Td (- Preconditions: Deposit, withdrawal, and transfer operations have been completed.) Tj
-/F1 8.2 Tf 54 571.0 Td (- Input: Inspect their audit records and attempt to update or delete an entry through the) Tj
-/F1 8.2 Tf 54 561.0 Td (application.) Tj
-/F1 8.2 Tf 54 551.0 Td (- Expected Result: Each balance-changing operation has an audit entry containing timestamp,) Tj
-/F1 8.2 Tf 54 541.0 Td (affected entity, amount, and operator; update and delete attempts are rejected.) Tj
-/F2 10 Tf 54 523.0 Td (TC-17: Date-Filtered Transaction History \(FR-10, S-21\)) Tj
-/F1 8.2 Tf 54 502.0 Td (- Preconditions: An authenticated user can view an account's transaction history.) Tj
-/F1 8.2 Tf 54 492.0 Td (- Input: Request history with inclusive from and to dates and inspect result ordering.) Tj
-/F1 8.2 Tf 54 482.0 Td (- Expected Result: Only transactions within the date range are returned, newest first, with) Tj
-/F1 8.2 Tf 54 472.0 Td (signed amounts and no duplicate records across pages.) Tj
-/F2 10 Tf 54 454.0 Td (TC-18: Account Statement Generation & Export \(FR-12, S-23\) \(NEW\)) Tj
-/F1 8.2 Tf 54 433.0 Td (- Preconditions: Customer account with 10+ transactions over past 60 days.) Tj
-/F1 8.2 Tf 54 423.0 Td (- Input: GET /accounts/{id}/statement?from=2026-09-01&to=2026-10-18.) Tj
-/F1 8.2 Tf 54 413.0 Td (- Expected Result: HTTP 200 OK; returns chronologically ordered statement with opening) Tj
-/F1 8.2 Tf 54 403.0 Td (balance, closing balance, debit/credit entries, and formatted export.) Tj
-/F2 10 Tf 54 385.0 Td (TC-19: Account List and History Read Performance \(FR-9, FR-10, NFR-2, S-25\)) Tj
-/F1 8.2 Tf 54 364.0 Td (- Preconditions: Database contains representative account and transaction data; authenticated) Tj
-/F1 8.2 Tf 54 354.0 Td (sessions can access permitted accounts.) Tj
-/F1 8.2 Tf 54 344.0 Td (- Input: Measure GET /dashboard for a Customer account list and GET) Tj
-/F1 8.2 Tf 54 334.0 Td (/accounts/{accountNumber}/transactions for a permitted date-filtered history.) Tj
-/F1 8.2 Tf 54 324.0 Td (- Expected Result: Each response returns only authorized data, preserves the documented) Tj
-/F1 8.2 Tf 54 314.0 Td (ordering and filters, and completes in under 3 seconds. Role-specific dashboard correctness) Tj
-/F1 8.2 Tf 54 304.0 Td (remains covered once, by TC-14.) Tj
-/F1 7 Tf 54 35 Td (TP-BMS-2026-v1.2  |  Page 5 of 7) Tj
-ET
-endstream
+Gb!#]D/\/g')nJ00u2aomNP\"]k_sS+E>hImb2Os]8HhFpHb*YRi>LNoo_0/lYhO-RhK#2;ZdsAM'Io=]Q!Yi1LgVMr\4.,>QUEii8d$'B#%p]bgJ&0I"[F"dC5n9NCPXLc)J]?ds#oc"3kipf<R]KFkcKraQBj[<P.!Zdgab\^pGqhfrbdJ,n),%_m</!TqNFNn;_5&>F><hPFlOC[C)UgY:mNqjr@K9qA7ZMM(I7iRccX=m8E5U``A;3nI3[^f.K6_,%*T;FRn8gk)bFgmTYXD@Ec$"T0>E]A/6)<MY"K2X#NZ.%?/^\:Lat?"ckp_(^2qGiFY>%h7Tkt*3P3`8oIbb2E%UQ!U`41b6-2S!?%\TT;jioFeoH2:;qq;Adgng"'FpjO5BMUi&hIl,u4lX4TAQ%01/+/)o/n7*B(c\bW"q@DuM.:Z^bs<]G`MoOfoRU2&_r"4+00cAhZtm`I3hf\4Ga+iB.dq*.fGfnO$XP-(OR3b`bd5mG^CD0<a5`j!)_h2YcaUj.XHk#@CPST:f<E03tPR?7BngHhCub#5JThL9DCZ17*4QDiD5R\kCq4'!KJa5uHb`r,nFj-/oF1@]Xrc!rpQ`Z4La@%e=YZ0i0+e%J_b4d"OcU-H`GXEi\i4Hs0+FMO<T(ps8K3fC-JTN3D`>753O3FC.ctXFfOgS5'kE?gq:pO%=l5fZO`4Zcrs'4JX(ah-T6"CECYePp:g5*23e[2hfgn4^cQb*W:G-FoG]9#i'JhXX:\))+>EMVK_gM8:XP:*Q=Pi+N2*T1:GgH=G*iI58Ui1[[,N(459C7J'<<`ZP*E4nb!a%q$_+5_G*UShP7t*in(__6T(\P1XM*ph*7T\qIK7\oP^&cOOh[^F9t(Qn@[1)7s4,t&.1f:KS9<.d:$7XLu,Y]DHN*"\V/W?3X%@X1JHO+c#bL<GGIm!L46WG3@Y*FLn&Jc18o!&jH5Ph_8gZsr:(`;O1WtXBg-iL[m9OZf<CBgqFUd!TF"IYhaPL8hp`(P1XU"\itQ)iiO8AWcZ6_,=b^/*dX9)&ArF:4BEsu[Z:s.hf%FkfGF+m[#[j7\SVBpTOtM_mD#&(t9%r*'&#Miu?eN(Lmab0jBs,#VR--;)13_Gsn/G\<FSAg;42/_%n+_[&8YNgtTRhQ6Qt778i+Z=FdVPsTe'U$b=OocTjE[,L<RKu64@j+'EE4TMOZ7X`5LPP>G<!MWb@=?/feDP=BTT1m/.X,;9$o^?-Ka8MV>=;#DO,U:LdD5!6s22oi*I**A=TnQ*YYMVX[-8#I.#*a@%,s2cCXEBp+Ma+o^(OXHFN4ff4$]+?#A4+d?d?FOYTTI]0uemlqJt^efuK"?'K$'I*,?*i'X`c]S/^apT>%2U)TQpc.b.u=*kJW.7XS@Kh$cFW=M[YT6N7A6Im)Q8?%I\b!aGVc5gE'-T+^ZMTKH_;Q2u.-)LU_#V5Kr&@]_=-lEg%QCSU"[:Ybmc\(`G#t'@g-bd&^1R-94ks8AARXS\B#,?pM+Q$mUY)!D*Jkm#H%W*ZCAn"DaH3IFiS45n;4*BSbblWOlf0`672Zr\2(>*0Mc.ca$;6+bq;33H.BokdV>8LsL`"*E;V'p"6LmFbuq(dfUn.oY27RPukUC!Q4*Jm+CN#F5LF:o'B/*OBnYKK%q$3ZV!\LGs?HJs(4+dY,dHB#Du88%K];%7+rS(soE6qfGTZW7&(17;C,nH-'FJMhP607mEb/&K[6MlE4ZGE9Tf%$EFZ+eg9>AhX['ZM7t(G[<0Z]ha`;/Aqm]_.n\(oSR]I3%IF&+>;1Ch?ii9.cqR$fDJi%13JU2ab#UUNbYG?$AqN)mmCXJm%#m-0\P).Wkma<On]'EXZ]Lk,P\I[jc'U,L.]>[TsAEY$s!00Jlp51fp!a![b*btgr.An%i7@@`Sfl\^-.!]Oj"Ca&Pfq-^/VTo-k]+M68?'d&XGEIW@<#rES;Ms7ZCUL47Wct`+J,'4A1IoMGkZYN;+mIOabdpoeBe:De1k59[cQ%r$7X-,+KGupd8HNr(hbS`i87uZra6Fl\W'CecBBJ4/oa,Ts'YW1JM?9:gtNnoe0^q(VuY5ZY*[\j&jNk'kfj3P*q!u%FTDPGL\=54s38K&m,a?phS^s_D!S3k[R#I)If?AZlN8kqZ4qcbS7(:<o?_I`l!J]MG)muio4F7(Cr5*l@P+M3pi!2DO[(A!G9Ro3k.CIg9%td#?6!7HLaYLj'e?!\:Gn/Xbh%ZkK"&uH$7N-GFO=9;jhCu+6m>f@+,a6DAcnqcRCDbN='YN,*Y2$EnZJ/A':MN(K0)O8l.Vtd43*sqJP+VjYWmN9o:u^'tKX2PImK&#BdJijU!Im<08Pb36"reR3bH994saPrSRDIa-#L&bXT\(>ZJ4J*b-gg-.a6!1^EG1[K!Nacdb8hj!2gD0=*377SNmJ/Z<TsBXqR'lX^U"]3YuoqRZ7d]VNUEe_1Bgr+16(_e>J[)^d>kmWM%-[UD)fEOm/1e^G[8WemUTZ(G%ZI8#b.UU>nV?Wbg_q-24mjI82fgTFI^+'uCEXIYe@^:-I*a7\%2R<I&IH)@Qn8ZH'N%srM84R5fQ"m,3roB/]aTk/Z_Q92Hh%OZCcek*b&%O^s*$0*dEqs(VF.lttLLuMr-e9<=uCOs0@D'uJSh(SueqTcg+O'&S.`]nsmQG9?FhH$pCatR$HZDSm\<dp!!/ap+l#@YV&%MC8q+da"c:J@-!#Kb`s8_.7AlE9:pk/A_B`!/i'lr[jqU\Zr3mNg75I38E,70^`V%V8*[o#IM<<7AcEE2oiQr4:U2;ju@ldq10!\+S`!%FRZ87HB/>/=]Th+:HBp,_Eoj_)f7V[Om2=-b,EV't%qgWi._Z8E?G^@Wprq^AMe+7[Ksgaf<5#<Zd@uE.<]0aILm+*V+JgVLu=#f&G/b6jA\N&"e$qM#~>endstream
 endobj
 16 0 obj
 <<
-/Type /Page
-/MediaBox [ 0 0 612 792 ]
-/Resources <<
-/Font <<
-/F1 5 0 R
-/F2 6 0 R
+/Filter [ /ASCII85Decode /FlateDecode ] /Length 3110
 >>
->>
-/Contents 17 0 R
-/Parent 1 0 R
->>
+stream
+Gb!Sn=]=?O&q9"F<:%L2FC:dlh6?dl\]kTd1cDs!7!&^6CoU]p]-PeKDTmU&X=?f-Z"2ob1X0_I+QU+3R9tDga;F12KB:u57d+N;p<GA/"APa!S!o0\([,tHojt0DEQ*I+g#_CciRtg&,0dKO@p2F0FN\e5i\Rh>Qb-I(dtqKHA=/gG/]U2A(i<'O7n:=S7mn`ukRhT@#>ICUaZHcpdTT`DQ5<m)1Q%XM5Ce,3BA(qd>hd9f>VN7)]'&?*dQGDj('s2.`&"Y01_K$nN(hRE#]U;1_B.\N:#Edaihr5TOiAC#P]J\-G2_Cg8&mMr)\((I4Ar@,<njXNSNZ^/2I;QVI:(H>9S"-?7@0H@(6Z\gV6NU/l<9JBaA/]u*L)8ocIfKhO`5G;".RX'%)85U9XK"5OJ<[+.q79#EPZ[Qc;0abehil`Bc)3*2tW6!IS;g6,le]"Rq0#r:M:M_2U>NpFIm7"\qUNYA$AnXP9;>A)PRP_EcgY\2![7EN,#kk[HYNiia=;I(0cTi-f^>,oW[VBB:cBH:BKZKBYs]no)k]SmO)=Cg!DYk_#rh^,2hW.SBuPMYrpc0?Wm@>ErW0^_+j."kc#2*4(>Ibiob%"!gF($Vj)Bu\j47ce?pLdjERK4]1?2>no?"Z=>)<tld17RY\5b<TOi+TgW&>mNW$I8"!4+$_--bjIR8fU5dLk>Vb,1_W!?^P@jo,t:`iq`cIjG#k`"pR&:gL%T5t3mfW?n"IPSGT"([:NjT70<>Kd7S?=BQdZs]tS@B,6^0(p3F\E:"4Z!PGkilD-CP5E_-^df6JKOphM[00gr_m+uKa-!!A7T\%f$ReNc2n(.B7"eMNgnPPi!OHFu)FW'[3XNB->E+YEfVTB'7)>RdoIXT6_nr)dH8QZX8%p#S2aHdnB?<h4,4VG+S-;'mMs1\)LA-57PWtip"U04&#a4:u:1KaR[2@ZjRh2mdOjMDqmSfa54^uSbN73Xh8)_9iK*Oac((\^6GSp"mb;:*-'o>U?+R-D0?OFf>c-_N.2H1;nRD+D%mK:XJb,6\LL"E*3D0b^GhpmE3E03(WU0U`Y)]@`9I[JsY/9n#4r-K39^^.KokPTn/`U%"f*:Pf.7e=^I`M"s&l4jYEKp>81Le:O#MF`E-aRLqYrNrC]"C#8Xbu$omk$m]0(:s>)()3fVlN/\F<(,_(6K9ZB'dYApL9;r66trT7=KrQt\$^"P$ElGm\()$PI:EEJWW=O))?Xq[%=fcE")q<NkfqFrq=07'Nj^?a8R;2$:9Yih/8F3VWu.;,Z8&MT.BTlsRd]Meld:bqW+$K7;#\6cLfk@M-qGF'eUc3sIfS)/JXj-+U,;Y8(;OH>7u,-sFbF8H@]Nd&PCPmBF!u#R^(p>:8Z38u)RM&UMnFXa$#(Y%"3\eArR?q!0)WA016qHqT@V?#%5&=k/BM9E.PeKc#>.b+-L_QWCb@XLn`XZ/U)]o9YEI'/W\<aF2]:0n!$6$b-a7>UBZ)3OAK]6JP$b\"I"j'0#iRL8Ean,dL5*^EU9V6^Eni42q?*;e$FqNTfV^d3`A=TmGWf?D.@sk'B@K?UhFIS]2FY(m89;:o"(8LBRh<1+p_<WG0#7%%4$DZCDEF$+KeU\%Ncd=q_iBU+b<77U=DfGuD:gA?h1P?>O)%LC1]a6V;Vkaag'sT-@3I=ibk3A6KSJ\LpbWY52#_G;RMk3ZUL#CHAZP]Z$UdspPW,Ur?DBt1^O7u2-hAO#;;[77Y-5hYZmUZA01ok.=^<5OG/[JK9)ZiJeO@@8K9V!CTp##Rltab]NO3L_7[KDkg)WZ-22QgLSkm,Gi=Q*L2`*%Z2N<VE'bO_A=2,^T:$)TaR^C=:n,QH[+Ln;CnN?bD'<*tuBp#M=eB1,i*>82s5*pWCn,Q1Vj;!-*6c(q2=1,X\Ud^Hi,oMCL3CUOQ1/4,O*h:Ns^1\o#C!_Qk@E>'5SpfO]8d:$K.,F\m4k,/cA#?2"ELbX9j%Q3m>/)BHI#6kn=,BX4iJRL]!.6<uOJ..H^"jE)<f/B+&.<qf=g-g_p&E>gHYhiTfQm?@ki,)7=DNK,mpJcu'b@Du`ffL1Qu/]n?2oP!g!?i<C2W68.=/fcXW6!b!=cN%k5Q."oLddkjFTT>P13I#m42@!+^(+SSl&%$=b'tSEq.0:Dp"9h<FW*nq>:Al]Z,Mk:sRf$'8CA=I?b\_<n;=t"_lWK=bk&<=1=N[Nu(m<^RUn&ZWP;%.ga7L:^2B;")G_<ZPT&#c#dZGDdSjoM("tnH`0F-47ZSB3M24%ObR.hhB!?[:9-+gG[3EcLbjEBEO<L1JHeYEq8I1pT"V4fN%/m6n*[V;:]GLFe"b\Tn/k*1Iprm2lUJr5'bIAlfX_c)4_3u(Zt2I#S'P]N3E0:D,2o-i*6sl'lpa5`hN*X"!uG!nPN2CN:HI%_s&f'N?6PHA\s-c/!F!-cH3KECg\O,cQR^]V`E[LtZG,\75+CAerDk`>K9f,&7ecsm&W:-;1(Z?i'(-oj_k6aiLNJj#CFj6>K@?a'O2bbY#o6tI8ZDnc/lA"d-.hCdCbgul[nl*SaH'%g#%l++@OjN79834Sm]$6=4QBGk-C'bA,]*"cjamcrZg'+j/+,2j'gZdkX!=lR?<'O-moo@a2qBL&4*tss/_V_'YNcX`/81d$<.4uQe9)m\lX1(M",bPtWnQj?D)C?gN0nF4Na`h/T<@*%?BESndV:KFp]kA>k;m7j9n[XfcMf=t::KC?7HNKraMML'N3[u_L?7"=bOPib1XX#li#-%OMs:eQmj+h9HD=tfoV"!UP.0nZ0@AG#=!ZGHHR*%<TMcSEW_:":P`m14#&`32a.tKlGrp?<@^pDt+#>;kS!jXOdoB5/Cf[;+6^gi9'_+?J]>F"Ld8a34</cVW'LN`1jjt*AN(1ULP1qnCUSitqo.SF'';-]"refkNc"Tm+9Y=^3Ut.$/.:%oWqFICD4&O.Gaqa6-BbN%s[K47-$)-8-ora6%?[;bYc@Ac?<$Vn'/kjJUi=^)hmm13=eMPH7`3ijgVL3KN5h9&$fh(ei9T$Y)=W-WrB9q9YVmk]P0D<;I.Kc`2VqU,8bPKt!,!P\J]@LR3%06d*p>J!<ofK#KLJ.~>endstream
 endobj
 17 0 obj
 <<
-/Length 4721
+/Filter [ /ASCII85Decode /FlateDecode ] /Length 3005
 >>
 stream
-BT
-/F2 10 Tf 54 770.0 Td (TC-20: Transaction Performance Target Verification \(NFR-1, S-30\) \(NEW\)) Tj
-/F1 8.2 Tf 54 749.0 Td (- Preconditions: Database populated with approximately 3,000 accounts; system is under normal) Tj
-/F1 8.2 Tf 54 739.0 Td (simulated load.) Tj
-/F1 8.2 Tf 54 729.0 Td (- Input: Execute deposit, withdrawal, and transfer operations and measure the time through) Tj
-/F1 8.2 Tf 54 719.0 Td (persisted success response.) Tj
-/F1 8.2 Tf 54 709.0 Td (- Expected Result: Each balance-affecting transaction completes within 2 seconds, including) Tj
-/F1 8.2 Tf 54 699.0 Td (database persistence.) Tj
-/F2 10 Tf 54 681.0 Td (TC-21: First-Time User Usability Walkthrough \(NFR-6, S-32\) \(NEW\)) Tj
-/F1 8.2 Tf 54 660.0 Td (- Preconditions: 3 first-time users without prior training.) Tj
-/F1 8.2 Tf 54 650.0 Td (- Input: Each participant performs Bank Officer deposit and Customer history lookup unaided.) Tj
-/F1 8.2 Tf 54 640.0 Td (- Expected Result: 100% task completion rate on first attempt without verbal prompts;) Tj
-/F1 8.2 Tf 54 630.0 Td (findings documented in Usability Walkthrough Report \(docs/USABILITYWALKTHROUGH.md\).) Tj
-/F2 10 Tf 54 612.0 Td (TC-22: Cross-Platform & Cross-Browser Portability \(NFR-9, S-31\) \(NEW\)) Tj
-/F1 8.2 Tf 54 591.0 Td (- Preconditions: Builds produced on Linux \(GCC\) and Windows \(MSVC\).) Tj
-/F1 8.2 Tf 54 581.0 Td (- Input: Run backend on Ubuntu 24.04 and Windows 11; access web frontend via Google Chrome) Tj
-/F1 8.2 Tf 54 571.0 Td (and Mozilla Firefox.) Tj
-/F1 8.2 Tf 54 561.0 Td (- Expected Result: Both OS binaries execute without platform-specific errors; UI renders) Tj
-/F1 8.2 Tf 54 551.0 Td (identically with responsive glassmorphism across Chrome and Firefox.) Tj
-0.5 w 54 533.0 m 558 533.0 l S
-/F2 13 Tf 54 516.0 Td (4. Requirements Traceability Matrix \(RTM\)) Tj
-/F1 8.2 Tf 54 491.0 Td (Requirement ID | Requirement Description | Verification Method | Associated Test Cases) Tj
-/F1 8.2 Tf 54 481.0 Td (FR-1 | User authentication with ID & password/PIN | Automated / API | TC-01, TC-15) Tj
-/F1 8.2 Tf 54 471.0 Td (FR-2 | Session management, logout & 3-fail lockout | Automated / Unit | TC-02, TC-02B, TC-03) Tj
-/F1 8.2 Tf 54 461.0 Td (FR-3 | Register and deactivate customer record | API / Integration | TC-04, TC-04B) Tj
-/F1 8.2 Tf 54 451.0 Td (FR-4 | Open new bank account for customer | API / Integration | TC-05) Tj
-/F1 8.2 Tf 54 441.0 Td (FR-5 | Freeze and close accounts | API / Functional | TC-07) Tj
-/F1 8.2 Tf 54 431.0 Td (FR-6 | Deposit funds with confirmation dialog | Functional / UI | TC-08 \(SRS 3.1\)) Tj
-/F1 8.2 Tf 54 421.0 Td (FR-7 | Withdraw funds with minimum balance & daily limit | Automated / API | TC-09) Tj
-/F1 8.2 Tf 54 411.0 Td (FR-8 | Atomic fund transfer between accounts | Unit / Integration | TC-10) Tj
-/F1 8.2 Tf 54 401.0 Td (FR-9 | View account balance | API / UI | TC-11) Tj
-/F1 8.2 Tf 54 391.0 Td (FR-10 | View transaction history with date filters | API / UI | TC-11, TC-17) Tj
-/F1 8.2 Tf 54 381.0 Td (FR-11 | Credit account interest once per period | API / Integration | TC-09B) Tj
-/F1 8.2 Tf 54 371.0 Td (FR-12 | Account statement generation & export | Automated / API | TC-18) Tj
-/F1 8.2 Tf 54 361.0 Td (FR-13 | Staff management & administrative unlock | Functional / UI | TC-02B, TC-12, TC-13) Tj
-/F1 8.2 Tf 54 351.0 Td (FR-14 | Role-specific dashboards | Functional / API | TC-14) Tj
-/F1 8.2 Tf 54 341.0 Td (NFR-1 | Balance-affecting transaction response time \(< 2 seconds\) | Performance test | TC-20) Tj
-/F1 8.2 Tf 54 331.0 Td (NFR-2 | Dashboard, account-list, and history response time \(< 3 seconds\) | Performance test |) Tj
-/F1 8.2 Tf 54 321.0 Td (TC-14, TC-19) Tj
-/F1 8.2 Tf 54 311.0 Td (NFR-3 | ACID transaction integrity | Unit test | TC-10) Tj
-/F1 8.2 Tf 54 301.0 Td (NFR-4 | Secure password hashing \(Argon2id\) | Unit / Security | TC-01) Tj
-/F1 8.2 Tf 54 291.0 Td (NFR-5 | Tamper-evident append-only audit trail | Security audit | TC-16) Tj
-/F1 8.2 Tf 54 281.0 Td (NFR-6 | Usability for first-time users | User walkthrough | TC-21) Tj
-/F1 8.2 Tf 54 271.0 Td (NFR-7 | Reliability & graceful error handling | API error test | TC-02, TC-09, TC-10B, TC-11) Tj
-/F1 8.2 Tf 54 261.0 Td (NFR-8 | Modular architecture by functional area | Static analysis | CMake build check) Tj
-/F1 8.2 Tf 54 251.0 Td (NFR-9 | Portability: Linux/Windows & Chrome/Firefox | Environment test | TC-22) Tj
-/F1 8.2 Tf 54 241.0 Td (SEC-1 | Role-based access control & token expiry | Automated / API | TC-03, TC-11, TC-13) Tj
-/F1 8.2 Tf 54 231.0 Td (SEC-2 | Encrypted transport \(HTTPS\) & Argon2 hashing | Security audit | TC-01, TC-15) Tj
-0.5 w 54 213.0 m 558 213.0 l S
-/F1 7 Tf 54 35 Td (TP-BMS-2026-v1.2  |  Page 6 of 7) Tj
-ET
-endstream
+Gb!SnCN&3)')b#/U:$V\;/lHK4G)u++Cm-'?CMMNmOD+FliqhBgY?[.9P/DHqlR$h2C=dk)0V95,7QHUY3nKOl;Vo6/RlR=$ifoF6FoO)HtEu6-GqRCC.=0kcUiW]l-E/jQ_sPOA^o9)L=</lN@$ApFh:LlM;an@ZY:(2&J&!d\n`1\mF6"4e-sfH)_N!tUb]TcFt[a6[V=?oO-X4(-Gr'hn;B!4nnccgXZh!s9djug_uBo+>FVZjD]6lHh1C'sjm*L9@Q=Wr_QB9:<Ej:\0O$EXK&'Ndf5-;iB$ISqYT$KN[i,^GEclZsTXJIK#8di)AI2keB/XI]?cFbQ*Q7P#4[I8IYC*'23^FJ"+]"Mm-B)m^#Fq_i:-Rt>%Tr6WSgG%\r:m2hk90P8h;TVPVhBNnr,hY>DX&Tu;u)4Hi2N&TI-%DmQ2cOmfEiYab*VFX[L&^MlD8OlF@nE+eJt^6eT`)1PS#PY85F)QUrbP6F(9pbEglCH-CX>U+_fNY?:T):qjdL3%EK"?fk`b/N;=7HjlH0pn=&",M=:Lq6uu$ke;$gp1_jk*MPRP2L.]grR>rU#<YnT>jeZAuP7VO81n#d@NRRTAi`S#CA"4gA$f^u2P/SkAjtmS.$1Si9HfL(6i!A*IG(ebQ;;s#X$c5jrV)!`:$%%8:+qMmQR_ji)(5LnpQ;_kI3@p0M/7JJ?c,)^sHl#:-)[/abbZ0dKPM"TC+O3\QQ/r;./&P]DFAGFtD<sl3rrP`MZA<V9R2>abgfMd=WjO'l>IE8`ceFdhDj_RCq4R0R/)GX_:6ic5U>VciQ_2Z[DSY!PM.uAal-l/cW<ZCcH,;pr+B%,@ol1'$cI@ptPU60=A)3,O^p@pnk;9Cqq,b%uq$KO(60168hA@C.Ae<@G/uZ`?=eL:-8,Gi))s7P[;hY-)([s/8;Rq5aC9!^_A2WBk'%WAOQ?9--oG^YA__b&nQq*&2fcdTc[du4/^_":ORW:5&rA132'r%)#==&TgD+h1c!:KR,YJ*2*$n_c$G8CeGc?\TYf3b.?7$l5Qi,]MYKI%"4&lM`&"iL\T\.FQ'T;WOCF+nbE:9GA4PEp?ejrmkI_?_aVg3][9$S>dB\*4m,S^uhI>p_0kN#@BZ&:lYUF($\Xg\<0(7%T#TPScr!F3:42'sK&?PWcmA4gO4T]6K`X*B\c":WQT[118r?,5$6D&D3M!+ftN&KK[CMdb#k$\BW`_aWW]Na>>U!fSgI</Hh+:)rkn#0jlu-/<9pigL:KW$m?%;j7c.jDS>T6+l.C/J,kDf&5GY^dOD-k#f>&_Je!SJdLi0<5/ME$_ru<:dQihUcm#&2F*IiRY_)EDTQN.nn8BaCn#"u7SJK=F'4jK-LO9qmRtIOK8p*H<9,O"lFHS_p5P="BQ*Ma!eTl[X4q^_UKpPE3BVM7Uh*KXtlgSJ*j+NpW8q0A@lcg&;o/[ahbf+n<^6=kN+/^12>,KL%XquT2%rIDr<f_bR<aI*S/.I"ij,c@<;.Zq9#aIuDfR*Z;KPdpNX#8aVH$i9$_:ED_cER'?Z:I1YWW%%.73ftS3\GM5enaG#SIo"G][.N6UZZR[Mb)r7-gDN1c/LluroIDm?e[Kh%dF/(lmDIJgdAZF[e@Jar][,T-.Z1eU(j][mDUE4&p1?+IF1<F`6oAU6!VBD<l]C28neO.[D?oG^#%;qj\VQP*\OWKs4b<!.d>CWq<ZGW"a(3[A^$;Z,1W_?ksT%nFddqdI[U1H@@qag&<JU]M/M=,1#t''m22BBaH$ERV[)^MG2<X2D]_7_P'X]PoGH#12k!SGp^r9]Z'3%-[GkhX;=V$.hUgK#8QSg:@8^Y-6mG4I1==iF#(*((AW^fDS\eMiRE1%aLP0qo9,tjdbdl1O^hI[M(Vc`h.>]_LD:>ja%_'kt&Ph`5C/dogOt3WPc_"7q>NV%SPjaf*SU18%A%a=JY*:*88L%C@H_TX0d"q/\WBS&bLS45kY%tIYK"D');B,tQMin&M>(/3)q(u4gqr'8q,S9%K3r&Yd'Z%FL&uho-q=C)4F39<f/\'?1g*E.8-"T]F\>LQ,UVR'kOj*uM*2m0g-s:2%9[rkJ(7S>ZBlK)QNBhHJ$O)[pPYp9nJ,O8d(UgZ&eiQq2i*,#!;14s$ZU_HGH;j*Y;iMe3p*S/`jh>cgs*F_@bP'K?Xj*2>DanoY8c5^b#itS>,^r1n?'OdN$iQ\\%GIsA..4#VlI.G=ZH\<inlUB#m-Q*>G&q0(qf_bgejV']RZ.![dm8R.b@#Atn:QZS"1e%@E;$(;-gJi_]rsi:ED#aB!Zr.tUUha_*UFSeE&T[GhcI,:EZoDU)4^`iiI#T!(d@Tlh<Xf2qkkaj^CE/):32T;'%ERK^tlPGh*N)[<1EAW&L7I_KVZag'KI&Y0nbsrnlM3=_B9=9e!,eV,/@?Q0`4a#!$:VV:?NZ3mN<`=9iA4I-F3j1X"'ieBd+8#*[q[;e2noYgT_9]&@s6b#BBm'V!Hb9CkRW\hj#<n%U6]F/5-,5*%WZ<D0qVTh_sAGDf76*?gNKS`>'bkKp*(.IDET#Y<&C!.ooa2dQhdM7)]<X.#X.bK?L4Z9^nMhL00:BcB3Vt>f:Bkj1Bl3/C*can-B.S4q`NK>t3U3#Uu(YHc`GPI^i-;5bLr;iWsSbB/<>`P!ZS/RMT*[s'b:-1W\]7FE"T+o).?P6c2,ZW-!!Xf4[O.q(@-^*5(r_R3tfYM"7/H<S*"JBt=k\f?nFVPdDdg]<,?Qc*BRP'nDOE%Z8]83YFrnOm["D\9iEW/Fsm(O>[DLmXP+7W*$3]=V:a:B`_Cpg+"XfR<SQ.**eZC`C9fKcl&.^BMjTS]l7o"#^bt=YEMu8YfrR%eA^_hLOR&oNrWI(rjFI=NTXa>C.h9HX:lDXb!o4'Ma4,T64h`P'5rq^4GRFF("aaBRRhfNV4bl-l7AEW^]bTV+hI,j,cl\rY8/Kna\3D]T)WYo93S7W&-l*J-pe10%E`7`guqDs(H%Y/qAZ;\eK4~>endstream
 endobj
 18 0 obj
 <<
-/Type /Page
-/MediaBox [ 0 0 612 792 ]
-/Resources <<
-/Font <<
-/F1 5 0 R
-/F2 6 0 R
+/Filter [ /ASCII85Decode /FlateDecode ] /Length 2679
 >>
->>
-/Contents 19 0 R
-/Parent 1 0 R
->>
+stream
+Gb!SnD/\/u')nJ01$FBlc:KdXUo5):EH#`l0mZpu+s$)8#WU2l9%o`hA\"TW+m=EjR3a;=Pn]-X-aa!X&hJ'igh18kH"LY+=STq\B+P0XS\XJO#0_hD%%,dl@IeWPR_8Li<I&.@(PZ5!r4VD)4f^etY3Xbh[g1`\eJep58EVg[Q*^3ef<QFC#06+7XOlpW,_jn2[e'27j,S!0?KZl^m1Ylb!g>Q"D/JX440/t*p#d=MNSFJin$htkIXfujGTObF'sD!#iI]lC':G+hAu.DfVeZ`I`c*ZVm9)gQ*k2]$EA>h/Z@:[nZ2So+Yag[2(X<`s@l2g%3u\BGAbOekDc7]*)2_*9WCQ(O#3B<)$RUoAr#cX`*5;Q?b=i$<.!0V:>30J6@Gu"kiEiNS$$UjZbCFdeBKE2\1*Gt=ag5><9\2&AZQ8P*B,Qbo$j"FI?g8M)+]FIS3+tN_5mG%32fIXs"3s7WkJ`tqNrKo=DXZ[sGP*]L6,l:e^i^^c6Lh2#(6J)oF0<p'r065+^D(0!"^[@l63gHs&J+%1@^,@`SEhtUn08OJ^stD&p4WW6;m?Us_.btME:.)^-9B]rBcE0eQGac[V_u$K0K+N@>iWHS/&*YP609kppEe-`'&KBJWH8I06,9m_C$XT1cEIcQafIB36^^_.4fNGHmPS,'b;Y9U=D*??IfO1O6[=Hn]&W_J_QqhF^b^WZD2G?hRc-'_m2b6Ua:q]L\+#OS6D"Z@>ORnrA5qFD#f=A@IbWM2#JhLi+fr9b1F@'%1D+1\7?A:]+j\M0&)FQMbph94J*:2rgB<T)gB?Y$k:T`?I4;2/=[uVIJ'&jpo6;WbUe7XXbsgP\m603%0PcuPP)![\jhs%oY7?7+KSGR]JQ(R7\++C!Fd+hLqaj0Q*'KjJh5AB<F,&"9^bugEaq5/[?[3/@Z^D*GT[1g.Crho&L1&h)#hH>C5d*:=YifFG,[*Wo;%b+RRa5usKP]dLee*_!IDiR*o!^Pf9JCSNcXtpU)\oY9,hG/D,kHJ8n'&b:.ZE].P!9^HI()6TGqJgu3J\gH1sbLkA>:CSAqEN]ZOha,ccb4&Vn)3nA9&'d`CbVKMCS-!U9@/tSu6WUD,bnMGV%FT"MP!Na!e!.BS9WW;cq/'%^Tc9]'&Gm:b/7haCUQQ5.>Fh+D1hDgn[eO4S0Q3aMP=Sf?u)#_?q41;U7K-RILtC<M5_L;HAXP/cj,E4`<ee4m**\H>d\(j(P,D`mYs@F[!?\?P:uTVpZO`L!4WZrcT]PIG,sI(/C.V](XUOp7IGc`mfImITWqIZJ9@cTTpd7_9Gbg]0h>@('nF&pjO$PhsX0QU8[Veis".-C^MC%s4+F;]-Z\=:6PgEfaaQRM=!0K?=/jn6ZIp]1JWJW<es5.PFK*Y+m&d&9a0-SR,BK6)(%sHU\/@kgJK_0*[(@8Jc4r@cQ0h,(%KQd2b`-Ji=a&ISat769X'r>L7e"j2B:J@T"ph0lfY<u:J]genAa;sBV-Y@i'rMj7K:!ECY.QFRjp'k2V?*W?2"WCah]b&a"(,G@:`&\N:ZQ'?O3(;>\FT##"f&8CT?%/G_[o5m3VG/ZM!RGXfmL_F;^)iX$JC]`oG@>#W\."TP:I,.d?Z,7as'_448lrp+#^$Rl'!Mn=ZL<DPf^j@K4;K#2<c.2&X$CD6lu,!GVp4Wi4:[96?U'0sFtJ&?@#.$A8]P#t$5F?^MHOnS;-(,WdGJ36fl6a)bS$4'biq+QYZ#kbCF7pa\=0$[$i)I[IQ#-96C\U^i1e_:+T[5e-16og3SMM-,k7MBW3_L/Y`?L'o;?@\0Jt;Du8#-j@NHOJL+*s',VQSe`I.J1dFUMPBa.lo.Lo<;%C34")g5A0VH:LP?/PZ+^q,I>nSZ,WJA&M>/5<\hkK37Iic"S",C%A6fESJcgj%1DmX)dg.:IIm<b=;P\;M.aPF`19`=VT_-+9k@]lEe@@@ae>aUP.3]7B9ESKNcbY.&-hGgu9g'G:Ur6V0auA,p$;<NZ+"i1fR:N2M=Tg7;*K[#J^&G?:N]2R],f/iHF+\`Nb&PS*-E/XBA/aIH*\e,1%Ug:1rDJ4;.l,?q:D@\:gUKqEqN'.K0X@_DS?%;Z>[7!bmPpQsCN1!WbmqWWmUZ@.dI[sScF)0_AYm0jEcM5JZ<MD&TKJQkcBBX*$mJaZ3MAip2+lbm3&jq6Hst/'IZd)emg*bT'\RGD,(*XkFQEac8sXVDf`G&!.skKc,Zj(<'DSM2@a8tL(s0p]'=?BEXEYGUf%C[cLe7?KpU&/%-`H[=g*kEM/U+5I`VP^Q"3?AmTDoluIfu+f<.%b)'mC[+-jhI6:+NR*2fMsZ>h6Iq+]+HM1aK#4?50])pA\E-\62i_>I;Y&cT-T?s#pYa;"f[FhR$-O63^;iWQMbOGaYBXhVCl[\i!F@2hjekdI![(cI=NKnm][=FQ$iQZZ"qb!==fjb"hh!b%OWlI"@MW=k-7WZpF7Qg:E\CFW%8HMn)E"j)pA4'ngiE<VXiXF;_65<,%?7D8),Bmt\V>:#eEMHYtN@*=!EoppMn+qB*8L\GnE/OsE4!IOc$rVch!KDsqu?QfP4QT?F5E2O_<lemI]#<$XIfRYYUM'eLAJZ[52m<3q0r<VnfT,f8H;='+&,hh]d20^"M!@Ac4,eTtMKAZE8W/2Y]XKk>T&5;ujm0E~>endstream
 endobj
 19 0 obj
 <<
-/Length 1182
+/Filter [ /ASCII85Decode /FlateDecode ] /Length 3552
 >>
 stream
-BT
-/F2 13 Tf 54 770.0 Td (5. Summary of Remediation Actions \(S-41 Done Criteria\)) Tj
-/F1 8.2 Tf 54 745.0 Td (1. Implementation alignment: All cases were checked against merged source, automated tests,) Tj
-/F1 8.2 Tf 54 735.0 Td (manual-test instructions, and docs/DEVIATIONS.md.) Tj
-/F1 8.2 Tf 54 725.0 Td (2. Sprint changes covered: Explicit cases now cover zero opening deposits \(TC-05\), the) Tj
-/F1 8.2 Tf 54 715.0 Td (freeze/close action body and conflict rules \(TC-07\), UTC daily-limit boundaries \(TC-09\), and) Tj
-/F1 8.2 Tf 54 705.0 Td (Administrator-only customer deactivation \(TC-04B\).) Tj
-/F1 8.2 Tf 54 695.0 Td (3. Overlap removed: TC-14 is the sole role-dashboard behavior case; TC-19 verifies) Tj
-/F1 8.2 Tf 54 685.0 Td (account-list/history performance.) Tj
-/F1 8.2 Tf 54 675.0 Td (4. Traceability table: Covers 100% of functional requirements \(FR-1 to FR-14\), non-functional) Tj
-/F1 8.2 Tf 54 665.0 Td (requirements \(NFR-1 to NFR-9\), and security rules \(SEC-1, SEC-2\).) Tj
-/F1 8.2 Tf 54 655.0 Td (5. SRS citation corrected: Date standardized to 02/09/2026; the v1.2 PDF is the issued copy.) Tj
-/F1 7 Tf 54 35 Td (TP-BMS-2026-v1.2  |  Page 7 of 7) Tj
-ET
-endstream
+Gb!So=``=W&q9SYka.i\;A)]SGHrmlQ$=ZO4LUd0<k2rQVB?adMU_.bOfeTNgAha]O[rC`GAB>&Z=U:tDP4c4%h0'qT]6P[J,L8#i<Tog#nRH=#nU#k@ItF47XKXO'bXRT4O#L]CPHKfNXM:i;oc71ZZOB5.E#0<J/$]hU?U13.2\qZ'?dXg1kYbS`UNBpC.NJ^%j-Tshn\H"(ql2LQeK$>\(pJ)9fZ=`gOI-?Xk7Z1=*&5Ji4/@GQZnf^$r(G66e0^`W>q"sHR9mq)Icm]-U1nc+=<*Qp2>cI.$Mj1_hP!GJfgq-%"q/_#H&8@.@IR.4aEK;5NQCbj@L,_n!":Cl+HCIHl@tsJEf1CrUi=l4O)k>!WOd4_C15;_Il1($rK.L0ks9XQLYn(;g9#@*COriMJrp3/7>0t#N,haZ?0O!Daf!1@p>(]/fdt[fgecAi5kt$3/1!=cWDYYbFdooS8(\6X@L+6CFD#$U@(r#BSd7G=3ph1%-c:?dF"&#n)/ie7i;g-ZUe!E[86Qn'L/?/fbc>dXLa8kKU_qhbFpipr(HY_I)/T>!":sTk"UX!P?/>a(GYZZ&.oURR&gUfA!XE)Q>jXO;C4)H@QoiuK'9L>4E+\^5G]mZR"Yk<V(NTp_tUsPoF>fY:m9NZ4@u=hn6%.Yi`DN=GU?s3X9kReGL@X<CeoNimQM$Aft'j?k:F_a%Y_j",TfgD4i]+a]8]oT?>YMG$4MqMN8YY8.l;i5]%8G`*II;EikI/"m$>]l3N+*gr+t^IE,s,:HkLB^S;8:fCiYkT<>X_4qAPHBR;G`eItu^>bgCXIU>%(aNg4;i`SsDU-8kjh6Lb.R!:p<4Oe55-7Bp<38[F:3PrB'XoqU2&i$hIQ,`2jN$aCilQt%nD'+HRhJ.E=[[$V+@WXqK[1$3j%b2eKV9]`W'4Xef(7I7M0+N`'u!hQCc:"!!j#GW3"e1#[]i[I[^)nK],3CV)/p*DL.aioKgo*4(2Kp1saDr,[$4Z/ZpO7jH:o`)eTo4X^!MJ(HBcK=^XH4i4)Ef<7nTOT!=k5BWtSeIX]5pSnWK[Rg?,[sg<#U21X<^X".RC`@[G@hNgSih!W9/.+U*35TOTNjI:fcpk/MlCQFNl&@U<e6U9la)2QAK%IU-NAptCjIIc0gQ;6ZX/sDF<re\jAjCrrqp*iaGiXM3+S3ZhC_C&?8,@VVL4G`7S>?QJ-c)r)p9#W.bY:1U;G.pC-0*b(3p._,#6SF84LBP1->JD[iuCJ1ONiOI2N_Z=4rJ3k[n(2=cEU1T-k1Vi[P&.2!HBQ.2ht2#<U(+S.Po?'GqBJ/ittDe9D-RhT.f71Zg7.)Hk9%Q>Z;A^.[CGL%k(ZJeK0E;aF*7F/iuY.'er8U\ekf9[:SDDoUM@lMbQu?UWNG"t<459-TLgJkXFoW6(eEj8sE]:TKSpRKk8J,7ba73H660aY?B#*^_!K;L)!q<DW$U/m#KKj!uuGl:VViY<EqtI6JVKo3^B>I/\9\l1405a%tE*[AL]ae"Q7dh1h<#\16[>3b,QX=OJ%7#=icu,f:!@!FuVU0?&X_3-pgjG(B`HGqJ27:N79*N6=ol'pK%YES4bIJoN!0B:SdtG)"<ebb!09+-2H/+Ym'4@n<<ZnCm]g\"akI?#nCN?btOT`+t]BL_ILPcU6f_lW^GP1SCVBRnK=rjF+QRnAoNV&kA=5.";d:5"<pVi,F>UL@^+8FWUJm6,;Q'b9t]dB'uJUY<d;d&XN/uYM`H79Q%*90<3W=/hQX<Z2EX%*5tHgf4S3?b(;hYS1<%.N8+M7$\kB>'b>[$d7j_/,dSnjj.%nm^a(M]Jb^1FAf(s&X;>9_U?E!3W(RTC!6q`B8%2\10No/uQ7B[D>jClE1:/\`4-=;KT9ggGcI,h9Pe8!,GM0C1Eage^c?T[*`iJ5>%^dkcbWC`R$aH72?r2-'7]C0rY<;G"9\uLAq,?.&1gIX_@[Q&LH+%Ke#B`'e@WVTR1-AaK6T]PYg6PD.WFKkEhf?<m2n\PM;n\ZLSSk9r\4.kE`,<*N-2j^s9g<d0e$"+hoQt+!oa^Abh(ib)Tsejc3pR^K.[BS3rL$.*A"Y='0IPZ#<aS79b2db'6Tmq;WF*hq3'2$%DVNVGnSIZDA,)E=IOsWe9PEbn7=mg+U&FXlBaa9t,O^[4XW+^O&Sdd5=oXR/OY>3Jd>2:DI=s-AUmYMNc"+2"B\H^Y-IT8is3S:2m<]`:R`T\u$Y;(k$h\@XZ<G].Sn1HjX#]e<(i/1m:5t<34?g87qsnb5m,AEDZS+LQ\.Vb#*5I>fZ^4%P=6mA0d)eOi(0bY>],U1HZslfm@.17&(N"m(<W:&HAh7IkQ1+l\DGOi/oa;VS#nm>gp[@W=#O&X?6n@cYTkH?u5e]JC&pL?pfBH`CBsci;dpBAqg"%>KFtgH^ge0hr4,pKpFN7YS=$F]b"i&iJOXnD\R=?%JpXq&jGJsIh=%h"i6b5VjoP%[,DW]lHLMc7EArkT6*O+GTi5unOc?T[=J&IUgG[EU=PtsS:loTaS?[&r0]Kb]pkuO7N<j-5oChj(E%OP8sG8bQ%,@A^<ZS'eUL???bJT7=\aAG.G6M4T:"W]kre%C@eBnKQ4H3Dph!:n\F=2oDgm%R:]E1B.=OQTdo668m"LK4Pqah7f5rH2h*Z^f.L<,e]$f&DF-.;gE\DRI5Y1t[SQrN"*l0Jq4d@tH4M\(>_?Nk$VPC*n/.m(O93GjE1"';:e)Zgp[6Q?Zmjn=Cd7Z^)6)$B&1pZ?p<C.j-T(]JfC&]gqGF%bP]:E7M;Y=Q(dc(XMbmH2>U-\,kjgfHXP8D`Y6!BO3=LoJWp*dVGjA#M&tE*DEVpn!h**Y,pK;h!T]2T3]Mcoe-1!X'(9qo4A:QCD_J;b;9IO!naV,Y(sE6KVWu:Y..`.7k@H_FTB%gDJ]ArImt1"q,U0nnOA>fmm^Q;S[_sAY)MsC*B10b=bQ@UBp,K[Mt6(br"Uf1TaS[5m*ujZZX3%"ft)#4mb*#?hI-ep1q7n'<Z]n#]Upn>@;uJ^$afh[JsZ#ag&nr'B)O_sVK[*`A:`e5S)#*.g(l#^fPF:8A5_/s7<mKff&TC@kAM;MU"jI4)=8FaZ24m1UJ!X$dHKQ3)D,UuHk3Xh,mu9-cZnZXqmNoKeSWq2#M;+3k5Fs]$2[K>hOh^9)>k7`9te;Ps3g;.RR,QD[AS;>Vtsif=lAQs$?]1P3)R0bGGlj[rShL0b76rU%6O?!,p)>),G\Fc]GqH1>$#W4ZrZes7RW#WIN?gQ'bJDsILjT\DCAk$b"po]Kmc<n<)HN+rmE)FG48NCER?.7MCJ,,@,99-+8Ga1T&rjY+_$n(TB=L*66+a3bE%"=%?K%RV:jjML\r(+eXkpG=*%)P,0ttaF&;\E]!<cmMRN>;V-<3_Jo"d8<2p>rCF)kkOm58UTb8=$Oq>B/,'D&,/lWW:YtgX=ppCgtkD*fhr'D^<Q\BTWUeV-EL$CuNVXBTY^K)P$k,0h2(J:r&l8&9<$IiLURRhi[KpGjXiO=NYQi11ro_N]9?2dRs^tsPA)H0su~>endstream
+endobj
+20 0 obj
+<<
+/Filter [ /ASCII85Decode /FlateDecode ] /Length 2261
+>>
+stream
+Gb!;e969,O%)1n+i6kBKM.Mfqn"-h1[-?p%)nYJ`(Ik-9FsYP4Uh$gH^*$u99)R*alEm*UU<"GX&0ClR0EE,BM"r!&!:Qd=^*#Zh9P6UqbD#2-31h8iFg.TnRLiX$l>t.*HohVMEd\k9*a#$$KcpUWf,Meg]14EA3^*_f[;=h+*_\@LS6h33I@,tl:&WH[Z02cns+KW4RdH<PTbT`HGfAebr6FlZW8F$phtAVApBdE!a];qBU$[FH3<AeLdE&)F9=1G(hA:L(#B&U)P_K[,8-FgflmH>EJ!sBOs)_7sYOsq,nj>57ndTt*+SZ@^-_g!'2r)(7.=W8LPWp<Spdat1liX^%GL(UZG:2TaRrB<jgE9jMS8hli3%o,S[ri-&!PrW\6eDZ/6-gj[LTZ3Scuk0Ab]E=+$FJ9A0.6shA%Z/)5.p$-<C657k9XB)4`SKE48P(.8E<;@Piso0`(DRR+nMfs:lG^Q\9(7^Icj>I7*N#GpqY(,9X`)fI+ojpFbc32;A:l%XQ0[]Gu;F-.sS=!"%;!e^/qQ9.%"\ag>fR(Nu-CmV[)-5Q:RT?4?:);K2Ste@'MGra@e]uU3u0Uq/C*HQAZAJZuutULQab^*>*W7Z?S<U[o;\2f'S%U.qGe'E5LWB1YIp+`P#4W/6K.gq&F8^:XiY3<$XCm4`DH?-%kh,N+T]7lk/\0V'FtXfnDEULW%s5JbP'KXri[89<Lb^:*_lMZfRA5a[kRY"0a9&!N)5THf.&W8e'"P!^4=?cl*bVrXPm%@+a,g/uutf'dD8iW*m(YeY\m/"Z)j0E`@pT6WJ*5rOQ`0*`a)[i1?cPb(Z#/I'FdV+cVOJdp4[K6png2m"`+`\;BO/<QBpMe^EP].N4\(KXkPHT2d=ZV%E5%bEEXHq0oDPCk;8"iTbG0^#*BaS7J2$kqVBlA0/[<=$Ln;O*V3QjPbR[?QjIWclZdrV+^ngnNrI&0(j(1M]lHhVHRIYOuV4b!CJ=o.Bt^jJYD^k6>TFTXV2*lr:C*gJgREaRR"ODnWt9Sj1,DJ52$Nq,OkAWIjJ+*$N)jP?KBYgnK/rNjF)T)i"WM6`lAnJW6ODTrSYHC%VsW[cgQOM\S2TO-%Or.ctT*>5asgPL&0jMo?)Np+%6[$l=J+.\(GFB^uC^t"iN/LPtVeZ;L[Rbn?5KYHF.7e0Z8:OY=b4N<d5%?qtK,6Ui;mjSQ1]R+5;-P%gE2e];)dl%u1"-*ik'm[^#)7QPfSOT`$X:?;5<t&H01?CO3Jgp^c+BIRiolQpj]8FppiL#9ZsnDec8#`SWljXFLooJ['fQ"DELB"MP,m59Eukgipc>g#KHCrZHp:JJIJ?ZA[K05Z*S^lZohn:;-W'RosQoLp&DP$t-\8o0H"rj9ZE*)j2)@G%g$O+U2hNKPq=9N(c;YoA1%LTM*/2<fQU:P$r!ih5/cdj3Q&hYSiRM;:poM2_PG-GD8lXRCPaRl?Ed]aUN'9bus_e=&DW7s"be*Z[*B\W[qZF!TXZlH,^LpNt>)\WDm8!9h$Pj9]d<idBC(nCrc>2;,c*2B\H<RcR'QYT$E(73VNshl5nsLQP"nZh"2j*R3h&#:!eRd=a0B^emlLsQ60FFbL?rACJ1m2bg#8JB!npUHjD*6$F-1E_EGp`e'qFp/t+SY(F<Tsc1/3'Q&>AlAq];Qct,I^$lR5=QB(SVkRFPlXc?'GG'lAd:H#q+>1&1cMt,Krn!>ENb>03-<gKh$BD"NHGlJ#5kQ[7u9-pg8MQrkEF+*N7+TfaiN6]0j;\=q."]R,Clc&@Q.g^7<F$8;Opehm%e./YqWHWE*%-<)Y9QC&kO5j1T**1PF>F@TeKQOIR6f-oc</7JGH,D2[b^Q%Q6Gc.e0M4cgg>'h#:RDd^W^s>A>YgMVj9!#GPu?.rW44>(F\q7SCE;hXc`HlOmr"/35j``8b;6*]O@[jP!:=S&q@d>'Z6^oj+`*VZei0*,U+h*4=;$56F^]lGs/ff]JQoirG67Y[m/h4Nq?ZN52^W3eX;hh1&ofACnH/_]9SZ9DAl<&f`nXaQGDDRgqd55ZO_rdid3Zd(rqiebDQrt:O%l&l$?fDuhdH4X*Cg8S`r89]+.WU?4an]Sr>RgaJd"0uVlTbYQhb=lnrM%AdmE'j"p%r#XV58,>`,E:C-p5<+idt?dXInKD8!"L4/(VMb(8.X^s#hlK30VBj)SX_SDgRP7EKYk8]3Q9"%f`]fT*uJli+@?EqFSTE-6?O7$8sUMX)OsI+TJAE:>gWRWcj~>endstream
 endobj
 xref
-0 20
+0 21
 0000000000 65535 f 
-0000000015 00000 n 
-0000000115 00000 n 
-0000000155 00000 n 
-0000000204 00000 n 
-0000000342 00000 n 
-0000000412 00000 n 
-0000000487 00000 n 
-0000005328 00000 n 
-0000005466 00000 n 
-0000009398 00000 n 
-0000009538 00000 n 
-0000013549 00000 n 
-0000013689 00000 n 
-0000017116 00000 n 
-0000017256 00000 n 
-0000020923 00000 n 
-0000021063 00000 n 
-0000025837 00000 n 
-0000025977 00000 n 
+0000000061 00000 n 
+0000000122 00000 n 
+0000000229 00000 n 
+0000000341 00000 n 
+0000000446 00000 n 
+0000000651 00000 n 
+0000000856 00000 n 
+0000000939 00000 n 
+0000001144 00000 n 
+0000001349 00000 n 
+0000001555 00000 n 
+0000001761 00000 n 
+0000001831 00000 n 
+0000002186 00000 n 
+0000002278 00000 n 
+0000005299 00000 n 
+0000008501 00000 n 
+0000011598 00000 n 
+0000014369 00000 n 
+0000018013 00000 n 
 trailer
 <<
-/Size 20
-/Root 3 0 R
-/Info 2 0 R
+/ID 
+[<bbbce2f00bafa4bb11032d8ccbaf87cd><bbbce2f00bafa4bb11032d8ccbaf87cd>]
+% ReportLab generated PDF document -- digest (opensource)
+
+/Info 13 0 R
+/Root 12 0 R
+/Size 21
 >>
 startxref
-27212
+20366
 %%EOF
